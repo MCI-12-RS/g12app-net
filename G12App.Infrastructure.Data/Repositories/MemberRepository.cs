@@ -2,7 +2,9 @@
 using G12App.Domain.Model;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace G12App.Infrastructure.Data.Repositories
 {
@@ -15,9 +17,35 @@ namespace G12App.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public IQueryable<Member> Get()
+        public async Task<Member> Create(Member member)
         {
-            return _context.Members.AsNoTracking();
+            _context.Add(member);
+            await _context.SaveChangesAsync();
+            return member;
+        }
+
+        public async Task<Member> GetMemberByIdAsync(int? id)
+        {
+            return await _context.Members.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Member>> GetMembersAsync()
+        {
+            return await _context.Members.ToListAsync();
+        }
+
+        public async Task<Member> Remove(Member member)
+        {
+            _context.Remove(member);
+            await _context.SaveChangesAsync();
+            return member;
+        }
+
+        public async Task<Member> Update(Member member)
+        {
+            _context.Update(member);
+            await _context.SaveChangesAsync();
+            return member;
         }
     }
 }
