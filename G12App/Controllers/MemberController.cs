@@ -1,4 +1,6 @@
 ﻿using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Model;
+using G12App.Domain.RequestMessages;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -15,6 +17,12 @@ namespace G12App.Controllers
             var members = await memberService.GetMembers();
 
             return Ok(members);
+        }
+
+        [HttpPost]
+        public IActionResult Post(MemberRequest member)
+        {
+            return Ok(member);
         }
 
     }

@@ -2,8 +2,8 @@
 {
     public enum CellType
     {
-        evangelistic,
-        discipleship,
-        macrocell,
+        Evangelistic,
+        Discipleship,
+        Macrocell,
     }
 }

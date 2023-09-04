@@ -3,6 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
+using G12App.Domain.Model;
+using G12App.Domain.Validators;
+using FluentValidation;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace G12App
 {
@@ -12,9 +18,14 @@ namespace G12App
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddFluentValidation(config =>
+            {
+                config.RegisterValidatorsFromAssemblies(new List<Assembly>() { typeof(Member).Assembly });
+            });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+          
 
             builder.Services
                 .RegisterDomain(builder.Configuration)
@@ -28,6 +39,7 @@ namespace G12App
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
