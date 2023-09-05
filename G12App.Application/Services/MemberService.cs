@@ -3,6 +3,7 @@ using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Model;
+using G12App.Domain.Querying;
 
 namespace G12App.Application.Services
 {
@@ -16,25 +17,25 @@ namespace G12App.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<MemberDTO>> GetMembers()
+        public async Task<IEnumerable<MemberDto>> GetMembers(Query query)
         {
-            var memberEntity = await _memberRepository.GetMembersAsync();
-            return _mapper.Map<IEnumerable<MemberDTO>>(memberEntity);
+            var memberEntity = await _memberRepository.GetMembersAsync(query);
+            return _mapper.Map<IEnumerable<MemberDto>>(memberEntity);
         }
-        public async Task<MemberDTO> GetMemberById(int? id)
+        public async Task<MemberDto> GetMemberById(int? id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
-            return _mapper.Map<MemberDTO>(memberEntity);
+            return _mapper.Map<MemberDto>(memberEntity);
         }
 
-        public async Task<MemberDTO> Add(MemberDTO memberDTO)
+        public async Task<MemberDto> Add(MemberDto memberDTO)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
             var member = await _memberRepository.Create(memberEntity);
-            return _mapper.Map<MemberDTO>(member);
+            return _mapper.Map<MemberDto>(member);
         }
 
-        public async Task Update(MemberDTO memberDTO)
+        public async Task Update(MemberDto memberDTO)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
             await _memberRepository.Update(memberEntity);

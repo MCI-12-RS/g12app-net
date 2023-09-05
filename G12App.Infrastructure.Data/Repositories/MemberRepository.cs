@@ -1,9 +1,10 @@
-﻿using G12App.Domain.Interfaces.Repositories;
+﻿using G12App.Common.Extensions;
+using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
+using G12App.Domain.Querying;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace G12App.Infrastructure.Data.Repositories
@@ -29,10 +30,10 @@ namespace G12App.Infrastructure.Data.Repositories
             return await _context.Members.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Member>> GetMembersAsync()
+        public async Task<IEnumerable<Member>> GetMembersAsync(Query query)
         {
             return await _context.Members
-                .Include(x => x.HomeAddress)
+                .ApplyPaging(query)
                 .ToListAsync();
         }
 

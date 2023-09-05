@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "G12App", "G12App\G12App.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "G12App.Domain", "G12App.Domain\G12App.Domain.csproj", "{C99895A9-9469-4D48-A958-EE3BF2331BEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G12App.Application", "G12App.Application\G12App.Application.csproj", "{99BAC737-306D-4752-9CE6-6DE1CA242132}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "G12App.Application", "G12App.Application\G12App.Application.csproj", "{99BAC737-306D-4752-9CE6-6DE1CA242132}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G12App.Infrastructure.Data", "G12App.Infrastructure.Data\G12App.Infrastructure.Data.csproj", "{84DA1215-E835-466C-B07A-6B9D15C8DA32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "G12App.Infrastructure.Data", "G12App.Infrastructure.Data\G12App.Infrastructure.Data.csproj", "{84DA1215-E835-466C-B07A-6B9D15C8DA32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G12App.Common", "G12App.Common\G12App.Common.csproj", "{A5817A33-5C46-4D54-94F2-D702FE85E6E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{84DA1215-E835-466C-B07A-6B9D15C8DA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84DA1215-E835-466C-B07A-6B9D15C8DA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84DA1215-E835-466C-B07A-6B9D15C8DA32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5817A33-5C46-4D54-94F2-D702FE85E6E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5817A33-5C46-4D54-94F2-D702FE85E6E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5817A33-5C46-4D54-94F2-D702FE85E6E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5817A33-5C46-4D54-94F2-D702FE85E6E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

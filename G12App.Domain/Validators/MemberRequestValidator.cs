@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using G12App.Domain.Model;
+using G12App.Domain.DTOs;
 
 namespace G12App.Domain.Validators
 {
-    public class MemberRequestValidator : AbstractValidator<Member>
+    public class MemberRequestValidator : AbstractValidator<MemberDto>
     {
         public MemberRequestValidator()
         {

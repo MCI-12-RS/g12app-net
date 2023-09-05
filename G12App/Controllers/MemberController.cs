@@ -1,7 +1,9 @@
 ﻿using G12App.Domain.DTOs;
+using G12App.Domain.Querying;
 using G12App.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace G12App.Controllers
 {
@@ -10,17 +12,19 @@ namespace G12App.Controllers
     public class MemberController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Get([FromServices] IMemberService memberService)
+        public async Task<IActionResult> Get([FromServices] IMemberService memberService, 
+            [FromQuery] int page, [FromQuery] int limit, [FromQuery] string sortBy, [FromQuery] string sortOrder)
         {
-            var members = await memberService.GetMembers();
+            var query = new Query(page, limit, sortBy, sortOrder);
+            var members = await memberService.GetMembers(query);
             return Ok(members);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromServices] IMemberService memberService, [FromBody] MemberDTO member)
+        public async Task<IActionResult> Post([FromServices] IMemberService memberService, [FromBody] MemberDto member)
         {
             var result = await memberService.Add(member);
-            return Ok(member);
+            return Ok(result);
         }
 
     }

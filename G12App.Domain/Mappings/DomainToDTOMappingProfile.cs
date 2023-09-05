@@ -8,7 +8,7 @@ namespace G12App.Domain.Mappings
     {
         public DomainToDTOMappingProfile()
         {
-            CreateMap<Member, MemberDTO>().ReverseMap();
+            CreateMap<Member, MemberDto>().ReverseMap();
             CreateMap<Address, AddressDto>().ReverseMap();
         }
     }

@@ -4,8 +4,8 @@ using System;
 
 namespace G12App.Domain.DTOs
 {
-    public class MemberDTO
-    {        
+    public class MemberDto
+    {
         public int? Id { get; set; }
         public string Name { get; set; }
         public MemberType MemberType { get; set; }

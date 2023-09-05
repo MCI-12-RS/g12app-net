@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace G12App.Domain.Querying
+{
+    public class Pagination
+    {
+        public Pagination()
+        {
+        }
+
+        public Pagination(int page, int limit)
+        {
+            Page = page;
+            Limit = limit;
+        }
+
+        public int Page { get; set; }
+
+        public int Limit { get; set; }
+    }
+}
