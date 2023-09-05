@@ -51,12 +51,9 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> Update(Member member)
         {
-            var memberEntity = await _context.Members.Include(x => x.HomeAddress).AsNoTracking().FirstOrDefaultAsync(x => x.Id == member.Id);                        
-            memberEntity = _mapper.Map(member, memberEntity);
-            _context.Attach(memberEntity);
+            var memberEntity = await _context.Members.Include(x => x.HomeAddress).FirstOrDefaultAsync(x => x.Id == member.Id);
+            _mapper.Map(member, memberEntity);
             _context.Entry(memberEntity).State = EntityState.Modified;
-            _context.Entry(memberEntity.HomeAddress).State = EntityState.Modified;
-            _context.Update(memberEntity);
             await _context.SaveChangesAsync();
             return member;
         }
