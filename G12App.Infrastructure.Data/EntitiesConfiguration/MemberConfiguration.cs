@@ -17,11 +17,7 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
 
-            // SEED
-            builder.HasData(new Member() { Id = 1, Name = "João" });
-            builder.HasData(new Member() { Id = 2, Name = "Judas" });
-            builder.HasData(new Member() { Id = 3, Name = "Tomé" });
-            builder.HasData(new Member() { Id = 4, Name = "Felipe" });
+            builder.HasOne(x => x.HomeAddress).WithMany().HasForeignKey(x => x.HomeAddressId).IsRequired();
         }
     }
 }

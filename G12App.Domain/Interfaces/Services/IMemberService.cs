@@ -9,7 +9,7 @@ namespace G12App.Domain.Interfaces.Services
     {
         Task<IEnumerable<MemberDTO>> GetMembers();
         Task<MemberDTO> GetMemberById(int? id);
-        Task Add(MemberDTO memberDTO);
+        Task<MemberDTO> Add(MemberDTO memberDTO);
         Task Update(MemberDTO memberDTO);
         Task Remove(int? id);
     }

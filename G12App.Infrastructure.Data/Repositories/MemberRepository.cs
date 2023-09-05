@@ -31,7 +31,9 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Member>> GetMembersAsync()
         {
-            return await _context.Members.ToListAsync();
+            return await _context.Members
+                .Include(x => x.HomeAddress)
+                .ToListAsync();
         }
 
         public async Task<Member> Remove(Member member)

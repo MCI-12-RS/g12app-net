@@ -7,6 +7,7 @@ namespace G12App.Infrastructure.Data.Context
     public class AppContext : DbContext
     {
         public DbSet<Member> Members { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         public AppContext(DbContextOptions<AppContext> options) : base(options)
         {

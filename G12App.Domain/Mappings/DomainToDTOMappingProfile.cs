@@ -9,6 +9,7 @@ namespace G12App.Domain.Mappings
         public DomainToDTOMappingProfile()
         {
             CreateMap<Member, MemberDTO>().ReverseMap();
+            CreateMap<Address, AddressDto>().ReverseMap();
         }
     }
 }
