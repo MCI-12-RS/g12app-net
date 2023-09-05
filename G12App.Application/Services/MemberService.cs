@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using G12App.Application.DTOs;
-using G12App.Application.Interfaces;
+using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Repositories;
+using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Model;
 
 namespace G12App.Application.Services
@@ -21,7 +21,6 @@ namespace G12App.Application.Services
             var memberEntity = await _memberRepository.GetMembersAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(memberEntity);
         }
-
         public async Task<MemberDTO> GetMemberById(int? id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);

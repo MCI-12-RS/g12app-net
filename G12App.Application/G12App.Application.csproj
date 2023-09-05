@@ -15,4 +15,8 @@
     <ProjectReference Include="..\G12App.Domain\G12App.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
 </Project>

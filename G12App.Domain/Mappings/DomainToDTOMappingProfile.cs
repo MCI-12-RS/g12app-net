@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using G12App.Application.DTOs;
+using G12App.Domain.DTOs;
 using G12App.Domain.Model;
 
-namespace G12App.Application.Mappings
+namespace G12App.Domain.Mappings
 {
     public class DomainToDTOMappingProfile : Profile
     {

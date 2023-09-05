@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using G12App.Domain.Mappings;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace G12App.Domain
@@ -7,6 +8,7 @@ namespace G12App.Domain
     {
         public static IServiceCollection RegisterDomain(this IServiceCollection servicesCollection, IConfiguration config)
         {
+            servicesCollection.AddAutoMapper(typeof(DomainToDTOMappingProfile));
             return servicesCollection;
         }
 

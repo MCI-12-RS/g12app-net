@@ -1,6 +1,7 @@
 ﻿using G12App.Application.Services;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Mappings;
 using G12App.Infrastructure.Data.Context;
 using G12App.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,10 @@ namespace G12App
         public static IServiceCollection RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IMemberRepository, MemberRepository>();
+
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+
             return services;
         }
 
