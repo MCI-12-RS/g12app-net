@@ -10,6 +10,12 @@ namespace G12App.Domain.Mappings
         {
             CreateMap<Member, MemberDto>().ReverseMap();
             CreateMap<Address, AddressDto>().ReverseMap();
+
+            CreateMap<Member, Member>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<Address, Address>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
         }
     }
 }

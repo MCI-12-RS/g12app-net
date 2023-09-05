@@ -1,4 +1,5 @@
-﻿using G12App.Common.Extensions;
+﻿using AutoMapper;
+using G12App.Common.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
@@ -12,10 +13,13 @@ namespace G12App.Infrastructure.Data.Repositories
     public class MemberRepository : IMemberRepository
     {
         private readonly AppContext _context;
+        private readonly IMapper _mapper;
 
-        public MemberRepository(AppContext context)
+        public MemberRepository(
+            AppContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Member> Create(Member member)
@@ -33,6 +37,7 @@ namespace G12App.Infrastructure.Data.Repositories
         public async Task<IEnumerable<Member>> GetMembersAsync(Query query)
         {
             return await _context.Members
+                .Include(x => x.HomeAddress)
                 .ApplyPaging(query)
                 .ToListAsync();
         }
@@ -46,7 +51,12 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> Update(Member member)
         {
-            _context.Update(member);
+            var memberEntity = await _context.Members.Include(x => x.HomeAddress).AsNoTracking().FirstOrDefaultAsync(x => x.Id == member.Id);                        
+            memberEntity = _mapper.Map(member, memberEntity);
+            _context.Attach(memberEntity);
+            _context.Entry(memberEntity).State = EntityState.Modified;
+            _context.Entry(memberEntity.HomeAddress).State = EntityState.Modified;
+            _context.Update(memberEntity);
             await _context.SaveChangesAsync();
             return member;
         }
