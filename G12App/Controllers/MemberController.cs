@@ -27,5 +27,12 @@ namespace G12App.Controllers
             return Ok(result);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromServices] IMemberService memberService, [FromBody] MemberDto member, int id)
+        {
+            member.Id = id;
+            var result = await memberService.Update(member, id);
+            return Ok(result);
+        }
     }
 }

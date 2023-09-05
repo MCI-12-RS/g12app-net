@@ -35,10 +35,11 @@ namespace G12App.Application.Services
             return _mapper.Map<MemberDto>(member);
         }
 
-        public async Task Update(MemberDto memberDTO)
+        public async Task<MemberDto> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
-            await _memberRepository.Update(memberEntity);
+            var member = await _memberRepository.Update(memberEntity);
+            return _mapper.Map<MemberDto>(member);
         }
 
         public async Task Remove(int? id)

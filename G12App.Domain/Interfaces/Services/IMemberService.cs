@@ -11,7 +11,7 @@ namespace G12App.Domain.Interfaces.Services
         Task<IEnumerable<MemberDto>> GetMembers(Query query);
         Task<MemberDto> GetMemberById(int? id);
         Task<MemberDto> Add(MemberDto memberDTO);
-        Task Update(MemberDto memberDTO);
+        Task<MemberDto> Update(MemberDto memberDTO, int id);
         Task Remove(int? id);
     }
 }
