@@ -1,25 +1,50 @@
-﻿using G12App.Domain.Interfaces.Repositories;
-using G12App.Domain.Interfaces.Services;
+﻿using AutoMapper;
+using G12App.Application.DTOs;
+using G12App.Application.Interfaces;
+using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 
 namespace G12App.Application.Services
 {
     public class MemberService : IMemberService
     {
-        private readonly IMemberRepository _repository;
-
-        public MemberService(IMemberRepository repository)
+        private IMemberRepository _memberRepository;
+        private readonly IMapper _mapper;
+        public MemberService(IMemberRepository memberRepository, IMapper mapper)
         {
-            _repository = repository;
+            _memberRepository = memberRepository;
+            _mapper = mapper;
         }
 
-        public async Task<List<Member>> GetMembers()
+        public async Task<IEnumerable<MemberDTO>> GetMembers()
         {
-            var list = _repository.Get()
-                .Where(x => x.Id >= 1 && x.Id <= 10)
-                .ToList();
+            var memberEntity = await _memberRepository.GetMembersAsync();
+            return _mapper.Map<IEnumerable<MemberDTO>>(memberEntity);
+        }
 
-            return list;
+        public async Task<MemberDTO> GetMemberById(int? id)
+        {
+            var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            return _mapper.Map<MemberDTO>(memberEntity);
+        }
+
+        public async Task Add(MemberDTO memberDTO)
+        {
+            var memberEntity = _mapper.Map<Member>(memberDTO);
+            await _memberRepository.Create(memberEntity);
+        }
+
+        public async Task Update(MemberDTO memberDTO)
+        {
+            var memberEntity = _mapper.Map<Member>(memberDTO);
+            await _memberRepository.Update(memberEntity);
+        }
+
+        public async Task Remove(int? id)
+        {
+            var memberEntity = _memberRepository.GetMemberByIdAsync(id).Result;
+            await _memberRepository.Remove(memberEntity);
+
         }
     }
 }
