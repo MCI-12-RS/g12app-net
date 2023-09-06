@@ -13,7 +13,7 @@ namespace G12App.Controllers
     {
         [HttpGet]
         public async Task<IActionResult> Get([FromServices] IMemberService memberService, 
-            [FromQuery] int page, [FromQuery] int limit, [FromQuery] string sortBy, [FromQuery] string sortOrder)
+            [FromQuery] int page = 1, [FromQuery] int limit = 10, [FromQuery] string sortBy = "", [FromQuery] string sortOrder = "")
         {
             var query = new Query(page, limit, sortBy, sortOrder);
             var members = await memberService.GetMembers(query);
