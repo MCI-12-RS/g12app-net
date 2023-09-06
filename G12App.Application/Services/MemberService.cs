@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using G12App.Domain.DTOs;
+using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Model;
@@ -9,8 +10,9 @@ namespace G12App.Application.Services
 {
     public class MemberService : IMemberService
     {
-        private IMemberRepository _memberRepository;
+        private readonly IMemberRepository _memberRepository;
         private readonly IMapper _mapper;
+
         public MemberService(IMemberRepository memberRepository, IMapper mapper)
         {
             _memberRepository = memberRepository;
@@ -31,6 +33,8 @@ namespace G12App.Application.Services
         public async Task<MemberDto> Add(MemberDto memberDTO)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
+            memberEntity.SetupCreation();
+            memberEntity.SetupLastModified();
             var member = await _memberRepository.Create(memberEntity);
             return _mapper.Map<MemberDto>(member);
         }
@@ -38,13 +42,15 @@ namespace G12App.Application.Services
         public async Task<MemberDto> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
+            memberEntity.SetupLastModified();
             var member = await _memberRepository.Update(memberEntity);
             return _mapper.Map<MemberDto>(member);
         }
 
         public async Task Remove(int? id)
         {
-            var memberEntity = _memberRepository.GetMemberByIdAsync(id).Result;
+            var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            memberEntity.SetupLastModified();
             await _memberRepository.Remove(memberEntity);
 
         }

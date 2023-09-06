@@ -1,8 +1,9 @@
-﻿using System;
+﻿using G12App.Domain.Model.Base;
+using System;
 
 namespace G12App.Domain.Model
 {
-    public class Report
+    public class Report : BaseEntity
     {
         public string Subject { get; set; }
         public DateTime Date { get; set; }

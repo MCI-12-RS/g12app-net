@@ -1,6 +1,5 @@
 ﻿using G12App.Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace G12App.Infrastructure.Data.Context
 {
@@ -23,11 +22,35 @@ namespace G12App.Infrastructure.Data.Context
 
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(typeof(AppContext).Assembly);
+
+            SeedData(builder);
         }
 
-        internal Task<Member> FindAsync(int? id)
+        private static void SeedData(ModelBuilder builder)
         {
-            throw new System.NotImplementedException();
+            builder.Entity<Address>().HasData(new Address()
+            {
+                Id = 1,
+                Street = "Biguas",
+                Number = "600",
+                City = "Alvorada",
+                Neighborhood = "Porto Verde",
+                Notes = string.Empty,
+                PostalCode = "94858540",
+                State = "RS",
+            });
+
+            builder.Entity<Member>().HasData(new Member()
+            {
+                Id = 1,
+                Name = "Rafael",
+                Surname = "Jorge Alves",
+                BirthDate = new System.DateTime(1993, 05, 10),
+                Email = "rafaeljorgealves@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                HomeAddressId = 1,
+                MemberType = Domain.Model.Enum.MemberType.Leadership,
+            });
         }
     }
 }

@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace G12App
 {
@@ -33,17 +31,21 @@ namespace G12App
 
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppContext>(options => options.UseSqlite(configuration["ConnectionStrings:AppContext"]));
+            services.AddDbContext<AppContext>(options => options
+                    .UseSqlite(configuration["ConnectionStrings:AppContext"]));
+
             return services;
         }
 
+        /// <summary>
+        /// Application configuration.
+        /// </summary>
+        /// <remarks>Used to ensure database creation and run migrations once created.</remarks>
         public static void Configure(this IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<AppContext>();
-                context.Database.EnsureCreated();
-            }
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetRequiredService<AppContext>();
+            context.Database.EnsureCreated();
         }
     }
 }

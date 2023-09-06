@@ -1,9 +1,10 @@
-﻿using G12App.Domain.Model.Enum;
+﻿using G12App.Domain.Model.Base;
+using G12App.Domain.Model.Enum;
 using System;
 
 namespace G12App.Domain.Model
 {
-    public class Cell
+    public class Cell : BaseEntity
     {
         public int Id { get; set; }
         public Member Lead { get; set; }

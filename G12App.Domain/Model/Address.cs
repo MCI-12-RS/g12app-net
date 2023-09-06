@@ -1,6 +1,8 @@
-﻿namespace G12App.Domain.Model
+﻿using G12App.Domain.Model.Base;
+
+namespace G12App.Domain.Model
 {
-    public class Address
+    public class Address : BaseEntity
     {
         public int Id { get; set; }
         public string Street { get; set; }

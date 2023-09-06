@@ -6,6 +6,7 @@ using G12App.Domain.Querying;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace G12App.Infrastructure.Data.Repositories
@@ -31,27 +32,30 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> GetMemberByIdAsync(int? id)
         {
-            return await _context.Members.FindAsync(id);
+            return await _context.Members.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
         public async Task<IEnumerable<Member>> GetMembersAsync(Query query)
         {
             return await _context.Members
-                .Include(x => x.HomeAddress)
+                .Where(x => x.IsDeleted == false)
                 .ApplyPaging(query)
                 .ToListAsync();
         }
 
         public async Task<Member> Remove(Member member)
         {
-            _context.Remove(member);
+            if (_context.Entry(member).State == EntityState.Detached)
+                _context.Attach(member);
+
+            _context.Entry(member).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return member;
         }
 
         public async Task<Member> Update(Member member)
         {
-            var memberEntity = await _context.Members.Include(x => x.HomeAddress).FirstOrDefaultAsync(x => x.Id == member.Id);
+            var memberEntity = await _context.Members.FirstOrDefaultAsync(x => x.Id == member.Id && x.IsDeleted == false);
             _mapper.Map(member, memberEntity);
             _context.Entry(memberEntity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
