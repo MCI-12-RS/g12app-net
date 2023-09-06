@@ -47,6 +47,7 @@ namespace G12App.Infrastructure.Data.Repositories
         {
             if (_context.Entry(member).State == EntityState.Detached)
                 _context.Attach(member);
+            member.IsDeleted = true;
 
             _context.Entry(member).State = EntityState.Modified;
             await _context.SaveChangesAsync();

@@ -1,5 +1,4 @@
 ﻿using G12App.Domain.DTOs;
-using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using System.Collections.Generic;
 using System.Threading.Tasks;
