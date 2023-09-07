@@ -6,6 +6,7 @@ using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
+using System.Net;
 
 namespace G12App.Application.Services
 {
@@ -52,6 +53,9 @@ namespace G12App.Application.Services
         public async Task<ServiceResult> Remove(int? id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            if (memberEntity == null)
+                return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado.");
+
             memberEntity.SetupLastModified();
             await _memberRepository.Remove(memberEntity);
             return new ServiceResult();

@@ -19,6 +19,10 @@ namespace G12App.Domain.Messages
         public ServiceResult(IEnumerable<Error> errors) : this() => (Errors) = (errors.ToList());
 
         public ServiceResult(Error error) : this() => (Errors) = (new List<Error>() { error });
+
+        public ServiceResult(string errorMessage) : this() => (Errors) = (new List<Error>() { new Error(errorMessage) });
+
+        public ServiceResult(HttpStatusCode statusCode, string errorMessage) : this() => (StatusCode, Errors) = (statusCode, new List<Error>() { new Error(errorMessage) });
     }
 
     public class ServiceResult<TData> : ServiceResult

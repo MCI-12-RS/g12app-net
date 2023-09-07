@@ -1,4 +1,5 @@
 ﻿using G12App.Domain.DTOs;
+using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Querying;
 using Microsoft.AspNetCore.Mvc;
@@ -16,21 +17,21 @@ namespace G12App.Controllers
         {
             var query = new Query(page, limit, sortBy, sortOrder);
             var result = await memberService.GetMembers(query);
-            return Ok(result);
+            return result.AsActionResult();
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromServices] IMemberService memberService, int id)
         {
             var result = await memberService.GetMemberById(id);
-            return Ok(result);
+            return result.AsActionResult();
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromServices] IMemberService memberService, [FromBody] MemberDto member)
         {
             var result = await memberService.Add(member);
-            return Ok(result);
+            return result.AsActionResult();
         }
 
         [HttpPut("{id}")]
@@ -38,14 +39,14 @@ namespace G12App.Controllers
         {
             member.Id = id;
             var result = await memberService.Update(member, id);
-            return Ok(result);
+            return result.AsActionResult();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove([FromServices] IMemberService memberService, int id)
         {
             var result = await memberService.Remove(id);
-            return Ok(result);
+            return result.AsActionResult();
         }
 
 
