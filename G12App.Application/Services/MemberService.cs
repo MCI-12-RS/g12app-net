@@ -3,6 +3,7 @@ using G12App.Domain.DTOs;
 using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
 
@@ -19,40 +20,41 @@ namespace G12App.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<MemberDto>> GetMembers(Query query)
+        public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query query)
         {
             var memberEntity = await _memberRepository.GetMembersAsync(query);
-            return _mapper.Map<IEnumerable<MemberDto>>(memberEntity);
-        }
-        public async Task<MemberDto> GetMemberById(int? id)
-        {
-            var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
-            return _mapper.Map<MemberDto>(memberEntity);
+            return new ServiceResult<IEnumerable<MemberDto>>(_mapper.Map<IEnumerable<MemberDto>>(memberEntity));
         }
 
-        public async Task<MemberDto> Add(MemberDto memberDTO)
+        public async Task<ServiceResult<MemberDto>> GetMemberById(int? id)
+        {
+            var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(memberEntity));
+        }
+
+        public async Task<ServiceResult<MemberDto>> Add(MemberDto memberDTO)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
             memberEntity.SetupCreation();
             memberEntity.SetupLastModified();
             var member = await _memberRepository.Create(memberEntity);
-            return _mapper.Map<MemberDto>(member);
+            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
         }
 
-        public async Task<MemberDto> Update(MemberDto memberDTO, int id)
+        public async Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
             memberEntity.SetupLastModified();
             var member = await _memberRepository.Update(memberEntity);
-            return _mapper.Map<MemberDto>(member);
+            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
         }
 
-        public async Task Remove(int? id)
+        public async Task<ServiceResult> Remove(int? id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
             memberEntity.SetupLastModified();
             await _memberRepository.Remove(memberEntity);
-
+            return new ServiceResult();
         }
     }
 }

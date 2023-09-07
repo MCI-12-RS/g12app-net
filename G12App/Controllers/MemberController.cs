@@ -15,15 +15,15 @@ namespace G12App.Controllers
             [FromQuery] int page = 1, [FromQuery] int limit = 10, [FromQuery] string sortBy = "", [FromQuery] string sortOrder = "")
         {
             var query = new Query(page, limit, sortBy, sortOrder);
-            var members = await memberService.GetMembers(query);
-            return Ok(members);
+            var result = await memberService.GetMembers(query);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromServices] IMemberService memberService, int id)
         {
-            var member = await memberService.GetMemberById(id);
-            return Ok(member);
+            var result = await memberService.GetMemberById(id);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -44,8 +44,8 @@ namespace G12App.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove([FromServices] IMemberService memberService, int id)
         {
-            await memberService.Remove(id);
-            return Ok();
+            var result = await memberService.Remove(id);
+            return Ok(result);
         }
 
 

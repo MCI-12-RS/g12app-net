@@ -1,4 +1,5 @@
 ﻿using G12App.Domain.DTOs;
+using G12App.Domain.Messages;
 using G12App.Domain.Querying;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,10 +8,10 @@ namespace G12App.Domain.Interfaces.Services
 {
     public interface IMemberService
     {
-        Task<IEnumerable<MemberDto>> GetMembers(Query query);
-        Task<MemberDto> GetMemberById(int? id);
-        Task<MemberDto> Add(MemberDto memberDTO);
-        Task<MemberDto> Update(MemberDto memberDTO, int id);
-        Task Remove(int? id);
+        Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query query);
+        Task<ServiceResult<MemberDto>> GetMemberById(int? id);
+        Task<ServiceResult<MemberDto>> Add(MemberDto memberDTO);
+        Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id);
+        Task<ServiceResult> Remove(int? id);
     }
 }

@@ -3,9 +3,9 @@ using G12App.Domain.DTOs;
 
 namespace G12App.Domain.Validators
 {
-    public class MemberRequestValidator : AbstractValidator<MemberDto>
+    public class MemberDtoValidator : AbstractValidator<MemberDto>
     {
-        public MemberRequestValidator()
+        public MemberDtoValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()

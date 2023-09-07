@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
+using G12App.Common.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
-using G12App.Common.Extensions;
-using AutoMapper.Execution;
+using System.Threading.Tasks;
 
 namespace G12App.Infrastructure.Data.Repositories
 {
