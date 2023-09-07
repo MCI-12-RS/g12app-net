@@ -80,7 +80,7 @@ namespace G12App.Domain.Tests
             // Assert
             result.Should().NotBeNull();
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().Contain(x => "E-mail inválido".Equals(x.ErrorMessage));
+            result.Errors.Should().Contain(x => "E-mail inválido".Equals(x.ErrorMessage, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

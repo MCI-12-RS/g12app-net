@@ -29,4 +29,4 @@ namespace G12App.Domain.Validators
                .WithMessage("Campo obrigatório");
         }
     }
-}
+} 
