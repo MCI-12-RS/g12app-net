@@ -24,7 +24,7 @@ namespace G12App.Domain.Validators
 
             RuleFor(x => x.Email)
                 .EmailAddress().Unless(x => string.IsNullOrEmpty(x.Email))
-                .WithMessage(Gender_ErrorMessage);
+                .WithMessage(Email_ErrorMessage);
 
             RuleFor(x => x.BirthDate)
                 .NotNull()
