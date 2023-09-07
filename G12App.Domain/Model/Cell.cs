@@ -15,6 +15,7 @@ namespace G12App.Domain.Model
         public int TimothyId { get; set; }
         public DayOfWeek WeekDay { get; set; }
         public Address Place { get; set; }
+        public int? PlaceId { get; set; }
         public CellType CellType { get; set; }
         public bool ReportMandatory { get; set; }
     }

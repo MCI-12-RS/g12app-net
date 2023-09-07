@@ -4,6 +4,7 @@ using G12App.Domain.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using G12App.Domain.DTOs;
 
 namespace G12App.Controllers
 {
@@ -17,12 +18,18 @@ namespace G12App.Controllers
         {
             var query = new Query(page, limit, sortBy, sortOrder);
             var result = await cellService.GetCell(query);
-            return Ok(result);
+            return result.AsActionResult();
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromServices] ICellService cellService, int? id)
         {
             var result = await cellService.GetCellById(id);
+            return result.AsActionResult();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add([FromServices] ICellService cellService, [FromBody] CellDTO cell)
+        {
+            var result = await cellService.Add(cell);
             return result.AsActionResult();
         }
     }

@@ -52,6 +52,18 @@ namespace G12App.Infrastructure.Data.Context
                 HomeAddressId = 1,
                 MemberType = Domain.Model.Enum.MemberType.Leadership,
             });
+            builder.Entity<Cell>().HasData(new Cell()
+            {
+                Id = 1,
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = Domain.Model.Enum.CellType.Evangelistic,
+                ReportMandatory = true,
+
+            });
         }
     }
 }
