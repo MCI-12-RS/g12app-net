@@ -5,28 +5,34 @@ namespace G12App.Domain.Validators
 {
     public class MemberDtoValidator : AbstractValidator<MemberDto>
     {
+        public const string Name_ErrorMessage = "Insira um nome válido, mínimo 2 caracteres";
+        public const string MemberType_ErrorMessage = "Campo obrigatório";
+        public const string Email_ErrorMessage = "E-mail inválido";
+        public const string BirthDate_ErrorMessage = "Campo obrigatório";
+        public const string Gender_ErrorMessage = "Campo obrigatório";
+
         public MemberDtoValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
                 .MinimumLength(2)
-                .WithMessage("Insira um nome válido, mínimo 2 carácteres");
+                .WithMessage(Name_ErrorMessage);
 
             RuleFor(x => x.MemberType)
                 .IsInEnum()
-                .WithMessage("Campo obrigatório");
+                .WithMessage(MemberType_ErrorMessage);
 
             RuleFor(x => x.Email)
                 .EmailAddress().Unless(x => string.IsNullOrEmpty(x.Email))
-                .WithMessage("E-mail inválido");
+                .WithMessage(Gender_ErrorMessage);
 
             RuleFor(x => x.BirthDate)
-                .NotEmpty()
-                .WithMessage("Campo obrigatório");
+                .NotNull()
+                .WithMessage(BirthDate_ErrorMessage);
 
             RuleFor(x => x.Gender)
                .IsInEnum()
-               .WithMessage("Campo obrigatório");
+               .WithMessage(Gender_ErrorMessage);
         }
     }
 } 
