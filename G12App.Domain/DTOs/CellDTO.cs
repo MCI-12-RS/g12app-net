@@ -1,6 +1,7 @@
 ﻿using G12App.Domain.Model.Enum;
 using G12App.Domain.Model;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace G12App.Domain.DTOs
 {
