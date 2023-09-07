@@ -18,7 +18,7 @@ namespace G12App.Domain.Validators
 
             RuleFor(x => x.Email)
                 .EmailAddress().Unless(x => string.IsNullOrEmpty(x.Email))
-                .WithMessage("E-mail ínvalido");
+                .WithMessage("E-mail inválido");
 
             RuleFor(x => x.BirthDate)
                 .NotEmpty()
