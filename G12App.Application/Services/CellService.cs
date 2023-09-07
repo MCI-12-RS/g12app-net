@@ -34,7 +34,7 @@ namespace G12App.Application.Services
             return _mapper.Map<CellDTO>(cellEntity);
         }
 
-        public async Task<IEnumerable<CellDTO>> GetMembers(Query query)
+        public async Task<IEnumerable<CellDTO>> GetCell(Query query)
         {
             var cellEntity = await _cellRepository.GetCellssAsync(query);
             return _mapper.Map<CellDTO[]>(cellEntity);
