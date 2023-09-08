@@ -16,14 +16,15 @@ namespace G12App
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IMemberService, MemberService>();
+            services.AddTransient<ICellService, CellService>();
             return services;
         }
 
         public static IServiceCollection RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IMemberRepository, MemberRepository>();
+            services.AddTransient<ICellRepository, CellRepository>();
 
-            services.AddScoped<IMemberService, MemberService>();
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
             return services;

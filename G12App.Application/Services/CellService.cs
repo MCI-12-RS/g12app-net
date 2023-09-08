@@ -6,6 +6,7 @@ using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Messages;
+using System.Net;
 
 namespace G12App.Application.Services
 {
