@@ -7,6 +7,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Messages;
 using System.Net;
+using AutoMapper.Execution;
 
 namespace G12App.Application.Services
 {
@@ -27,7 +28,8 @@ namespace G12App.Application.Services
             cellEntity.SetupCreation();
             cellEntity.SetupLastModified();
             var cell = await _cellRepository.Create(cellEntity);
-            return _mapper.Map<ServiceResult<CellDTO>>(cell);
+            /*return _mapper.Map<ServiceResult<CellDTO>>(cell);*/
+            return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
         }
 
         public async Task<ServiceResult<CellDTO>> GetCellById(int? id)
@@ -39,9 +41,9 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query query)
         {
             var cellEntity = await _cellRepository.GetCellssAsync(query);
-            return _mapper.Map<ServiceResult<IEnumerable<CellDTO>>>(cellEntity);
+            return new ServiceResult<IEnumerable<CellDTO>>(_mapper.Map<IEnumerable<CellDTO>>(cellEntity));
 
-            
+
         }
 
         public async Task<ServiceResult> Remove(int? id)
