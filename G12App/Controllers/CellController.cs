@@ -32,5 +32,11 @@ namespace G12App.Controllers
             var result = await cellService.Add(cell);
             return result.AsActionResult();
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove([FromServices] ICellService cellService, int? id)
+        {
+            var result = await cellService.Remove(id);
+            return result.AsActionResult();
+        }
     }
 }

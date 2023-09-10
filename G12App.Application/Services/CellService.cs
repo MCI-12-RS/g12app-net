@@ -48,7 +48,7 @@ namespace G12App.Application.Services
         public async Task<ServiceResult> Remove(int? id)
         {
             var cellEntity = await _cellRepository.GetCellByIdAsync(id);
-            if (cellEntity != null)
+            if (cellEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado.");
 
             cellEntity.SetupLastModified();
