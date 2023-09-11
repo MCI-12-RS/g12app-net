@@ -36,13 +36,13 @@ namespace G12App.Domain.Tests
             result.IsValid.Should().BeTrue();
         }
         [Fact]
-        public async Task ShouldGetErrorsForValidCellWithNullId()
+        public async Task ShouldGetErrorsForValidCellWithNullLeadId()
         {
             //Arrange
             var cell = new CellDTO()
             {
-                Id = null,
-                LeadId = 1,
+                Id = 1,
+                LeadId = 0,
                 HostId = 1,
                 TimothyId = 1,
                 WeekDay = System.DayOfWeek.Tuesday,

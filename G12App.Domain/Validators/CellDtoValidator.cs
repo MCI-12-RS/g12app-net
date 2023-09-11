@@ -14,23 +14,23 @@ namespace G12App.Domain.Validators
         public CellDtoValidator()
         {
             RuleFor(x => x.LeadId)
-                .Null()
+                .GreaterThan(0)
                 .WithMessage(LeadID_ErrorMessage);
 
             RuleFor(x => x.HostId)
-                .Null()
+                .NotNull()
                 .WithMessage(HostID_ErrorMessage);
                 
             RuleFor(x => x.TimothyId)
-                .Null()
+                .NotNull()
                 .WithMessage(TimothyID_ErrorMessage); 
             
             RuleFor(x => x.WeekDay)
-                .Null()
+                .NotNull()
                 .WithMessage(WeekDay_ErrorMessage);
             
             RuleFor(x => x.PlaceId)
-                .Null()
+                .NotNull()
                 .WithMessage(PlaceID_ErrorMessage);
         }
     }
