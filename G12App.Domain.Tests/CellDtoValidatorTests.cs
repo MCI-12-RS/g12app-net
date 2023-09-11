@@ -56,7 +56,7 @@ namespace G12App.Domain.Tests
 
             //Assert
             result.Should().NotBeNull();
-            result.IsValid.Should().BeTrue();
+            result.IsValid.Should().BeFalse();
             result.Errors.Should().Contain(x => CellDtoValidator.LeadID_ErrorMessage.Equals(x.ErrorMessage));
         }
     }
