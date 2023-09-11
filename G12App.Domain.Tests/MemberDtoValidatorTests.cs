@@ -82,5 +82,6 @@ namespace G12App.Domain.Tests
             result.IsValid.Should().BeFalse();
             result.Errors.Should().Contain(x => MemberDtoValidator.Email_ErrorMessage.Equals(x.ErrorMessage));
         }
+
     }
 }
