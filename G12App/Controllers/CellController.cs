@@ -39,7 +39,7 @@ namespace G12App.Controllers
             return result.AsActionResult();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromServices] ICellService cellService, CellDTO cell, int id)
+        public async Task<IActionResult> Update([FromServices] ICellService cellService,[FromBody] CellDTO cell, int id)
         {
             cell.Id = id;
             var result = await cellService.Update(cell, id);
