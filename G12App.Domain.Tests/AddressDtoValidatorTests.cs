@@ -36,5 +36,30 @@ namespace G12App.Domain.Tests
             result.Should().NotBeNull();
             result.IsValid.Should().BeTrue();
         }
+
+        [Fact]
+        public async Task ShouldGetErrorsForInvalidAddress()
+        {
+            //Arrange
+            var address = new AddressDto()
+            {
+                Id = 1,
+                Street = null,
+                Number = "600",
+                City = "Alvorada",
+                Neighborhood = "Porto Verde",
+                Notes = string.Empty,
+                PostalCode = "94858540",
+                State = "RS",
+            };
+
+            //Act
+            var result = await _validator.ValidateAsync(address);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().Contain(x => AddressDtoValidator.Street_ErrorMessage.Equals(x.ErrorMessage));
+        }
     }
 }
