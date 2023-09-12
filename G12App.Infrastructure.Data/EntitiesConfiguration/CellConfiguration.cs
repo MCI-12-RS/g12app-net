@@ -10,13 +10,17 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(x => x.Lead).WithMany().HasForeignKey(x => x.LeadId);
+            builder.HasOne(x => x.Lead).WithMany().HasForeignKey(x => x.LeadId).IsRequired();
             builder.Navigation(x => x.Lead).AutoInclude();
-            builder.HasOne(x => x.Host).WithMany().HasForeignKey(x => x.HostId);
+
+            builder.HasOne(x => x.Host).WithMany().HasForeignKey(x => x.HostId).IsRequired();
             builder.Navigation(x => x.Host).AutoInclude();
-            builder.HasOne(x => x.Timothy).WithMany().HasForeignKey(x => x.TimothyId);
+
+            builder.HasOne(x => x.Timothy).WithMany().HasForeignKey(x => x.TimothyId).IsRequired();
             builder.Navigation(x => x.Timothy).AutoInclude();
-            
+
+            builder.HasOne(x => x.Place).WithMany().HasForeignKey(x => x.PlaceId);
+            builder.Navigation(x => x.Place).AutoInclude();
         }
     }
 }
