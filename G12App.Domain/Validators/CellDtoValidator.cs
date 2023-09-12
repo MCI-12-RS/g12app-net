@@ -18,11 +18,11 @@ namespace G12App.Domain.Validators
                 .WithMessage(LeadID_ErrorMessage);
 
             RuleFor(x => x.HostId)
-                .NotNull()
+                .GreaterThan(0)
                 .WithMessage(HostID_ErrorMessage);
                 
             RuleFor(x => x.TimothyId)
-                .NotNull()
+                .GreaterThan(0)
                 .WithMessage(TimothyID_ErrorMessage); 
             
             RuleFor(x => x.WeekDay)

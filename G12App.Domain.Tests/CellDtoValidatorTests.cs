@@ -35,29 +35,61 @@ namespace G12App.Domain.Tests
             result.Should().NotBeNull();
             result.IsValid.Should().BeTrue();
         }
-        [Fact]
-        public async Task ShouldGetErrorsForValidCellWithNullLeadId()
-        {
-            //Arrange
-            var cell = new CellDTO()
-            {
-                Id = 1,
-                LeadId = 0,
-                HostId = 1,
-                TimothyId = 1,
-                WeekDay = System.DayOfWeek.Tuesday,
-                PlaceId = 1,
-                CellType = Domain.Model.Enum.CellType.Evangelistic,
-                ReportMandatory = true,
-            };
 
+
+        public static object[][] ShouldGetErrorForInvalidCell_Data = new object[][]
+        {
+            // Test 1
+            new object[] {
+
+                // dto
+                new CellDTO()
+                {
+                    Id = 1,
+                    LeadId = 0,
+                    HostId = 1,
+                    TimothyId = 1,
+                    WeekDay = System.DayOfWeek.Tuesday,
+                    PlaceId = 1,
+                    CellType = Domain.Model.Enum.CellType.Evangelistic,
+                    ReportMandatory = true,
+                },
+                
+                // errorMessage
+                CellDtoValidator.LeadID_ErrorMessage
+            },
+
+            // Test 2
+            new object[] {
+                // dto
+                new CellDTO()
+                {
+                    Id = 1,
+                    LeadId = 1,
+                    HostId = 0,
+                    TimothyId = 1,
+                    WeekDay = System.DayOfWeek.Tuesday,
+                    PlaceId = 1,
+                    CellType = Domain.Model.Enum.CellType.Evangelistic,
+                    ReportMandatory = true,
+                },
+                
+                // errorMessage
+                CellDtoValidator.HostID_ErrorMessage
+            }
+        };
+
+        [Theory]
+        [MemberData(nameof(ShouldGetErrorForInvalidCell_Data))]
+        public async Task ShouldGetErrorForInvalidCell_MemberData(CellDTO dto, string errorMessage)
+        {
             //Act
-            var result = await _validator.ValidateAsync(cell);
+            var result = await _validator.ValidateAsync(dto);
 
             //Assert
             result.Should().NotBeNull();
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().Contain(x => CellDtoValidator.LeadID_ErrorMessage.Equals(x.ErrorMessage));
+            result.Errors.Should().Contain(x => errorMessage.Equals(x.ErrorMessage));
         }
     }
 }
