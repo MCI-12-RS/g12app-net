@@ -170,9 +170,9 @@ namespace G12App.Application.Tests
             var mock = new Mock<ICellRepository>();
             var mapperMock = new Mock<IMapper>();
 
-            mapperMock.Setup(x => x.Map<Cell>(cellDto));
+            mapperMock.Setup(x => x.Map<Cell>(cellDto)).Returns(cell);
             mock.Setup(x => x.Update(It.IsAny<Cell>())).ReturnsAsync(cell);
-            mapperMock.Setup(x => x.Map<CellDTO>(cell));
+            mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
 
             //Act
             var service = new CellService(mock.Object, mapperMock.Object);

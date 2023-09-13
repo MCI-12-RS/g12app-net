@@ -54,8 +54,9 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Cell> Update(Cell cell)
         {
-            var memberEntity = await _context.Members.FirstOrDefaultAsync(x => x.Id == cell.Id && x.IsDeleted == false);
-            _context.Entry(memberEntity).State = EntityState.Modified;
+            var cellEntity = await _context.Cells.FirstOrDefaultAsync(x => x.Id == cell.Id && x.IsDeleted == false);
+            _mapper.Map(cell, cellEntity);
+            _context.Entry(cellEntity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return cell;
         }
