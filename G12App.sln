@@ -25,11 +25,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Unit tests", "4 - Unit 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "G12App.Domain.Tests", "G12App.Domain.Tests\G12App.Domain.Tests.csproj", "{ED420093-76CA-4B50-BDAE-1F058FF2489E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G12App.Application.Tests", "G12App.Application.Tests\G12App.Application.Tests.csproj", "{7D5F2A60-88BD-42EC-8A9A-D8A6DF6A0FDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "G12App.Application.Tests", "G12App.Application.Tests\G12App.Application.Tests.csproj", "{7D5F2A60-88BD-42EC-8A9A-D8A6DF6A0FDE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{99BAC737-306D-4752-9CE6-6DE1CA242132} = {99BAC737-306D-4752-9CE6-6DE1CA242132}
 		{C99895A9-9469-4D48-A958-EE3BF2331BEA} = {C99895A9-9469-4D48-A958-EE3BF2331BEA}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G12App.Infrastructure.Data.Tests", "G12App.Infrastructure.Tests\G12App.Infrastructure.Data.Tests.csproj", "{602FE595-0F3F-490D-818D-7B72C17D33D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{7D5F2A60-88BD-42EC-8A9A-D8A6DF6A0FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D5F2A60-88BD-42EC-8A9A-D8A6DF6A0FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D5F2A60-88BD-42EC-8A9A-D8A6DF6A0FDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{602FE595-0F3F-490D-818D-7B72C17D33D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{602FE595-0F3F-490D-818D-7B72C17D33D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{602FE595-0F3F-490D-818D-7B72C17D33D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{602FE595-0F3F-490D-818D-7B72C17D33D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 		{A5817A33-5C46-4D54-94F2-D702FE85E6E0} = {A20D4243-AD67-4DDB-8C6B-8F21FB882EAF}
 		{ED420093-76CA-4B50-BDAE-1F058FF2489E} = {9F8DDDFC-DF39-4243-8A04-F3789571AE53}
 		{7D5F2A60-88BD-42EC-8A9A-D8A6DF6A0FDE} = {9F8DDDFC-DF39-4243-8A04-F3789571AE53}
+		{602FE595-0F3F-490D-818D-7B72C17D33D9} = {9F8DDDFC-DF39-4243-8A04-F3789571AE53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DDB18509-46A0-45D3-AB71-CDDA45092FC5}
