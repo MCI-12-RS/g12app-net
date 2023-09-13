@@ -72,5 +72,17 @@ namespace G12App.Infrastructure.Data.Tests
             var getResult = await _repository.GetCellByIdAsync(createdCell.Id);
             getResult.Should().BeNull();
         }
+        [Fact]
+        public async Task TestToCreate()
+        {
+            //Arrange
+            
+
+            //Act
+            var result = await _repository.Create(_defaultCellToCreate);
+
+            //Assert
+            result.Should().NotBeNull();
+        }
     }
 }
