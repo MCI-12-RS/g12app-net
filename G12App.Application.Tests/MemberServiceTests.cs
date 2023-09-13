@@ -8,7 +8,7 @@ using FluentAssertions;
 
 namespace G12App.Application.Tests
 {
-    public class MemberSeerviceTests
+    public class MemberServiceTests
     {
         [Fact]
         public async void AddMemberSeerviceIsOk()

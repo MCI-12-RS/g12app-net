@@ -18,7 +18,8 @@ namespace G12App.Domain.Mappings
             CreateMap<Address, Address>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
 
-            
+            CreateMap<Cell, Cell>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
         }
     }
 }
