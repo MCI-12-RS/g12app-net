@@ -138,5 +138,50 @@ namespace G12App.Application.Tests
             mock.Verify(x => x.Remove(cell));
             
         }
+
+        [Fact]
+        public async void RepositoryUpdateIsOk()
+        {
+            var cell = new Cell()
+            {
+                Id = 1,
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = Domain.Model.Enum.CellType.Evangelistic,
+                ReportMandatory = true,
+            };
+
+            var cellDto = new CellDTO()
+            {
+                Id = 1,
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = Domain.Model.Enum.CellType.Evangelistic,
+                ReportMandatory = true,
+            };
+            
+            //mock
+            var mock = new Mock<ICellRepository>();
+            var mapperMock = new Mock<IMapper>();
+
+            mapperMock.Setup(x => x.Map<Cell>(cellDto));
+            mock.Setup(x => x.Update(It.IsAny<Cell>())).ReturnsAsync(cell);
+            mapperMock.Setup(x => x.Map<CellDTO>(cell));
+
+            //Act
+            var service = new CellService(mock.Object, mapperMock.Object);
+            var result = await service.Update(cellDto, cell.Id);
+
+            //Assert
+            mapperMock.Verify(x => x.Map<Cell>(cellDto));
+            mock.Verify(x => x.Update(cell));
+            result.Data.Should().Be(cellDto);
+        }
     }
 }
