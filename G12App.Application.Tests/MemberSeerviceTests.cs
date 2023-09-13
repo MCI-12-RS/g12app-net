@@ -140,5 +140,48 @@ namespace G12App.Application.Tests
             mapperMock.Verify(x => x.Map<MemberDto>(member));
             result.Data.Should().Be(memberDto);
         }
+
+        [Fact]
+        public async void UpdateMemberIsOk()
+        {
+            var member = new Member()
+            {
+                Id = 1,
+                Name = "Rafael",
+                Surname = "Jorge Alves",
+                BirthDate = new System.DateTime(1993, 05, 10),
+                Email = "rafaeljorgealves@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                HomeAddressId = 1,
+                MemberType = Domain.Model.Enum.MemberType.Leadership,
+            };
+
+            var memberDto = new MemberDto()
+            {
+                Id = 1,
+                Name = "Rafael",
+                Surname = "Jorge Alves",
+                BirthDate = new System.DateTime(1993, 05, 10),
+                Email = "rafaeljorgealves@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                //HomeAddressId = 1,
+                MemberType = Domain.Model.Enum.MemberType.Leadership,
+            };
+
+            //mock
+            var mock = new Mock<IMemberRepository>();
+            var mapperMock = new Mock<IMapper>();
+
+            mapperMock.Setup(x => x.Map<MemberDto>(member)).Returns(memberDto);
+            mock.Setup(x => x.Update(It.IsAny<Member>())).ReturnsAsync(member);
+            mapperMock.Setup(x => x.Map<Member>(memberDto)).Returns(member);
+
+            //Act
+            var service = new MemberService(mock.Object, mapperMock.Object);
+            var result = await service.Update(memberDto, member.Id);
+
+            //Assert
+            mock.Verify(x => x.Update(member));
+        }
     }
 }
