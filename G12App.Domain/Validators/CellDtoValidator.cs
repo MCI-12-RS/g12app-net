@@ -30,7 +30,7 @@ namespace G12App.Domain.Validators
                 .WithMessage(WeekDay_ErrorMessage);
             
             RuleFor(x => x.PlaceId)
-                .NotNull()
+                .GreaterThan(0)
                 .WithMessage(PlaceID_ErrorMessage);
         }
     }

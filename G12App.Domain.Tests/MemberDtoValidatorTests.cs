@@ -47,13 +47,14 @@ namespace G12App.Domain.Tests
             result.IsValid.Should().BeTrue();
         }
 
-        [Fact]
-        public async Task ShouldGetErrorsForInvalidMemberWithInvalidEmail()
+        public static object[][] ShouldGetErrorForInvalidMember_Data = new object[][]
         {
-            // Arrange
-            var member = new MemberDto()
+            //Test 1
+            new object[]
             {
-                Id = 1,
+                new MemberDto()
+                {
+                    Id = 1,
                 Name = "Rafael",
                 Surname = "Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
@@ -71,17 +72,83 @@ namespace G12App.Domain.Tests
                     State = "RS",
                 },
                 MemberType = Domain.Model.Enum.MemberType.Leadership,
-            };
+                },
+             //errorMessagem
+            MemberDtoValidator.Email_ErrorMessage
+            },
 
-            // Act
-            var result = await _validator.ValidateAsync(member);
+            //Test 2
+            new object[]
+            {
+                new MemberDto()
+                {
+                    Id = 1,
+                Name = "",
+                Surname = "Jorge Alves",
+                BirthDate = new System.DateTime(1993, 05, 10),
+                Email = "my_invalid_email",
+                Gender = Domain.Model.Enum.Gender.Male,
+                HomeAddress = new AddressDto()
+                {
+                    Id = 1,
+                    Street = "Biguas",
+                    Number = "600",
+                    City = "Alvorada",
+                    Neighborhood = "Porto Verde",
+                    Notes = string.Empty,
+                    PostalCode = "94858540",
+                    State = "RS",
+                },
+                MemberType = Domain.Model.Enum.MemberType.Leadership,
+                },
+             //errorMessagem
+            MemberDtoValidator.Name_ErrorMessage
+            },
+
+               //Test 3
+            new object[]
+            {
+                new MemberDto()
+                {
+                    Id = 1,
+                Name = "Rafael",
+                Surname = "",
+                BirthDate = new System.DateTime(1993, 05, 10),
+                Email = "my_invalid_email",
+                Gender = Domain.Model.Enum.Gender.Male,
+                HomeAddress = new AddressDto()
+                {
+                    Id = 1,
+                    Street = "Biguas",
+                    Number = "600",
+                    City = "Alvorada",
+                    Neighborhood = "Porto Verde",
+                    Notes = string.Empty,
+                    PostalCode = "94858540",
+                    State = "RS",
+                },
+                MemberType = Domain.Model.Enum.MemberType.Leadership,
+                },
+             //errorMessagem
+            MemberDtoValidator.Surname_ErrorMessage
+            },
 
 
-            // Assert
+        };
+
+        [Theory]
+        [MemberData(nameof(ShouldGetErrorForInvalidMember_Data))]
+        public async Task ShouldGetErrorForInvalidMemberData(MemberDto dto, string errorMessage)
+        {
+            //Act
+            var result = await _validator.ValidateAsync(dto);
+
+            //Assert
             result.Should().NotBeNull();
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().Contain(x => MemberDtoValidator.Email_ErrorMessage.Equals(x.ErrorMessage));
+            result.Errors.Should().Contain(x => errorMessage.Equals(x.ErrorMessage));
         }
+
 
     }
 }

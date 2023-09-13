@@ -76,6 +76,44 @@ namespace G12App.Domain.Tests
                 
                 // errorMessage
                 CellDtoValidator.HostID_ErrorMessage
+            },
+
+            // Test 3
+            new object[] {
+                // dto
+                new CellDTO()
+                {
+                    Id = 1,
+                    LeadId = 1,
+                    HostId = 1,
+                    TimothyId = 0,
+                    WeekDay = System.DayOfWeek.Tuesday,
+                    PlaceId = 1,
+                    CellType = Domain.Model.Enum.CellType.Evangelistic,
+                    ReportMandatory = true,
+                },
+                
+                // errorMessage
+                CellDtoValidator.TimothyID_ErrorMessage
+            },
+
+            // Test 4
+            new object[] {
+                // dto
+                new CellDTO()
+                {
+                    Id = 1,
+                    LeadId = 1,
+                    HostId = 1,
+                    TimothyId = 1,
+                    WeekDay = System.DayOfWeek.Tuesday,
+                    PlaceId = 0,
+                    CellType = Domain.Model.Enum.CellType.Evangelistic,
+                    ReportMandatory = true,
+                },
+                
+                // errorMessage
+                CellDtoValidator.PlaceID_ErrorMessage
             }
         };
 
