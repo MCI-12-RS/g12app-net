@@ -75,14 +75,25 @@ namespace G12App.Infrastructure.Data.Tests
         [Fact]
         public async Task TestToCreate()
         {
-            //Arrange
             
-
             //Act
             var result = await _repository.Create(_defaultCellToCreate);
 
             //Assert
             result.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task GetByIdTest()
+        {
+            //Arrange
+            var createdCell = await _repository.Create(_defaultCellToCreate);
+
+            //Act
+            var result = await _repository.GetCellByIdAsync(createdCell.Id);
+
+            //Assert
+            result.Should().Be(createdCell);
         }
     }
 }
