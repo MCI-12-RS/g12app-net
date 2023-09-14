@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using G12App.Domain.Model;
+using G12App.Domain.Querying;
 using G12App.Infrastructure.Data.Repositories;
 using System.Threading.Tasks;
 using Xunit;
@@ -20,6 +21,8 @@ namespace G12App.Infrastructure.Data.Tests
             HomeAddressId = 1,
             MemberType = Domain.Model.Enum.MemberType.Leadership,
         };
+        private readonly Query query = new Query();
+
         public MemberRepositoryTests()
         {
             _repository = new MemberRepository(_fixture.Context, _fixture.Mapper);
@@ -30,7 +33,7 @@ namespace G12App.Infrastructure.Data.Tests
         {
             //Arrange
             var createdMember = new Member()
-            {                
+            {
                 Name = "Rafael",
                 Surname = "Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
@@ -71,6 +74,20 @@ namespace G12App.Infrastructure.Data.Tests
 
             //Assert
             result.IsDeleted.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task GetMembersTest()
+        {
+            //Arrange
+            var member = await _repository.Create(_defaultMember);
+            var query = new Query();
+
+            //Act
+            var result = await _repository.GetMembersAsync(query);
+
+            //Assert
+            result.Should().NotBeNull();
         }
     }
 }

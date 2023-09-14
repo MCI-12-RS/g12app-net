@@ -3,6 +3,7 @@ using FluentAssertions;
 using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Domain.Model.Enum;
+using G12App.Domain.Querying;
 using G12App.Infrastructure.Data.Repositories;
 using Moq;
 using System.Threading.Tasks;
@@ -69,8 +70,7 @@ namespace G12App.Infrastructure.Data.Tests
             var result = await _repository.Remove(createdCell);
 
             //Assert
-            var getResult = await _repository.GetCellByIdAsync(createdCell.Id);
-            getResult.Should().BeNull();
+            result.IsDeleted.Should().BeTrue();
         }
         [Fact]
         public async Task TestToCreate()
@@ -94,6 +94,20 @@ namespace G12App.Infrastructure.Data.Tests
 
             //Assert
             result.Should().Be(createdCell);
+        }
+
+        [Fact]
+        public async Task GetCellTest()
+        {
+            //Arrange
+            var createdCell = await _repository.Create(_defaultCellToCreate);
+            var query = new Query();
+
+            //Act
+            var result = await _repository.GetCellssAsync(query);
+
+            //Assert
+            result.Should().NotBeNull();
         }
     }
 }
