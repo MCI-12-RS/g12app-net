@@ -6,6 +6,9 @@ using System.Text;
 using G12App.Domain.Model;
 using AutoMapper.Execution;
 using Member = G12App.Domain.Model.Member;
+using System.Net.Http.Json;
+using G12App.Domain.Messages;
+using G12App.Domain.DTOs;
 
 namespace G12App.Tests
 {
@@ -118,15 +121,32 @@ namespace G12App.Tests
         public async Task RemoveTest()
         {
             //Arrange
-            var member = defaultMember;
+            var member = new Member()
+            {
+
+                Name = "Rafael",
+                Surname = "Jorge Alves",
+                BirthDate = new System.DateTime(1993, 05, 10),
+                Email = "rafaeljorgealves@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                HomeAddressId = 1,
+                MemberType = Domain.Model.Enum.MemberType.Leadership,
+            };
+            var memberJson = new StringContent(
+                JsonSerializer.Serialize(member, _testsFixture.JsonSerializerOptions),
+                Encoding.UTF8,
+                "application/json");
+            var postResponse = await _testsFixture.HttpClient.PostAsync("/api/member", memberJson);
+            var postResponseString = await postResponse.Content.ReadAsStringAsync();
+            var jsonMember = await postResponse.Content.ReadFromJsonAsync<ServiceResult<MemberDto>>(_testsFixture.JsonSerializerOptions);
 
             //Act
-            var response = await _testsFixture.HttpClient.DeleteAsync("/api/member"+member.Id);
+            
+            var removeResponse = await _testsFixture.HttpClient.DeleteAsync("/api/member/" + jsonMember.Data.Id);
 
             //Assert
-            var result = await response.Content.ReadAsStringAsync();
-            result.Should().BeNullOrEmpty();
-            
+            var result = await removeResponse.Content.ReadAsStringAsync();
+            removeResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
 }

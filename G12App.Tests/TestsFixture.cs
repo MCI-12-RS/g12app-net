@@ -11,7 +11,7 @@ namespace G12App.Tests
             var webApplicationFactory = new WebApplicationFactory<Program>();
             HttpClient = webApplicationFactory.CreateDefaultClient();
 
-            JsonSerializerOptions = new JsonSerializerOptions();
+            JsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
             JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
