@@ -10,7 +10,7 @@ namespace G12App.Domain.Model
         public int Visitors { get; set; }
         public int Frequenters { get; set; }
         public int Members { get; set; }
-        public Cell Cell { get; set; }
+        public int CellId { get; set; }
         public int LeadershipId { get; set; }
         public int HostId { get; set; }
         public int TimothyId { get; set; }

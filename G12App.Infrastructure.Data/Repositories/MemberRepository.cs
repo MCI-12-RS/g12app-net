@@ -32,7 +32,8 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> GetMemberByIdAsync(int? id)
         {
-            return await _context.Members.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            return await _context.Members.FirstOrDefaultAsync
+                (x => x.Id == id && x.IsDeleted == false);
         }
 
         public async Task<IEnumerable<Member>> GetMembersAsync(Query query)
@@ -56,7 +57,8 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> Update(Member member)
         {
-            var memberEntity = await _context.Members.FirstOrDefaultAsync(x => x.Id == member.Id && x.IsDeleted == false);
+            var memberEntity = await _context.Members.FirstOrDefaultAsync
+                (x => x.Id == member.Id && x.IsDeleted == false);
             _mapper.Map(member, memberEntity);
             _context.Entry(memberEntity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
