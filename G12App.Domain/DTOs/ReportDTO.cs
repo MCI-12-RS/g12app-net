@@ -5,6 +5,7 @@ namespace G12App.Domain.DTOs
 {
     public class ReportDTO
     {
+        public int ReportId { get; set; }
         public string Subject { get; set; }
         public DateTime Date { get; set; }
         public int Visitors { get; set; }

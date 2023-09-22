@@ -5,6 +5,7 @@ namespace G12App.Domain.Model
 {
     public class Report : BaseEntity
     {
+        public int ReportId { get; set; }
         public string Subject { get; set; }
         public DateTime Date { get; set; }
         public int Visitors { get; set; }
@@ -14,5 +15,6 @@ namespace G12App.Domain.Model
         public int LeadershipId { get; set; }
         public int HostId { get; set; }
         public int TimothyId { get; set; }
+        public Cell Cell { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace G12App.Domain.Mappings
             CreateMap<Member, MemberDto>().ReverseMap();
             CreateMap<Address, AddressDto>().ReverseMap();
             CreateMap<Cell, CellDTO>().ReverseMap();
+            CreateMap<Report, ReportDTO>().ReverseMap();
 
             CreateMap<Member, Member>()
                 .ForMember(x => x.Id, opt => opt.Ignore());

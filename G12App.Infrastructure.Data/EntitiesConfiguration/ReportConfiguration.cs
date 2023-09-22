@@ -8,7 +8,10 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<Report> builder)
         {
-            builder.HasKey(x => x.CellId);
+            builder.HasKey(x => x.ReportId);
+
+            builder.HasOne(x => x.Cell).WithMany().HasForeignKey(x => x.Cell.Id).IsRequired();
+            builder.Navigation(x => x.Cell);
         }
     }
 }
