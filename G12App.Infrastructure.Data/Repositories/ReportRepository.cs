@@ -1,12 +1,18 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
+using G12App.Common.Extensions;
+using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
+using G12App.Domain.Querying;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace G12App.Infrastructure.Data.Repositories
 {
-    public class ReportRepository
+    public class ReportRepository : IReportRepository
     {
         private readonly AppContext _context;
         private readonly IMapper _mapper;
@@ -24,16 +30,18 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
-        public async Task<Report> GetByCellId(int? cellId)
+        public async Task<IEnumerable<Report>> GetByCellId(int? cellId)
         {
-            return await _context.Reports.FirstOrDefaultAsync
-                (x => x.CellId == cellId && x.IsDeleted == false);
+            return await _context.Reports
+                .Where(x => x.IsDeleted == false && x.CellId == cellId)
+                .ToListAsync();
         }
 
-        public async Task<Report> GetByLeadershipId(int? cellId)
+        public async Task<IEnumerable<Report>> GetReportsByLeadId(int LeadId)
         {
-            return await _context.Reports.FirstOrDefaultAsync
-                (x => x.LeadershipId == cellId && x.IsDeleted == false);
+            return await _context.Reports
+                .Where(x => x.IsDeleted == false)
+                .ToListAsync();
         }
 
         public async Task<Report> Update(Report report)
@@ -44,6 +52,32 @@ namespace G12App.Infrastructure.Data.Repositories
             _context.Entry(reportEntity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return report;
+        }
+
+        public async Task<IEnumerable<Report>> GetReportsAsync(Query query)
+        {
+            return await _context.Reports
+                .Where(x => x.IsDeleted == false)
+                .ApplyPaging(query)
+                .ToListAsync();
+        }
+
+        public async Task<Report> Remove (Report report)
+        {
+            if (_context.Entry(report).State == EntityState.Detached)
+                _context.Attach(report);
+            report.IsDeleted = true;
+
+            _context.Entry(report).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return report;
+        }
+
+        public async Task<IEnumerable<Report>> GetReportsById(int reportId)
+        {
+            return await _context.Reports
+                .Where (x => x.IsDeleted == false && x.ReportId == reportId)
+                .ToListAsync();
         }
     }
 }
