@@ -21,6 +21,8 @@ namespace G12App.Domain.Mappings
 
             CreateMap<Cell, Cell>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
+            CreateMap<Report, Report>()
+                .ForMember(x => x.ReportId, opt => opt.Ignore());
         }
     }
 }

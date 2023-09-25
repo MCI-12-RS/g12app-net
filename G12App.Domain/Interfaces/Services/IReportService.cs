@@ -16,6 +16,6 @@ namespace G12App.Domain.Interfaces.Services
         Task<ServiceResult<ReportDTO>> GetByLeadershipId(int id);
         Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO);
         Task <ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id);
-        Task<ServiceResult<ReportDTO>> Delete(int id);
+        Task<ServiceResult> Delete(int id);
     }
 }

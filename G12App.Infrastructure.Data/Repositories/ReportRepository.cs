@@ -73,11 +73,11 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
-        public async Task<IEnumerable<Report>> GetReportsById(int reportId)
+        public async Task<Report> GetReportById(int reportId)
         {
-            return await _context.Reports
-                .Where (x => x.IsDeleted == false && x.ReportId == reportId)
-                .ToListAsync();
+            return await _context.Reports.FirstOrDefaultAsync
+                (x => x.ReportId == reportId && x.IsDeleted == false);
+
         }
     }
 }
