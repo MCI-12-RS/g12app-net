@@ -10,8 +10,6 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
         {
             builder.HasKey(x => x.ReportId);
 
-            builder.HasOne(x => x.Cell).WithMany().HasForeignKey(x => x.Cell.Id).IsRequired();
-            builder.Navigation(x => x.Cell);
         }
     }
 }
