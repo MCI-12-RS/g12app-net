@@ -47,15 +47,17 @@ namespace G12App.Application.Services
             return new ServiceResult<IEnumerable<ReportDTO>>(_mapper.Map<IEnumerable<ReportDTO>>(reportEntity));
         }
 
-        public async Task<ServiceResult<ReportDTO>> GetByCellId(int id)
+        public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetByCellId(Query query, int cellId)
         {
-            var reportEntity = await _reportRepository.GetReportById(id);
-            return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(reportEntity));
+            var reportEntity = await _reportRepository.GetByCellId(query, cellId);
+            return new ServiceResult<IEnumerable<ReportDTO>>(_mapper.Map<IEnumerable<ReportDTO>>(reportEntity));
         }
 
-        public Task<ServiceResult<ReportDTO>> GetByLeadershipId(int id)
+        public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetByLeadershipId(Query query, int leadId)
         {
-            throw new NotImplementedException();
+            var reportEntity = await _reportRepository.GetByLeadId(query, leadId);
+            return new ServiceResult<IEnumerable<ReportDTO>>(_mapper.Map<IEnumerable<ReportDTO>>(reportEntity));
+
         }
 
         public async Task<ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id)

@@ -30,17 +30,21 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
-        public async Task<IEnumerable<Report>> GetByCellId(int? cellId)
+        public async Task<IEnumerable<Report>> GetByCellId(Query query, int cellId)
         {
             return await _context.Reports
                 .Where(x => x.IsDeleted == false && x.CellId == cellId)
+                .ApplyPaging(query)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Report>> GetReportsByLeadId(int LeadId)
+
+
+        public async Task<IEnumerable<Report>> GetByLeadId(Query query, int LeadId)
         {
             return await _context.Reports
-                .Where(x => x.IsDeleted == false)
+                .Where(x => x.IsDeleted == false && x.LeadershipId == LeadId)
+                .ApplyPaging(query)
                 .ToListAsync();
         }
 

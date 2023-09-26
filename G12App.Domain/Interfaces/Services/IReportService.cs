@@ -12,8 +12,8 @@ namespace G12App.Domain.Interfaces.Services
     public interface IReportService
     {
         Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query query);
-        Task<ServiceResult<ReportDTO>> GetByCellId(int id);
-        Task<ServiceResult<ReportDTO>> GetByLeadershipId(int id);
+        Task<ServiceResult<IEnumerable<ReportDTO>>> GetByCellId(Query query, int id);
+        Task<ServiceResult<IEnumerable<ReportDTO>>> GetByLeadershipId(Query query, int id);
         Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO);
         Task <ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id);
         Task<ServiceResult> Delete(int id);
