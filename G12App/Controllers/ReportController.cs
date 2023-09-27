@@ -20,6 +20,14 @@ namespace G12App.Controllers
             var result = await reportService.GetAllReports(query);
             return result.AsActionResult();
         }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromServices] IReportService reportService, int id)
+        {
+            var result = await reportService.GetByReportId(id);
+            return result.AsActionResult();
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Post([FromServices] IReportService reportService, [FromBody] ReportDTO reportDTO)
