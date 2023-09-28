@@ -21,7 +21,6 @@ namespace G12App.Infrastructure.Data.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(typeof(AppContext).Assembly);
 
@@ -53,6 +52,7 @@ namespace G12App.Infrastructure.Data.Context
                 HomeAddressId = 1,
                 MemberType = Domain.Model.Enum.MemberType.Leadership,
             });
+
             builder.Entity<Cell>().HasData(new Cell()
             {
                 Id = 1,

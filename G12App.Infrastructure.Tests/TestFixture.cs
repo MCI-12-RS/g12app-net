@@ -13,14 +13,20 @@ namespace G12App.Infrastructure.Data.Tests
 
         public TestFixture()
         {
+            var connection = new SqliteConnection("Filename=:memory:");
+            connection.Open();
+
             var contextOptions = new DbContextOptionsBuilder<AppContext>()
-                .UseSqlite("Filename=:memory:")
+                .UseSqlite(connection)
                 .Options;
 
             Context = new AppContext(contextOptions);
             Context.Database.EnsureCreated();
-
             Mapper = new Mapper(new MapperConfiguration(x => x.AddProfile<DomainToDTOMappingProfile>()));
+        }
+
+        ~TestFixture(){
+            Context.Database.EnsureDeleted();
         }
     }
 }
