@@ -5,7 +5,7 @@ namespace G12App.Domain.DTOs
 {
     public class ReportDTO
     {
-        public int ReportId { get; set; }
+        public int? ReportId { get; set; }
         public string Subject { get; set; }
         public DateTime Date { get; set; }
         public int Visitors { get; set; }
@@ -14,6 +14,6 @@ namespace G12App.Domain.DTOs
         public int CellId { get; set; }
         public int LeadershipId { get; set; }
         public int HostId { get; set; }
-        public int TimothyId { get; set; }
+        public int? TimothyId { get; set; }
     }
 }
