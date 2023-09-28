@@ -35,7 +35,7 @@ namespace G12App
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppContext>(options => options
-                    .UseSqlite(configuration["ConnectionStrings:AppContext"]));
+                    .UseSqlite("Filename=:memory:"));
 
             return services;
         }
