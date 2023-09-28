@@ -19,7 +19,10 @@ namespace G12App.Tests
                 builder
                     .ConfigureTestServices(services =>
                     {
-                        services.AddDbContext<AppContext>(options => options.UseSqlite("Filename=:memory:"));
+                        var conn = new SqliteConnection("Filename=:memory:");
+                        conn.Open();
+
+                        services.AddDbContext<AppContext>(options => options.UseSqlite(conn));
                     });
             });
 
