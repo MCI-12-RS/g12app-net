@@ -149,8 +149,8 @@ namespace G12App.Domain.Tests
             }
         };
 
-        /*[Theory]
-        [(nameof(ShouldGetErrorsForInvalidReport_Data))]
+        [Theory]
+        [MemberData(nameof(ShouldGetErrorsForInvalidReport_Data))]
         public async Task ShouldGetErrorForInvalidReportData(ReportDTO dto, string errorMessage)
         {
             //Act
@@ -161,6 +161,6 @@ namespace G12App.Domain.Tests
             result.IsValid.Should().BeFalse();
             result.Errors.Should().Contain(x => errorMessage.Equals(x.ErrorMessage));
 
-        }*/
+        }
     }
 }
