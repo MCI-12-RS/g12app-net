@@ -58,7 +58,7 @@ namespace G12App.Domain.Tests
                 Name = "Rafael",
                 Surname = "Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
-                Email = "rafaeljorgealves@gmail.com",
+                Email = "rafaeljorgealvesgmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddress = new AddressDto()
                 {

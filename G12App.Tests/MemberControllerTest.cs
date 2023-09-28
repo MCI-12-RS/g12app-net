@@ -1,14 +1,12 @@
-using Microsoft.AspNetCore.Mvc.Testing;
-using G12App;
 using FluentAssertions;
-using System.Text.Json;
-using System.Text;
-using G12App.Domain.Model;
-using AutoMapper.Execution;
-using Member = G12App.Domain.Model.Member;
-using System.Net.Http.Json;
-using G12App.Domain.Messages;
 using G12App.Domain.DTOs;
+using G12App.Domain.Messages;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Member = G12App.Domain.Model.Member;
 
 namespace G12App.Tests
 {
@@ -49,7 +47,7 @@ namespace G12App.Tests
                 "application/json");
 
             //Act
-            var response = await _testsFixture.HttpClient.GetAsync("/api/member/"+member.Id);
+            var response = await _testsFixture.HttpClient.GetAsync("/api/member/" + member.Id);
             var result = await response.Content.ReadAsStringAsync();
 
             //Assert
@@ -62,7 +60,7 @@ namespace G12App.Tests
             //Arrange
             var member = new Member()
             {
-                
+
                 Name = "Rafael",
                 Surname = "Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
@@ -102,14 +100,14 @@ namespace G12App.Tests
                 MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
-           
+
             var resultMemberJson = new StringContent(
                 JsonSerializer.Serialize(resultMember, _testsFixture.JsonSerializerOptions),
                 Encoding.UTF8,
                 "application/json");
 
             //Act
-            var response = await _testsFixture.HttpClient.PutAsync("/api/member/"+resultMember.Id, resultMemberJson);
+            var response = await _testsFixture.HttpClient.PutAsync("/api/member/" + resultMember.Id, resultMemberJson);
 
             //Assert
             var result = await response.Content.ReadAsStringAsync();
@@ -141,7 +139,7 @@ namespace G12App.Tests
             var jsonMember = await postResponse.Content.ReadFromJsonAsync<ServiceResult<MemberDto>>(_testsFixture.JsonSerializerOptions);
 
             //Act
-            
+
             var removeResponse = await _testsFixture.HttpClient.DeleteAsync("/api/member/" + jsonMember.Data.Id);
 
             //Assert
