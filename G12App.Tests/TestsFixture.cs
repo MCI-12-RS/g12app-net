@@ -34,6 +34,6 @@ namespace G12App.Tests
 
         public HttpClient HttpClient { get; }
 
-        public JsonSerializerOptions JsonSerializerOptions { get; }
+        public JsonSerializerOptions JsonSerializerOptions { get; } 
     }
 }
