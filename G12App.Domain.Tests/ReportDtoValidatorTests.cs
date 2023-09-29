@@ -24,7 +24,7 @@ namespace G12App.Domain.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 1,
+                Members = 2,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -84,24 +84,6 @@ namespace G12App.Domain.Tests
                     ReportId = 1,
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
-                    Visitors = 0,
-                    Members = 1,
-                    CellId = 1,
-                    LeadershipId = 1,
-                    HostId = 1
-                },
-                //Error message
-                ReportDTOValidator.Id_ErrorMessage
-            },
-
-            //Test 4 
-            new object[]
-            {
-                new ReportDTO()
-                {
-                    ReportId = 1,
-                    Subject = "Valid subject",
-                    Date = new DateTime(2023, 9, 28),
                     Visitors = 1,
                     Members = 0,
                     CellId = 1,
@@ -109,10 +91,12 @@ namespace G12App.Domain.Tests
                     HostId = 1
                 },
                 //Error message
-                ReportDTOValidator.Id_ErrorMessage
+                ReportDTOValidator.Frequenters_ErrorMessage
             },
 
-            //Test 5 
+            
+
+            //Test 4 
             new object[]
             {
                 new ReportDTO()
@@ -130,7 +114,7 @@ namespace G12App.Domain.Tests
                 ReportDTOValidator.Id_ErrorMessage
             },
 
-            //Test 6 
+            //Test 5 
             new object[]
             {
                 new ReportDTO()

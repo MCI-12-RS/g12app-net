@@ -54,5 +54,72 @@ namespace G12App.Infrastructure.Data.Tests
             //Assert
             result.Should().NotBeNull();
         }
+
+        [Fact]
+        public async Task GetReportsTest()
+        {
+            //Arrange
+            var dfReport = _defaultReport;
+            var query = new Query();
+
+            //Act
+            var result = await _repository.GetReportsAsync(query);
+
+            //Assert
+            result.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task GetReportByIdTest()
+        {
+            //Arrange
+            var toCreateReport = new Report()
+            {
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 1,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 1
+            };
+            var createdReport = await _repository.Create(toCreateReport);
+
+            //Act
+            var result = await _repository.GetReportById(createdReport.ReportId);
+
+            //Assert
+            result.Should().Be(createdReport);
+        }
+
+        [Fact]
+        public async Task RemoveTest()
+        {
+            //Arrange
+            var toCreateReport = new Report()
+            {
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 1,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 1
+            };
+            var createdReport = await _repository.Create(toCreateReport);
+
+            //Act
+            var result = await _repository.Remove(createdReport);
+
+            //Assert
+            result.IsDeleted.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task UpdateTest()
+        {
+            //Arrange
+            
+        }
     }
 }
