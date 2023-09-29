@@ -100,5 +100,49 @@ namespace G12App.Application.Tests
             mapperMock.Verify(x => x.Map<ReportDTO>(report));
             result.Data.Should().Be(reportDto);
         }
+
+        [Fact]
+        public async void RemoveTest()
+        {
+            //Arrange
+            var report = new Report()
+            {
+                ReportId = 1,
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 2,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 1
+            };
+
+            var reportDto = new ReportDTO()
+            {
+                ReportId = 1,
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 2,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 1
+            };
+
+            //Mock
+            var mock = new Mock<IReportRepository>();
+            var mapperMock = new Mock<IMapper>();
+
+            mock.Setup(x => x.GetReportById(report.ReportId)).ReturnsAsync(report);
+            mock.Setup(x => x.Remove(It.IsAny<Report>())).ReturnsAsync(report);
+            mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
+
+            //Act
+            var service = new ReportService(mock.Object, mapperMock.Object);
+            var result = await service.Delete(report.ReportId);
+
+            //Assert
+            mock.Verify(x => x.Remove(report));
+        }
     }
 }
