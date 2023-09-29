@@ -6,6 +6,7 @@ using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.QueryModels;
 using System.Net;
 
 namespace G12App.Application.Services
@@ -21,7 +22,7 @@ namespace G12App.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query query)
+        public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query<MemberFilter> query)
         {
             var memberEntity = await _memberRepository.GetMembersAsync(query);
             return new ServiceResult<IEnumerable<MemberDto>>(_mapper.Map<IEnumerable<MemberDto>>(memberEntity));

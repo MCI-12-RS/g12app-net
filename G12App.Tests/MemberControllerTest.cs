@@ -1,6 +1,8 @@
 using FluentAssertions;
 using G12App.Domain.DTOs;
 using G12App.Domain.Messages;
+using G12App.Domain.Querying;
+using G12App.Domain.Querying.QueryModels;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -16,20 +18,23 @@ namespace G12App.Tests
         private readonly Member defaultMember = new Member()
         {
             Id = 1,
-            Name = "Rafael",
-            Surname = "Jorge Alves",
+            Name = "Rafael Alves",
             BirthDate = new System.DateTime(1993, 05, 10),
             Email = "rafaeljorgealves@gmail.com",
             Gender = Domain.Model.Enum.Gender.Male,
             HomeAddressId = 1,
-            MemberType = Domain.Model.Enum.MemberType.Leadership,
         };
 
         [Fact]
         public async Task GetTest()
         {
+            var queryJson = new StringContent(
+                JsonSerializer.Serialize(new Query<MemberFilter>(), _testsFixture.JsonSerializerOptions),
+                Encoding.UTF8,
+                "application/json");
+
             //Act
-            var response = await _testsFixture.HttpClient.GetAsync("/api/member");
+            var response = await _testsFixture.HttpClient.PostAsync("/api/member/search", queryJson);
 
             //Assert
             var result = await response.Content.ReadAsStringAsync();
@@ -61,13 +66,11 @@ namespace G12App.Tests
             var member = new Member()
             {
 
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
             var memberJson = new StringContent(
                 JsonSerializer.Serialize(member, _testsFixture.JsonSerializerOptions),
@@ -91,13 +94,11 @@ namespace G12App.Tests
             var resultMember = new Member()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alvessss",
+                Name = "Rafael Alvessss",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
 
@@ -123,12 +124,10 @@ namespace G12App.Tests
             {
 
                 Name = "Rafael",
-                Surname = "Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
             var memberJson = new StringContent(
                 JsonSerializer.Serialize(member, _testsFixture.JsonSerializerOptions),

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
-using G12App.Common.Extensions;
+using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;

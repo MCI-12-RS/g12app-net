@@ -16,25 +16,20 @@ namespace G12App.Application.Tests
             var member = new Member()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             var memberDto = new MemberDto()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
-                //HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             //mock
@@ -61,25 +56,20 @@ namespace G12App.Application.Tests
             var member = new Member()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             var memberDto = new MemberDto()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
-                //HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
             //mock
             var mock = new Mock<IMemberRepository>();
@@ -103,25 +93,21 @@ namespace G12App.Application.Tests
             var member = new Member()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             var memberDto = new MemberDto()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 //HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             //mock
@@ -147,25 +133,20 @@ namespace G12App.Application.Tests
             var member = new Member()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             var memberDto = new MemberDto()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
-                //HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             //mock

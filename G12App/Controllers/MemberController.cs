@@ -2,7 +2,9 @@
 using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.QueryModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace G12App.Controllers
@@ -11,31 +13,30 @@ namespace G12App.Controllers
     [ApiController]
     public class MemberController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> Get([FromServices] IMemberService memberService,
-            [FromQuery] int page = 1, [FromQuery] int limit = 10, [FromQuery] string sortBy = "", [FromQuery] string sortOrder = "")
+        [HttpPost("search")]
+        public async Task<IActionResult> SearchAsync([FromServices] IMemberService memberService, [FromBody] Query<MemberFilter> query)
         {
-            var query = new Query(page, limit, sortBy, sortOrder);
+            query = query ?? throw new ArgumentNullException(nameof(query));
             var result = await memberService.GetMembers(query);
             return result.AsActionResult();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromServices] IMemberService memberService, int id)
+        public async Task<IActionResult> GetByIdAsync([FromServices] IMemberService memberService, int id)
         {
             var result = await memberService.GetMemberById(id);
             return result.AsActionResult();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromServices] IMemberService memberService, [FromBody] MemberDto member)
+        public async Task<IActionResult> PostAsync([FromServices] IMemberService memberService, [FromBody] MemberDto member)
         {
             var result = await memberService.Add(member);
             return result.AsActionResult();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromServices] IMemberService memberService, [FromBody] MemberDto member, int id)
+        public async Task<IActionResult> UpdateAsync([FromServices] IMemberService memberService, [FromBody] MemberDto member, int id)
         {
             member.Id = id;
             var result = await memberService.Update(member, id);
@@ -43,7 +44,7 @@ namespace G12App.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove([FromServices] IMemberService memberService, int id)
+        public async Task<IActionResult> RemoveAsync([FromServices] IMemberService memberService, int id)
         {
             var result = await memberService.Remove(id);
             return result.AsActionResult();

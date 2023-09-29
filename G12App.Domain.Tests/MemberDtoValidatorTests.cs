@@ -20,8 +20,7 @@ namespace G12App.Domain.Tests
             var member = new MemberDto()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
@@ -35,8 +34,7 @@ namespace G12App.Domain.Tests
                     Notes = string.Empty,
                     PostalCode = "94858540",
                     State = "RS",
-                },
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
+                }
             };
 
             // Act
@@ -56,7 +54,6 @@ namespace G12App.Domain.Tests
                 {
                     Id = 1,
                 Name = "Rafael",
-                Surname = "Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealvesgmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
@@ -71,7 +68,6 @@ namespace G12App.Domain.Tests
                     PostalCode = "94858540",
                     State = "RS",
                 },
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
                 },
              //errorMessagem
             MemberDtoValidator.Email_ErrorMessage
@@ -84,7 +80,6 @@ namespace G12App.Domain.Tests
                 {
                     Id = 1,
                 Name = "",
-                Surname = "Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "my_invalid_email",
                 Gender = Domain.Model.Enum.Gender.Male,
@@ -99,41 +94,10 @@ namespace G12App.Domain.Tests
                     PostalCode = "94858540",
                     State = "RS",
                 },
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
                 },
              //errorMessagem
             MemberDtoValidator.Name_ErrorMessage
             },
-
-               //Test 3
-            new object[]
-            {
-                new MemberDto()
-                {
-                    Id = 1,
-                Name = "Rafael",
-                Surname = "",
-                BirthDate = new System.DateTime(1993, 05, 10),
-                Email = "my_invalid_email",
-                Gender = Domain.Model.Enum.Gender.Male,
-                HomeAddress = new AddressDto()
-                {
-                    Id = 1,
-                    Street = "Biguas",
-                    Number = "600",
-                    City = "Alvorada",
-                    Neighborhood = "Porto Verde",
-                    Notes = string.Empty,
-                    PostalCode = "94858540",
-                    State = "RS",
-                },
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
-                },
-             //errorMessagem
-            MemberDtoValidator.Surname_ErrorMessage
-            },
-
-
         };
 
         [Theory]

@@ -11,7 +11,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\G12App.Common\G12App.Common.csproj" />
 		<ProjectReference Include="..\G12App.Domain\G12App.Domain.csproj" />
 	</ItemGroup>
 

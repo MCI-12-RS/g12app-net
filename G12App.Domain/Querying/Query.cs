@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace G12App.Domain.Querying
 {
     public class Query<TFilter> : Query
-        where TFilter : BaseQueryFilter  
+        where TFilter : BaseQueryFilter, new()
     {
+        public Query()
+        {
+            Filter = new TFilter();
+        }
+
         public TFilter Filter { get; set; }
     }
 
-    public class Query 
-    {        
+    public class Query
+    {
         public Query()
         {
             Pagination = new Pagination();

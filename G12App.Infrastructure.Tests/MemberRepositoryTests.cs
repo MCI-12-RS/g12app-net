@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.QueryModels;
 using G12App.Infrastructure.Data.Repositories;
 using System.Threading.Tasks;
 using Xunit;
@@ -13,13 +14,11 @@ namespace G12App.Infrastructure.Data.Tests
         private readonly MemberRepository _repository;
         private readonly Member _defaultMember = new Member()
         {
-            Name = "Rafael",
-            Surname = "Jorge Alves",
+            Name = "Rafael Alves",
             BirthDate = new System.DateTime(1993, 05, 10),
             Email = "rafaeljorgealves@gmail.com",
             Gender = Domain.Model.Enum.Gender.Male,
             HomeAddressId = 1,
-            MemberType = Domain.Model.Enum.MemberType.Leadership,
         };
         private readonly Query query = new Query();
 
@@ -34,13 +33,11 @@ namespace G12App.Infrastructure.Data.Tests
             //Arrange
             var createdMember = new Member()
             {
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             };
 
             //Act
@@ -81,7 +78,7 @@ namespace G12App.Infrastructure.Data.Tests
         {
             //Arrange
             var member = await _repository.Create(_defaultMember);
-            var query = new Query();
+            var query = new Query<MemberFilter>();
 
             //Act
             var result = await _repository.GetMembersAsync(query);

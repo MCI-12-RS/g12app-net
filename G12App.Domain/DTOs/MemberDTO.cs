@@ -8,8 +8,6 @@ namespace G12App.Domain.DTOs
     {
         public int? Id { get; set; }
         public string Name { get; set; }
-        public string Surname { get; set; }
-        public MemberType MemberType { get; set; }
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public string Email { get; set; }

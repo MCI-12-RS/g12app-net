@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using G12App.Common.Extensions;
+using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.QueryModels;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -36,10 +37,11 @@ namespace G12App.Infrastructure.Data.Repositories
                 (x => x.Id == id && x.IsDeleted == false);
         }
 
-        public async Task<IEnumerable<Member>> GetMembersAsync(Query query)
+        public async Task<IEnumerable<Member>> GetMembersAsync(Query<MemberFilter> query)
         {
             return await _context.Members
                 .Where(x => x.IsDeleted == false)
+                .ApplyFilter(query)
                 .ApplyPaging(query)
                 .ToListAsync();
         }

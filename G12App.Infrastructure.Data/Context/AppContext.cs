@@ -44,13 +44,11 @@ namespace G12App.Infrastructure.Data.Context
             builder.Entity<Member>().HasData(new Member()
             {
                 Id = 1,
-                Name = "Rafael",
-                Surname = "Jorge Alves",
+                Name = "Rafael Jorge Alves",
                 BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
-                MemberType = Domain.Model.Enum.MemberType.Leadership,
             });
 
             builder.Entity<Cell>().HasData(new Cell()
