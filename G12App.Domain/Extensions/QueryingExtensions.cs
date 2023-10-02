@@ -60,5 +60,13 @@ namespace G12App.Domain.Extensions
 
             return queryable;
         }
+
+        public static IQueryable<Report> ApplyFilter(this IQueryable<Report> queryable, Query<ReportFilter> query)
+        {
+            if (!string.IsNullOrWhiteSpace(query.Filter.Subject))
+                queryable = queryable.Where(x => x.Subject.Contains(query.Filter.Subject));
+
+            return queryable;
+        }
     }
 }

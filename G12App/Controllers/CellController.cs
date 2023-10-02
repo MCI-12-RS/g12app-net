@@ -1,12 +1,11 @@
-﻿using G12App.Domain.Interfaces.Services;
-using G12App.Domain.Querying;
+﻿using G12App.Domain.DTOs;
 using G12App.Domain.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using G12App.Domain.DTOs;
+using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace G12App.Controllers
 {
