@@ -8,8 +8,8 @@ namespace G12App.Domain.Querying.Filters
         public int LeadId { get; set; }
         public int HostId { get; set;}
         public int TimothyId { get; set; }
-        public DayOfWeek WeekDay { get; set; }
+        public DayOfWeek? WeekDay { get; set; }
         public int PlaceId { get; set; }
-        public CellType CellType { get; set; }
+        public CellType? CellType { get; set; }
     }
 }

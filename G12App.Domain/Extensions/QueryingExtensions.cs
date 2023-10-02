@@ -2,7 +2,9 @@
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Domain.Querying.QueryModels;
+using G12App.Domain.Model.Enum;
 using System.Linq;
+using System;
 
 namespace G12App.Domain.Extensions
 {
@@ -46,6 +48,15 @@ namespace G12App.Domain.Extensions
 
             if (query.Filter.TimothyId>0)
                 queryable = queryable.Where(x => x.TimothyId.Equals(query.Filter.TimothyId));
+
+            if (query.Filter.WeekDay.HasValue)
+                queryable = queryable.Where(x => x.WeekDay.Equals(query.Filter.WeekDay));
+
+            if (query.Filter.PlaceId > 0)
+                queryable = queryable.Where(x => x.PlaceId.Equals(query.Filter.PlaceId));
+
+            if (query.Filter.CellType.HasValue)
+                queryable = queryable.Where(x => x.CellType.Equals(query.Filter.CellType));
 
             return queryable;
         }
