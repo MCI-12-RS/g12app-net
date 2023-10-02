@@ -38,8 +38,14 @@ namespace G12App.Domain.Extensions
 
         public static IQueryable<Cell> ApplyFilter(this IQueryable<Cell> queryable, Query<CellFilter> query)
         {
-            if (!int IsNullOrWhiteSpace(query.Filter.LeadId))
-                queryable = queryable.Where(x => x.LeadId.Contains(query.Filter.LeadId));
+            if (query.Filter.LeadId>0)
+                queryable = queryable.Where(x => x.LeadId.Equals(query.Filter.LeadId));
+
+            if (query.Filter.HostId>0)
+                queryable = queryable.Where(x => x.HostId.Equals(query.Filter.HostId));
+
+            if (query.Filter.TimothyId>0)
+                queryable = queryable.Where(x => x.TimothyId.Equals(query.Filter.TimothyId));
 
             return queryable;
         }
