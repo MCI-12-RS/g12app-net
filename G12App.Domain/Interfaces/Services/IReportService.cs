@@ -1,6 +1,7 @@
 ﻿using G12App.Domain.DTOs;
 using G12App.Domain.Messages;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,7 @@ namespace G12App.Domain.Interfaces.Services
 {
     public interface IReportService
     {
-        Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query query);
-        Task<ServiceResult<IEnumerable<ReportDTO>>> GetByCellId(Query query, int id);
-        Task<ServiceResult<IEnumerable<ReportDTO>>> GetByLeadershipId(Query query, int id);
+        Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query<ReportFilter> query);
         Task<ServiceResult<ReportDTO>> GetByReportId (int id);
         Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO);
         Task <ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id);

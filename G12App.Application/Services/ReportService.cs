@@ -7,6 +7,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Extensions;
 using System.Net;
+using G12App.Domain.Querying.Filters;
 
 namespace G12App.Application.Services
 {
@@ -41,23 +42,10 @@ namespace G12App.Application.Services
             return new ServiceResult();
         }
 
-        public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query query)
+        public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query<ReportFilter> query)
         {
             var reportEntity = await _reportRepository.GetReportsAsync(query);
             return new ServiceResult<IEnumerable<ReportDTO>>(_mapper.Map<IEnumerable<ReportDTO>>(reportEntity));
-        }
-
-        public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetByCellId(Query query, int cellId)
-        {
-            var reportEntity = await _reportRepository.GetByCellId(query, cellId);
-            return new ServiceResult<IEnumerable<ReportDTO>>(_mapper.Map<IEnumerable<ReportDTO>>(reportEntity));
-        }
-
-        public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetByLeadershipId(Query query, int leadId)
-        {
-            var reportEntity = await _reportRepository.GetByLeadId(query, leadId);
-            return new ServiceResult<IEnumerable<ReportDTO>>(_mapper.Map<IEnumerable<ReportDTO>>(reportEntity));
-
         }
 
         public async Task<ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id)

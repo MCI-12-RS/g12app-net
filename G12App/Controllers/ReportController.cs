@@ -2,8 +2,10 @@
 using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace G12App.Controllers
@@ -13,10 +15,9 @@ namespace G12App.Controllers
     public class ReportController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Get([FromServices] IReportService reportService,
-            [FromQuery] int page = 1, [FromQuery] int limit = 10, [FromQuery] string sortBy = "", [FromQuery] string sortOrder = "")
+        public async Task<IActionResult> Get([FromServices] IReportService reportService, [FromBody] Query<ReportFilter> query)
         {
-            var query = new Query(page, limit, sortBy, sortOrder);
+            query = query ?? throw new ArgumentNullException(nameof(query));
             var result = await reportService.GetAllReports(query);
             return result.AsActionResult();
         }

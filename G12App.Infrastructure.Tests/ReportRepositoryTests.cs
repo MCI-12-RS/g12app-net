@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Repositories;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace G12App.Infrastructure.Data.Tests
         {
             //Arrange
             var dfReport = _defaultReport;
-            var query = new Query();
+            var query = new Query<ReportFilter>();
 
             //Act
             var result = await _repository.GetReportsAsync(query);

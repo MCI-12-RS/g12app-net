@@ -1,4 +1,5 @@
 ﻿using G12App.Domain.Model.Base;
+using G12App.Domain.Model.Enum;
 using System;
 
 namespace G12App.Domain.Model
@@ -15,5 +16,6 @@ namespace G12App.Domain.Model
         public int LeadershipId { get; set; }
         public int HostId { get; set; }
         public int TimothyId { get; set; }
+        public CellType? CellType { get; set; }
     }
 }

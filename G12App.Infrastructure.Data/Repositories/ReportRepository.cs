@@ -3,6 +3,7 @@ using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -29,23 +30,6 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
-        public async Task<IEnumerable<Report>> GetByCellId(Query query, int cellId)
-        {
-            return await _context.Reports
-                .Where(x => x.IsDeleted == false && x.CellId == cellId)
-                .ApplyPaging(query)
-                .ToListAsync();
-        }
-
-
-
-        public async Task<IEnumerable<Report>> GetByLeadId(Query query, int LeadId)
-        {
-            return await _context.Reports
-                .Where(x => x.IsDeleted == false && x.LeadershipId == LeadId)
-                .ApplyPaging(query)
-                .ToListAsync();
-        }
 
         public async Task<Report> Update(Report report)
         {
@@ -57,11 +41,12 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
-        public async Task<IEnumerable<Report>> GetReportsAsync(Query query)
+        public async Task<IEnumerable<Report>> GetReportsAsync(Query<ReportFilter> query)
         {
             return await _context.Reports
                 .Where(x => x.IsDeleted == false)
                 .ApplyPaging(query)
+                .ApplyFilter(query)
                 .ToListAsync();
         }
 

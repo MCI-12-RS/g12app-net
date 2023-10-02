@@ -66,6 +66,21 @@ namespace G12App.Domain.Extensions
             if (!string.IsNullOrWhiteSpace(query.Filter.Subject))
                 queryable = queryable.Where(x => x.Subject.Contains(query.Filter.Subject));
 
+            if (query.Filter.Date.HasValue)
+                queryable = queryable.Where(x => x.Date.Equals(query.Filter.Date));
+
+            if (query.Filter.CellType.HasValue)
+                queryable = queryable.Where(x => x.CellType.Equals(query.Filter.CellType));
+
+            if (query.Filter.LeadershipId > 0)
+                queryable = queryable.Where(x => x.LeadershipId.Equals(query.Filter.LeadershipId));
+
+            if (query.Filter.HostId > 0)
+                queryable = queryable.Where(x => x.HostId.Equals(query.Filter.HostId));
+
+            if (query.Filter.TimothyId > 0)
+                queryable = queryable.Where(x => x.TimothyId.Equals(query.Filter.TimothyId));
+
             return queryable;
         }
     }
