@@ -120,7 +120,35 @@ namespace G12App.Infrastructure.Data.Tests
         public async Task UpdateTest()
         {
             //Arrange
-            
+            var toCreateReport = new Report()
+            {
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 1,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 1
+            };
+
+            var toUpdateReport = new Report()
+            {
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 1,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 2
+            };
+            var createdReport = await _repository.Create(toCreateReport);
+
+            //Act
+            var result = await _repository.Update(toUpdateReport);
+
+            //Assert
+            result.Should().Be(toUpdateReport);
+
         }
     }
 }
