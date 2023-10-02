@@ -2,7 +2,7 @@ using FluentAssertions;
 using G12App.Domain.DTOs;
 using G12App.Domain.Messages;
 using G12App.Domain.Querying;
-using G12App.Domain.Querying.QueryModels;
+using G12App.Domain.Querying.Filters;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -38,7 +38,7 @@ namespace G12App.Tests
 
             //Assert
             var result = await response.Content.ReadAsStringAsync();
-            result.Should().NotBeNullOrEmpty(result);
+            result.Should().NotBeNullOrEmpty();
         }
 
         [Fact]

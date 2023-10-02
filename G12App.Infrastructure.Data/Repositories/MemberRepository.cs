@@ -3,7 +3,7 @@ using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
-using G12App.Domain.Querying.QueryModels;
+using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;

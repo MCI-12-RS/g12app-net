@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
-using G12App.Domain.Querying.QueryModels;
+using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Repositories;
 using System.Threading.Tasks;
 using Xunit;

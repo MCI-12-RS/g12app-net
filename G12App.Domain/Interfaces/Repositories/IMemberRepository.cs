@@ -1,6 +1,6 @@
 ﻿using G12App.Domain.Model;
 using G12App.Domain.Querying;
-using G12App.Domain.Querying.QueryModels;
+using G12App.Domain.Querying.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

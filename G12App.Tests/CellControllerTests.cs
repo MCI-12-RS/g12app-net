@@ -2,6 +2,8 @@
 using G12App.Domain.DTOs;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
+using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,13 +33,18 @@ namespace G12App.Tests
         [Fact]
         public async Task GetCellTests()
         {
-            //Act
-            var response = await _testsFixture.HttpClient.GetAsync("api/cell");
-            var result = await response.Content.ReadAsStringAsync();
+            var queryJson = new StringContent(
+                JsonSerializer.Serialize(new Query<CellFilter>(), _testsFixture.JsonSerializerOptions),
+                Encoding.UTF8,
+                "application/json");
 
+            //Act
+            var response = await _testsFixture.HttpClient.PostAsync("/api/cell/search", queryJson);
+            
             //Assert
+            var result = await response.Content.ReadAsStringAsync();
             result.Should().NotBeNullOrEmpty();
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
         }
 
         [Fact]

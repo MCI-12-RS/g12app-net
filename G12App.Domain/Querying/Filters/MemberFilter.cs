@@ -1,4 +1,4 @@
-﻿namespace G12App.Domain.Querying.QueryModels
+﻿namespace G12App.Domain.Querying.Filters
 {
     public class MemberFilter : BaseQueryFilter
     {

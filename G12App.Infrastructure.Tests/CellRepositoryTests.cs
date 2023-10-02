@@ -4,6 +4,7 @@ using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Repositories;
 using Moq;
 using System.Threading.Tasks;
@@ -101,10 +102,10 @@ namespace G12App.Infrastructure.Data.Tests
         {
             //Arrange
             var createdCell = await _repository.Create(_defaultCellToCreate);
-            var query = new Query();
+            var query = new Query<CellFilter>();
 
             //Act
-            var result = await _repository.GetCellssAsync(query);
+            var result = await _repository.GetCellsAsync(query);
 
             //Assert
             result.Should().NotBeNull();

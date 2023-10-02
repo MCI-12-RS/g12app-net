@@ -6,7 +6,7 @@ using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
-using G12App.Domain.Querying.QueryModels;
+using G12App.Domain.Querying.Filters;
 using System.Net;
 
 namespace G12App.Application.Services

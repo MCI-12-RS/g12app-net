@@ -2,7 +2,7 @@
 using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Querying;
-using G12App.Domain.Querying.QueryModels;
+using G12App.Domain.Querying.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
