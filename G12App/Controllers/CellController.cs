@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using G12App.Domain.DTOs;
+using G12App.Domain.Querying.Filters;
+using System;
 
 namespace G12App.Controllers
 {
@@ -12,11 +14,11 @@ namespace G12App.Controllers
     [ApiController]
     public class CellController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> Get([FromServices] ICellService cellService,
-            [FromQuery] int page = 1, [FromQuery] int limit = 10, [FromQuery] string sortBy = "", [FromQuery] string sortOrder = "")
+        [HttpPost("search")]
+        
+        public async Task<IActionResult> Get([FromServices] ICellService cellService, [FromBody] Query<CellFilter> query)
         {
-            var query = new Query(page, limit, sortBy, sortOrder);
+            query = query ?? throw new ArgumentNullException(nameof(query));
             var result = await cellService.GetCell(query);
             return result.AsActionResult();
         }

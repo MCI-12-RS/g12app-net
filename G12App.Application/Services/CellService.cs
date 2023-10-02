@@ -8,6 +8,7 @@ using G12App.Domain.Querying;
 using G12App.Domain.Messages;
 using System.Net;
 using AutoMapper.Execution;
+using G12App.Domain.Querying.Filters;
 
 namespace G12App.Application.Services
 {
@@ -37,9 +38,9 @@ namespace G12App.Application.Services
             return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cellEntity));
         }
 
-        public async Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query query)
+        public async Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query<CellFilter> query)
         {
-            var cellEntity = await _cellRepository.GetCellssAsync(query);
+            var cellEntity = await _cellRepository.GetCellsAsync(query);
             return new ServiceResult<IEnumerable<CellDTO>>(_mapper.Map<IEnumerable<CellDTO>>(cellEntity));
 
 

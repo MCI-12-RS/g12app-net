@@ -3,12 +3,13 @@ using G12App.Domain.Querying;
 using G12App.Domain.Messages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using G12App.Domain.Querying.Filters;
 
 namespace G12App.Domain.Interfaces.Services
 {
     public interface ICellService
     {
-        Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query query);
+        Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query<CellFilter> query);
         Task<ServiceResult<CellDTO>> GetCellById(int? id);
         Task<ServiceResult<CellDTO>> Add(CellDTO cellDTO);
         Task<ServiceResult<CellDTO>> Update(CellDTO cellDTO, int id);

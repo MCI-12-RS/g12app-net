@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using G12App.Domain.Querying.Filters;
 
 namespace G12App.Infrastructure.Data.Repositories
 {
@@ -33,10 +34,11 @@ namespace G12App.Infrastructure.Data.Repositories
             return _context.Cells.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
-        public async Task<IEnumerable<Cell>> GetCellssAsync(Query query)
+        public async Task<IEnumerable<Cell>> GetCellsAsync(Query<CellFilter> query)
         {
             return await _context.Cells
                 .Where(x => x.IsDeleted == false)
+                .ApplyFilter(query)
                 .ApplyPaging(query)
                 .ToListAsync();
         }
