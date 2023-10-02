@@ -1,5 +1,6 @@
 ﻿using G12App.Domain.Model;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using G12App.Domain.Querying.QueryModels;
 using System.Linq;
 
@@ -31,6 +32,14 @@ namespace G12App.Domain.Extensions
 
             if (!string.IsNullOrWhiteSpace(query.Filter.HomeAddress_State))
                 queryable = queryable.Where(x => x.HomeAddress.State.Contains(query.Filter.HomeAddress_State));
+
+            return queryable;
+        }
+
+        public static IQueryable<Cell> ApplyFilter(this IQueryable<Cell> queryable, Query<CellFilter> query)
+        {
+            if (!int IsNullOrWhiteSpace(query.Filter.LeadId))
+                queryable = queryable.Where(x => x.LeadId.Contains(query.Filter.LeadId));
 
             return queryable;
         }
