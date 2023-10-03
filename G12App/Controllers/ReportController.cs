@@ -14,7 +14,7 @@ namespace G12App.Controllers
     [ApiController]
     public class ReportController : ControllerBase
     {
-        [HttpGet]
+        [HttpPost("search")]
         public async Task<IActionResult> Get([FromServices] IReportService reportService, [FromBody] Query<ReportFilter> query)
         {
             query = query ?? throw new ArgumentNullException(nameof(query));

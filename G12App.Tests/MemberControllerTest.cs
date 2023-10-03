@@ -28,8 +28,13 @@ namespace G12App.Tests
         [Fact]
         public async Task GetTest()
         {
+            var query = new Query<MemberFilter>()
+            {
+                Pagination = new Pagination(1, 10),
+                Filter = new MemberFilter() 
+            };
             var queryJson = new StringContent(
-                JsonSerializer.Serialize(new Query<MemberFilter>(), _testsFixture.JsonSerializerOptions),
+                JsonSerializer.Serialize(query, _testsFixture.JsonSerializerOptions),
                 Encoding.UTF8,
                 "application/json");
 
@@ -57,6 +62,7 @@ namespace G12App.Tests
 
             //Assert
             result.Should().NotBeNullOrEmpty();
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [Fact]

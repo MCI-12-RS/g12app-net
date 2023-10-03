@@ -44,7 +44,7 @@ namespace G12App.Tests
             //Assert
             var result = await response.Content.ReadAsStringAsync();
             result.Should().NotBeNullOrEmpty();
-
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [Fact]

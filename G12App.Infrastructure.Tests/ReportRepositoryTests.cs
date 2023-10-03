@@ -25,7 +25,8 @@ namespace G12App.Infrastructure.Data.Tests
             Members = 1,
             CellId = 1,
             LeadershipId = 1,
-            HostId = 1
+            HostId = 1,
+            CellType = Domain.Model.Enum.CellType.Discipleship
         };
         private readonly Query query = new Query();
 
