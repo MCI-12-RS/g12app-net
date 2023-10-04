@@ -2,6 +2,7 @@
 using G12App.Domain.DTOs;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
+using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System;
@@ -66,7 +67,7 @@ namespace G12App.Tests
         public async Task CreateTest()
         {
             //Arrange
-            var cell = new Cell()
+            var cell = new CellDTO()
             {
                 LeadId = 1,
                 HostId = 1,
@@ -118,6 +119,51 @@ namespace G12App.Tests
 
             //Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task UpdateTest()
+        {
+            //Arrange
+            var cell = new Cell()
+            {
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = CellType.Evangelistic,
+                ReportMandatory = true,
+            };
+            var cellJson = new StringContent(
+                JsonSerializer.Serialize(cell, _testsFixture.JsonSerializerOptions),
+                Encoding.UTF8,
+                "application/json");
+            var postResponse = await _testsFixture.HttpClient.PostAsync("api/cell/", cellJson);
+            var jsonCell = await postResponse.Content.ReadFromJsonAsync<ServiceResult<CellDTO>>(_testsFixture.JsonSerializerOptions);
+
+            var toUpCell = new Cell()
+            {
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = CellType.Discipleship,
+                ReportMandatory = true,
+            };
+            var toUpCellJson = new StringContent(
+               JsonSerializer.Serialize(toUpCell, _testsFixture.JsonSerializerOptions),
+               Encoding.UTF8,
+               "application/json");
+
+            //Act
+            var result = await _testsFixture.HttpClient.PutAsync("/api/cell/" + jsonCell.Data.Id, toUpCellJson);
+            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<CellDTO>>(_testsFixture.JsonSerializerOptions);
+
+            //Assert
+            result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            resultJson.Data.CellType.Should().Be(CellType.Discipleship);
         }
     }
 }
