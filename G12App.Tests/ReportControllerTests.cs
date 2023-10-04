@@ -133,5 +133,25 @@ namespace G12App.Tests
             result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             resultJson.Data.CellType.Should().Be(CellType.Evangelistic);
         }
+
+        [Fact]
+        public async Task GetById()
+        { //Arrange
+            var dfReport = toCreateReport;
+            var dfRepJson = new StringContent(
+               JsonSerializer.Serialize(dfReport, _testsFixture.JsonSerializerOptions),
+               Encoding.UTF8,
+               "application/json");
+            var createResponse = await _testsFixture.HttpClient.PostAsync("/api/report/", dfRepJson);
+            var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
+
+            //Act
+            var result = await _testsFixture.HttpClient.GetAsync("/api/report/" + postResponse.Data.ReportId);
+            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
+
+            //Assert
+            result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            resultJson.Data.CellType.Should().Be(CellType.Discipleship);
+        }
     }
 }
