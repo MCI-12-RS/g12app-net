@@ -17,7 +17,7 @@ namespace G12App.Application.Services
 
         public async Task <ServiceResult<ReportDTO>> LogReport(ReportDTO reportDTO)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }
