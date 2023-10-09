@@ -14,6 +14,7 @@ namespace G12App.Domain.Model
         public Member Timothy { get; set; }
         public int TimothyId { get; set; }
         public DayOfWeek WeekDay { get; set; }
+        public TimeOnly Time { get; set; }
         public Address Place { get; set; }
         public int? PlaceId { get; set; }
         public CellType CellType { get; set; }

@@ -29,12 +29,9 @@ namespace G12App.Application.Services
 
             //Partindo do domingo validar dia da célula vs dia do report
 
+
             return new ServiceResult<ReportDTO>();
-
-
-
-
-
+            
             //Mapear o DTO pra report 
 
         }
