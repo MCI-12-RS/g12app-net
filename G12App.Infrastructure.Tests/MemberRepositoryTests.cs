@@ -15,7 +15,7 @@ namespace G12App.Infrastructure.Data.Tests
         private readonly Member _defaultMember = new Member()
         {
             Name = "Rafael Alves",
-            BirthDate = new System.DateTime(1993, 05, 10),
+            BirthDate = new System.DateOnly(1993, 05, 10),
             Email = "rafaeljorgealves@gmail.com",
             Gender = Domain.Model.Enum.Gender.Male,
             HomeAddressId = 1,
@@ -34,7 +34,7 @@ namespace G12App.Infrastructure.Data.Tests
             var createdMember = new Member()
             {
                 Name = "Rafael Alves",
-                BirthDate = new System.DateTime(1993, 05, 10),
+                BirthDate = new System.DateOnly(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,

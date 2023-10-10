@@ -10,7 +10,7 @@ namespace G12App.Domain.Model
 
         public string Name { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateOnly BirthDate { get; set; }
 
         public Gender Gender { get; set; }
 
