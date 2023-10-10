@@ -12,17 +12,16 @@ namespace G12App.Application.Services
         private readonly IReportService _reportService;
         private readonly IMapper _mapper;
 
-        public ReportApp(ICellService cellService, IReportService reportService, IMapper mapper)
+        public ReportApp(ICellService cellService, IReportService reportService)
         {
             _cellService = cellService;
             _reportService = reportService;
-            _mapper = mapper;
         }
 
         public async Task<ServiceResult<ReportDTO>> LogReport(ReportDTO reportDTO)
         {
             //Validar data do ReportDTO < data atual
-            if (reportDTO.Date <= DateTime.Now)
+            if (reportDTO.Date > DateTime.Now)
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "O relatório não pode ser enviado antes da célula");
 
             //Buscar célula
@@ -34,7 +33,7 @@ namespace G12App.Application.Services
             if (cellResult.Data.WeekDay > DateTime.Now.DayOfWeek)
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Relatório não pode ser lançado antes da data de cadastro da célula");
 
-            if (cellResult.Data.Time > TimeOnly.FromDateTime(DateTime.Now))
+            if (cellResult.Data.WeekDay == DateTime.Now.DayOfWeek && cellResult.Data.Time > TimeOnly.FromDateTime(DateTime.Now))
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Relatório não pode ser lançado antes do horário de cadastro da célula");
 
             //Mapear o DTO pra report 

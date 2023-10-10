@@ -32,7 +32,7 @@ namespace G12App.Application.Services
         }
 
         public async Task<ServiceResult> Delete(int id)
-        {
+        {   
             var reportEntity = await _reportRepository.GetReportById(id);
             if (reportEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado");
