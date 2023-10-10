@@ -9,7 +9,6 @@ namespace G12App.Domain.Model
         public int ReportId { get; set; }
         public string Subject { get; set; }
         public DateTime Date { get; set; }
-        public TimeOnly Time { get; set; }
         public int Visitors { get; set; }
         public int Frequenters { get; set; }
         public int Members { get; set; }
