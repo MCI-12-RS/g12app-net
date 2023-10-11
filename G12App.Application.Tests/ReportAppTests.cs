@@ -42,6 +42,93 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<ICellService>();
+            mock.Setup(x => x.GetCellById(report.CellId)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            var mockReportService = new Mock<IReportService>();
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+
+            //Act
+            var app = new ReportApp(mock.Object, mockReportService.Object);
+            var log = await app.LogReport(report);
+
+
+            //Assert
+            log.IsValid.Should().BeTrue();
+            log.Data.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async void LogReportTestShouldGetReportDateError()
+        {
+            //Arrange
+            var report = new ReportDTO()
+            {
+                ReportId = 1,
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 10, 28),
+                Visitors = 1,
+                Members = 2,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 1
+            };
+
+            var cell = new CellDTO()
+            {
+                Id = 1,
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = Domain.Model.Enum.CellType.Evangelistic,
+                ReportMandatory = true,
+            };
+
+            //Mock
+            var mock = new Mock<ICellService>();
+            mock.Setup(x => x.GetCellById(report.CellId)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            var mockReportService = new Mock<IReportService>();
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+
+            //Act
+            var app = new ReportApp(mock.Object, mockReportService.Object);
+            var log = await app.LogReport(report);
+
+
+            //Assert
+            log.IsValid.Should().BeFalse();
+        }
+
+        [Fact]
+        public async void LogReportShouldGetIdError()
+        {
+            //Arrange
+            var report = new ReportDTO()
+            {
+                ReportId = 1,
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 2,
+                CellId = 3,
+                LeadershipId = 1,
+                HostId = 1
+            };
+
+            var cell = new CellDTO()
+            {
+                Id = 1,
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = Domain.Model.Enum.CellType.Evangelistic,
+                ReportMandatory = true,
+            };
+
+            //Mock
+            var mock = new Mock<ICellService>();
             mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
             var mockReportService = new Mock<IReportService>();
             mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
@@ -49,11 +136,10 @@ namespace G12App.Application.Tests
             //Act
             var app = new ReportApp(mock.Object, mockReportService.Object);
             var log = await app.LogReport(report);
-            
+
 
             //Assert
-            log.IsValid.Should().BeTrue();
-            log.Data.Should().NotBeNull();
+            log.IsValid.Should().BeFalse();
         }
     }
 }
