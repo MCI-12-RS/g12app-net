@@ -97,10 +97,11 @@ namespace G12App.Application.Tests
 
             //Assert
             log.IsValid.Should().BeFalse();
+            log.Errors.Should().Contain(x => "O relatório não pode ser enviado antes da célula".Equals(x.ErrorMessage));
         }
 
         [Fact]
-        public async void LogReportShouldGetIdError()
+        public async void LogReportShouldGetInvalidCell()
         {
             //Arrange
             var report = new ReportDTO()

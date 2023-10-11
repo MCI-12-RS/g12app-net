@@ -26,7 +26,7 @@ namespace G12App.Application.Services
 
             //Buscar célula
             var cellResult = await _cellService.GetCellById(reportDTO.CellId);
-            if (!cellResult.IsValid || cellResult.Data == null)
+            if (cellResult == null)
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Célula não encontrada");
 
             //Partindo do domingo validar dia da célula vs dia do report
