@@ -232,5 +232,5 @@ namespace G12App.Application.Tests
             log.IsValid.Should().BeFalse();
             log.Errors.Should().Contain(x => "Relatório não pode ser lançado antes do horário de cadastro da célula".Equals(x.ErrorMessage));
         }
-    }
+    } 
 }

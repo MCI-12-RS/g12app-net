@@ -29,6 +29,12 @@ namespace G12App.Controllers
             return result.AsActionResult();
         }
 
+        [HttpPost("log")]
+        public async Task<IActionResult> PostReport([FromServices] IReportApp reportApp, [FromBody] ReportDTO reportDTO)
+        {
+            var result = await reportApp.LogReport(reportDTO);
+            return result.AsActionResult();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromServices] IReportService reportService, [FromBody] ReportDTO reportDTO)
