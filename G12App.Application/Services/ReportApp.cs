@@ -30,10 +30,10 @@ namespace G12App.Application.Services
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Célula não encontrada");
 
             //Partindo do domingo validar dia da célula vs dia do report
-            if (cellResult.Data.WeekDay > DateTime.Now.DayOfWeek)
+            if (cellResult.Data.WeekDay > reportDTO.Date.DayOfWeek)
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Relatório não pode ser lançado antes da data de cadastro da célula");
 
-            if (cellResult.Data.WeekDay == DateTime.Now.DayOfWeek && cellResult.Data.Time > TimeOnly.FromDateTime(DateTime.Now))
+            if (cellResult.Data.WeekDay == reportDTO.Date.DayOfWeek && cellResult.Data.Time > TimeOnly.FromDateTime(reportDTO.Date))
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Relatório não pode ser lançado antes do horário de cadastro da célula");
 
             //Mapear o DTO pra report 
