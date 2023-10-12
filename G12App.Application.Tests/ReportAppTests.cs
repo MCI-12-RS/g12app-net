@@ -20,7 +20,7 @@ namespace G12App.Application.Tests
             {
                 ReportId = 1,
                 Subject = "Valid subject",
-                Date = new DateTime(2023, 9, 28),
+                Date = new DateTime(2023, 10, 12),
                 Visitors = 1,
                 Members = 2,
                 CellId = 1,
@@ -231,6 +231,50 @@ namespace G12App.Application.Tests
             //Assert
             log.IsValid.Should().BeFalse();
             log.Errors.Should().Contain(x => "Relatório não pode ser lançado antes do horário de cadastro da célula".Equals(x.ErrorMessage));
+        }
+
+        [Fact]
+        public async void LogReportShouldGetWeekError()
+        {
+            //Arrange
+            var report = new ReportDTO()
+            {
+                ReportId = 1,
+                Subject = "Valid subject",
+                Date = new DateTime(2023, 9, 28),
+                Visitors = 1,
+                Members = 2,
+                CellId = 1,
+                LeadershipId = 1,
+                HostId = 1
+            };
+
+            var cell = new CellDTO()
+            {
+                Id = 1,
+                LeadId = 1,
+                HostId = 1,
+                TimothyId = 1,
+                WeekDay = System.DayOfWeek.Tuesday,
+                PlaceId = 1,
+                CellType = Domain.Model.Enum.CellType.Evangelistic,
+                ReportMandatory = true,
+            };
+
+            //Mock
+            var mock = new Mock<ICellService>();
+            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            var mockReportService = new Mock<IReportService>();
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+
+            //Act
+            var app = new ReportApp(mock.Object, mockReportService.Object);
+            var log = await app.LogReport(report);
+
+
+            //Assert
+            log.IsValid.Should().BeFalse();
+            log.Errors.Should().Contain(x => "O relatório precisa ser da semana atual".Equals(x.ErrorMessage));
         }
     } 
 }

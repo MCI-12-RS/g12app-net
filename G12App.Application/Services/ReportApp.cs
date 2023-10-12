@@ -2,6 +2,7 @@
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
+using System.Globalization;
 using System.Net;
 
 namespace G12App.Application.Services
@@ -16,6 +17,13 @@ namespace G12App.Application.Services
         {
             _cellService = cellService;
             _reportService = reportService;
+        }
+
+        private static int WeekNum(DateTime dt)
+        {
+            Calendar cal = new CultureInfo("en-US").Calendar;
+            int week = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+            return week;
         }
 
         public async Task<ServiceResult<ReportDTO>> LogReport(ReportDTO reportDTO)
@@ -37,6 +45,9 @@ namespace G12App.Application.Services
 
             if (cellResult.Data.WeekDay == reportDTO.Date.DayOfWeek && cellResult.Data.Time > TimeOnly.FromDateTime(reportDTO.Date))
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Relatório não pode ser lançado antes do horário de cadastro da célula");
+
+            if (WeekNum(reportDTO.Date) != WeekNum(DateTime.Now))
+                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "O relatório precisa ser da semana atual");
 
             //Mapear o DTO pra report 
             return await _reportService.Add(reportDTO);
