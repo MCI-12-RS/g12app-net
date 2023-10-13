@@ -1,0 +1,46 @@
+﻿a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.bg-body-tertiary{
+  background: #000;
+  padding: 0;
+}
+
+.nav-link{
+  color: #fff !important ;
+}
+
+.navbar-brand{ 
+  padding: 0;
+}
+
+.btn-primary {
+  float: right !important;
+  display: block;
+  margin-right: 1px !important;
+  margin: 0 auto !important;
+}
+
+.navbar-nav{
+  width: 100%;
+}
+
+.navbar-nav > * {
+  margin-right: 30px !important;
+}
