@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Navbar, Container, Nav, NavDropdown  } from 'react-bootstrap';
+
 import './NavMenu.css';
 
 export class NavMenu extends Component {
@@ -23,23 +23,29 @@ export class NavMenu extends Component {
 
   render() {
     return (
-      <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
-          <NavbarBrand tag={Link} to="/">G12App.API</NavbarBrand>
-          <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-          <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
-            <ul className="navbar-nav flex-grow">
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-              </NavItem>
-            </ul>
-          </Collapse>
+      <header>        
+        <Navbar expand="lg" className="bg-body-tertiary">
+            <Container>
+            <Navbar.Brand href="#home">MCI</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link href="#home">Home</Nav.Link>
+                <Nav.Link href="#link">Link</Nav.Link>
+                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.2">
+                    Another action
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item href="#action/3.4">
+                    Separated link
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
         </Navbar>
       </header>
     );
