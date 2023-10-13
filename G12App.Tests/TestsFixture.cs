@@ -1,4 +1,5 @@
-﻿using G12App.Infrastructure.Data.Context;
+﻿using G12App.API;
+using G12App.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
@@ -34,6 +35,6 @@ namespace G12App.Tests
 
         public HttpClient HttpClient { get; }
 
-        public JsonSerializerOptions JsonSerializerOptions { get; } 
+        public JsonSerializerOptions JsonSerializerOptions { get; }
     }
 }
