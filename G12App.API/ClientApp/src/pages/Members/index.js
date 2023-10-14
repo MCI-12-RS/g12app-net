@@ -59,7 +59,9 @@ export const Members = () => {
   };
 
   const debounceEventTrigger = debounce(field => {
-    setSearchData({...searchData, [field.name]: field.value});
+    var currentValue = searchData[field.name] || ''; 
+    if(field.value != currentValue)
+      setSearchData({...searchData, [field.name]: field.value});
   }, 500);
 
   const handleSearchEvent = (event) => {
@@ -68,7 +70,6 @@ export const Members = () => {
   };
   
   useEffect(() => {
-    console.log(searchData);
     search();   
   }, [pagination, searchData]);
 
@@ -84,24 +85,24 @@ export const Members = () => {
           <Row className="mb-3 pr-0">
             <InputGroup className="mb-3" as={Col}>
               <InputGroup.Text id="basic-addon3">Nome</InputGroup.Text>
-              <Form.Control id="basic-url" name="name" aria-describedby="basic-addon3" onKeyUp={handleSearchEvent} />
+              <Form.Control id="basic-url" name="name" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
 
             <InputGroup className="mb-3 pr-0" as={Col}>
               <InputGroup.Text id="basic-addon3">Liderança</InputGroup.Text>
-              <Form.Control id="basic-url" name="name" aria-describedby="basic-addon3" onKeyUp={handleSearchEvent} />
+              <Form.Control id="basic-url" name="name" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
           </Row>
           
           <Row className="mb-3 pr-0">
             <InputGroup className="mb-3" as={Col}>
               <InputGroup.Text id="basic-addon3">Bairro</InputGroup.Text>
-              <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" onKeyUp={handleSearchEvent} />
+              <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
 
             <InputGroup className="mb-3 pr-0" as={Col}>
               <InputGroup.Text id="basic-addon3">Cidade</InputGroup.Text>
-              <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" onKeyUp={handleSearchEvent} />
+              <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
           </Row>
         </div>
@@ -113,7 +114,8 @@ export const Members = () => {
             data={members} 
             textTotal='pessoas cadastradas'  
             loading={loading} 
-            pagination={pagination} 
+            pagination={pagination}
+            setPagination={setPagination} 
             totalRecords={total}/>
           </div>
       </div>

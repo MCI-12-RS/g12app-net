@@ -31,4 +31,18 @@ const SearchMembers = async (search, pagination, sort) => {
     return obj;
 }
 
-export { SearchMembers };
+const GetMember = async (id) => {
+    
+    var response = await fetch('/api/member/' + id, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
+export { SearchMembers, GetMember };

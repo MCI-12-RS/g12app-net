@@ -2,6 +2,7 @@ import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { Members } from "./pages/Members"
+import { MemberDetails } from "./pages/Members/details";
 
 const AppRoutes = [
   {
@@ -22,7 +23,11 @@ const AppRoutes = [
   },
   {
     path: '/new-member',
-    element: <Home />
+    element: <MemberDetails />
+  },
+  {
+    path: '/members/:id',
+    element: <MemberDetails />
   },
   {
     path: '/ministries',

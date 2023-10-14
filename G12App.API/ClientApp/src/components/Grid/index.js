@@ -7,11 +7,16 @@ const Grid = ({
     data = [],
     loading = false,
     pagination = { page: 1, limit: 20 },
+    setPagination = () => {},
     totalRecords = 0,
     textTotal = "registros"
 }) => {
 
     const pages = Math.max(Math.ceil(totalRecords / pagination.limit), 1);
+
+    const setPage = (page) => {
+        setPagination({ ...pagination, page: page });
+    };
 
     return (    
         
@@ -46,10 +51,10 @@ const Grid = ({
             <div class="pagination-container">
                 <span class="total-records">{totalRecords} {textTotal}</span>
                 <Pagination size="sm">
-                    <Pagination.First />
-                    <Pagination.Prev />
-                    <Pagination.Item active={pagination.page == 1}>1</Pagination.Item>
-                    {() => {
+                    <Pagination.First onClick={() => setPage(1)} />
+                    <Pagination.Prev onClick={() => setPage(pagination.page - 1)} />
+                    <Pagination.Item active={pagination.page == 1} onClick={() => setPage(1)}>1</Pagination.Item>
+                    {(() => {
                         var elements = [];
                         
                         if(pages == 1)
@@ -59,22 +64,24 @@ const Grid = ({
                         var nextPage = pagination.page + 1;
 
                         if(prevPage > 1)
-                            elements.push(<Pagination.Item>{prevPage}</Pagination.Item>);
+                            elements.push(<Pagination.Item onClick={() => setPage(prevPage)}>{prevPage}</Pagination.Item>);
 
                         if(pagination.page > 2)
-                            elements.push(<Pagination.Item active>{pagination.page}</Pagination.Item>);
+                            elements.push(<Pagination.Item active onClick={() => setPage(pagination.page)}>{pagination.page}</Pagination.Item>);
 
                         if(nextPage < pages)
-                            elements.push(<Pagination.Item>{nextPage}</Pagination.Item>);
+                            elements.push(<Pagination.Item onClick={() => setPage(nextPage)}>{nextPage}</Pagination.Item>);
 
                         if(nextPage + 1 < pages)
                             elements.push(<Pagination.Ellipsis />);
 
                         if(nextPage < pages)
-                            elements.push(<Pagination.Item>{pages}</Pagination.Item>);
-                    }}
-                    <Pagination.Next />
-                    <Pagination.Last />
+                            elements.push(<Pagination.Item onClick={() => setPage(pages)}>{pages}</Pagination.Item>);
+
+                        return elements;
+                    })()}
+                    <Pagination.Next onClick={() => setPage(pagination.page + 1)} />
+                    <Pagination.Last onClick={() => setPage(pages)} />
                 </Pagination>
             </div>
         

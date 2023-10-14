@@ -33,8 +33,11 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> GetMemberByIdAsync(int? id)
         {
-            return await _context.Members.FirstOrDefaultAsync
-                (x => x.Id == id && x.IsDeleted == false);
+            return await _context.Members
+                    .Include(x => x.Leadership)
+                    .Include(x => x.HomeAddress)
+                    .Where(x => x.Id == id && x.IsDeleted == false)
+                    .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Member>> GetMembersAsync(Query<MemberFilter> query)

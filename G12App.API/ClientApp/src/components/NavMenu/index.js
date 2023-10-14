@@ -29,7 +29,7 @@ export class NavMenu extends Component {
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
             <Navbar.Brand as={Link} to="/">
-              <img class="logo" width="64" height="64" src={logo} />
+              <img className="logo" width="64" height="64" src={logo} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -50,8 +50,8 @@ export class NavMenu extends Component {
                 
               </Nav>
             
-              <div class="btn-wrapper">
-                <Button class="register-report" as={Link} to="/log-report">Registrar relatório</Button>                
+              <div className="btn-wrapper">
+                <Button className="register-report" as={Link} to="/log-report">Registrar relatório</Button>                
               </div>
             </Navbar.Collapse>
           </Container>
