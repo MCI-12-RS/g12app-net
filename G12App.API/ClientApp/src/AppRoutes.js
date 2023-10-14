@@ -19,6 +19,22 @@ const AppRoutes = [
   {
     path: '/members',
     element: <Members />
+  },
+  {
+    path: '/new-member',
+    element: <Home />
+  },
+  {
+    path: '/cells',
+    element: <Home />
+  },
+  {
+    path: '/new-cell',
+    element: <Home />
+  },
+  {
+    path: '/log-report',
+    element: <Home />
   }
 ];
 

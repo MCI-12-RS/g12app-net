@@ -38,16 +38,16 @@ export class NavMenu extends Component {
                
                 <NavDropdown title="Ministério" id="basic-nav-dropdown">
                   <NavDropdown.Item as={Link} to="/members">Gerenciar pessoas</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="#">Cadastrar pessoa</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/new-member">Cadastrar pessoa</NavDropdown.Item>
                 </NavDropdown>
                 
                 <NavDropdown title="Células" id="basic-nav-dropdown">
-                  <NavDropdown.Item as={Link} to="#">Gerenciar</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="#">Cadastrar</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/cells">Gerenciar</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/new-cell">Cadastrar</NavDropdown.Item>
                 </NavDropdown>
 
                 
-                <Button class="register-report">Registrar relatório</Button>
+                <Button class="register-report" as={Link} to="/log-report">Registrar relatório</Button>
                 
               </Nav>
             </Navbar.Collapse>

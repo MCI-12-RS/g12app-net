@@ -17,7 +17,11 @@ const Grid = ({
         
         loading ?
 
-        <p><em>Carregando...</em></p> :
+        <p class="loading"><em>Carregando...</em></p> :
+        
+        totalRecords == 0 ?
+
+        <p class="no-records"><em>Nenhum registro encontrado.</em></p> :
 
         <div>   
             <table className="table table-striped" aria-labelledby="tableLabel">

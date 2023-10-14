@@ -50,10 +50,6 @@ export const Members = () => {
   };
   
   useEffect(() => {
-    search();
-  }, []);
-
-  useEffect(() => {
     search();   
   }, [pagination]);
 
