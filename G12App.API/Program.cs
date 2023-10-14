@@ -42,9 +42,6 @@ namespace G12App.API
             app.UseAuthorization();
             app.MapControllers();
             app.MapFallbackToFile("index.html");
-            //app.MapControllerRoute(
-            //    name: "default",
-            //    pattern: "{controller}/{action=Index}/{id?}");
 
             app.Configure();
             await app.RunAsync();

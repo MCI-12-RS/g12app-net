@@ -2,6 +2,14 @@
   margin-bottom: 20px;
 }
 
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.nav-item.dropdown .dropdown-menu{
+  margin-top: -2px;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -39,12 +47,17 @@ html {
   display: block;
   margin-right: 1px !important;
   margin: 0 auto !important;
-}
-
-.navbar-nav{
-  width: 100%;
+  white-space: nowrap !important;
 }
 
 .navbar-nav > * {
   margin-right: 30px !important;
+}
+
+.navbar-nav{
+  float: left;
+}
+
+.btn-wrapper{
+  float: right;
 }

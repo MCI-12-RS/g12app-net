@@ -25,6 +25,10 @@ const AppRoutes = [
     element: <Home />
   },
   {
+    path: '/ministries',
+    element: <Home />
+  },
+  {
     path: '/cells',
     element: <Home />
   },

@@ -36,20 +36,23 @@ export class NavMenu extends Component {
               <Nav className="me-auto">
                 <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
                
-                <NavDropdown title="Ministério" id="basic-nav-dropdown">
+                <NavDropdown title="Ministério" id="basic-nav-dropdown" renderMenuOnMount={true}>
                   <NavDropdown.Item as={Link} to="/members">Gerenciar pessoas</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/new-member">Cadastrar pessoa</NavDropdown.Item>
+                  <NavDropdown.Divider />                  
+                  <NavDropdown.Item as={Link} to="/ministries">Ver ministérios</NavDropdown.Item>
                 </NavDropdown>
                 
-                <NavDropdown title="Células" id="basic-nav-dropdown">
+                <NavDropdown title="Células" id="basic-nav-dropdown" renderMenuOnMount={true}>
                   <NavDropdown.Item as={Link} to="/cells">Gerenciar</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/new-cell">Cadastrar</NavDropdown.Item>
-                </NavDropdown>
-
-                
-                <Button class="register-report" as={Link} to="/log-report">Registrar relatório</Button>
+                </NavDropdown> 
                 
               </Nav>
+            
+              <div class="btn-wrapper">
+                <Button class="register-report" as={Link} to="/log-report">Registrar relatório</Button>                
+              </div>
             </Navbar.Collapse>
           </Container>
         </Navbar>

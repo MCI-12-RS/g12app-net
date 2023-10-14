@@ -7,6 +7,7 @@ using G12App.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -40,6 +41,7 @@ namespace G12App.API
             conn.Open();
 
             services.AddDbContext<AppContext>(options => options.UseSqlite(conn));
+
 
             return services;
         }
