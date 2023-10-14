@@ -13,5 +13,6 @@ namespace G12App.Domain.DTOs
         public string Email { get; set; }
         public AddressDto HomeAddress { get; set; }
         public int? LeadershipId { get; set; }
+        public MemberDto Leadership { get; set; }
     }
 }

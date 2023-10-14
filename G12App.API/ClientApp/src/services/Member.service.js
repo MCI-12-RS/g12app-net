@@ -1,6 +1,6 @@
 
 const SearchMembers = async (search, pagination, sort) => {
-    console.log(1);
+    
     var response = await fetch('/api/member/search', {
         method: 'POST',
         body: JSON.stringify({
@@ -26,8 +26,6 @@ const SearchMembers = async (search, pagination, sort) => {
         },
     });
 
-    
-    console.log(2);
     var obj = await response.json();
 
     return obj;

@@ -41,22 +41,68 @@ namespace G12App.Infrastructure.Data.Context
                 State = "RS",
             });
 
+            builder.Entity<Address>().HasData(new Address()
+            {
+                Id = 2,
+                Street = "Oscar Schick",
+                Number = "0",
+                City = "Alvorada",
+                Neighborhood = "Formosa",
+                Notes = string.Empty,
+                PostalCode = "00000000",
+                State = "RS",
+            });
+
+            builder.Entity<Address>().HasData(new Address()
+            {
+                Id = 3,
+                Street = "Rua da Figueira",
+                Number = "0",
+                City = "Alvorada",
+                Neighborhood = "Sumare",
+                Notes = string.Empty,
+                PostalCode = "00000000",
+                State = "RS",
+            });
+
             builder.Entity<Member>().HasData(new Member()
             {
                 Id = 1,
-                Name = "Rafael Jorge Alves",
+                Name = "Samuel Colares",
+                BirthDate = new System.DateOnly(1993, 05, 10),
+                Email = "aaaaa@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                HomeAddressId = 2,
+            });
+
+            builder.Entity<Member>().HasData(new Member()
+            {
+                Id = 2,
+                Name = "Eduardo Coelho",
+                BirthDate = new System.DateOnly(1993, 05, 10),
+                Email = "bbbbbb@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                HomeAddressId = 3,
+                LeadershipId = 1,
+            });
+
+            builder.Entity<Member>().HasData(new Member()
+            {
+                Id = 3,
+                Name = "Rafael Alves",
                 BirthDate = new System.DateOnly(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
+                LeadershipId = 2,
             });
 
             builder.Entity<Cell>().HasData(new Cell()
             {
                 Id = 1,
-                LeadId = 1,
-                HostId = 1,
-                TimothyId = 1,
+                LeadId = 3,
+                HostId = 3,
+                TimothyId = 2,
                 WeekDay = System.DayOfWeek.Tuesday,
                 PlaceId = 1,
                 CellType = Domain.Model.Enum.CellType.Evangelistic,

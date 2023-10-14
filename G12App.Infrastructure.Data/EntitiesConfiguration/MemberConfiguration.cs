@@ -11,9 +11,10 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
             builder.HasKey(x => x.Id);
 
             builder.HasOne(x => x.HomeAddress).WithMany().HasForeignKey(x => x.HomeAddressId);
-            builder.Navigation(x => x.HomeAddress).AutoInclude();
+            //builder.Navigation(x => x.HomeAddress).AutoInclude();
 
             builder.HasOne(x => x.Leadership).WithMany().HasForeignKey(x => x.LeadershipId);
+            //builder.Navigation(x => x.Leadership).AutoInclude();
         }
     }
 }

@@ -1,0 +1,7 @@
+.total-records{
+    display: inline-block;
+}
+
+.pagination{
+    float: right;
+}
