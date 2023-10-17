@@ -1,6 +1,7 @@
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
+import { Cells } from "./pages/Cells";
 import { Members } from "./pages/Members"
 import { MemberDetails } from "./pages/Members/details";
 
@@ -35,7 +36,7 @@ const AppRoutes = [
   },
   {
     path: '/cells',
-    element: <Home />
+    element: <Cells />
   },
   {
     path: '/new-cell',

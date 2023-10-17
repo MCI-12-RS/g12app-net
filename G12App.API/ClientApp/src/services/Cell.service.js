@@ -29,3 +29,5 @@ const SearchCells = async (search, pagination, sort) => {
 
     return obj;
 }
+
+export {SearchCells}

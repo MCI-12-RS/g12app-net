@@ -15,7 +15,7 @@ export const Cells = () => {
     const [pagination, setPagination] =
         React.useState({page: 1, limit: 20});
     const [searchData, setSearchData] =
-        React.useState({leadId: '', hostId: '', timothyId: '', weekDay: '', placeId: '', cellType: ''});
+        React.useState({lead: '', host: '', timothy: '', weekDay: null, cellType: null});
     const [loading, setLoading] = React.useState(false);
     const [total, setTotal] = React.useState(0);
 
@@ -25,21 +25,21 @@ export const Cells = () => {
         render: (cell) => (cell.id.toString() ?? '0').padStart(4, "0")
       },
       {
-        name: 'Responsáveis',
-        render: (cell) => `Líder: ${cell.lead.name}\n`+
-                          `Líder G12: ${cell.lead.leadership.name}`
+        name: 'Liderança',
+        render: (cell) => <><span><b>Líder: </b>{cell.lead?.name}</span><br/>
+                          <span><b>Líder G12: </b>{cell.lead?.leadership?.name}</span></>
       },
       {
         name: 'Rua',
-        render: (cell) => cell.place.street
+        render: (cell) => cell.place?.street
       },
       {
         name: 'Bairro',
-        render: (cell) => cell.place.neighborhood
+        render: (cell) => cell.place?.neighborhood
       },
       {
         name: 'Cidade',
-        render: (cell) => cell.place.city
+        render: (cell) => cell.place?.city
       }
     ];
 
@@ -70,5 +70,23 @@ export const Cells = () => {
       search();
     }, [pagination, searchData]);
 
-    
+    return (
+      <>
+        <div>
+          <h1>Células</h1>
+          <hr />
+          <div className="row">
+            <h6>&nbsp;</h6>
+            <Grid 
+            columns={columns}
+            data={cells}
+            textTotal='Células cadastradas'
+            loading={loading}
+            pagination={pagination}
+            setPagination={setPagination}
+            totalRecords={total}/>
+          </div>
+        </div>
+      </>
+    )
 }

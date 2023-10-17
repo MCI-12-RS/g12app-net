@@ -35,6 +35,7 @@ namespace G12App.Infrastructure.Data.Repositories
                 .Include(x => x.Lead)
                 .Include(x => x.Host)
                 .Include(x => x.Timothy)
+                .Include(x => x.Place)
                 .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
@@ -45,6 +46,7 @@ namespace G12App.Infrastructure.Data.Repositories
                 .Include(x => x.Lead)
                 .Include(x => x.Host)
                 .Include(x => x.Timothy)
+                .Include(x => x.Place)
                 .ApplyFilter(query)
                 .ApplyPaging(query)
                 .ToListAsync();
