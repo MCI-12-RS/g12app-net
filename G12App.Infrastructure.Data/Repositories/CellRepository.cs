@@ -31,13 +31,20 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public Task<Cell> GetCellByIdAsync(int? id)
         {
-            return _context.Cells.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            return _context.Cells
+                .Include(x => x.Lead)
+                .Include(x => x.Host)
+                .Include(x => x.Timothy)
+                .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
         public async Task<IEnumerable<Cell>> GetCellsAsync(Query<CellFilter> query)
         {
             return await _context.Cells
                 .Where(x => x.IsDeleted == false)
+                .Include(x => x.Lead)
+                .Include(x => x.Host)
+                .Include(x => x.Timothy)
                 .ApplyFilter(query)
                 .ApplyPaging(query)
                 .ToListAsync();
