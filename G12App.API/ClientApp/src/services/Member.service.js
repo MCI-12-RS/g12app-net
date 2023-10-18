@@ -45,4 +45,31 @@ const GetMember = async (id) => {
     return obj;
 }
 
-export { SearchMembers, GetMember };
+const CreateMember = async (member) => {      
+      var response = await fetch('/api/member', {
+          method: 'POST',
+          body: JSON.stringify(member),
+          headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+          },
+      });
+  
+      var obj = await response.json();
+  
+      return obj;
+}
+
+const DeleteMember = async (id) => {      
+    var response = await fetch('/api/member/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
+export { SearchMembers, GetMember, CreateMember, DeleteMember };
