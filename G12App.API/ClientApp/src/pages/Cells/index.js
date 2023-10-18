@@ -75,6 +75,35 @@ export const Cells = () => {
         <div>
           <h1>Células</h1>
           <hr />
+
+          <div className="mb-3" as={Col}>
+            <h6>Filtros</h6>
+
+            <Row className="mb-3 pr-0">
+            <InputGroup className="mb-3" as={Col}>
+              <InputGroup.Text id="basic-addon3">Liderança</InputGroup.Text>
+              <Form.Control id="basic-url" name="name" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+            </InputGroup>
+
+            <InputGroup className="mb-3 pr-0" as={Col}>
+              <InputGroup.Text id="basic-addon3">Rua</InputGroup.Text>
+              <Form.Control id="basic-url" name="street" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+            </InputGroup>
+          </Row>
+
+          <Row className="mb-3 pr-0">
+            <InputGroup className="mb-3" as={Col}>
+              <InputGroup.Text id="basic-addon3">Bairro</InputGroup.Text>
+              <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+            </InputGroup>
+
+            <InputGroup className="mb-3 pr-0" as={Col}>
+              <InputGroup.Text id="basic-addon3">Cidade</InputGroup.Text>
+              <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+            </InputGroup>
+          </Row>
+          </div>
+          
           <div className="row">
             <h6>&nbsp;</h6>
             <Grid 
