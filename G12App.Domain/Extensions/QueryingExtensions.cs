@@ -44,6 +44,9 @@ namespace G12App.Domain.Extensions
             if (!string.IsNullOrWhiteSpace(query.Filter.Lead))
                 queryable = queryable.Where(x => x.Lead.Name.ToLower().Contains(query.Filter.Lead));
 
+            if (!string.IsNullOrWhiteSpace(query.Filter.Leadership))
+                queryable = queryable.Where(x => x.Lead.Leadership.Name.ToLower().Contains(query.Filter.Leadership));
+
             if (query.Filter.HostId > 0)
                 queryable = queryable.Where(x => x.HostId.Equals(query.Filter.HostId));
 

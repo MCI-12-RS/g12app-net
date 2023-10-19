@@ -13,6 +13,7 @@ const SearchCells = async (search, pagination, sort) => {
             },
             "filter": {
               "lead": search.lead,
+              "leadership": search.leadership,
               "host": search.host,
               "timoyhy": search.timoyhy,
               "weekDay": search.weekDay,
@@ -20,7 +21,7 @@ const SearchCells = async (search, pagination, sort) => {
               "homeAddress_City": search.city,
               "homeAddress_State": search.state,
               "homeAddress_Street": search.street,
-              "cellType": search.cellType,
+              "cellType": search.cellType == "" ? null : search.cellType,
             }
         }),
         headers: {

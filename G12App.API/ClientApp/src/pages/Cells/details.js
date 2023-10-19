@@ -54,10 +54,6 @@ export const MemberDetails = () => {
         const { name, value } = event.target;
         setCell({ ...cell, [name]: value });
     };
-    const handleChangeEvent = (event) => {
-        const { name, value } = event.target;
-        setCell({ ...cell, [name]: data.value });
-    };
 
     const getNoOptionsMessage = (data) => {
         if(!(data.inputValue?.length)) return "Digite para pesquisar..."
@@ -68,8 +64,8 @@ export const MemberDetails = () => {
         let input = e.target;
 
         if(e.charCode < 47 || e.charCode > 57) {
-            e.preventDefault():
-            
+            e.preventDefault();
+        }
         var len = input.value.length;
 
         if(len !== 1 || len !== 3) {

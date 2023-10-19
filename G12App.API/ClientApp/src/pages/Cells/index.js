@@ -15,7 +15,8 @@ export const Cells = () => {
     const [pagination, setPagination] =
         React.useState({page: 1, limit: 20});
     const [searchData, setSearchData] =
-        React.useState({lead: '', host: '', timothy: '', street: '', cellType: null, neighborhood: '', city: '', state: ''});
+        React.useState({lead: '', leadership: '', host: '', timothy: '', 
+        street: '', cellType: null, neighborhood: '', city: '', state: ''});
     const [loading, setLoading] = React.useState(false);
     const [total, setTotal] = React.useState(0);
 
@@ -26,26 +27,31 @@ export const Cells = () => {
       },
       {
         name: 'Liderança',
-        render: (cell) => <><span><b>Líder: </b>{cell.lead?.name}</span><br/>
-                          <span><b>Líder G12: </b>{cell.lead?.leadership?.name}</span></>
+        render: (cell) => <>
+                            <span><b>Líder: </b>{cell.lead?.name}</span><br/>
+                            <span><b>G12: </b>{cell.lead?.leadership?.name}</span>
+                          </>
       },
       {
-        name: 'Rua',
-        render: (cell) => cell.place?.street
-      },
-      {
-        name: 'Bairro',
-        render: (cell) => cell.place?.neighborhood
-      },
-      {
-        name: 'Cidade',
-        render: (cell) => cell.place?.city
+        name: 'Localização',
+        render: (cell) => <>
+                            <span><b>Rua: </b>{cell.place?.street}</span><br/>
+                            <span><b>Bairro: </b>{cell.place?.neighborhood}</span><br/>
+                            <span><b>Cidade: </b>{cell.place?.city}</span>
+                          </>
       },
       {
         name: 'Modalidade',
-        render: (cell) => cell.cellType
+        render: (cell) => translateCellType(cell.cellType)
       }
     ];
+
+    const translateCellType = (cellType) => {
+      if (cellType == "Evangelistic")
+      return "Evangelística";
+      if (cellType == "Discipleship")
+      return "Discipuladora"
+    }
 
     const search = async () => {
       setLoading(true);
@@ -90,20 +96,37 @@ export const Cells = () => {
             </InputGroup>
 
             <InputGroup className="mb-3 pr-0" as={Col}>
-              <InputGroup.Text id="basic-addon3">Rua</InputGroup.Text>
-              <Form.Control id="basic-url" name="street" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+              <InputGroup.Text id="basic-addon3">G12</InputGroup.Text>
+              <Form.Control id="basic-url" name="leadership" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
           </Row>
 
           <Row className="mb-3 pr-0">
             <InputGroup className="mb-3" as={Col}>
-              <InputGroup.Text id="basic-addon3">Bairro</InputGroup.Text>
-              <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+              <InputGroup.Text id="basic-addon3">Rua</InputGroup.Text>
+              <Form.Control id="basic-url" name="street" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
 
             <InputGroup className="mb-3 pr-0" as={Col}>
+              <InputGroup.Text id="basic-addon3">Bairro</InputGroup.Text>
+              <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+            </InputGroup>
+          </Row>
+
+          <Row className="mb-3 pr-0">
+            <InputGroup className="mb-3" as={Col}>
               <InputGroup.Text id="basic-addon3">Cidade</InputGroup.Text>
               <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+            </InputGroup>
+
+            <InputGroup className="mb-3 pr-0" as={Col}>
+              <InputGroup.Text id="basic-addon2">Modalidade</InputGroup.Text>
+                <Form.Select name="cellType" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                <option value="">Todas</option> 
+                <option value="Evangelistic">Evangelística</option>
+                <option value="Discipleship">Discipuladora</option>
+                <option value="Macrocell">Macrocélula</option>
+              </Form.Select>
             </InputGroup>
           </Row>
           </div>
