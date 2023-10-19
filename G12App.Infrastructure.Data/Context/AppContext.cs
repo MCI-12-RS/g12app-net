@@ -108,7 +108,18 @@ namespace G12App.Infrastructure.Data.Context
                 PlaceId = 1,
                 CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,
+            });
 
+            builder.Entity<Cell>().HasData(new Cell()
+            {
+                Id = 2,
+                LeadId = 2,
+                HostId = 3,
+                TimothyId = 2,
+                WeekDay = System.DayOfWeek.Wednesday,
+                PlaceId = 3,
+                CellType = Domain.Model.Enum.CellType.Discipleship,
+                ReportMandatory = true,
             });
         }
     }

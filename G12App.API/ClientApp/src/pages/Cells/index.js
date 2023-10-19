@@ -15,7 +15,7 @@ export const Cells = () => {
     const [pagination, setPagination] =
         React.useState({page: 1, limit: 20});
     const [searchData, setSearchData] =
-        React.useState({lead: '', host: '', timothy: '', weekDay: null, cellType: null});
+        React.useState({lead: '', host: '', timothy: '', street: '', cellType: null, neighborhood: '', city: '', state: ''});
     const [loading, setLoading] = React.useState(false);
     const [total, setTotal] = React.useState(0);
 
@@ -40,6 +40,10 @@ export const Cells = () => {
       {
         name: 'Cidade',
         render: (cell) => cell.place?.city
+      },
+      {
+        name: 'Modalidade',
+        render: (cell) => cell.cellType
       }
     ];
 
@@ -82,7 +86,7 @@ export const Cells = () => {
             <Row className="mb-3 pr-0">
             <InputGroup className="mb-3" as={Col}>
               <InputGroup.Text id="basic-addon3">Liderança</InputGroup.Text>
-              <Form.Control id="basic-url" name="name" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+              <Form.Control id="basic-url" name="lead" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
 
             <InputGroup className="mb-3 pr-0" as={Col}>

@@ -41,6 +41,9 @@ namespace G12App.Domain.Extensions
             if (query.Filter.LeadId > 0)
                 queryable = queryable.Where(x => x.LeadId.Equals(query.Filter.LeadId));
 
+            if (!string.IsNullOrWhiteSpace(query.Filter.Lead))
+                queryable = queryable.Where(x => x.Lead.Name.ToLower().Contains(query.Filter.Lead));
+
             if (query.Filter.HostId > 0)
                 queryable = queryable.Where(x => x.HostId.Equals(query.Filter.HostId));
 
@@ -50,8 +53,17 @@ namespace G12App.Domain.Extensions
             if (query.Filter.WeekDay.HasValue)
                 queryable = queryable.Where(x => x.WeekDay.Equals(query.Filter.WeekDay));
 
-            if (query.Filter.PlaceId > 0)
-                queryable = queryable.Where(x => x.PlaceId.Equals(query.Filter.PlaceId));
+            if (!string.IsNullOrWhiteSpace(query.Filter.HomeAddress_Neighborhood))
+                queryable = queryable.Where(x => x.Place.Neighborhood.ToLower().Contains(query.Filter.HomeAddress_Neighborhood.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(query.Filter.HomeAddress_City))
+                queryable = queryable.Where(x => x.Place.City.ToLower().Contains(query.Filter.HomeAddress_City.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(query.Filter.HomeAddress_State))
+                queryable = queryable.Where(x => x.Place.State.ToLower().Contains(query.Filter.HomeAddress_State.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(query.Filter.HomeAddress_Street))
+                queryable = queryable.Where(x => x.Place.Street.ToLower().Contains(query.Filter.HomeAddress_Street.ToLower()));
 
             if (query.Filter.CellType.HasValue)
                 queryable = queryable.Where(x => x.CellType.Equals(query.Filter.CellType));

@@ -12,12 +12,15 @@ const SearchCells = async (search, pagination, sort) => {
                 "sortOrder": ""
             },
             "filter": {
-                "leadId": search.leadId,
-                "hostId": search.hostId,
-                "timoyhyId": search.timoyhyId,
-                "weekDay": search.weekDay,
-                "placeId": search.placeId,
-                "cellType": search.cellType,
+              "lead": search.lead,
+              "host": search.host,
+              "timoyhy": search.timoyhy,
+              "weekDay": search.weekDay,
+              "homeAddress_Neighborhood": search.neighborhood,
+              "homeAddress_City": search.city,
+              "homeAddress_State": search.state,
+              "homeAddress_Street": search.street,
+              "cellType": search.cellType,
             }
         }),
         headers: {
