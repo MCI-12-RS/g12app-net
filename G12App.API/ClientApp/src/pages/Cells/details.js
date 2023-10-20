@@ -16,8 +16,18 @@ import states from '../../components/Address/states.json'
 export const CellDetails = () => {
 
     const emptyCell = {
-        lead: '',
-        leadership: '',
+        lead: {
+            name: ''
+        },
+        host: {
+            name: ''
+        },
+        timothy: {
+            name: ''
+        },
+        leadership: {
+            name: ''
+        },
         place: {
             street: '',
             number: '',
@@ -97,21 +107,21 @@ export const CellDetails = () => {
                             <Col>
                                 <InputGroup className="mb-3" as={Col}>
                                     <InputGroup.Text id="basic-addon1">Líder</InputGroup.Text>
-                                    <Form.Control name="lead" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['lead']} />
+                                    <Form.Control name="lead" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell.lead?.name} />
                                 </InputGroup>
                             </Col>
 
                             <Col>
                                 <InputGroup className="mb-3" as={Col}>
                                     <InputGroup.Text id="basic-addon1">Timóteo</InputGroup.Text>
-                                    <Form.Control name="timothy" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['timothy']} />
+                                    <Form.Control name="timothy" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell.timothy?.name} />
                                 </InputGroup>
                             </Col>
 
                             <Col>
                                 <InputGroup className="mb-3" as={Col}>
                                     <InputGroup.Text id="basic-addon1">Anfitrião</InputGroup.Text>
-                                    <Form.Control name="host" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['host']} />
+                                    <Form.Control name="host" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell.host?.name} />
                                 </InputGroup>
                             </Col>
                         </Row>
