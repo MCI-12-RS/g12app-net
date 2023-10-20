@@ -14,5 +14,7 @@ namespace G12App.Domain.DTOs
         public AddressDto HomeAddress { get; set; }
         public int? LeadershipId { get; set; }
         public MemberDto Leadership { get; set; }
+        public int? MinisteryLevel { get; set; }
+
     }
 }

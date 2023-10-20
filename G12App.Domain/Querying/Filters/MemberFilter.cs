@@ -13,5 +13,7 @@
         public string HomeAddress_City { get; set; }
 
         public string HomeAddress_State { get; set; }
+        public int? MinisteryLevel { get; set; }
+
     }
 }
