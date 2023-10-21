@@ -74,6 +74,7 @@ namespace G12App.Infrastructure.Data.Context
                 Email = "aaaaa@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 2,
+                MinisteryLevel = 0
             });
 
             builder.Entity<Member>().HasData(new Member()
@@ -85,6 +86,7 @@ namespace G12App.Infrastructure.Data.Context
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 3,
                 LeadershipId = 1,
+                MinisteryLevel = 1,
             });
 
             builder.Entity<Member>().HasData(new Member()
@@ -96,6 +98,7 @@ namespace G12App.Infrastructure.Data.Context
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
                 LeadershipId = 2,
+                MinisteryLevel = 2,
             });
 
             builder.Entity<Cell>().HasData(new Cell()

@@ -20,7 +20,7 @@ namespace G12App.Application.Tests
             {
                 ReportId = 1,
                 Subject = "Valid subject",
-                Date = new DateTime(2023, 10, 12),
+                Date = new DateTime(2023, 10, 20),
                 Visitors = 1,
                 Members = 2,
                 CellId = 1,
