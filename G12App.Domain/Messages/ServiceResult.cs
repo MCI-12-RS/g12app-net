@@ -28,8 +28,14 @@ namespace G12App.Domain.Messages
     public class ServiceResult<TData> : ServiceResult
     {
         public TData Data { get; set; }
+
+        public int? TotalRecords { get; set; }
+
         public ServiceResult() { }
+
         public ServiceResult(TData data) => (Data) = (data);
+
+        public ServiceResult(TData data, int totalRecords) :this(data) => (TotalRecords) = (totalRecords);
 
         public ServiceResult(TData data, IEnumerable<Error> errors) : this(data) => (Errors) = (errors.ToList());
 

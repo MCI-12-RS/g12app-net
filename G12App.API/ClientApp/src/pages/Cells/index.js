@@ -142,7 +142,7 @@ export const Cells = () => {
           <Grid
             columns={columns}
             data={cells}
-            textTotal='Células cadastradas'
+            textTotal='células cadastradas'
             loading={loading}
             pagination={pagination}
             setPagination={setPagination}

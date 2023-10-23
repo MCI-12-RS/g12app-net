@@ -6,7 +6,7 @@ const Grid = ({
     columns = [],
     data = [],
     loading = false,
-    pagination = { page: 1, limit: 20 },
+    pagination = { page: 1, limit: 10 },
     setPagination = () => {},
     totalRecords = 0,
     textTotal = "registros"
@@ -26,14 +26,14 @@ const Grid = ({
         
         totalRecords == 0 ?
 
-        <p class="no-records"><em>Nenhum registro encontrado.</em></p> :
+        <p className="no-records"><em>Nenhum registro encontrado.</em></p> :
 
         <div>   
             <table className="table table-striped" aria-labelledby="tableLabel">
                 <thead>
                 <tr key="columns">
                     {columns.map(column =>
-                        <th>{column.name}</th>
+                        <th key={column.name}>{column.name}</th>
                         )}
                 </tr>
                 </thead>
@@ -41,35 +41,43 @@ const Grid = ({
                     {data.map(member =>
                         (<tr key={member.id}>
                             {columns.map(column =>
-                                <td>{column.render(member)}</td>
+                                <td key={column.name + '-' + member.id}>{column.render(member)}</td>
                             )}
                         </tr>)
                     )}
                 </tbody>
             </table>
             
-            <div class="pagination-container">
-                <span class="total-records">{totalRecords} {textTotal}</span>
+            <div className="pagination-container">
+                <span className="total-records">{totalRecords} {textTotal}</span>
                 <Pagination size="sm">
-                    <Pagination.First onClick={() => setPage(1)} />
-                    <Pagination.Prev onClick={() => setPage(pagination.page - 1)} />
-                    <Pagination.Item active={pagination.page == 1} onClick={() => setPage(1)}>1</Pagination.Item>
                     {(() => {
                         var elements = [];
+
+                        if(pagination.page > 1)
+                            elements.push(<Pagination.First onClick={() => setPage(1)} />);
+
+                        if(pagination.page > 2)
+                            elements.push(<Pagination.Prev onClick={() => setPage(pagination.page - 1)} />);
+
+                        elements.push(<Pagination.Item active={pagination.page == 1} onClick={() => setPage(1)}>1</Pagination.Item>);
                         
                         if(pages == 1)
-                            return;
+                            return elements;
 
                         var prevPage = pagination.page - 1;
                         var nextPage = pagination.page + 1;
 
+                        if(prevPage > 2)
+                            elements.push(<Pagination.Ellipsis />);
+                            
                         if(prevPage > 1)
                             elements.push(<Pagination.Item onClick={() => setPage(prevPage)}>{prevPage}</Pagination.Item>);
-
-                        if(pagination.page > 2)
+                        
+                        if(pagination.page >= 2)
                             elements.push(<Pagination.Item active onClick={() => setPage(pagination.page)}>{pagination.page}</Pagination.Item>);
 
-                        if(nextPage < pages)
+                        if(nextPage <= pages)
                             elements.push(<Pagination.Item onClick={() => setPage(nextPage)}>{nextPage}</Pagination.Item>);
 
                         if(nextPage + 1 < pages)
@@ -78,10 +86,13 @@ const Grid = ({
                         if(nextPage < pages)
                             elements.push(<Pagination.Item onClick={() => setPage(pages)}>{pages}</Pagination.Item>);
 
+                        if(pagination.page < pages){
+                            elements.push(<Pagination.Next onClick={() => setPage(pagination.page + 1)} />);
+                            elements.push(<Pagination.Last onClick={() => setPage(pages)} />);
+                        }
+
                         return elements;
                     })()}
-                    <Pagination.Next onClick={() => setPage(pagination.page + 1)} />
-                    <Pagination.Last onClick={() => setPage(pages)} />
                 </Pagination>
             </div>
         

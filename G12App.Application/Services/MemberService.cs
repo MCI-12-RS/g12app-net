@@ -25,7 +25,10 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query<MemberFilter> query)
         {
             var memberEntity = await _memberRepository.GetMembersAsync(query);
-            return new ServiceResult<IEnumerable<MemberDto>>(_mapper.Map<IEnumerable<MemberDto>>(memberEntity));
+            var totalMembers = memberEntity.Any() ? await _memberRepository.CountMembersAsync(query) : 0;
+            return new ServiceResult<IEnumerable<MemberDto>>(
+                _mapper.Map<IEnumerable<MemberDto>>(memberEntity),
+                totalMembers);
         }
 
         public async Task<ServiceResult<MemberDto>> GetMemberById(int? id)

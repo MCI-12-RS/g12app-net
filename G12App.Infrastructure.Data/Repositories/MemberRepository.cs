@@ -40,15 +40,28 @@ namespace G12App.Infrastructure.Data.Repositories
                     .FirstOrDefaultAsync();
         }
 
+        private IQueryable<Member> GetMembersQueryableAsync(Query<MemberFilter> query)
+        {
+            return _context.Members
+                .Where(x => x.IsDeleted == false)
+                .ApplyFilter(query);
+        }
+
         public async Task<IEnumerable<Member>> GetMembersAsync(Query<MemberFilter> query)
         {
-            return await _context.Members
-                .Where(x => x.IsDeleted == false)
-                .Include(x => x.HomeAddress)
-                .Include(x => x.Leadership)
-                .ApplyFilter(query)
-                .ApplyPaging(query)
-                .ToListAsync();
+            return await
+                this.GetMembersQueryableAsync(query)
+                    .Include(x => x.HomeAddress)
+                    .Include(x => x.Leadership)
+                    .ApplyPaging(query)
+                    .ToListAsync();
+        }
+
+        public async Task<int> CountMembersAsync(Query<MemberFilter> query)
+        {
+            return await
+                this.GetMembersQueryableAsync(query)
+                    .CountAsync();
         }
 
         public async Task<Member> Remove(Member member)

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using G12App.Domain.DTOs;
 
 namespace G12App.Domain.Validators
@@ -22,7 +23,9 @@ namespace G12App.Domain.Validators
                 .WithMessage(Email_ErrorMessage);
 
             RuleFor(x => x.BirthDate)
-                .NotNull()
+                .GreaterThan(
+                    DateOnly.FromDateTime(
+                        DateTime.Now.Subtract(TimeSpan.FromDays(365 * 100))))
                 .WithMessage(BirthDate_ErrorMessage);
 
             RuleFor(x => x.Gender)

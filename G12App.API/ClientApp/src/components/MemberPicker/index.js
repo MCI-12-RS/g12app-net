@@ -5,6 +5,8 @@ import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
 import './style.css';
 
+const NoLeadershipText = 'Sem lideranca (nivel base)';
+
 const MemberPicker = ({
     label = 'Membro',
     ministryLevel,
@@ -14,7 +16,7 @@ const MemberPicker = ({
     minLength = 3, 
     notInIds = [],
     selectedValue = null,
-    selectedLabel = ''
+    selectedLabel = NoLeadershipText
 }) => {
 
     const [option, setOption] = React.useState({ label: selectedLabel, value: selectedValue });
@@ -58,7 +60,7 @@ const MemberPicker = ({
                 onChange={handleSelectChangeEvent} 
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
-                defaultOptions={[ {label: 'Sem lideranca (nivel base)', value: null} ]}
+                defaultOptions={[ {label: NoLeadershipText, value: null} ]}
                 placeholder="" loadOptions={loadMembers}>
             </AsyncSelect>
         </InputGroup>

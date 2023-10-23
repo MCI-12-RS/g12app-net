@@ -12,6 +12,10 @@ namespace G12App.Domain.Model
 
         public DateOnly BirthDate { get; set; }
 
+        public string PhoneNumber { get; set; }
+
+        public string MobileNumber { get; set; }
+
         public Gender Gender { get; set; }
 
         public string Email { get; set; }

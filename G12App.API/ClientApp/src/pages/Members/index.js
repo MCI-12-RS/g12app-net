@@ -13,7 +13,7 @@ export const Members = () => {
   const [members, setMembers] = 
     React.useState([]);
   const [pagination, setPagination] = 
-    React.useState({page: 1, limit: 20});
+    React.useState({page: 1, limit: 10});
   const [searchData, setSearchData] = 
     React.useState({name: '', leadershipName: '', email: '', neighborhood: '', city: '', state: ''});
   const [loading, setLoading] = React.useState(false);
@@ -34,11 +34,11 @@ export const Members = () => {
     },
     {
       name: 'Bairro',
-      render: (member) => member.homeAddress?.neighborhood
+      render: (member) => (member.homeAddress?.neighborhood ?? '').length ? member.homeAddress?.neighborhood : '-'
     },
     {
       name: 'Cidade',
-      render: (member) => member.homeAddress?.city
+      render: (member) => (member.homeAddress?.city ?? '').length ? member.homeAddress?.city : '-'
     },
     {
       name: '',

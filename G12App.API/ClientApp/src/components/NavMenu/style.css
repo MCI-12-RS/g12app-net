@@ -2,6 +2,10 @@
   margin-bottom: 20px;
 }
 
+.nav-item.dropdown{
+  text-decoration: none !important;
+}
+
 .nav-item.dropdown:hover .dropdown-menu {
   display: block;
 }

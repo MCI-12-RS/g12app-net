@@ -44,6 +44,7 @@ namespace G12App.Infrastructure.Data.Repositories
             return await _context.Cells
                 .Where(x => x.IsDeleted == false)
                 .Include(x => x.Lead)
+                .Include(x => x.Lead.Leadership)
                 .Include(x => x.Host)
                 .Include(x => x.Timothy)
                 .Include(x => x.Place)
