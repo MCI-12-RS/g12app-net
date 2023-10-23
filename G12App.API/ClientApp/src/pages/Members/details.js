@@ -1,33 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { InputGroup, Form, Col, Row, Button, Container, SelectBox } from 'react-bootstrap';
-import { Link, useParams } from "react-router-dom";
-import { GetMember, SearchMembers } from '../../services/Member.service';
-import AsyncSelect from 'react-select/async'
-import { debounce } from 'lodash';
-import Grid from '../../components/Grid';
-//import test from '../../data/states.csv';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { InputGroup, Form, Col, Row, Button, Container, Spinner } from 'react-bootstrap';
+import { useParams, useNavigate } from "react-router-dom";
+import { GetMember, CreateMember, UpdateMember } from '../../services/Member.service';
+import MemberPicker from '../../components/MemberPicker';
+import { HandleDateMask, FromBRDate, ToBRDate } from '../../shared/utils';
 
 import './style.css';
-import states from '../../components/Address/states.json'
+import moment from "moment";
+import { AddressDetails } from "../../components/Address";
 
-export const MemberDetails = () => {   
+export const MemberDetails = () => {
 
     const emptyMember = {
+        id: 0,
         name: '',
         birthDate: '',
+        phoneNumber: '',
+        mobileNumber: '',
+        email: '',
         homeAddress: {
             street: '',
             number: '',
             neighborhood: '',
             city: '',
             state: ''
+        },
+        leadershipId: null,
+        leadership: {
+            id: null,
+            name: ''
         }
     };
 
     const params = useParams();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [member, setMember] = useState(emptyMember);
 
@@ -37,20 +43,16 @@ export const MemberDetails = () => {
 
     const fetchUser = async () => {
         setLoading(true);
-        if(!params.id) {
-            setMember(emptyMember);
+        if (!params.id) {
             setLoading(false);
             return;
         }
 
         var result = await GetMember(params.id);
-        if(result.isValid){
+        if (result.isValid) {
             const member = result.data;
-            if (member.birthDate){
-                var date = new Date(member.birthDate);
-                member.birthDate = (date.getDate() + 1).toString().padStart(2, '0') + '/' + 
-                                   (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
-                                   date.getFullYear();
+            if (member.birthDate) {
+                member.birthDate = ToBRDate(member.birthDate);
             }
             setMember(result.data);
         }
@@ -62,181 +64,129 @@ export const MemberDetails = () => {
         setMember({ ...member, [name]: value });
     };
 
-    const handleSelectChangeEvent = (name, data) => {
-        setMember({ ...member, [name]: data.value });
+    const handleSelectChangeEvent = (name, value) => {
+        setMember({ ...member, [name]: value });
     };
 
-    const loadG12 = async (inputValue) => {
-        let result = await SearchMembers({ name: inputValue }, {page: 1, limit: 10});
-        if(!result.isValid) return [];
-
-        return result.data.map((member) => ({
-            label: member.name,
-            value: member.id
-        }));
-    }
-
-    const getNoOptionsMessage = (data) => {
-        if(!(data.inputValue?.length)) return "Digite para pesquisar..."
-        return "Nenhum resultado encontrado.";
-    }
-        
-    const handleDateMask = (e) => {
-        let input = e.target;
-        
-        if(e.charCode < 47 || e.charCode > 57) {
-            e.preventDefault();
+    const getAge = () => {
+        if (member.birthDate && member.birthDate.length == 10) {
+            var date = moment(FromBRDate(member.birthDate));
+            return moment().diff(date, 'years') ?? '-';
         }
 
-        var len = input.value.length;
+        return '-'
+    }
 
-        if(len !== 1 || len !== 3) {
-            if(e.charCode == 47) {
-                e.preventDefault();
+    const SaveMember = async () => {
+        setLoading(true);
+
+        try {
+            var result;
+            if (params.id) {
+                result = await UpdateMember({ ...member, birthDate: FromBRDate(member.birthDate) });
+            } else {
+                result = await CreateMember({ ...member, birthDate: FromBRDate(member.birthDate) });
             }
+
+            if (result.isValid) {
+                alert('Cadastro salvo com sucesso!');
+                navigate('/members/' + result.data.id);
+            } else {
+                alert('Erro ao salvar cadastro.');
+            }
+
+        }
+        catch (e) {
+            alert('Erro ao salvar cadastro.');
         }
 
-        if(len === 2) {
-            input.value += '/';
-        }
-
-        if(len === 5) {
-            input.value += '/';
-        }
-        return true;
-    }; 
+        setLoading(false);
+    }
 
     return (
-        loading ? 
-        (<div>Carregando...</div>) : (
         <>
             {(params.id ? <h1>Alterar cadastro de pessoa</h1> : <h1>Cadastrar nova pessoa</h1>)}
             <hr />
-            <Container fluid>
-                <h6>Dados pessoais</h6>
-                <Row className="mb-3 pr-0 justify-content-md-center">
-                    <Col>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">Nome</InputGroup.Text>
-                            <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['name']} />
-                        </InputGroup>
-                    </Col>
+            {loading ?
+                (<Spinner animation="border" />) : (
+                    <>
+                        <Container fluid>
+                            <h6>Dados pessoais</h6>
+                            <Row className="mb-3 pr-0 justify-content-md-center">
+                                <Col>
+                                    <InputGroup className="mb-3" as={Col}>
+                                        <InputGroup.Text id="basic-addon1">Nome</InputGroup.Text>
+                                        <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['name']} />
+                                    </InputGroup>
+                                </Col>
 
-                    <Col>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Data de Nascimento</InputGroup.Text>
-                            <Form.Control type="text" pattern="\d{2}\/\d{2}\/\d{2}" name="birthDate" onKeyPress={handleDateMask} 
-                                aria-describedby="basic-addon2" maxLength={10} value={member['birthDate']}  onChange={handleChangeEvent} />
-                        </InputGroup>
-                    </Col>
-                </Row>
-            </Container>
-                
-            <Container fluid>
-                <h6>Ministerial</h6>
-                <Row className="mb-3 pr-0 justify-content-md-center">
-                    <Col>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">Liderança G12</InputGroup.Text>
-                            <AsyncSelect 
-                                name="leadership" aria-describedby="basic-addon1" className="async-select" 
-                                onChange={(data) => handleSelectChangeEvent('leadership', data)} 
-                                noOptionsMessage={getNoOptionsMessage}
-                                placeholder="" loadOptions={loadG12}>
-                            </AsyncSelect>
-                        </InputGroup>
-                    </Col>
+                                <Col>
+                                    <InputGroup className="mb-3 pr-0" as={Col}>
+                                        <InputGroup.Text id="basic-addon2">Email</InputGroup.Text>
+                                        <Form.Control name="email" aria-describedby="basic-addon2" onChange={handleChangeEvent}
+                                            value={member.email} />
+                                    </InputGroup>
+                                </Col>
+                            </Row>
 
-                    <Col>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Lider</InputGroup.Text>
-                            <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} />
-                        </InputGroup>
-                    </Col>
-                </Row>
-            </Container>
-            
-            <Container fluid>
-                <h6>Endereco</h6>
-                <Row className="mb-3 pr-0 justify-content-md-center">
-                    <Col xs={8}>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">Rua</InputGroup.Text>
-                            <Form.Control name="homeAddress.street" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                            value={member.homeAddress?.street} />
-                        </InputGroup>
-                    </Col>
+                            <Row className="mb-3 pr-0 justify-content-md-center">
+                                <Col>
 
-                    <Col xs={4}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Numero</InputGroup.Text>
-                            <Form.Control type="text" pattern="\d{2}\/\d{2}\/\d{2}" name="homeAddress.number"
-                                aria-describedby="basic-addon2" maxLength={10} value={member.homeAddress?.number}
-                                onChange={handleChangeEvent} />
-                        </InputGroup>
-                    </Col>
-                </Row>
-                
-                <Row className="mb-3 pr-0 justify-content-md-center">
-                    <Col xs={4}>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">Bairro</InputGroup.Text>
-                            <Form.Control name="homeAddress.neighborhood" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                                value={member.homeAddress?.neighborhood} />
-                        </InputGroup>
-                    </Col>
+                                    <InputGroup className="mb-3 pr-0" as={Col}>
+                                        <InputGroup.Text id="basic-addon2">Data de Nascimento</InputGroup.Text>
+                                        <Form.Control type="text" pattern="\d{2}\/\d{2}\/\d{2}" name="birthDate" onKeyPress={HandleDateMask}
+                                            aria-describedby="basic-addon2" maxLength={10} value={member['birthDate']} onChange={handleChangeEvent} />
+                                        <InputGroup.Text id="basic-addon2">{getAge() + ' anos'}</InputGroup.Text>
+                                    </InputGroup>
+                                </Col>
 
-                    <Col xs={4}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Cidade</InputGroup.Text>
-                            <Form.Control type="text" pattern="\d{2}\/\d{2}\/\d{2}" name="homeAddress.city" 
-                                aria-describedby="basic-addon2" onChange={handleChangeEvent}
-                                value={member.homeAddress?.city} />
-                        </InputGroup>
-                    </Col>
-                    
-                    <Col xs={4}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Estado</InputGroup.Text>
-                            <Form.Select name="homeAddress.state" aria-describedby="basic-addon2" onChange={handleChangeEvent}>
-                                {states.map((state) => (
-                                    <option value={state.acronym} selected={member.homeAddress.state == state.acronym}>{state.name}</option>
-                                ))}
-                            </Form.Select>
-                        </InputGroup>
-                    </Col>
-                </Row>
-                
-                <Row className="mb-3 pr-0 justify-content-md-center">
-                    <Col xs={4}>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">CEP</InputGroup.Text>
-                            <Form.Control name="homeAddress.postalCode" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                                value={member.homeAddress?.postalCode} />
-                        </InputGroup>
-                    </Col>
+                                <Col>
+                                    <InputGroup className="mb-3 pr-0" as={Col}>
+                                        <InputGroup.Text id="basic-addon2">Celular</InputGroup.Text>
+                                        <Form.Control name="mobileNumber" aria-describedby="basic-addon2" onChange={handleChangeEvent}
+                                            value={member.mobileNumber} />
+                                    </InputGroup>
+                                </Col>
 
-                    <Col xs={8}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Referencia</InputGroup.Text>
-                            <Form.Control type="text" pattern="\d{2}\/\d{2}\/\d{2}" name="homeAddress.notes" 
-                                aria-describedby="basic-addon2" onChange={handleChangeEvent}
-                                value={member.homeAddress?.notes} />
-                        </InputGroup>
-                    </Col>
-                </Row>
-                
-                
-                <Row className="mb-3 pr-0 d-flex">
-                    
-                    <Col xs={12}>
-                        {(params.id && <Button variant="danger" type="submit" className="">Deletar cadastro</Button>)}
-                        <Button variant="primary" type="submit" className="float-end">Salvar {(params.id ? "alteracoes" : "cadastro")}</Button>
-                    </Col>    
+                                <Col>
+                                    <InputGroup className="mb-3" as={Col}>
+                                        <InputGroup.Text id="basic-addon1">Telefone / Whatsapp</InputGroup.Text>
+                                        <Form.Control name="phoneNumber" aria-describedby="basic-addon1" onChange={handleChangeEvent}
+                                            value={member.phoneNumber} />
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                        </Container>
 
-                </Row>
-            </Container>
+                        <Container fluid>
+                            <h6>Ministerial</h6>
+                            <Row className="mb-3 pr-0 justify-content-md-center">
+                                <Col>
+                                    <MemberPicker label="Lideranca"
+                                        setValue={(value) => handleSelectChangeEvent('leadershipId', value)}
+                                        notInIds={[member.id]}
+                                        selectedLabel={member.leadership?.name}
+                                        selectedValue={member.leadership?.id} />
+                                </Col>
+                            </Row>
+                        </Container>
+
+                        <AddressDetails address={member.homeAddress} setAddress={(address) => handleSelectChangeEvent('homeAddress', address)} />
+
+                        <Container fluid>
+                            <Row className="mb-3 pr-0 d-flex">
+
+                                <Col xs={12}>
+                                    {(params.id && <Button variant="danger" type="submit" className="">Deletar cadastro</Button>)}
+                                    <Button variant="primary" type="submit" onClick={SaveMember} className="float-end">
+                                        Salvar {(params.id ? "alteracoes" : "cadastro")}
+                                    </Button>
+                                </Col>
+
+                            </Row>
+                        </Container>
+                    </>
+                )}
         </>
-    ));
-
+    );
 };

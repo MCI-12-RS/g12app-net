@@ -23,6 +23,7 @@ namespace G12App.Domain.Model
         public Member Leadership { get; set; }
 
         public int? LeadershipId { get; set; }
-        public int? MinisteryLevel { get; set; }
+
+        public int? MinistryLevel { get; set; }
     }
 }

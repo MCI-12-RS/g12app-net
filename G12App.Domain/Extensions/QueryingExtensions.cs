@@ -33,8 +33,11 @@ namespace G12App.Domain.Extensions
             if (!string.IsNullOrWhiteSpace(query.Filter.HomeAddress_State))
                 queryable = queryable.Where(x => x.HomeAddress.State.ToLower().Contains(query.Filter.HomeAddress_State.ToLower()));
 
-            if (query.Filter.MinisteryLevel > 0)
-                queryable = queryable.Where(x => x.MinisteryLevel.Equals(query.Filter.MinisteryLevel));
+            if (query.Filter.MinistryLevel.HasValue && query.Filter.MinistryLevel.Value >= 0)
+                queryable = queryable.Where(x => x.MinistryLevel.Equals(query.Filter.MinistryLevel.Value));
+
+            if (query.Filter.NotInId != null && query.Filter.NotInId.Any())
+                queryable = queryable.Where(x => !query.Filter.NotInId.Contains(x.Id));
 
             return queryable;
         }

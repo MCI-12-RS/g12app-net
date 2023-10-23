@@ -13,7 +13,9 @@
         public string HomeAddress_City { get; set; }
 
         public string HomeAddress_State { get; set; }
-        public int? MinisteryLevel { get; set; }
 
+        public int? MinistryLevel { get; set; }
+
+        public int[] NotInId { get; set; }
     }
 }

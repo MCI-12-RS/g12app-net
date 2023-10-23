@@ -61,3 +61,8 @@ html {
 .btn-wrapper{
   float: right;
 }
+
+.spinner-border {
+  margin: 0 auto;
+  display: block;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { InputGroup, Form, Col, Row, Button } from 'react-bootstrap';
+import { InputGroup, Form, Col, Row, Spinner } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
@@ -34,11 +34,11 @@ export const Members = () => {
     },
     {
       name: 'Bairro',
-      render: (member) => member.homeAddress.neighborhood
+      render: (member) => member.homeAddress?.neighborhood
     },
     {
       name: 'Cidade',
-      render: (member) => member.homeAddress.city
+      render: (member) => member.homeAddress?.city
     },
     {
       name: '',

@@ -19,6 +19,8 @@ const SearchMembers = async (search, pagination, sort) => {
               "homeAddress_Neighborhood": search.neighborhood,
               "homeAddress_City": search.city,
               "homeAddress_State": search.state,
+              "ministryLevel": search.ministryLevel,
+              "notInId": search.notInIds
             }
           }),
         headers: {
@@ -59,6 +61,20 @@ const CreateMember = async (member) => {
       return obj;
 }
 
+const UpdateMember = async (member) => {
+    var response = await fetch('/api/member/' + member.id, {
+        method: 'PUT',
+        body: JSON.stringify(member),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
 const DeleteMember = async (id) => {      
     var response = await fetch('/api/member/' + id, {
         method: 'DELETE',
@@ -72,4 +88,4 @@ const DeleteMember = async (id) => {
     return obj;
 }
 
-export { SearchMembers, GetMember, CreateMember, DeleteMember };
+export { SearchMembers, GetMember, CreateMember, UpdateMember, DeleteMember };

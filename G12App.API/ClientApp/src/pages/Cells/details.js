@@ -98,7 +98,7 @@ export const CellDetails = () => {
         loading ?
             (<div>Carregando...</div>) : (
                 <>
-                    {(params.id ? <h1>Alterar cadastro de Células</h1> : <h1>Cadastrar nova Célula</h1>)}
+                    {(params.id ? <h1>Alterar cadastro de célula</h1> : <h1>Cadastrar nova célula</h1>)}
                     <hr />
                     <Container fluid>
                         <h6>Participantes</h6>

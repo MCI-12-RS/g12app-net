@@ -9,47 +9,39 @@ import { MemberDetails } from "./pages/Members/details";
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
-  },
-  {
-    path: '/counter',
-    element: <Counter />
-  },
-  {
-    path: '/fetch-data',
-    element: <FetchData />
+    element: <Home key="home" />
   },
   {
     path: '/members',
-    element: <Members />
+    element: <Members key="members" />
   },
   {
     path: '/new-member',
-    element: <MemberDetails />
+    element: <MemberDetails key="new-member" />
   },
   {
     path: '/members/:id',
-    element: <MemberDetails />
+    element: <MemberDetails key="member-details" />
   },
   {
     path: '/ministries',
-    element: <Home />
+    element: <Home key="home" />
   },
   {
     path: '/cells',
-    element: <Cells />
+    element: <Cells key="cells" />
   },
   {
     path: '/new-cell',
-    element: <CellDetails />
+    element: <CellDetails key="new-cell" />
   },
   {
     path: '/cells/:id',
-    element: <CellDetails />
+    element: <CellDetails key="cell-details" />
   },
   {
     path: '/log-report',
-    element: <Home />
+    element: <Home key="log-report" />
   }
 ];
 

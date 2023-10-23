@@ -1,5 +1,5 @@
 import React from "react";
-import { Pagination } from "react-bootstrap";
+import { Pagination, Spinner } from "react-bootstrap";
 import "./style.css";
 
 const Grid = ({
@@ -22,7 +22,7 @@ const Grid = ({
         
         loading ?
 
-        <p class="loading"><em>Carregando...</em></p> :
+        <Spinner animation="border" /> :
         
         totalRecords == 0 ?
 
