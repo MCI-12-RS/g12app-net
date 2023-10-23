@@ -76,10 +76,9 @@ const UpdateCell = async (cell) => {
     return obj;
 }
 
-const DeleteCell = async (cell) => {
+const DeleteCell = async (id) => {
     var response = await fetch('/api/cell/' + id, {
         method: 'DELETE',
-        body: JSON.stringify(cell),
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
         },
