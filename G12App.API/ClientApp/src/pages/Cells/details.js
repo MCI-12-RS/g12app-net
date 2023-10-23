@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { InputGroup, Form, Col, Row, Button, Container, SelectBox } from 'react-bootstrap';
-import { Link, useParams } from "react-router-dom";
-import { GetCell, GetMember, SearchMembers } from '../../services/Cell.service';
-import AsyncSelect from 'react-select/async'
-import { debounce } from 'lodash';
-import Grid from '../../components/Grid';
-//import test from '../../data/states.csv';
+import { InputGroup, Form, Col, Row, Button, Container, FormCheck } from 'react-bootstrap';
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { CreateCell, DeleteCell, GetCell, UpdateCell } from '../../services/Cell.service';
+import MemberPicker from '../../components/MemberPicker';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+
+
 
 import './style.css';
-import states from '../../components/Address/states.json'
+import { AddressDetails } from "../../components/Address";
 
 export const CellDetails = () => {
 
@@ -19,12 +16,15 @@ export const CellDetails = () => {
         lead: {
             name: ''
         },
+        leadId:  null,
         host: {
             name: ''
         },
+        hostId: null,
         timothy: {
             name: ''
         },
+        timothyId: null,
         leadership: {
             name: ''
         },
@@ -38,8 +38,17 @@ export const CellDetails = () => {
     };
 
     const params = useParams();
+    const location = useLocation();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [cell, setCell] = useState(emptyCell);
+    const [registerMore, setRegisterMore] = useState(location.state?.registerMore ?? false);
+
+    useEffect(() => {
+        if (location.state?.registerMore) {
+            setRegisterMore(true);
+        }
+    }, []);
 
     useEffect(() => {
         fetchUser();
@@ -65,34 +74,65 @@ export const CellDetails = () => {
         setCell({ ...cell, [name]: value });
     };
 
-    const getNoOptionsMessage = (data) => {
-        if (!(data.inputValue?.length)) return "Digite para pesquisar..."
-        return "Nenhum resultado encontrado.";
+    const handleSelectChangeEvent = (name, value) => {
+        setCell({ ...cell, [name]: value });
+    };
+
+    const SaveCell = async () => {
+        setLoading(true);
+
+        try {
+            var result;
+            if (params.id) {
+                result = await UpdateCell(cell);
+            } else {
+                result = await CreateCell(cell);
+            }
+
+            if (result.isValid) {
+                alert('Cadastro salvo com sucesso!');
+                if (registerMore)
+                    navigate('/new-cell', { state: { registerMore: true } });
+                else
+                    navigate('/cell/' + result.data.id);
+            } else {
+                alert('Erro ao salvar cadastro.');
+            }
+
+        }
+        catch (e) {
+            alert('Erro ao salvar cadastro.');
+        }
+
+        setLoading(false);
     }
 
-    const handleDateMask = (e) => {
-        let input = e.target;
+    const DeleteCellPrompt = async (e) => {
+        e.preventDefault();
+        window.confirm('Tem certeza que deseja deletar o cadastro?') && await ConfirmDeleteMember();
+        return false;
+    }
 
-        if (e.charCode < 47 || e.charCode > 57) {
-            e.preventDefault();
-        }
-        var len = input.value.length;
+    const ConfirmDeleteMember = async () => {
+        setLoading(true);
 
-        if (len !== 1 || len !== 3) {
-            if (e.charCode == 47) {
-                e.preventDefault();
+        try {
+            var result = await DeleteCell(cell.id);
+
+            if (result.isValid) {
+                alert('Cadastro deletado com sucesso!');
+                navigate('/cells');
+            } else {
+                alert('Erro ao deletar cadastro.');
             }
+
+        }
+        catch (e) {
+            alert('Erro ao deletar cadastro.');
         }
 
-        if (len === 2) {
-            input.value += '/';
-        }
-
-        if (len === 5) {
-            input.value += '/';
-        }
-        return true;
-    };
+        setLoading(false);
+    }
 
     return (
         loading ?
@@ -105,79 +145,50 @@ export const CellDetails = () => {
                         <hr />
                         <Row className="mb-3" as={Col}>
                             <Col>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">Líder</InputGroup.Text>
-                                    <Form.Control name="lead" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell.lead?.name} />
-                                </InputGroup>
+                                <MemberPicker label="Líder"
+                                    setValue={(value) => handleSelectChangeEvent('leadId', value)}
+                                    selectedLabel={cell.lead?.name}
+                                    selectedValue={cell.lead?.id} />
                             </Col>
 
                             <Col>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">Timóteo</InputGroup.Text>
-                                    <Form.Control name="timothy" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell.timothy?.name} />
-                                </InputGroup>
+                                <MemberPicker label="Timóteo"
+                                    setValue={(value) => handleSelectChangeEvent('timothyId', value)}
+                                    selectedLabel={cell.timothy?.name}
+                                    selectedValue={cell.timothy?.id} />
                             </Col>
 
                             <Col>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">Anfitrião</InputGroup.Text>
-                                    <Form.Control name="host" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell.host?.name} />
-                                </InputGroup>
+                                <MemberPicker label="Anfitrião"
+                                    setValue={(value) => handleSelectChangeEvent('hostId', value)}
+                                    selectedLabel={cell.host?.name}
+                                    selectedValue={cell.host?.id} />
                             </Col>
                         </Row>
                     </Container>
 
+                    <AddressDetails address={cell.place} setAddress={(address) => handleSelectChangeEvent('place', address)} />
+
                     <Container fluid>
-                        <h6>Endereço</h6>
-                        <hr />
-                        <Row className="mb-3" as={Col}>
-                            <Col xs={8}>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">Rua</InputGroup.Text>
-                                    <Form.Control name="street" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['street']} />
-                                </InputGroup>
+                        <Row className="mb-3 pr-0 d-flex">
+
+                            <Col xs={12}>
+                                {(params.id && <Button variant="danger" type="submit" onClick={DeleteCellPrompt}>Deletar cadastro</Button>)}
+
+                                <div className="float-end d-flex">
+                                    {(!params.id ?
+                                        <InputGroup className="pt-1 me-3" as={Col}>
+                                            <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais células"
+                                                onChange={(event) => setRegisterMore(event.target.checked)} />
+                                        </InputGroup> :
+                                        '')}
+
+                                    <Button variant="primary" className="ms-3" type="submit" onClick={SaveCell}>
+                                        Salvar {(params.id ? "alteracoes" : "cadastro")}
+                                    </Button>
+                                </div>
                             </Col>
 
-                            <Col xs={2}>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">Número</InputGroup.Text>
-                                    <Form.Control name="number" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['number']} />
-                                </InputGroup>
-                            </Col>
-
-                            <Col xs={2}>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">CEP</InputGroup.Text>
-                                    <Form.Control name="postalcode" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['postalcode']} />
-                                </InputGroup>
-                            </Col>
-                        </Row>
-
-                        <Row>
-                            <Col>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">Bairro</InputGroup.Text>
-                                    <Form.Control name="neighborhood" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['neighborhood']} />
-                                </InputGroup>
-                            </Col>
-
-                            <Col>
-                                <InputGroup className="mb-3" as={Col}>
-                                    <InputGroup.Text id="basic-addon1">Cidade</InputGroup.Text>
-                                    <Form.Control name="city" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={cell['city']} />
-                                </InputGroup>
-                            </Col>
-
-                            <Col xs={4}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Estado</InputGroup.Text>
-                            <Form.Select name="homeAddress.state" aria-describedby="basic-addon2" onChange={handleChangeEvent}>
-                                {states.map((state) => (
-                                    <option value={state.acronym} selected={cell.place.state == state.acronym}>{state.name}</option>
-                                ))}
-                            </Form.Select>
-                        </InputGroup>
-                    </Col>
                         </Row>
                     </Container>
                 </>

@@ -24,10 +24,6 @@ export const Cells = () => {
 
   const columns = [
     {
-      name: '#',
-      render: (cell) => (cell.id.toString() ?? '0').padStart(4, "0")
-    },
-    {
       name: 'Liderança',
       render: (cell) => <>
         <span><b>Líder: </b>{cell.lead?.name}</span><br />

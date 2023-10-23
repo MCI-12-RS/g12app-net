@@ -16,8 +16,8 @@ namespace G12App.Domain.DTOs
         public Member Timothy { get; set; }
         public DayOfWeek WeekDay { get; set; }
         public TimeOnly Time { get; set; }
-        public int PlaceId { get; set; }
-        public Address Place { get; set; }
+        public int? PlaceId { get; set; }
+        public Address? Place { get; set; }
         public CellType CellType { get; set; }
         public bool ReportMandatory { get; set; }
     }
