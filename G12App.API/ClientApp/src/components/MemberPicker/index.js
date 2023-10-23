@@ -5,7 +5,7 @@ import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
 import './style.css';
 
-const NoLeadershipText = 'Sem lideranca (nivel base)';
+const NoLeadershipText = 'Sem liderança (nível base)';
 
 const MemberPicker = ({
     label = 'Membro',
@@ -13,7 +13,7 @@ const MemberPicker = ({
     setValue,
     noOptionsMessage,
     placeholder,
-    minLength = 3, 
+    minLength = 2, 
     notInIds = [],
     selectedValue = null,
     selectedLabel = NoLeadershipText

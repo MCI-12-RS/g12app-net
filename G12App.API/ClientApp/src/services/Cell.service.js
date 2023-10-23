@@ -48,4 +48,45 @@ const GetCell = async (id) => {
     
 }
 
-export {SearchCells, GetCell}
+const CreateCell = async (cell) => {
+    var response = await fetch('/api/cell', {
+        method: 'POST',
+        body: JSON.stringify(cell),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
+const UpdateCell = async (cell) => {
+    var response = await fetch('/api/cell/' + cell.id, {
+        method: 'PUT',
+        body: JSON.stringify(cell),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
+const DeleteCell = async (cell) => {
+    var response = await fetch('/api/cell/' + id, {
+        method: 'DELETE',
+        body: JSON.stringify(cell),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+export {SearchCells, GetCell, CreateCell, UpdateCell, DeleteCell };
