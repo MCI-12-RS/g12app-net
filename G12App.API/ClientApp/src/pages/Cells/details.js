@@ -8,7 +8,9 @@ import MemberPicker from '../../components/MemberPicker';
 
 
 import './style.css';
+import moment from "moment";
 import { AddressDetails } from "../../components/Address";
+import InputMask from "react-input-mask";
 
 export const CellDetails = () => {
 
@@ -16,7 +18,7 @@ export const CellDetails = () => {
         lead: {
             name: ''
         },
-        leadId:  null,
+        leadId: null,
         host: {
             name: ''
         },
@@ -26,6 +28,9 @@ export const CellDetails = () => {
         },
         timothyId: null,
         leadership: {
+            name: ''
+        },
+        weekDay: {
             name: ''
         },
         place: {
@@ -76,6 +81,11 @@ export const CellDetails = () => {
 
     const handleSelectChangeEvent = (name, value) => {
         setCell({ ...cell, [name]: value });
+    };
+
+    const handleSearchEvent = (event) => {
+        var field = event.target;
+        debounceEventTrigger(field);
     };
 
     const SaveCell = async () => {
@@ -142,7 +152,6 @@ export const CellDetails = () => {
                     <hr />
                     <Container fluid>
                         <h6>Participantes</h6>
-                        <hr />
                         <Row className="mb-3" as={Col}>
                             <Col>
                                 <MemberPicker label="Líder"
@@ -163,6 +172,36 @@ export const CellDetails = () => {
                                     setValue={(value) => handleSelectChangeEvent('hostId', value)}
                                     selectedLabel={cell.host?.name}
                                     selectedValue={cell.host?.id} />
+                            </Col>
+                        </Row>
+                    </Container>
+
+                    <Container fluid>
+                        <h6>Data/Horário</h6>
+                        <Row ClassName="mb-3 pr-0">
+
+                            <InputGroup className="mb-3 pr-0" as={Col}>
+                                <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
+                                <Form.Select name="weekDay" defaultValue={cell.weekDay} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
+                                    <option value="">Selecione o dia</option>
+                                    <option value="Sunday">Segunda-feira</option>
+                                    <option value="Tuesday">Terça-feira</option>
+                                    <option value="Wednesday">Quarta-feira</option>
+                                    <option value="Thursday">Quinta-feira</option>
+                                    <option value="Friday">Sexta-feira</option>
+                                    <option value="Saturday">Sábado</option>
+                                    <option value="Monday">Domingo</option>
+                                </Form.Select>
+                            </InputGroup>
+
+
+                            <Col>
+                                <InputGroup className="mb-3 pr-0" as={Col}>
+                                    <InputGroup.Text id="basic-addon2">Horário</InputGroup.Text>
+                                    <InputMask mask="99:99:99" value={cell['time']} onChange={handleChangeEvent}>
+                                        <Form.Control name="time" aria-describedby="basic-addon2" />
+                                    </InputMask>
+                                </InputGroup>
                             </Col>
                         </Row>
                     </Container>

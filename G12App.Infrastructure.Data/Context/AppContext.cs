@@ -109,6 +109,7 @@ namespace G12App.Infrastructure.Data.Context
                 TimothyId = 2,
                 WeekDay = System.DayOfWeek.Tuesday,
                 PlaceId = 1,
+                Time = new System.TimeOnly(20,00),
                 CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,
             });
