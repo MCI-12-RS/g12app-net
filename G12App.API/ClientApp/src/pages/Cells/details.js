@@ -83,20 +83,15 @@ export const CellDetails = () => {
         setCell({ ...cell, [name]: value });
     };
 
-    const handleSearchEvent = (event) => {
-        var field = event.target;
-        debounceEventTrigger(field);
-    };
-
     const SaveCell = async () => {
         setLoading(true);
 
         try {
             var result;
             if (params.id) {
-                result = await UpdateCell(cell);
+                result = await UpdateCell({ ...cell, time: cell.time + ":00" });
             } else {
-                result = await CreateCell(cell);
+                result = await CreateCell({ ...cell, time: cell.time + ":00" });
             }
 
             if (result.isValid) {
@@ -179,26 +174,26 @@ export const CellDetails = () => {
                     <Container fluid>
                         <h6>Data/Horário</h6>
                         <Row ClassName="mb-3 pr-0">
-
-                            <InputGroup className="mb-3 pr-0" as={Col}>
-                                <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
-                                <Form.Select name="weekDay" defaultValue={cell.weekDay} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
-                                    <option value="">Selecione o dia</option>
-                                    <option value="Sunday">Segunda-feira</option>
-                                    <option value="Tuesday">Terça-feira</option>
-                                    <option value="Wednesday">Quarta-feira</option>
-                                    <option value="Thursday">Quinta-feira</option>
-                                    <option value="Friday">Sexta-feira</option>
-                                    <option value="Saturday">Sábado</option>
-                                    <option value="Monday">Domingo</option>
-                                </Form.Select>
-                            </InputGroup>
-
+                            <Col>
+                                <InputGroup className="mb-3 pr-0" as={Col}>
+                                    <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
+                                    <Form.Select name="weekDay" defaultValue={cell.weekDay} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
+                                        <option value={null}>Selecione o dia</option>
+                                        <option value="Monday">Segunda-feira</option>
+                                        <option value="Tuesday">Terça-feira</option>
+                                        <option value="Wednesday">Quarta-feira</option>
+                                        <option value="Thursday">Quinta-feira</option>
+                                        <option value="Friday">Sexta-feira</option>
+                                        <option value="Saturday">Sábado</option>
+                                        <option value="Sunday">Domingo</option>
+                                    </Form.Select>
+                                </InputGroup>
+                            </Col>
 
                             <Col>
                                 <InputGroup className="mb-3 pr-0" as={Col}>
                                     <InputGroup.Text id="basic-addon2">Horário</InputGroup.Text>
-                                    <InputMask mask="99:99:99" value={cell['time']} onChange={handleChangeEvent}>
+                                    <InputMask mask="99:99" value={cell['time']} onChange={handleChangeEvent}>
                                         <Form.Control name="time" aria-describedby="basic-addon2" />
                                     </InputMask>
                                 </InputGroup>

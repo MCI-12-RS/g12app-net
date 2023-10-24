@@ -17,7 +17,7 @@ export const Cells = () => {
   const [searchData, setSearchData] =
     React.useState({
       lead: '', leadership: '', host: '', timothy: '',
-      street: '', cellType: null, neighborhood: '', city: '', state: ''
+      street: '', cellType: null, weekDay: null, neighborhood: '', city: '', state: ''
     });
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
@@ -43,9 +43,14 @@ export const Cells = () => {
       render: (cell) => translateCellType(cell.cellType)
     },
     {
+      name: 'Dia da semana',
+      render: (cell) => translateWeekDay(cell.weekDay)
+    },
+    {
       name: '',
       render: (cell) => <Link to={"/cells/" + cell.id}><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
     }
+    
   ];
 
   const translateCellType = (cellType) => {
@@ -53,6 +58,23 @@ export const Cells = () => {
       return "Evangelística";
     if (cellType == "Discipleship")
       return "Discipuladora"
+  };
+
+  const translateWeekDay = (weekDay) => {
+    if (weekDay == "Monday")
+    return "Segunda-Feira";
+    if (weekDay == "Tuesday")
+    return "Terça-Feira";
+    if (weekDay == "Wednesday")
+    return "Quarta-Feira";
+    if (weekDay == "Thursday")
+    return "Quinta-Feira";
+    if (weekDay == "Friday")
+    return "Sexta-Feira";
+    if (weekDay == "Saturday")
+    return "Sábado";
+    if (weekDay == "Sunday")
+    return "Domingo";
   }
 
   const search = async () => {
@@ -128,6 +150,20 @@ export const Cells = () => {
                 <option value="Evangelistic">Evangelística</option>
                 <option value="Discipleship">Discipuladora</option>
                 <option value="Macrocell">Macrocélula</option>
+              </Form.Select>
+            </InputGroup>
+
+            <InputGroup className="mb-3 pr-0" as={Col}>
+              <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
+              <Form.Select name="weekDay" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                <option value="">Selecione o dia</option>
+                <option value="Monday">Segunda-feira</option>
+                <option value="Tuesday">Terça-feira</option>
+                <option value="Wednesday">Quarta-feira</option>
+                <option value="Thursday">Quinta-feira</option>
+                <option value="Friday">Sexta-feira</option>
+                <option value="Saturday">Sábado</option>
+                <option value="Sunday">Domingo</option>
               </Form.Select>
             </InputGroup>
           </Row>

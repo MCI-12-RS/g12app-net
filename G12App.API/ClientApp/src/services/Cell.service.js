@@ -16,7 +16,7 @@ const SearchCells = async (search, pagination, sort) => {
               "leadership": search.leadership,
               "host": search.host,
               "timoyhy": search.timoyhy,
-              "weekDay": search.weekDay,
+              "weekDay": search.weekDay == "" ? null : search.weekDay,
               "homeAddress_Neighborhood": search.neighborhood,
               "homeAddress_City": search.city,
               "homeAddress_State": search.state,
