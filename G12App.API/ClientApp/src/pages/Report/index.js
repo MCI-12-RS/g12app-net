@@ -51,7 +51,7 @@ export const Report = () => {
     useEffect(() => {
         fetchUser();
     }, [params]);
-    
+
     const fetchUser = async () => {
         setLoading(true);
         if (!params.id) {
@@ -88,7 +88,9 @@ export const Report = () => {
                     </Row>
 
                     <Row className="mb-3 pr-0" as={Col}>
-                        <InputGroup.Text id="basic-addon1">Endereço: {cell.place?.street}, {cell.place?.number} Número: {cell.place?.number} </InputGroup.Text>
+                        <Col>
+                            <InputGroup.Text id="basic-addon1">Endereço: {cell.place?.street}, {cell.place?.number} Número: {cell.place?.number} </InputGroup.Text>
+                        </Col>
                     </Row>
                 </Container>
             </>
