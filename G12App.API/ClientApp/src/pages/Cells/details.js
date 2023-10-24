@@ -104,7 +104,7 @@ export const CellDetails = () => {
                 if (registerMore)
                     navigate('/new-cell', { state: { registerMore: true } });
                 else
-                    navigate('/cell/' + result.data.id);
+                    navigate('/cells/' + result.data.id);
             } else {
                 alert('Erro ao salvar cadastro.');
             }
