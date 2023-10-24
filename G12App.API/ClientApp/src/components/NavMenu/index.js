@@ -44,8 +44,8 @@ export class NavMenu extends Component {
                 </NavDropdown>
                 
                 <NavDropdown title="Células" id="basic-nav-dropdown" renderMenuOnMount={true}>
-                  <NavDropdown.Item as={Link} to="/cells">Gerenciar</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/new-cell">Cadastrar</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/cells">Gerenciar células</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/new-cell">Cadastrar célula</NavDropdown.Item>
                   <NavDropdown.Divider /> 
                   <NavDropdown.Item as={Link} to="/log-report">Registrar relatório</NavDropdown.Item>
 
