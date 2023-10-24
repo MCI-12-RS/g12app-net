@@ -3,8 +3,9 @@ import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { Cells } from "./pages/Cells";
 import { CellDetails } from "./pages/Cells/details";
-import { Members } from "./pages/Members"
+import { Members } from "./pages/Members";
 import { MemberDetails } from "./pages/Members/details";
+import { Report } from "./pages/Report";
 
 const AppRoutes = [
   {
@@ -41,7 +42,7 @@ const AppRoutes = [
   },
   {
     path: '/log-report',
-    element: <Home key="log-report" />
+    element: <Report key="log-report" />
   }
 ];
 
