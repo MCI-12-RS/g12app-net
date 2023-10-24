@@ -36,13 +36,7 @@ namespace G12App.Controllers
             return result.AsActionResult();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromServices] IReportService reportService, [FromBody] ReportDTO reportDTO)
-        {
-            var result = await reportService.Add(reportDTO);
-            return result.AsActionResult();
-        }
-
+       
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromServices] IReportService reportService, int id)
         {

@@ -48,6 +48,10 @@ export const Report = () => {
     const [loading, setLoading] = useState(false);
     const [cell, setCell] = useState(emptyCell);
 
+    useEffect(() => {
+        fetchUser();
+    }, [params]);
+    
     const fetchUser = async () => {
         setLoading(true);
         if (!params.id) {
@@ -70,12 +74,21 @@ export const Report = () => {
                 <Container fluid>
                     <h6>Dados da Célula</h6>
                     <Row className="mb-3 pr-0" as={Col}>
-                        <InputGroup.Text id="basic-addon1">Líder: {cell.lead?.name}</InputGroup.Text>
+                        <Col>
+                            <InputGroup.Text id="basic-addon1">Líder: {cell.lead?.name}</InputGroup.Text>
+                        </Col>
 
-                        <InputGroup.Text id="basic-addon1">Timóteo: {cell.host?.name}</InputGroup.Text>
+                        <Col>
+                            <InputGroup.Text id="basic-addon1">Timóteo: {cell.host?.name}</InputGroup.Text>
+                        </Col>
 
-                        <InputGroup.Text id="basic-addon1">Anfitrião: {cell.host?.name}</InputGroup.Text>
-                        
+                        <Col>
+                            <InputGroup.Text id="basic-addon1">Anfitrião: {cell.host?.name}</InputGroup.Text>
+                        </Col>
+                    </Row>
+
+                    <Row className="mb-3 pr-0" as={Col}>
+                        <InputGroup.Text id="basic-addon1">Endereço: {cell.place?.street}, {cell.place?.number} Número: {cell.place?.number} </InputGroup.Text>
                     </Row>
                 </Container>
             </>
