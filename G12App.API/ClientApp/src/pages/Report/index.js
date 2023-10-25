@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { InputGroup, Container, Row, Col, Form } from 'react-bootstrap';
+import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 
 import './style.css';
@@ -14,7 +14,9 @@ export const Report = () => {
         subject: '',
         visitors: null,
         frequenters: null,
-        cellId: null
+        cellId: null,
+        date: null
+
     };
 
     const emptyCell = {
@@ -47,24 +49,39 @@ export const Report = () => {
     const params = useParams();
     const [loading, setLoading] = useState(false);
     const [cell, setCell] = useState(emptyCell);
+    const [report, setReport] = useState(emptyReport);
+    const [registerVisitor, setRegisterVisitor] = useState(location.state?.registerVisitor ?? false);
 
     useEffect(() => {
         fetchUser();
     }, [params]);
 
+    useEffect(() => {
+        if (location.state?.registerVisitor) {
+            setRegisterVisitor(true);
+        }
+    }, []);
+
     const fetchUser = async () => {
         setLoading(true);
         if (!params.id) {
             setCell(emptyCell);
+            setReport(emptyReport);
             setLoading(false);
             return;
         }
 
         var result = await GetCell(params.id);
         if (result.isValid) {
-            setCell(result.data)
+            setCell(result.data);
+            setReport(emptyReport);
         }
         setLoading(false);
+    };
+
+    const handleChangeEvent = (event) => {
+        const { name, value } = event.target;
+        setReport({ ...report, [name]: value });
     };
 
     return (
@@ -88,8 +105,59 @@ export const Report = () => {
                     </Row>
 
                     <Row className="mb-3 pr-0" as={Col}>
+                        <Col xs={7}>
+                            <InputGroup.Text id="basic-addon1">Rua: {cell.place?.street}</InputGroup.Text>
+                        </Col>
+
+                        <Col xs={2}>
+                            <InputGroup.Text id="basic-addon1">Número: {cell.place?.number}</InputGroup.Text>
+                        </Col>
+
                         <Col>
-                            <InputGroup.Text id="basic-addon1">Endereço: {cell.place?.street}, {cell.place?.number} Número: {cell.place?.number} </InputGroup.Text>
+                            <InputGroup.Text id="basic-addon1">Bairro: {cell.place?.neighborhood}</InputGroup.Text>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col>
+                            <InputGroup className="mb-3 pr-0" as={Col}>
+                                <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
+                                <InputMask mask="99/99/9999" value={report.d} onChange={handleChangeEvent}>
+                                    <Form.Control type="text" name="date.dateOnly"
+                                        aria-describedby="basic-addon2" />
+                                </InputMask>
+                            </InputGroup>
+                        </Col>
+
+                        <Col>
+                            <InputGroup className="mb-3 pr-0" as={Col}>
+                                <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
+                                <InputMask mask="99:99" value={report.d} onChange={handleChangeEvent}>
+                                    <Form.Control type="text" name="date.dateOnly"
+                                        aria-describedby="basic-addon2" />
+                                </InputMask>
+                            </InputGroup>
+                        </Col>
+                    </Row>
+
+                    <Row className="mb-3 pr-0">
+                        <InputGroup className="mb-3" as={Col}>
+                            <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
+                            <Form.Control id="basic-url" name="subject" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
+                        </InputGroup>
+                    </Row>
+
+                    <Row className="mb-3 pr-0">
+                        <Col> <InputGroup className="mb-3" as={Col}>
+                            <InputGroup.Text id="basic-addon3">Participantes:</InputGroup.Text>
+                            <Form.Control id="basic-url" name="frequenters" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
+                        </InputGroup>
+                        </Col>
+
+                        <Col> <InputGroup className="mb-3" as={Col}>
+                            <InputGroup.Text id="basic-addon3">Visitantes:</InputGroup.Text>
+                            <Form.Control id="basic-url" name="visitors" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
+                        </InputGroup>
                         </Col>
                     </Row>
                 </Container>
