@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
+import MemberPicker from '../../components/MemberPicker';
+
 
 import './style.css';
 import moment from "moment";
@@ -50,17 +52,11 @@ export const Report = () => {
     const [loading, setLoading] = useState(false);
     const [cell, setCell] = useState(emptyCell);
     const [report, setReport] = useState(emptyReport);
-    const [registerVisitor, setRegisterVisitor] = useState(location.state?.registerVisitor ?? false);
 
     useEffect(() => {
         fetchUser();
     }, [params]);
 
-    useEffect(() => {
-        if (location.state?.registerVisitor) {
-            setRegisterVisitor(true);
-        }
-    }, []);
 
     const fetchUser = async () => {
         setLoading(true);
@@ -78,6 +74,11 @@ export const Report = () => {
         }
         setLoading(false);
     };
+
+    const handleSelectChangeEvent = (name, value) => {
+        setReport({ ...report, [name]: value });
+    };
+
 
     const handleChangeEvent = (event) => {
         const { name, value } = event.target;
@@ -119,10 +120,14 @@ export const Report = () => {
                     </Row>
 
                     <Row>
+                        <h6>Dados do Relatório</h6>
+                    </Row>
+
+                    <Row>
                         <Col>
                             <InputGroup className="mb-3 pr-0" as={Col}>
                                 <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
-                                <InputMask mask="99/99/9999" value={report.d} onChange={handleChangeEvent}>
+                                <InputMask mask="99/99/9999" value={report.date?.dateOnly} onChange={handleChangeEvent}>
                                     <Form.Control type="text" name="date.dateOnly"
                                         aria-describedby="basic-addon2" />
                                 </InputMask>
@@ -132,8 +137,8 @@ export const Report = () => {
                         <Col>
                             <InputGroup className="mb-3 pr-0" as={Col}>
                                 <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
-                                <InputMask mask="99:99" value={report.d} onChange={handleChangeEvent}>
-                                    <Form.Control type="text" name="date.dateOnly"
+                                <InputMask mask="99:99" value={report.date?.timeOnly} onChange={handleChangeEvent}>
+                                    <Form.Control type="text" name="date.timeOnly"
                                         aria-describedby="basic-addon2" />
                                 </InputMask>
                             </InputGroup>
@@ -148,6 +153,13 @@ export const Report = () => {
                     </Row>
 
                     <Row className="mb-3 pr-0">
+                        <Col>
+                            <MemberPicker label="Líder"
+                                setValue={(value) => handleSelectChangeEvent('leadId', value)}
+                                selectedLabel={cell.lead?.name}
+                                selectedValue={cell.lead?.id} />
+                        </Col>
+
                         <Col> <InputGroup className="mb-3" as={Col}>
                             <InputGroup.Text id="basic-addon3">Participantes:</InputGroup.Text>
                             <Form.Control id="basic-url" name="frequenters" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
