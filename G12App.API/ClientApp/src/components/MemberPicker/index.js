@@ -16,7 +16,8 @@ const MemberPicker = ({
     minLength = 2, 
     notInIds = [],
     selectedValue = null,
-    selectedLabel = NoLeadershipText
+    selectedLabel = NoLeadershipText,
+    isMulti = false,
 }) => {
 
     const [option, setOption] = React.useState({ label: selectedLabel, value: selectedValue });
@@ -61,7 +62,9 @@ const MemberPicker = ({
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
                 defaultOptions={[ {label: NoLeadershipText, value: null} ]}
-                placeholder="" loadOptions={loadMembers}>
+                placeholder="" loadOptions={loadMembers}
+                isMulti={isMulti}>
+                    
             </AsyncSelect>
         </InputGroup>
     )

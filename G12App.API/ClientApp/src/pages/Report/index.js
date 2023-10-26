@@ -154,17 +154,11 @@ export const Report = () => {
 
                     <Row className="mb-3 pr-0">
                         <Col>
-                            <MemberPicker label="Líder"
-                                setValue={(value) => handleSelectChangeEvent('leadId', value)}
-                                selectedLabel={cell.lead?.name}
-                                selectedValue={cell.lead?.id} />
+                            <MemberPicker label="Participantes" isMulti={true}
+                                setValue={(value) => handleSelectChangeEvent('members', value)} />
                         </Col>
-
-                        <Col> <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon3">Participantes:</InputGroup.Text>
-                            <Form.Control id="basic-url" name="frequenters" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
-                        </InputGroup>
-                        </Col>
+                    </Row>
+                    <Row>
 
                         <Col> <InputGroup className="mb-3" as={Col}>
                             <InputGroup.Text id="basic-addon3">Visitantes:</InputGroup.Text>
@@ -172,6 +166,12 @@ export const Report = () => {
                         </InputGroup>
                         </Col>
                     </Row>
+                </Container>
+
+                <Container fluid>
+                    <Button variant="primary" className="ms-3" type="submit onClick={}">
+                        Enviar relatório
+                    </Button>
                 </Container>
             </>
         </>
