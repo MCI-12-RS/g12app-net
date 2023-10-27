@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
+import LogReport from "../../services/Report.service";
 
 
 import './style.css';
@@ -73,6 +74,25 @@ export const Report = () => {
             setReport(emptyReport);
         }
         setLoading(false);
+    };
+
+    const LogReport = async () => {
+        setLoading(true);
+
+        try{
+            var result;
+
+            result = await LogReport({...report, date: report.date.dateOnly + report.date.timeOnly});
+            if (result.isValid){
+                alert('Relatório enviado com sucesso!');
+                Navigate('/reports/' + result.data.id)
+            } else {
+                alert('Erro ao enviar relatório');
+            }
+        }
+        catch (e) {
+            alert('Erro ao enviar relatório.');
+        }
     };
 
     const handleSelectChangeEvent = (name, value) => {
@@ -169,7 +189,7 @@ export const Report = () => {
                 </Container>
 
                 <Container fluid>
-                    <Button variant="primary" className="ms-3" type="submit onClick={}">
+                    <Button variant="primary" className="ms-3" type="submit" onClick={LogReport}>
                         Enviar relatório
                     </Button>
                 </Container>
