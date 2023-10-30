@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
-import { GetCell } from "../../services/Cell.service";
+import { GetCell, SearchCells } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import LogReport from "../../services/Report.service";
+import { debounce } from 'lodash';
 
 
 import './style.css';
@@ -76,14 +77,37 @@ export const Report = () => {
         setLoading(false);
     };
 
+    const search = async () => {
+        setLoading(true);
+
+        const result = await SearchCells(searchData, pagination);
+        if (result.isValid) {
+            setCells(result.data);
+            setTotal(result.totalRecords ?? result.data.length);
+        }
+
+        setLoading(false);
+    };
+
+    const debounceEventTrigger = debounce(field => {
+        var currentValue = searchData[field.name] || '';
+        if (field.value != currentValue)
+            setSearchData({ ...searchData, [field.name]: field.value });
+    }, 500);
+
+    const handleSearchEvent = (event) => {
+        var field = event.target;
+        debounceEventTrigger(field);
+    };
+
     const LogReport = async () => {
         setLoading(true);
 
-        try{
+        try {
             var result;
 
-            result = await LogReport({...report, date: report.date.dateOnly + report.date.timeOnly});
-            if (result.isValid){
+            result = await LogReport({ ...report, date: report.date.dateOnly + report.date.timeOnly });
+            if (result.isValid) {
                 alert('Relatório enviado com sucesso!');
                 Navigate('/reports/' + result.data.id)
             } else {
@@ -110,6 +134,15 @@ export const Report = () => {
             <h1>Registrar relatório</h1>
             <>
                 <Container fluid>
+                    <h6>Selecione a célula</h6>
+
+                    <Row>
+                        <InputGroup className="mb-3" as={Col}>
+                            <InputGroup.Text id="basic-addon3">Insira um dado da célula:</InputGroup.Text>
+                            <Form.Control id="basic-url" name="lead" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                        </InputGroup>
+
+                    </Row>
                     <h6>Dados da Célula</h6>
                     <Row className="mb-3 pr-0" as={Col}>
                         <Col>
