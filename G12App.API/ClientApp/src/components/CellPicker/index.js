@@ -1,7 +1,7 @@
 import React from "react";
 import { SearchCells } from "../../services/Cell.service";
 import { Col, InputGroup } from "react-bootstrap";
-import AsyncSelect from "react-select/dist/declarations/src/Async";
+import AsyncSelect from "react-select/async";
 import './style.css';
 
 const CellPicker = ({
@@ -18,7 +18,7 @@ const CellPicker = ({
 
     const getNoOptionsMessage = (data) => {
         if (data.inputValue?.length < minLength) return placeholder ?? "Digite para pesquisar...";
-        return noOptionMessage ?? "Nenhum membro encontrado";
+        return noOptionMessage ?? "Nenhuma célula encontrada";
     }
 
     const loadCells = async (inputValue) => {
@@ -27,14 +27,17 @@ const CellPicker = ({
         }
 
         var result = await SearchCells(
-            { name: inputValue, noInIds: noInIds },
-            { page: 1, sortOrder: 'asc' },
+            { lead: inputValue },
+            { page: 1, limit: 10 },
             { sortBy: 'lead.name', sortOrder: 'asc' })
 
         if (!result.isValid) return [];
 
         return result.data.map((cell) => ({
-            label: cell.lead?.name,
+            label: 
+            'Líder: ' + cell.lead?.name +
+            ' / Rua: ' + cell.place?.street +
+            ' / Bairro: ' + cell.place?.neighborhood,
             value: cell.id
         }));
     }

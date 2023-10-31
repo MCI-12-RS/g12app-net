@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
 import { GetCell, SearchCells } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
+import CellPicker from '../../components/CellPicker';
 import LogReport from "../../services/Report.service";
+import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 
 
@@ -13,6 +15,17 @@ import InputMask from "react-input-mask";
 import { useParams } from 'react-router-dom';
 
 export const Report = () => {
+
+    const [cells, setCells] =
+    React.useState([]);
+    const [pagination, setPagination] =
+    React.useState({ page: 1, limit: 20 });
+    const [total, setTotal] = React.useState(0);
+    const [searchData, setSearchData] =
+    React.useState({
+      lead: '', leadership: '', host: '', timothy: '',
+      street: '', cellType: null, weekDay: null, neighborhood: '', city: '', state: ''
+    });
 
     const emptyReport = {
         subject: '',
@@ -54,25 +67,19 @@ export const Report = () => {
     const [loading, setLoading] = useState(false);
     const [cell, setCell] = useState(emptyCell);
     const [report, setReport] = useState(emptyReport);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchUser();
+        fetchCell();
     }, [params]);
 
 
-    const fetchUser = async () => {
+    const fetchCell = async (cellId) => {
         setLoading(true);
-        if (!params.id) {
-            setCell(emptyCell);
-            setReport(emptyReport);
-            setLoading(false);
-            return;
-        }
-
-        var result = await GetCell(params.id);
+        
+        var result = await GetCell(cellId);
         if (result.isValid) {
             setCell(result.data);
-            setReport(emptyReport);
         }
         setLoading(false);
     };
@@ -109,7 +116,7 @@ export const Report = () => {
             result = await LogReport({ ...report, date: report.date.dateOnly + report.date.timeOnly });
             if (result.isValid) {
                 alert('Relatório enviado com sucesso!');
-                Navigate('/reports/' + result.data.id)
+                navigate('/reports/' + result.data.id)
             } else {
                 alert('Erro ao enviar relatório');
             }
@@ -121,6 +128,8 @@ export const Report = () => {
 
     const handleSelectChangeEvent = (name, value) => {
         setReport({ ...report, [name]: value });
+        fetchCell(value)
+        
     };
 
 
@@ -136,13 +145,14 @@ export const Report = () => {
                 <Container fluid>
                     <h6>Selecione a célula</h6>
 
-                    <Row>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon3">Insira um dado da célula:</InputGroup.Text>
-                            <Form.Control id="basic-url" name="lead" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-                        </InputGroup>
-
+                    <Row className="mb-3 pr-0">
+                        <Col>
+                            <CellPicker label="Insira um dado da célula:"
+                                setValue={(value) => handleSelectChangeEvent('cell', value)} />
+                        </Col>
                     </Row>
+
+                    
                     <h6>Dados da Célula</h6>
                     <Row className="mb-3 pr-0" as={Col}>
                         <Col>

@@ -16,7 +16,7 @@ const MemberPicker = ({
     minLength = 2, 
     notInIds = [],
     selectedValue = null,
-    selectedLabel = NoLeadershipText,
+    selectedLabel = null,
     isMulti = false,
 }) => {
 
