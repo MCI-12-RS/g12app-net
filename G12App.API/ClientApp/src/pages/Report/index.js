@@ -17,15 +17,15 @@ import { useParams } from 'react-router-dom';
 export const Report = () => {
 
     const [cells, setCells] =
-    React.useState([]);
+        React.useState([]);
     const [pagination, setPagination] =
-    React.useState({ page: 1, limit: 20 });
+        React.useState({ page: 1, limit: 20 });
     const [total, setTotal] = React.useState(0);
     const [searchData, setSearchData] =
-    React.useState({
-      lead: '', leadership: '', host: '', timothy: '',
-      street: '', cellType: null, weekDay: null, neighborhood: '', city: '', state: ''
-    });
+        React.useState({
+            lead: '', leadership: '', host: '', timothy: '',
+            street: '', cellType: null, weekDay: null, neighborhood: '', city: '', state: ''
+        });
 
     const emptyReport = {
         subject: '',
@@ -76,7 +76,7 @@ export const Report = () => {
 
     const fetchCell = async (cellId) => {
         setLoading(true);
-        
+
         var result = await GetCell(cellId);
         if (result.isValid) {
             setCell(result.data);
@@ -129,7 +129,7 @@ export const Report = () => {
     const handleSelectChangeEvent = (name, value) => {
         setReport({ ...report, [name]: value });
         fetchCell(value)
-        
+
     };
 
 
@@ -137,6 +137,13 @@ export const Report = () => {
         const { name, value } = event.target;
         setReport({ ...report, [name]: value });
     };
+
+    const translateCellType = (cellType) => {
+        if (cellType == "Evangelistic")
+          return "Evangelística";
+        if (cellType == "Discipleship")
+          return "Discipuladora"
+      };
 
     return (
         <>
@@ -147,12 +154,12 @@ export const Report = () => {
 
                     <Row className="mb-3 pr-0">
                         <Col>
-                            <CellPicker label="Insira um dado da célula:"
+                            <CellPicker label="Insira o nome do líder:"
                                 setValue={(value) => handleSelectChangeEvent('cell', value)} />
                         </Col>
                     </Row>
 
-                    
+
                     <h6>Dados da Célula</h6>
                     <Row className="mb-3 pr-0" as={Col}>
                         <Col>
@@ -165,6 +172,16 @@ export const Report = () => {
 
                         <Col>
                             <InputGroup.Text id="basic-addon1">Anfitrião: {cell.host?.name}</InputGroup.Text>
+                        </Col>
+                    </Row>
+
+                    <Row className="mb-3 pr-0" as={Col}>
+                        <Col>
+                            <InputGroup.Text id="basic-addon1">Líder G12: {cell.lead?.leadership?.name}</InputGroup.Text>
+                        </Col>
+
+                        <Col>
+                            <InputGroup.Text id="basic-addon1">Modalidade: {translateCellType(cell.cellType)}</InputGroup.Text>
                         </Col>
                     </Row>
 
