@@ -3,7 +3,7 @@ import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
 import { GetCell, SearchCells } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import CellPicker from '../../components/CellPicker';
-import LogReport from "../../services/Report.service";
+import {LogReport } from "../../services/Report.service";
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 
@@ -32,7 +32,8 @@ export const Report = () => {
         visitors: null,
         frequenters: null,
         cellId: null,
-        date: null
+        dateOnly: null,
+        timeOnly: null
 
     };
 
@@ -69,10 +70,6 @@ export const Report = () => {
     const [report, setReport] = useState(emptyReport);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchCell();
-    }, [params]);
-
 
     const fetchCell = async (cellId) => {
         setLoading(true);
@@ -107,23 +104,24 @@ export const Report = () => {
         debounceEventTrigger(field);
     };
 
-    const LogReport = async () => {
+    const submitReport = async () => {
         setLoading(true);
 
-        try {
+        /*try {*/
             var result;
 
-            result = await LogReport({ ...report, date: report.date.dateOnly + report.date.timeOnly });
+            result = await LogReport({ ...report, date: report.dateOnly + report.timeOnly });
             if (result.isValid) {
                 alert('Relatório enviado com sucesso!');
                 navigate('/reports/' + result.data.id)
             } else {
                 alert('Erro ao enviar relatório');
             }
-        }
-        catch (e) {
+        //}
+        /*catch (e) {
             alert('Erro ao enviar relatório.');
-        }
+            console.error(e);
+        }*/
     };
 
     const handleSelectChangeEvent = (name, value) => {
@@ -207,8 +205,8 @@ export const Report = () => {
                         <Col>
                             <InputGroup className="mb-3 pr-0" as={Col}>
                                 <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
-                                <InputMask mask="99/99/9999" value={report.date?.dateOnly} onChange={handleChangeEvent}>
-                                    <Form.Control type="text" name="date.dateOnly"
+                                <InputMask mask="99/99/9999" value={report.dateOnly} onChange={handleChangeEvent}>
+                                    <Form.Control type="text" name="dateOnly"
                                         aria-describedby="basic-addon2" />
                                 </InputMask>
                             </InputGroup>
@@ -217,8 +215,8 @@ export const Report = () => {
                         <Col>
                             <InputGroup className="mb-3 pr-0" as={Col}>
                                 <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
-                                <InputMask mask="99:99" value={report.date?.timeOnly} onChange={handleChangeEvent}>
-                                    <Form.Control type="text" name="date.timeOnly"
+                                <InputMask mask="99:99" value={report.timeOnly} onChange={handleChangeEvent}>
+                                    <Form.Control type="text" name="timeOnly"
                                         aria-describedby="basic-addon2" />
                                 </InputMask>
                             </InputGroup>
@@ -249,7 +247,7 @@ export const Report = () => {
                 </Container>
 
                 <Container fluid>
-                    <Button variant="primary" className="ms-3" type="submit" onClick={LogReport}>
+                    <Button variant="primary" className="ms-3" type="submit" onClick={submitReport}>
                         Enviar relatório
                     </Button>
                 </Container>

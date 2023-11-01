@@ -34,9 +34,6 @@ namespace G12App.Domain.Validators
                 .GreaterThan(0)
                 .WithMessage(Id_ErrorMessage);
 
-            RuleFor(x => x.Members)
-                .GreaterThan(0)
-                .WithMessage(Frequenters_ErrorMessage);
                 
         }
     }

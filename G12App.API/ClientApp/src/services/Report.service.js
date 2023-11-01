@@ -34,7 +34,7 @@ const SearchCells = async (search, pagination, sort) => {
     return obj;
 }
 
-const LogReport = async (id) => {
+const LogReport = async (report) => {
     var response = await fetch('/api/report/log', {
         method: 'POST',
         body: JSON.stringify(report),
@@ -43,3 +43,5 @@ const LogReport = async (id) => {
         }
     })
 }
+
+export {LogReport}
