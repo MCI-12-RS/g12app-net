@@ -6,7 +6,7 @@ import CellPicker from '../../components/CellPicker';
 import { LogReport } from "../../services/Report.service";
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
-
+import { FromBRDate } from '../../shared/utils';
 
 import './style.css';
 import moment from "moment";
@@ -77,6 +77,14 @@ export const Report = () => {
         var result = await GetCell(cellId);
         if (result.isValid) {
             setCell(result.data);
+            setReport({
+                ...report, 
+                cellId: result.data.id,
+                hostId: result.data.hostId,
+                timothyId: result.data.timothyId,
+                leadershipId: result.data.leadId
+            });
+
         }
         setLoading(false);
     };
@@ -110,7 +118,7 @@ export const Report = () => {
         /*try {*/
         var result;
 
-        result = await LogReport({ ...report, date: report.dateOnly + T + report.timeOnly });
+        result = await LogReport({ ...report, date: FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00" });
         if (result.isValid) {
             alert('Relatório enviado com sucesso!');
             navigate('/reports/' + result.data.id)
@@ -125,7 +133,6 @@ export const Report = () => {
     };
 
     const handleSelectChangeEvent = (name, value) => {
-        setReport({ ...report, [name]: value });
         fetchCell(value)
 
     };
