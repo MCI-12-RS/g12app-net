@@ -3,7 +3,7 @@ import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
 import { GetCell, SearchCells } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import CellPicker from '../../components/CellPicker';
-import {LogReport } from "../../services/Report.service";
+import { LogReport } from "../../services/Report.service";
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 
@@ -108,15 +108,15 @@ export const Report = () => {
         setLoading(true);
 
         /*try {*/
-            var result;
+        var result;
 
-            result = await LogReport({ ...report, date: report.dateOnly + report.timeOnly });
-            if (result.isValid) {
-                alert('Relatório enviado com sucesso!');
-                navigate('/reports/' + result.data.id)
-            } else {
-                alert('Erro ao enviar relatório');
-            }
+        result = await LogReport({ ...report, date: report.dateOnly + report.timeOnly });
+        if (result.isValid) {
+            alert('Relatório enviado com sucesso!');
+            navigate('/reports/' + result.data.id)
+        } else {
+            alert('Erro ao enviar relatório');
+        }
         //}
         /*catch (e) {
             alert('Erro ao enviar relatório.');
@@ -138,10 +138,10 @@ export const Report = () => {
 
     const translateCellType = (cellType) => {
         if (cellType == "Evangelistic")
-          return "Evangelística";
+            return "Evangelística";
         if (cellType == "Discipleship")
-          return "Discipuladora"
-      };
+            return "Discipuladora"
+    };
 
     return (
         <>
@@ -238,10 +238,11 @@ export const Report = () => {
                     </Row>
                     <Row>
 
-                        <Col> <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon3">Visitantes:</InputGroup.Text>
-                            <Form.Control id="basic-url" name="visitors" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
-                        </InputGroup>
+                        <Col>
+                            <InputGroup className="mb-3" as={Col}>
+                                <InputGroup.Text id="basic-addon3">Visitantes:</InputGroup.Text>
+                                <Form.Control id="basic-url" name="visitors" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
+                            </InputGroup>
                         </Col>
                     </Row>
                 </Container>
