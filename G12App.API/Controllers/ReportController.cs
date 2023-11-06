@@ -3,13 +3,11 @@ using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
-namespace G12App.Controllers
+namespace G12App.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -22,7 +20,7 @@ namespace G12App.Controllers
             var result = await reportService.GetAllReports(query);
             return result.AsActionResult();
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromServices] IReportService reportService, int id)
         {
@@ -37,11 +35,11 @@ namespace G12App.Controllers
             return result.AsActionResult();
         }
 
-       
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromServices] IReportService reportService, int id)
         {
-            var result = await reportService.Delete(id); 
+            var result = await reportService.Delete(id);
             return result.AsActionResult();
         }
 

@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace G12App.Controllers
+namespace G12App.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

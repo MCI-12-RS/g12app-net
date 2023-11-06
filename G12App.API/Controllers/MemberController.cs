@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace G12App.Controllers
+namespace G12App.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

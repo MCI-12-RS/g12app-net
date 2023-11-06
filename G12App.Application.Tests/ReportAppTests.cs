@@ -17,7 +17,7 @@ namespace G12App.Application.Tests
             {
                 ReportId = 1,
                 Subject = "Valid subject",
-                Date = new DateTime(2023, 10, 20),
+                Date = DateTime.Now,
                 Visitors = 1,
                 CellId = 1,
                 LeadershipId = 1,
@@ -30,10 +30,11 @@ namespace G12App.Application.Tests
                 LeadId = 1,
                 HostId = 1,
                 TimothyId = 1,
-                WeekDay = System.DayOfWeek.Tuesday,
+                WeekDay = DateTime.Now.DayOfWeek,
                 PlaceId = 1,
                 CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,
+                Time = TimeOnly.FromDateTime(DateTime.Now.Subtract(TimeSpan.FromMinutes(3)))
             };
 
             //Mock

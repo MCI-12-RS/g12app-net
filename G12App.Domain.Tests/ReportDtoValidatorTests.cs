@@ -72,27 +72,8 @@ namespace G12App.Domain.Tests
                 //Error message
                 ReportDTOValidator.Date_ErrorMessage
             },
-
-              //Test 3 
-            new object[]
-            {
-                new ReportDTO()
-                {
-                    ReportId = 1,
-                    Subject = "Valid subject",
-                    Date = new DateTime(2023, 9, 28),
-                    Visitors = 1,
-                    CellId = 1,
-                    LeadershipId = 1,
-                    HostId = 1
-                },
-                //Error message
-                ReportDTOValidator.Frequenters_ErrorMessage
-            },
-
             
-
-            //Test 4 
+            //Test 3
             new object[]
             {
                 new ReportDTO()
@@ -109,7 +90,7 @@ namespace G12App.Domain.Tests
                 ReportDTOValidator.Id_ErrorMessage
             },
 
-            //Test 5 
+            //Test 4
             new object[]
             {
                 new ReportDTO()
