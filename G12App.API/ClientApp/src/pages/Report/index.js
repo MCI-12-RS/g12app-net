@@ -110,7 +110,7 @@ export const Report = () => {
         /*try {*/
         var result;
 
-        result = await LogReport({ ...report, date: report.dateOnly + report.timeOnly });
+        result = await LogReport({ ...report, date: report.dateOnly + T + report.timeOnly });
         if (result.isValid) {
             alert('Relatório enviado com sucesso!');
             navigate('/reports/' + result.data.id)
@@ -153,7 +153,7 @@ export const Report = () => {
                     <Row className="mb-3 pr-0">
                         <Col>
                             <CellPicker label="Insira o nome do líder:"
-                                setValue={(value) => handleSelectChangeEvent('cell', value)} />
+                                setValue={(value) => handleSelectChangeEvent('cellId', value)} />
                         </Col>
                     </Row>
 
