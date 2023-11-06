@@ -24,7 +24,6 @@ namespace G12App.Domain.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 2,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -49,7 +48,6 @@ namespace G12App.Domain.Tests
                     Subject = "",
                     Date = new DateTime(2023, 9, 28),
                     Visitors = 1,
-                    Members = 1,
                     CellId = 1,
                     LeadershipId = 1,
                     HostId = 1
@@ -67,7 +65,6 @@ namespace G12App.Domain.Tests
                     Subject = "Valid subject",
                     Date = DateTime.MinValue,
                     Visitors = 1,
-                    Members = 1,
                     CellId = 1,
                     LeadershipId = 1,
                     HostId = 1
@@ -85,7 +82,6 @@ namespace G12App.Domain.Tests
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
                     Visitors = 1,
-                    Members = 0,
                     CellId = 1,
                     LeadershipId = 1,
                     HostId = 1
@@ -105,7 +101,6 @@ namespace G12App.Domain.Tests
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
                     Visitors = 1,
-                    Members = 1,
                     CellId = 0,
                     LeadershipId = 1,
                     HostId = 1
@@ -123,7 +118,6 @@ namespace G12App.Domain.Tests
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
                     Visitors = 1,
-                    Members = 1,
                     CellId = 1,
                     LeadershipId = 0,
                     HostId = 1

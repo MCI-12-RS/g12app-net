@@ -5,9 +5,7 @@ using G12App.Domain.Mappings;
 using G12App.Infrastructure.Data.Context;
 using G12App.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,11 +35,8 @@ namespace G12App.API
 
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            var conn = new SqliteConnection("Filename=:memory:");
-            conn.Open();
-
-            services.AddDbContext<AppContext>(options => options.UseSqlite(conn));
-
+            services.AddDbContext<AppContext>(options => options.UseMySql(
+                configuration["ConnectionStrings:AppContext"], ServerVersion.AutoDetect(configuration["ConnectionStrings:AppContext"])));
 
             return services;
         }

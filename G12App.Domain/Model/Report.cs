@@ -11,7 +11,7 @@ namespace G12App.Domain.Model
         public string Subject { get; set; }
         public DateTime Date { get; set; }
         public int Visitors { get; set; }
-        public List<Member> Members { get; set; }
+        public ICollection<Member> Members { get; set; }
         public int CellId { get; set; }
         public int LeadershipId { get; set; }
         public int HostId { get; set; }

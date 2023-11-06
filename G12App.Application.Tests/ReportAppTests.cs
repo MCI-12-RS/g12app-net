@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using G12App.Application.Services;
 using G12App.Domain.DTOs;
-using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
-using G12App.Domain.Model;
 using Moq;
 
 namespace G12App.Application.Tests
@@ -22,7 +19,6 @@ namespace G12App.Application.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 20),
                 Visitors = 1,
-                Members = 2,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -66,7 +62,6 @@ namespace G12App.Application.Tests
                 Subject = "Valid subject",
                 Date = DateTime.Now.AddDays(1),
                 Visitors = 1,
-                Members = 2,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -110,8 +105,7 @@ namespace G12App.Application.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 2,
-                 CellId = 3,
+                CellId = 3,
                 LeadershipId = 1,
                 HostId = 1
             };
@@ -154,7 +148,6 @@ namespace G12App.Application.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 09),
                 Visitors = 1,
-                Members = 2,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -198,7 +191,6 @@ namespace G12App.Application.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 10, 10, 00, 00),
                 Visitors = 1,
-                Members = 2,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -243,7 +235,6 @@ namespace G12App.Application.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 2,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -276,5 +267,5 @@ namespace G12App.Application.Tests
             log.IsValid.Should().BeFalse();
             log.Errors.Should().Contain(x => "O relatório precisa ser da semana atual".Equals(x.ErrorMessage));
         }
-    } 
+    }
 }

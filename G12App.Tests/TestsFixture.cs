@@ -1,7 +1,6 @@
 ﻿using G12App.API;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,17 +14,18 @@ namespace G12App.Tests
     {
         public TestsFixture()
         {
-            var webApplicationFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
-            {
-                builder
-                    .ConfigureTestServices(services =>
+            var webApplicationFactory = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
                     {
-                        var conn = new SqliteConnection("Filename=:memory:");
-                        conn.Open();
+                        builder
+                            .ConfigureServices(services =>
+                            {
+                                var conn = new SqliteConnection("Filename=:memory:");
+                                conn.Open();
 
-                        services.AddDbContext<AppContext>(options => options.UseSqlite(conn));
+                                services.AddDbContext<AppContext>(options => options.UseSqlite(conn));
+                            });
                     });
-            });
 
             HttpClient = webApplicationFactory.CreateDefaultClient();
 

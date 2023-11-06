@@ -6,6 +6,7 @@ using G12App.Domain.Querying.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace G12App.Controllers
 {

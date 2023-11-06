@@ -1,6 +1,7 @@
 ﻿using G12App.Domain.Model.Base;
 using G12App.Domain.Model.Enum;
 using System;
+using System.Collections.Generic;
 
 namespace G12App.Domain.Model
 {
@@ -29,5 +30,7 @@ namespace G12App.Domain.Model
         public int? LeadershipId { get; set; }
 
         public int? MinistryLevel { get; set; }
+
+        public ICollection<Report> Reports { get; set; }
     }
 }

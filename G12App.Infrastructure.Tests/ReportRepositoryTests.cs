@@ -14,21 +14,20 @@ namespace G12App.Infrastructure.Data.Tests
 {
     public class ReportRepositoryTests
     {
-        private readonly TestFixture _fixture = new TestFixture();
+        private readonly TestFixture _fixture = new();
         private readonly ReportRepository _repository;
-        private readonly Report _defaultReport = new Report()
+        private readonly Report _defaultReport = new()
         {
             ReportId = 1,
             Subject = "Valid subject",
             Date = new DateTime(2023, 9, 28),
             Visitors = 1,
-            Members = 1,
             CellId = 1,
             LeadershipId = 1,
             HostId = 1,
             CellType = Domain.Model.Enum.CellType.Discipleship
         };
-        private readonly Query query = new Query();
+        private readonly Query query = new();
 
         public ReportRepositoryTests()
         {
@@ -44,7 +43,6 @@ namespace G12App.Infrastructure.Data.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 1,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -80,7 +78,6 @@ namespace G12App.Infrastructure.Data.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 1,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -103,7 +100,6 @@ namespace G12App.Infrastructure.Data.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 1,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -126,7 +122,6 @@ namespace G12App.Infrastructure.Data.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 1,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -137,7 +132,6 @@ namespace G12App.Infrastructure.Data.Tests
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
-                Members = 1,
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 2
