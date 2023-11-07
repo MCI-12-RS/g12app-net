@@ -26,7 +26,7 @@ export class NavMenu extends Component {
   render() {
     return (
       <header>        
-        <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar expand="lg" className="bg-body-tertiary" bg="dark">
             <Container>
             <Navbar.Brand as={Link} to="/">
               <img className="logo" width="64" height="64" src={logo} />
