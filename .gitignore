@@ -45,3 +45,5 @@ msbuild.wrn
 # Sqlite
 AppContext.db
 AppContext.db*
+
+!/ubuntu-build
