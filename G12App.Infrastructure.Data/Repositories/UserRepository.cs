@@ -4,6 +4,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -36,14 +37,24 @@ namespace G12App.Infrastructure.Data.Repositories
             throw new System.NotImplementedException();
         }
 
-        public Task<User> Remove(User user)
+        public async Task<User> Remove(User user)
         {
-            throw new System.NotImplementedException();
+            if (_context.Entry(user).State == EntityState.Detached)
+                _context.Attach(user);
+            user.IsDeleted = true;
+
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return user;
         }
 
-        public Task<User> Update(User user)
+        public async Task<User> Update(User user)
         {
-            throw new System.NotImplementedException();
+            var userEntity = await _context.Users.FirstOrDefaultAsync(x =>  x.Id == user.Id && x.IsDeleted == false);
+            _mapper.Map(user, userEntity);
+            _context.Entry(userEntity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return user;
         }
     }
 }
