@@ -32,6 +32,7 @@ namespace G12App.Domain.Mappings
                 .ForMember(x => x.Id, opt => opt.Ignore());
             CreateMap<Report, Report>()
                 .ForMember(x => x.ReportId, opt => opt.Ignore());
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }
