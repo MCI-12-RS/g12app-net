@@ -11,7 +11,7 @@ export class Home extends Component {
           <h1>Dashboard</h1>
           <hr />
           
-          <Alert variant="info">Bem-vindo!</Alert>
+          <Alert variant="info">Bem-vindo (a)!</Alert>
         </div>
       </>
     );
