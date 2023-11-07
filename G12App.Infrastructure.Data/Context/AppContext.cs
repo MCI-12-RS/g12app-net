@@ -9,6 +9,7 @@ namespace G12App.Infrastructure.Data.Context
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Cell> Cells { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public AppContext(DbContextOptions<AppContext> options) : base(options)
         {
