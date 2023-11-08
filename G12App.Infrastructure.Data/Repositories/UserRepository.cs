@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
@@ -6,6 +7,7 @@ using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace G12App.Infrastructure.Data.Repositories
@@ -27,14 +29,19 @@ namespace G12App.Infrastructure.Data.Repositories
             return user;
         }
 
-        public Task<User> GetUserByIdAsync(int? id)
+        public async Task<User> GetUserByIdAsync(int? id)
         {
-            throw new System.NotImplementedException();
+            return await _context.Users.FirstOrDefaultAsync
+                 (x => x.Id == id && x.IsDeleted == false);
         }
 
-        public Task<IEnumerable<User>> GetUsersAsync(Query<UserFilter> query)
+        public async Task<IEnumerable<User>> GetUsersAsync(Query<UserFilter> query)
         {
-            throw new System.NotImplementedException();
+            return await _context.Users
+                            .Where(x => x.IsDeleted == false)
+                            .ApplyPaging(query)
+                            .ApplyFilter(query)
+                            .ToListAsync();
         }
 
         public async Task<User> Remove(User user)
@@ -50,7 +57,7 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<User> Update(User user)
         {
-            var userEntity = await _context.Users.FirstOrDefaultAsync(x =>  x.Id == user.Id && x.IsDeleted == false);
+            var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id && x.IsDeleted == false);
             _mapper.Map(user, userEntity);
             _context.Entry(userEntity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
