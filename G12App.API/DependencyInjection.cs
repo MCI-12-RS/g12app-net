@@ -28,7 +28,7 @@ namespace G12App.API
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<ICellRepository, CellRepository>();
             services.AddTransient<IReportRepository, ReportRepository>();
-            services.AddTransient<UserRepository, UserRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 

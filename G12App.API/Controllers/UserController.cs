@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using G12App.Domain.Extensions;
+using G12App.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace G12App.API.Controllers
 {
@@ -7,5 +9,11 @@ namespace G12App.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromServices] IUserService userService, int id)
+        {
+            var result = await userService.GetUserById(id);
+            return result.AsActionResult();
+        }
     }
 }
