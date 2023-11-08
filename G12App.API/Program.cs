@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using G12App.API.Middlewares;
 using G12App.Domain;
 using G12App.Domain.Model;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,7 @@ namespace G12App.API
             app.UseAuthorization();
             app.MapControllers();
             app.MapFallbackToFile("index.html");
+            app.UseMiddleware<ErrorMiddleware>();
 
             app.Configure();
             await app.RunAsync();
