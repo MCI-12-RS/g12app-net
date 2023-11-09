@@ -53,7 +53,7 @@ namespace G12App.Application.Services
             return new ServiceResult();
         }
 
-        public async Task<ServiceResult<UserDTO>> Update(UserDTO userDTO)
+        public async Task<ServiceResult<UserDTO>> Update(UserDTO userDTO, int id)
         {
             var userEntity = _mapper.Map<User>(userDTO);
             userEntity.SetupLastModified();

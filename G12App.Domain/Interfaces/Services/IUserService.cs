@@ -12,7 +12,7 @@ namespace G12App.Domain.Interfaces.Services
         Task<ServiceResult<IEnumerable<UserDTO>>> GetUsers(Query<UserFilter> query);
         Task<ServiceResult<UserDTO>> GetUserById(int? id);
         Task<ServiceResult<UserDTO>> Add(UserDTO userDTO);
-        Task<ServiceResult<UserDTO>> Update(UserDTO userDTO);
+        Task<ServiceResult<UserDTO>> Update(UserDTO userDTO, int id);
         Task<ServiceResult> Remove(int? id);
     }
 }
