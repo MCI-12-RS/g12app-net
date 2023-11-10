@@ -41,6 +41,10 @@ namespace G12App.API
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(option => option.AllowAnyOrigin()
+                     .AllowAnyMethod()
+                     .AllowAnyHeader());
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
             app.MapFallbackToFile("index.html");

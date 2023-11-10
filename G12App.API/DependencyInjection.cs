@@ -6,10 +6,13 @@ using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Infrastructure.Data.Context;
 using G12App.Infrastructure.Data.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace G12App.API
 {
@@ -27,11 +30,28 @@ namespace G12App.API
 
         public static IServiceCollection RegisterJWT(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddControllers();
-
+            services.AddCors();
             var jwtSection = configuration.GetSection("JWTSettings");
             services.Configure<JWTSettings>(jwtSection);
             var appSetings = jwtSection.Get<JWTSettings>();
+
+            var key = Encoding.ASCII.GetBytes(appSetings.SecretKey);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
             return services;
         }
