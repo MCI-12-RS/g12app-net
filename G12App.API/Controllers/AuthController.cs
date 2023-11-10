@@ -28,7 +28,7 @@ namespace G12App.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserToken>> Authenticate([FromBody] User user)
+        public async Task<IActionResult<UserToken>> Authenticate([FromBody] User user)
         {
             if (user == null)
             {

@@ -39,7 +39,7 @@ export const LogPage = () => {
 
         <Row className="mb-3 pr-0 d-flex">
             <div className="float-end d-flex">
-                <Button variant="primary" className="ms-3" type="submit">
+                <Button variant="primary" className="ms-3" type="submit"> 
                     Login
                 </Button>
             </div>
