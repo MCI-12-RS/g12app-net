@@ -2,6 +2,7 @@
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Mappings;
+using G12App.Domain.Model;
 using G12App.Infrastructure.Data.Context;
 using G12App.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +21,17 @@ namespace G12App.API
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IReportApp, ReportApp>();
+            return services;
+        }
+
+        public static IServiceCollection RegisterJWT(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddControllers();
+
+            var jwtSection = configuration.GetSection("JWTSettings");
+            services.Configure<JWTSettings>(jwtSection);
+            var appSetings = jwtSection.Get<JWTSettings>();
+
             return services;
         }
 
