@@ -1,6 +1,5 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using G12App.API.Middlewares;
 using G12App.Domain;
 using G12App.Domain.Model;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using G12App.API.Middleware;
 
 namespace G12App.API
 {

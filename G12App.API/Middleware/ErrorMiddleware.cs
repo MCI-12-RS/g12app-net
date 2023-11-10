@@ -6,11 +6,10 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace G12App.API.Middlewares
+namespace G12App.API.Middleware
 {
     public class ErrorMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly ILogger<ErrorMiddleware> _logger;
 
         public ErrorMiddleware(ILogger<ErrorMiddleware> logger)
@@ -22,7 +21,7 @@ namespace G12App.API.Middlewares
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (Exception ex)
             {

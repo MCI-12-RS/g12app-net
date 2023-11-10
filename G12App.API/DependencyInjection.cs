@@ -1,4 +1,5 @@
-﻿using G12App.Application.Services;
+﻿using G12App.API.Middleware;
+using G12App.Application.Services;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Mappings;
@@ -43,6 +44,8 @@ namespace G12App.API
             services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+
+            services.AddSingleton<ErrorMiddleware>();
 
             return services;
         }
