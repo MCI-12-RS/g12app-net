@@ -21,7 +21,7 @@ namespace G12App.Domain.Tests
             {
                 Id = 1,
                 Name = "Rafael Jorge Alves",
-                BirthDate = new System.DateOnly(1993, 05, 10),
+                BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddress = new AddressDto()
@@ -54,7 +54,7 @@ namespace G12App.Domain.Tests
                 {
                     Id = 1,
                 Name = "Rafael",
-                BirthDate = new System.DateOnly(1993, 05, 10),
+                BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealvesgmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddress = new AddressDto()
@@ -80,7 +80,7 @@ namespace G12App.Domain.Tests
                 {
                     Id = 1,
                 Name = "",
-                BirthDate = new System.DateOnly(1993, 05, 10),
+                BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "my_invalid_email",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddress = new AddressDto()

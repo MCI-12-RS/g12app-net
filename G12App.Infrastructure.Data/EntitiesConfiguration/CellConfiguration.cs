@@ -10,13 +10,13 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(x => x.Lead).WithMany().HasForeignKey(x => x.LeadId).IsRequired();
+            builder.HasOne(x => x.Lead).WithMany().HasForeignKey(x => x.LeadId).OnDelete(DeleteBehavior.ClientNoAction);
 
-            builder.HasOne(x => x.Host).WithMany().HasForeignKey(x => x.HostId).IsRequired();
+            builder.HasOne(x => x.Host).WithMany().HasForeignKey(x => x.HostId).OnDelete(DeleteBehavior.ClientNoAction);
 
-            builder.HasOne(x => x.Timothy).WithMany().HasForeignKey(x => x.TimothyId).IsRequired();
+            builder.HasOne(x => x.Timothy).WithMany().HasForeignKey(x => x.TimothyId).OnDelete(DeleteBehavior.ClientNoAction);
 
-            builder.HasOne(x => x.Place).WithMany().HasForeignKey(x => x.PlaceId);
+            builder.HasOne(x => x.Place).WithMany().HasForeignKey(x => x.PlaceId).OnDelete(DeleteBehavior.ClientNoAction);
         }
     }
 }

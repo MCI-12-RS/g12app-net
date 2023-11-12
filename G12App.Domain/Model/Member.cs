@@ -2,16 +2,18 @@
 using G12App.Domain.Model.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace G12App.Domain.Model
 {
     public class Member : BaseEntity
     {
+        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public DateOnly? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public string PhoneNumber { get; set; }
 

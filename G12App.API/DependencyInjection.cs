@@ -72,9 +72,8 @@ namespace G12App.API
 
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppContext>(options => options.UseMySql(
+            services.AddDbContext<AppContext>(options => options.UseSqlServer(
                 configuration["ConnectionStrings:AppContext"],
-                ServerVersion.AutoDetect(configuration["ConnectionStrings:AppContext"]),
                 opt => opt.EnableRetryOnFailure(
                     maxRetryCount: 10,
                     maxRetryDelay: System.TimeSpan.FromSeconds(30),

@@ -26,23 +26,23 @@ namespace G12App.API.Controllers
             _jwtsettings = jwtsettings.Value;
         }
 
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<IActionResult<UserToken>> Authenticate([FromBody] User user)
-        {
-            if (user == null)
-            {
-                return NotFound(new { message = "Email ou senha incorretos" });
-            }
+        //[HttpPost("login")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult<UserToken>> Authenticate([FromBody] User user)
+        //{
+        //    if (user == null)
+        //    {
+        //        return NotFound(new { message = "Email ou senha incorretos" });
+        //    }
 
-            var token = GenerateAccessToken(user);
+        //    var token = GenerateAccessToken(user);
 
-            return new UserToken
-            {
-                User = user,
-                Token = token
-            };
-        }
+        //    return new UserToken
+        //    {
+        //        User = user,
+        //        Token = token
+        //    };
+        //}
 
         private string GenerateAccessToken(User user)
         {

@@ -70,7 +70,7 @@ namespace G12App.Infrastructure.Data.Context
             {
                 Id = 1,
                 Name = "Samuel Colares",
-                BirthDate = new System.DateOnly(1993, 05, 10),
+                BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "aaaaa@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 2,
@@ -81,7 +81,7 @@ namespace G12App.Infrastructure.Data.Context
             {
                 Id = 2,
                 Name = "Eduardo Coelho",
-                BirthDate = new System.DateOnly(1993, 05, 10),
+                BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "bbbbbb@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 3,
@@ -93,7 +93,7 @@ namespace G12App.Infrastructure.Data.Context
             {
                 Id = 3,
                 Name = "Rafael Alves",
-                BirthDate = new System.DateOnly(1993, 05, 10),
+                BirthDate = new System.DateTime(1993, 05, 10),
                 Email = "rafaeljorgealves@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
                 HomeAddressId = 1,
@@ -109,7 +109,7 @@ namespace G12App.Infrastructure.Data.Context
                 TimothyId = 2,
                 WeekDay = System.DayOfWeek.Tuesday,
                 PlaceId = 1,
-                Time = new System.TimeOnly(20, 00),
+                Time = new System.TimeOnly(20, 00).ToString(),
                 CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,
             });

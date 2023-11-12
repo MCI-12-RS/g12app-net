@@ -1,18 +1,9 @@
 version: '3.3'
 services:
   db:
-    image: mysql:5.7
-    restart: always
+    image: mcr.microsoft.com/mssql/server:2017-latest
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
     ports:
-      - '3306:3306'
-    expose:
-      - '3306'
-    volumes:
-      - my-db:/var/lib/mysql
-volumes:
-  my-db:
+      - "1433:1433"
