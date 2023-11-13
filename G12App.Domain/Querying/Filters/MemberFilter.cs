@@ -17,5 +17,9 @@
         public int? MinistryLevel { get; set; }
 
         public int[] NotInId { get; set; }
+
+        public int? LeadershipId { get; set; }
+
+        public bool? ChildrenMembersComputed { get; set; }
     }
 }

@@ -15,13 +15,11 @@ namespace G12App.Infrastructure.Data.Repositories
     public class MemberRepository : IMemberRepository
     {
         private readonly AppContext _context;
-        private readonly IMapper _mapper;
 
         public MemberRepository(
-            AppContext context, IMapper mapper)
+            AppContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<Member> Create(Member member)
@@ -43,6 +41,7 @@ namespace G12App.Infrastructure.Data.Repositories
         private IQueryable<Member> GetMembersQueryableAsync(Query<MemberFilter> query)
         {
             return _context.Members
+                .IgnoreAutoIncludes()
                 .Where(x => x.IsDeleted == false)
                 .ApplyFilter(query);
         }
@@ -52,7 +51,6 @@ namespace G12App.Infrastructure.Data.Repositories
             return await
                 this.GetMembersQueryableAsync(query)
                     .Include(x => x.HomeAddress)
-                    .Include(x => x.Leadership)
                     .ApplyPaging(query)
                     .ToListAsync();
         }
@@ -77,10 +75,8 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> Update(Member member)
         {
-            var memberEntity = await _context.Members.FirstOrDefaultAsync
-                (x => x.Id == member.Id && x.IsDeleted == false);
-            _mapper.Map(member, memberEntity);
-            _context.Entry(memberEntity).State = EntityState.Modified;
+            _context.Attach(member);
+            _context.Entry(member).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return member;
         }

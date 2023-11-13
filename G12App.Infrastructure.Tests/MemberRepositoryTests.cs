@@ -24,7 +24,7 @@ namespace G12App.Infrastructure.Data.Tests
 
         public MemberRepositoryTests()
         {
-            _repository = new MemberRepository(_fixture.Context, _fixture.Mapper);
+            _repository = new MemberRepository(_fixture.Context);
         }
 
         [Fact]

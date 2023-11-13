@@ -19,6 +19,23 @@ export const Members = () => {
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
 
+  const translateMinistryLevel = (ministryLevel) => {
+    switch(ministryLevel){
+      case 1: return 'Pastores';
+      case 12: return 'G12';
+      default: return ministryLevel;
+    }
+  };
+
+  const getLeadership = (member) => {
+    switch(member.ministryLevel){
+      case 1: return '-';
+      case 12: return <><b>{member.computedLeadershipName}</b></>;
+      case 144: return <><b>{member.computedG12Leader}</b></>;
+      default: return <><b>{member.computedG12Leader}</b> / {member.computedLeadershipName}</>;
+    }
+  }
+
   const columns = [
     {
       name: '#',
@@ -29,8 +46,12 @@ export const Members = () => {
       render: (member) => member.name
     },
     {
-      name: 'Liderança',
-      render: (member) => member.leadership?.name ?? '-'
+      name: 'Nivel',
+      render: (member) => translateMinistryLevel(member.ministryLevel)
+    },
+    {
+      name: 'Ministerio',
+      render: (member) => getLeadership(member)
     },
     {
       name: 'Bairro',

@@ -42,6 +42,8 @@ namespace G12App.Application.Services
             var memberEntity = _mapper.Map<Member>(memberDTO);
             memberEntity.SetupCreation();
             memberEntity.SetupLastModified();
+            await UpdateComputedValues(memberEntity);
+
             var member = await _memberRepository.Create(memberEntity);
             return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
         }
@@ -50,8 +52,31 @@ namespace G12App.Application.Services
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
             memberEntity.SetupLastModified();
+            await UpdateComputedValues(memberEntity);
+
             var member = await _memberRepository.Update(memberEntity);
             return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
+        }
+
+        public async Task<ServiceResult<MemberDto>> ConsolidateMemberComputedData(int id)
+        {
+            var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            await UpdateComputedValues(memberEntity);
+
+            var member = await _memberRepository.Update(memberEntity);
+            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
+        }
+
+        public async Task<ServiceResult> SetConsolidatedChildrenData(int? id, bool flagValue)
+        {
+            var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            if (memberEntity == null)
+                return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado.");
+
+            memberEntity.ChildrenMembersComputed = true;
+            _ = await _memberRepository.Update(memberEntity);
+
+            return new ServiceResult();
         }
 
         public async Task<ServiceResult> Remove(int? id)
@@ -63,6 +88,33 @@ namespace G12App.Application.Services
             memberEntity.SetupLastModified();
             await _memberRepository.Remove(memberEntity);
             return new ServiceResult();
+        }
+
+        private async Task UpdateComputedValues(Member memberEntity)
+        {
+            var leadershipList = new List<Member>();
+            var leadId = memberEntity.LeadershipId;
+
+            while (leadId is > 0)
+            {
+                var leader = await _memberRepository.GetMemberByIdAsync(leadId);
+                leadershipList.Add(leader);
+                leadId = leader.LeadershipId;
+
+                if (leadershipList.Count > 5)
+                    break;
+            }
+
+            if (leadershipList.Select(x => x.Id).Distinct().Count() != leadershipList.Count)
+                throw new Exception("Membro nao pode ser discipulo de um discipulo.");
+
+            leadershipList.Reverse();
+
+            memberEntity.ComputedLeadershipName = leadershipList.LastOrDefault()?.Name ?? string.Empty;
+            memberEntity.ComputedG12Leader = leadershipList.Skip(1).FirstOrDefault()?.Name;
+            memberEntity.LeadershipTree = string.Join(" / ", leadershipList.Select(x => x.Name));
+            memberEntity.MinistryLevel = (int)Math.Pow(12, leadershipList.Count);
+            memberEntity.ChildrenMembersComputed = false;
         }
     }
 }

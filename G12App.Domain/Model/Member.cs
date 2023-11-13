@@ -13,7 +13,7 @@ namespace G12App.Domain.Model
 
         public string Name { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public string PhoneNumber { get; set; }
 
@@ -34,5 +34,15 @@ namespace G12App.Domain.Model
         public int? MinistryLevel { get; set; }
 
         public ICollection<Report> Reports { get; set; }
+
+        public int? SpouseId { get; set; }
+
+        public string ComputedG12Leader { get; set; }
+
+        public string ComputedLeadershipName { get; set; }
+
+        public string LeadershipTree { get; set; }
+
+        public bool ChildrenMembersComputed { get; set; }
     }
 }

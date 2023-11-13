@@ -6,6 +6,7 @@ using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Infrastructure.Data.Context;
 using G12App.Infrastructure.Data.Repositories;
+using G12App.Workers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +80,12 @@ namespace G12App.API
                     maxRetryDelay: System.TimeSpan.FromSeconds(30),
                     errorNumbersToAdd: null)));
 
+            return services;
+        }
+
+        public static IServiceCollection RegisterWorkers(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHostedService<ChildrenMemberConsolidationWorker>();
             return services;
         }
 

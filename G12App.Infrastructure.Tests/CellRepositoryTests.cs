@@ -29,7 +29,7 @@ namespace G12App.Infrastructure.Data.Tests
         public CellRepositoryTests()
         {
 
-            _repository = new CellRepository(_fixture.Context, _fixture.Mapper);
+            _repository = new CellRepository(_fixture.Context);
         }
 
         [Fact]

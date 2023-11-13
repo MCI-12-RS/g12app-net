@@ -1,26 +1,23 @@
-﻿using AutoMapper;
+﻿using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
-using G12App.Domain.Extensions;
 using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using G12App.Domain.Querying.Filters;
 
 namespace G12App.Infrastructure.Data.Repositories
 {
     public class CellRepository : ICellRepository
     {
         private readonly AppContext _context;
-        private readonly IMapper _mapper;
 
-        public CellRepository(AppContext context, IMapper mapper)
+        public CellRepository(AppContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
         public async Task<Cell> Create(Cell cell)
         {
@@ -66,9 +63,8 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Cell> Update(Cell cell)
         {
-            var cellEntity = await _context.Cells.FirstOrDefaultAsync(x => x.Id == cell.Id && x.IsDeleted == false);
-            _mapper.Map(cell, cellEntity);
-            _context.Entry(cellEntity).State = EntityState.Modified;
+            _context.Attach(cell);
+            _context.Entry(cell).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return cell;
         }

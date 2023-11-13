@@ -39,6 +39,12 @@ namespace G12App.Domain.Extensions
             if (query.Filter.NotInId != null && query.Filter.NotInId.Any())
                 queryable = queryable.Where(x => !query.Filter.NotInId.Contains(x.Id));
 
+            if (query.Filter.ChildrenMembersComputed.HasValue)
+                queryable = queryable.Where(x => query.Filter.ChildrenMembersComputed.Equals(x.ChildrenMembersComputed));
+
+            if (query.Filter.LeadershipId.HasValue)
+                queryable = queryable.Where(x => query.Filter.LeadershipId.Equals(x.LeadershipId));
+
             return queryable;
         }
 
@@ -105,7 +111,7 @@ namespace G12App.Domain.Extensions
 
         public static IQueryable<User> ApplyFilter(this IQueryable<User> queryable, Query<UserFilter> query)
         {
-            if(!string.IsNullOrWhiteSpace(query.Filter.Name))
+            if (!string.IsNullOrWhiteSpace(query.Filter.Name))
                 queryable = queryable.Where(x => x.Name.ToLower().Contains(query.Filter.Name.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(query.Filter.Email))

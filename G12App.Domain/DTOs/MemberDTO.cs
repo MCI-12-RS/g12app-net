@@ -16,5 +16,9 @@ namespace G12App.Domain.DTOs
         public int? LeadershipId { get; set; }
         public MemberDto Leadership { get; set; }
         public int? MinistryLevel { get; set; }
+        public int? SpouseId { get; set; }
+        public string ComputedG12Leader { get; set; }
+        public string ComputedLeadershipName { get; set; }
+        public string LeadershipTree { get; set; }
     }
 }

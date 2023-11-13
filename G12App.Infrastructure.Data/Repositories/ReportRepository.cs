@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
@@ -15,12 +16,10 @@ namespace G12App.Infrastructure.Data.Repositories
     public class ReportRepository : IReportRepository
     {
         private readonly AppContext _context;
-        private readonly IMapper _mapper;
 
-        public ReportRepository(AppContext context, IMapper mapper)
+        public ReportRepository(AppContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<Report> Create(Report report)
@@ -33,10 +32,8 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Report> Update(Report report)
         {
-            var reportEntity = await _context.Reports.FirstOrDefaultAsync
-                (x => x.CellId == report.CellId && x.IsDeleted == false);
-            _mapper.Map(report, reportEntity);
-            _context.Entry(reportEntity).State = EntityState.Modified;
+            _context.Attach(report);
+            _context.Entry(report).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return report;
         }
@@ -50,7 +47,7 @@ namespace G12App.Infrastructure.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Report> Remove (Report report)
+        public async Task<Report> Remove(Report report)
         {
             if (_context.Entry(report).State == EntityState.Detached)
                 _context.Attach(report);
