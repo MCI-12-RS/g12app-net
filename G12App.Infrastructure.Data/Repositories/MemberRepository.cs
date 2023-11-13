@@ -52,6 +52,7 @@ namespace G12App.Infrastructure.Data.Repositories
                 this.GetMembersQueryableAsync(query)
                     .Include(x => x.HomeAddress)
                     .ApplyPaging(query)
+                    .ApplySort(query).ThenBy(x => x.Name)
                     .ToListAsync();
         }
 

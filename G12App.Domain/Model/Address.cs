@@ -4,7 +4,6 @@ namespace G12App.Domain.Model
 {
     public class Address : BaseEntity
     {
-        public int Id { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }
         public string Notes { get; set; }

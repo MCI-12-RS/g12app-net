@@ -19,10 +19,10 @@ namespace G12App.Domain.Querying
             Sort = new Sort();
         }
 
-        public Query(int page, int limit, string sortBy, string sortOrder)
+        public Query(int page, int limit, string sortBy, bool order)
         {
             Pagination = new Pagination(page, limit);
-            Sort = new Sort(sortBy, sortOrder);
+            Sort = new Sort(sortBy, order);
         }
 
         public Pagination Pagination { get; set; }

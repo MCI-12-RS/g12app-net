@@ -9,8 +9,8 @@ const SearchMembers = async (search, pagination, sort) => {
               "limit": pagination.limit
             },
             "sort": {
-              "sortBy": "",
-              "sortOrder": ""
+              "sortBy": sort.sortBy,
+              "order": sort.order
             },
             "filter": {
               "name": search.name,

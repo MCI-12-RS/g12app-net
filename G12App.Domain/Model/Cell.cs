@@ -7,8 +7,6 @@ namespace G12App.Domain.Model
 {
     public class Cell : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         public Member Lead { get; set; }
         public int LeadId { get; set; }
         public Member Host { get; set; }

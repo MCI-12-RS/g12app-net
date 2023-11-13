@@ -58,10 +58,10 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
-        public async Task<Report> GetReportById(int reportId)
+        public async Task<Report> GetReportById(int Id)
         {
             return await _context.Reports.FirstOrDefaultAsync
-                (x => x.ReportId == reportId && x.IsDeleted == false);
+                (x => x.Id == Id && x.IsDeleted == false);
 
         }
     }

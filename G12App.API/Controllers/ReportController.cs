@@ -24,7 +24,7 @@ namespace G12App.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromServices] IReportService reportService, int id)
         {
-            var result = await reportService.GetByReportId(id);
+            var result = await reportService.GetById(id);
             return result.AsActionResult();
         }
 

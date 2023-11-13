@@ -15,7 +15,7 @@ namespace G12App.Application.Tests
             //Arrange
             var report = new ReportDTO()
             {
-                ReportId = 1,
+                Id = 1,
                 Subject = "Valid subject",
                 Date = DateTime.Now,
                 Visitors = 1,
@@ -59,7 +59,7 @@ namespace G12App.Application.Tests
             //Arrange
             var report = new ReportDTO()
             {
-                ReportId = 1,
+                Id = 1,
                 Subject = "Valid subject",
                 Date = DateTime.Now.AddDays(1),
                 Visitors = 1,
@@ -102,7 +102,7 @@ namespace G12App.Application.Tests
             //Arrange
             var report = new ReportDTO()
             {
-                ReportId = 1,
+                Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
@@ -145,7 +145,7 @@ namespace G12App.Application.Tests
             //Arrange
             var report = new ReportDTO()
             {
-                ReportId = 1,
+                Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 09),
                 Visitors = 1,
@@ -188,7 +188,7 @@ namespace G12App.Application.Tests
             //Arrange
             var report = new ReportDTO()
             {
-                ReportId = 1,
+                Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 10, 10, 00, 00),
                 Visitors = 1,
@@ -232,7 +232,7 @@ namespace G12App.Application.Tests
             //Arrange
             var report = new ReportDTO()
             {
-                ReportId = 1,
+                Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,

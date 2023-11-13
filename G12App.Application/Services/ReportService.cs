@@ -57,7 +57,7 @@ namespace G12App.Application.Services
 
         }
 
-        public async Task<ServiceResult<ReportDTO>> GetByReportId (int id)
+        public async Task<ServiceResult<ReportDTO>> GetById (int id)
         {
             var reportEntity = await _reportRepository.GetReportById(id);
             return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(reportEntity));

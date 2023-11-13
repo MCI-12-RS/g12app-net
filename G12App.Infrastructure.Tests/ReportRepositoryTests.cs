@@ -15,7 +15,7 @@ namespace G12App.Infrastructure.Data.Tests
         private readonly ReportRepository _repository;
         private readonly Report _defaultReport = new()
         {
-            ReportId = 1,
+            Id = 1,
             Subject = "Valid subject",
             Date = new DateTime(2023, 9, 28),
             Visitors = 1,
@@ -82,7 +82,7 @@ namespace G12App.Infrastructure.Data.Tests
             var createdReport = await _repository.Create(toCreateReport);
 
             //Act
-            var result = await _repository.GetReportById(createdReport.ReportId);
+            var result = await _repository.GetReportById(createdReport.Id);
 
             //Assert
             result.Should().Be(createdReport);

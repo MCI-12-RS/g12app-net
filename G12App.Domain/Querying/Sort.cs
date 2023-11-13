@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace G12App.Domain.Querying
 {
     public class Sort
@@ -11,14 +6,14 @@ namespace G12App.Domain.Querying
         {
         }
 
-        public Sort(string sortBy, string sortOrder)
+        public Sort(string sortBy, bool order)
         {
             SortBy = sortBy;
-            SortOrder = sortOrder;
+            Order = order;
         }
 
         public string SortBy { get; set; }
 
-        public string SortOrder { get; set; }
+        public bool Order { get; set; }
     }
 }

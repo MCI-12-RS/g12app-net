@@ -18,6 +18,7 @@ export const Members = () => {
     React.useState({name: '', leadershipName: '', email: '', neighborhood: '', city: '', state: ''});
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
+  const [sort, setSort] = React.useState({sortBy: 'ministryLevel', order: false});
 
   const translateMinistryLevel = (ministryLevel) => {
     switch(ministryLevel){
@@ -29,7 +30,7 @@ export const Members = () => {
 
   const getLeadership = (member) => {
     switch(member.ministryLevel){
-      case 1: return '-';
+      case 0: case 1: return '-';
       case 12: return <><b>{member.computedLeadershipName}</b></>;
       case 144: return <><b>{member.computedG12Leader}</b></>;
       default: return <><b>{member.computedG12Leader}</b> / {member.computedLeadershipName}</>;
@@ -70,7 +71,7 @@ export const Members = () => {
   const search = async () => {
     setLoading(true);
 
-    const result = await SearchMembers(searchData, pagination);
+    const result = await SearchMembers(searchData, pagination, sort);
     if(result.isValid){
       setMembers(result.data);
       setTotal(result.totalRecords ?? result.data.length);
@@ -92,7 +93,7 @@ export const Members = () => {
   
   useEffect(() => {
     search();   
-  }, [pagination, searchData]);
+  }, [pagination, searchData, sort]);
 
   return (
     <>

@@ -91,7 +91,7 @@ namespace G12App.Tests
             var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
 
             //Act
-            var result = await _testsFixture.HttpClient.DeleteAsync("/api/report/" + postResponse.Data.ReportId);
+            var result = await _testsFixture.HttpClient.DeleteAsync("/api/report/" + postResponse.Data.Id);
 
             //Assert
             result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -124,7 +124,7 @@ namespace G12App.Tests
                "application/json");
 
             //Act
-            var result = await _testsFixture.HttpClient.PutAsync("/api/report/" + postResponse.Data.ReportId, toUpRepJson);
+            var result = await _testsFixture.HttpClient.PutAsync("/api/report/" + postResponse.Data.Id, toUpRepJson);
             var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
 
             //Assert
@@ -144,7 +144,7 @@ namespace G12App.Tests
             var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
 
             //Act
-            var result = await _testsFixture.HttpClient.GetAsync("/api/report/" + postResponse.Data.ReportId);
+            var result = await _testsFixture.HttpClient.GetAsync("/api/report/" + postResponse.Data.Id);
             var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
 
             //Assert

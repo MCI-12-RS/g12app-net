@@ -20,7 +20,7 @@ namespace G12App.Domain.Tests
             //Arrange
             var report = new ReportDTO()
             {
-                ReportId = 1,
+                Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = 1,
@@ -44,7 +44,7 @@ namespace G12App.Domain.Tests
             {
                 new ReportDTO()
                 {
-                    ReportId = 1,
+                    Id = 1,
                     Subject = "",
                     Date = new DateTime(2023, 9, 28),
                     Visitors = 1,
@@ -61,7 +61,7 @@ namespace G12App.Domain.Tests
             {
                 new ReportDTO()
                 {
-                    ReportId = 1,
+                    Id = 1,
                     Subject = "Valid subject",
                     Date = DateTime.MinValue,
                     Visitors = 1,
@@ -78,7 +78,7 @@ namespace G12App.Domain.Tests
             {
                 new ReportDTO()
                 {
-                    ReportId = 1,
+                    Id = 1,
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
                     Visitors = 1,
@@ -95,7 +95,7 @@ namespace G12App.Domain.Tests
             {
                 new ReportDTO()
                 {
-                    ReportId = 1,
+                    Id = 1,
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
                     Visitors = 1,

@@ -3,6 +3,8 @@ using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
+using G12App.Domain.Model.Base;
 
 namespace G12App.Domain.Extensions
 {
@@ -12,6 +14,27 @@ namespace G12App.Domain.Extensions
         {
             return queryable.Skip((query.Pagination.Page - 1) * query.Pagination.Limit).Take(query.Pagination.Limit);
         }
+
+        public static IOrderedQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> queryable, Query query)
+            where TEntity : BaseEntity
+        {
+            if (string.IsNullOrWhiteSpace(query.Sort.SortBy))
+                return queryable.OrderBy(x => x.Id);
+
+            var command = query.Sort.Order ? "OrderByDescending" : "OrderBy";
+            var type = typeof(TEntity);
+            var property = type.GetProperties()
+                .FirstOrDefault(x => x.Name.Equals(query.Sort.SortBy, StringComparison.InvariantCultureIgnoreCase));
+            var parameter = Expression.Parameter(type, "p");
+            var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+            var orderByExpression = Expression.Lambda(propertyAccess, parameter);
+            var resultExpression = Expression.Call(typeof(Queryable), command, new Type[] { type, property.PropertyType },
+                queryable.Expression, Expression.Quote(orderByExpression));
+
+            return queryable.Provider.CreateQuery<TEntity>(resultExpression) as IOrderedQueryable<TEntity>;
+        }
+
+        #region Member
 
         public static IQueryable<Member> ApplyFilter(this IQueryable<Member> queryable, Query<MemberFilter> query)
         {
@@ -47,6 +70,8 @@ namespace G12App.Domain.Extensions
 
             return queryable;
         }
+
+        #endregion
 
         public static IQueryable<Cell> ApplyFilter(this IQueryable<Cell> queryable, Query<CellFilter> query)
         {
