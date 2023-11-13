@@ -44,7 +44,7 @@ namespace G12App.API.Controllers
         //    };
         //}
 
-        private string GenerateAccessToken(User user)
+        private string GenerateAccessToken(Member member)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtsettings.SecretKey);
@@ -52,7 +52,7 @@ namespace G12App.API.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Email.ToString()),
+                    new Claim(ClaimTypes.Name, member.Email.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

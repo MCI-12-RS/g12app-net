@@ -134,15 +134,5 @@ namespace G12App.Domain.Extensions
             return queryable;
         }
 
-        public static IQueryable<User> ApplyFilter(this IQueryable<User> queryable, Query<UserFilter> query)
-        {
-            if (!string.IsNullOrWhiteSpace(query.Filter.Name))
-                queryable = queryable.Where(x => x.Name.ToLower().Contains(query.Filter.Name.ToLower()));
-
-            if (!string.IsNullOrWhiteSpace(query.Filter.Email))
-                queryable = queryable.Where(x => x.Email.ToLower().Contains(query.Filter.Email.ToLower()));
-
-            return queryable;
-        }
     }
 }

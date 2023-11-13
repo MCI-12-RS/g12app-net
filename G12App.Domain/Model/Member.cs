@@ -41,5 +41,6 @@ namespace G12App.Domain.Model
         public string LeadershipTree { get; set; }
 
         public bool ChildrenMembersComputed { get; set; }
+        public string Password { get; set; }
     }
 }

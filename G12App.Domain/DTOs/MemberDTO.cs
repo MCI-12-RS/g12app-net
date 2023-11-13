@@ -20,5 +20,6 @@ namespace G12App.Domain.DTOs
         public string ComputedG12Leader { get; set; }
         public string ComputedLeadershipName { get; set; }
         public string LeadershipTree { get; set; }
+        public string Password { get; set; }
     }
 }

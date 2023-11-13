@@ -24,7 +24,6 @@ namespace G12App.API
             services.AddTransient<IMemberService, MemberService>();
             services.AddTransient<ICellService, CellService>();
             services.AddTransient<IReportService, ReportService>();
-            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IReportApp, ReportApp>();
             return services;
         }
@@ -62,7 +61,6 @@ namespace G12App.API
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<ICellRepository, CellRepository>();
             services.AddTransient<IReportRepository, ReportRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
