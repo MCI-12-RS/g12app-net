@@ -37,12 +37,10 @@ namespace G12App.API
 
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
                 app.UseHsts();
-            }
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
