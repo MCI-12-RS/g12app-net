@@ -3,6 +3,7 @@ using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace G12App.API.Controllers
             return result.AsActionResult();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromServices] IMemberService memberService, [FromBody] MemberDto member)
         {

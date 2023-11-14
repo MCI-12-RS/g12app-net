@@ -53,7 +53,7 @@ namespace G12App.Application.Services
                 Name = user.Name,
 
             };
-            return new ServiceResult<ResponseLoginDTO>();
+            return new ServiceResult<ResponseLoginDTO>(response);
         }
 
         private string GenerateAccessToken(MemberDto member)

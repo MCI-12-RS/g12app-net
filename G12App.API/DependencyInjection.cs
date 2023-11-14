@@ -25,6 +25,7 @@ namespace G12App.API
             services.AddTransient<ICellService, CellService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IReportApp, ReportApp>();
+            services.AddTransient<IAuthService, AuthService>();
             return services;
         }
 
