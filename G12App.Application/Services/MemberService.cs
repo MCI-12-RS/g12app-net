@@ -106,7 +106,7 @@ namespace G12App.Application.Services
             }
 
             if (leadershipList.Select(x => x.Id).Distinct().Count() != leadershipList.Count)
-                throw new Exception("Membro nao pode ser discipulo de um discipulo.");
+                throw new Exception("Membro não pode ser discípulo de um discípulo.");
 
             leadershipList.Reverse();
 

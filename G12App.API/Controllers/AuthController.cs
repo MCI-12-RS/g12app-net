@@ -11,6 +11,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System;
+using G12App.Domain.Interfaces.Services;
+using G12App.Domain.DTOs;
 
 namespace G12App.API.Controllers
 {
@@ -19,46 +21,13 @@ namespace G12App.API.Controllers
     
     public class AuthController : ControllerBase
     {
-        private readonly JWTSettings _jwtsettings;
-
-        public AuthController(IOptions<JWTSettings> jwtsettings)
+       
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Authenticate([FromServices] IAuthService authService, [FromBody] LoginDTO loginDTO)
         {
-            _jwtsettings = jwtsettings.Value;
-        }
-
-        //[HttpPost("login")]
-        //[AllowAnonymous]
-        //public async Task<IActionResult<UserToken>> Authenticate([FromBody] User user)
-        //{
-        //    if (user == null)
-        //    {
-        //        return NotFound(new { message = "Email ou senha incorretos" });
-        //    }
-
-        //    var token = GenerateAccessToken(user);
-
-        //    return new UserToken
-        //    {
-        //        User = user,
-        //        Token = token
-        //    };
-        //}
-
-        private string GenerateAccessToken(Member member)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtsettings.SecretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, member.Email.ToString()),
-                }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var result = await authService.Login(loginDTO);
+            return result.AsActionResult();
         }
     }
 }
