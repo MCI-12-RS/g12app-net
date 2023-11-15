@@ -16,11 +16,11 @@ namespace G12App.Application.Services
     public class AuthService : IAuthService
     {
         private readonly IMemberService _memberService;
-        private readonly JWTSettings _jwtsettings;
+        private readonly JWTSettings _jwtSettings;
 
-        public AuthService(IMemberService memberService, IOptions<JWTSettings> jwtsettings)
+        public AuthService(IMemberService memberService, IOptions<JWTSettings> jwtSettings)
         {
-            _jwtsettings = jwtsettings.Value;
+            _jwtSettings = jwtSettings.Value;
             _memberService = memberService;
         }
         public async Task<ServiceResult<ResponseLoginDTO>> Login(LoginDTO login)
@@ -59,7 +59,7 @@ namespace G12App.Application.Services
         private string GenerateAccessToken(MemberDto member)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtsettings.SecretKey);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

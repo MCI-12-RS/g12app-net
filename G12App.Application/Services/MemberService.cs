@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using G12App.Domain.DTOs;
-using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
@@ -15,11 +14,16 @@ namespace G12App.Application.Services
     {
         private readonly IMemberRepository _memberRepository;
         private readonly IMapper _mapper;
+        private readonly IEntityChangeTrackingService _changeTrackingService;
 
-        public MemberService(IMemberRepository memberRepository, IMapper mapper)
+        public MemberService(
+            IMemberRepository memberRepository,
+            IMapper mapper,
+            IEntityChangeTrackingService changeTrackingService)
         {
             _memberRepository = memberRepository;
             _mapper = mapper;
+            _changeTrackingService = changeTrackingService;
         }
 
         public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query<MemberFilter> query)
@@ -40,8 +44,10 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<MemberDto>> Add(MemberDto memberDTO)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
-            memberEntity.SetupCreation();
-            memberEntity.SetupLastModified();
+
+            _changeTrackingService.SetupCreationData(memberEntity);
+            _changeTrackingService.SetupLastModifiedData(memberEntity);
+
             await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Create(memberEntity);
@@ -51,7 +57,8 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = _mapper.Map<Member>(memberDTO);
-            memberEntity.SetupLastModified();
+
+            _changeTrackingService.SetupLastModifiedData(memberEntity);
             await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Update(memberEntity);
@@ -85,7 +92,7 @@ namespace G12App.Application.Services
             if (memberEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado.");
 
-            memberEntity.SetupLastModified();
+            _changeTrackingService.SetupLastModifiedData(memberEntity);
             await _memberRepository.Remove(memberEntity);
             return new ServiceResult();
         }

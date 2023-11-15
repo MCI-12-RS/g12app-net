@@ -12,6 +12,7 @@ namespace G12App.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CellController : ControllerBase
     {
         [HttpPost("search")]

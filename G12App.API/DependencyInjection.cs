@@ -19,13 +19,14 @@ namespace G12App.API
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<IMemberService, MemberService>();
             services.AddTransient<ICellService, CellService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IReportApp, ReportApp>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddScoped<IEntityChangeTrackingService, EntityChangeTrackingService>();
             return services;
         }
 
@@ -57,7 +58,7 @@ namespace G12App.API
             return services;
         }
 
-        public static IServiceCollection RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterInfrastructure(this IServiceCollection services)
         {
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<ICellRepository, CellRepository>();
@@ -82,7 +83,7 @@ namespace G12App.API
             return services;
         }
 
-        public static IServiceCollection RegisterWorkers(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterWorkers(this IServiceCollection services)
         {
             services.AddHostedService<ChildrenMemberConsolidationWorker>();
             return services;

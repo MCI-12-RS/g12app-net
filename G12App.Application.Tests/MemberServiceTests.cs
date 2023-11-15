@@ -5,6 +5,7 @@ using G12App.Domain.Model;
 using G12App.Domain.DTOs;
 using G12App.Application.Services;
 using FluentAssertions;
+using G12App.Domain.Interfaces.Services;
 
 namespace G12App.Application.Tests
 {
@@ -41,7 +42,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<MemberDto>(member)).Returns(memberDto);
 
             //Act
-            var service = new MemberService(mock.Object, mapperMock.Object);
+            var service = new MemberService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.Add(memberDto);
 
             //Assert
@@ -80,7 +81,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<MemberDto>(member)).Returns(memberDto);
 
             //Act
-            var service = new MemberService(mock.Object, mapperMock.Object);
+            var service = new MemberService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.Remove(member.Id);
 
             //Assert
@@ -118,7 +119,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<MemberDto>(member)).Returns(memberDto);
 
             //Act
-            var service = new MemberService(mock.Object, mapperMock.Object);
+            var service = new MemberService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.GetMemberById(member.Id);
 
             //Assert
@@ -158,7 +159,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<Member>(memberDto)).Returns(member);
 
             //Act
-            var service = new MemberService(mock.Object, mapperMock.Object);
+            var service = new MemberService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.Update(memberDto, member.Id);
 
             //Assert

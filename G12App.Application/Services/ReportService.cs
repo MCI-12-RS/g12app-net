@@ -15,18 +15,25 @@ namespace G12App.Application.Services
     {
         private readonly IReportRepository _reportRepository;
         private readonly IMapper _mapper;
+        private readonly IEntityChangeTrackingService _changeTrackingService;
 
-        public ReportService(IReportRepository reportRepository, IMapper mapper)
+        public ReportService(
+            IReportRepository reportRepository, 
+            IMapper mapper,
+            IEntityChangeTrackingService changeTrackingService)
         {
             _reportRepository = reportRepository;
             _mapper = mapper;
+            _changeTrackingService = changeTrackingService;
         }
 
         public async Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO)
         {
             var reportEntity = _mapper.Map<Report>(reportDTO);
-            reportEntity.SetupCreation();
-            reportEntity.SetupLastModified();
+            
+            _changeTrackingService.SetupCreationData(reportEntity);
+            _changeTrackingService.SetupLastModifiedData(reportEntity);
+
             var report = await _reportRepository.Create(reportEntity);
             return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(report));
         }
@@ -37,7 +44,8 @@ namespace G12App.Application.Services
             if (reportEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado");
 
-            reportEntity.SetupLastModified();
+            _changeTrackingService.SetupLastModifiedData(reportEntity);
+
             await _reportRepository.Remove(reportEntity);
             return new ServiceResult();
         }
@@ -51,7 +59,9 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id)
         {
             var reportEntity = _mapper.Map<Report>(reportDTO);
-            reportEntity.SetupLastModified();
+
+            _changeTrackingService.SetupLastModifiedData(reportEntity);
+
             var report = await _reportRepository.Update(reportEntity);
             return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(report));
 

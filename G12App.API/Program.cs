@@ -81,9 +81,9 @@ namespace G12App.API
             builder.Services
                 .RegisterDomain(builder.Configuration)
                 .RegisterDatabase(builder.Configuration)
-                .RegisterInfrastructure(builder.Configuration)
-                .RegisterServices(builder.Configuration)
-                .RegisterWorkers(builder.Configuration)
+                .RegisterInfrastructure()
+                .RegisterServices()
+                .RegisterWorkers()
                 .RegisterJWT(builder.Configuration);
 
             var app = builder.Build();

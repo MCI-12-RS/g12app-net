@@ -16,18 +16,24 @@ namespace G12App.Application.Services
     {
         private readonly ICellRepository _cellRepository;
         private readonly IMapper _mapper;
+        private readonly IEntityChangeTrackingService _changeTrackingService;
 
-        public CellService(ICellRepository cellRepository, IMapper mapper )
+        public CellService(
+            ICellRepository cellRepository, 
+            IMapper mapper,
+            IEntityChangeTrackingService changeTrackingService)
         {
             _cellRepository = cellRepository;
             _mapper = mapper;
+            _changeTrackingService = changeTrackingService;
         }
 
         public async Task<ServiceResult<CellDTO>> Add(CellDTO cellDTO)
         {
             var cellEntity = _mapper.Map<Cell>(cellDTO);
-            cellEntity.SetupCreation();
-            cellEntity.SetupLastModified();
+            _changeTrackingService.SetupCreationData(cellEntity);
+            _changeTrackingService.SetupLastModifiedData(cellEntity);
+
             var cell = await _cellRepository.Create(cellEntity);
             return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
         }
@@ -52,7 +58,7 @@ namespace G12App.Application.Services
             if (cellEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado.");
 
-            cellEntity.SetupLastModified();
+            _changeTrackingService.SetupLastModifiedData(cellEntity);
             await _cellRepository.Remove(cellEntity);
             return new ServiceResult();
         }
@@ -60,7 +66,8 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<CellDTO>> Update(CellDTO cellDTO, int id)
         {
             var cellEntity = _mapper.Map<Cell>(cellDTO);
-            cellEntity.SetupLastModified();
+
+            _changeTrackingService.SetupLastModifiedData(cellEntity);
             var cell = await _cellRepository.Update(cellEntity);
             return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
         }

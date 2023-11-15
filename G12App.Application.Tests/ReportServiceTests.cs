@@ -3,6 +3,7 @@ using FluentAssertions;
 using G12App.Application.Services;
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Repositories;
+using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Model;
 using Moq;
 
@@ -45,7 +46,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
 
             //Act
-            var service = new ReportService(mock.Object, mapperMock.Object);
+            var service = new ReportService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.Add(reportDto);
 
             //Arrange
@@ -88,7 +89,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
 
             //Act
-            var service = new ReportService(mock.Object, mapperMock.Object);
+            var service = new ReportService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.GetById(report.Id);
 
             //Assert
@@ -132,7 +133,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
 
             //Act
-            var service = new ReportService(mock.Object, mapperMock.Object);
+            var service = new ReportService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.Delete(report.Id);
 
             //Assert
