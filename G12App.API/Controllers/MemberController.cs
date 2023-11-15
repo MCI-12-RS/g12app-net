@@ -29,7 +29,6 @@ namespace G12App.API.Controllers
             return result.AsActionResult();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromServices] IMemberService memberService, [FromBody] MemberDto member)
         {

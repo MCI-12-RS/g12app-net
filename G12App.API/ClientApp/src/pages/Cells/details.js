@@ -3,16 +3,16 @@ import { InputGroup, Form, Col, Row, Button, Container, FormCheck } from 'react-
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { CreateCell, DeleteCell, GetCell, UpdateCell } from '../../services/Cell.service';
 import MemberPicker from '../../components/MemberPicker';
-
-
-
-
-import './style.css';
-import moment from "moment";
+import { useToastContext } from '../../contexts/ToastContext';
+import { StringifyResponseErrors } from '../../shared/utils';
 import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
 
+import './style.css';
+
 export const CellDetails = () => {
+
+    let toastContext = useToastContext();
 
     const emptyCell = {
         lead: {
@@ -95,18 +95,25 @@ export const CellDetails = () => {
             }
 
             if (result.isValid) {
-                alert('Cadastro salvo com sucesso!');
+                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                    description: 'Cadastro salvo com sucesso!'
+                  });
+
                 if (registerMore)
                     navigate('/new-cell', { state: { registerMore: true } });
                 else
                     navigate('/cells/' + result.data.id);
             } else {
-                alert('Erro ao salvar cadastro.');
+                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                    description: <>{'Erro ao salvar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
+                  });
             }
 
         }
         catch (e) {
-            alert('Erro ao salvar cadastro.');
+            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+                description: 'Erro de sistema ao salvar cadastro.'
+              });
         }
 
         setLoading(false);
@@ -125,15 +132,21 @@ export const CellDetails = () => {
             var result = await DeleteCell(cell.id);
 
             if (result.isValid) {
-                alert('Cadastro deletado com sucesso!');
+                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                    description: 'Cadastro deletado com sucesso!'
+                  });
                 navigate('/cells');
             } else {
-                alert('Erro ao deletar cadastro.');
+                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                    description: <>{'Erro ao deletar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
+                  });
             }
 
         }
         catch (e) {
-            alert('Erro ao deletar cadastro.');
+            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+                description: 'Erro de sistema ao deletar cadastro.'
+              });
         }
 
         setLoading(false);

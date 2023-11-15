@@ -1,48 +1,102 @@
-import React, { useState } from "react";
-import { Button, Col, Container, InputGroup } from "react-bootstrap";
-import { Input } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Container, InputGroup, Row, Form } from "react-bootstrap";
+import { useToastContext } from "../../contexts/ToastContext";
+import { useAuthenticationContext } from "../../contexts/AuthenticationContext";
+import './style.css';
+import { Login } from "../../services/Auth.service";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const [login, setLogin] = useState(emptyLogin);
+export const LoginPage = () => {
 
-
-export const LogPage = () => {
+    const toastContext = useToastContext();
+    const authContext = useAuthenticationContext();
+    const navigate = useNavigate();
 
     const emptyLogin = {
-        email: '',
+        userName: '',
         password: ''
     };
 
+    const [login, setLogin] = useState(emptyLogin);
+    const [errorMessage, setErrorMessage] = useState(<>&nbsp;</>);
+
     const handleChangeEvent = (event) => {
         const { name, value } = event.target;
-        setLogin ({... login, [name]: value });
+        setLogin({ ...login, [name]: value });
     }
 
-    <Container fluid>
-        <h6>Sign In</h6>
-        <Row className="mb-3 pr-0 justify-content-md-center">
-            <Col>
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="basic-addon1">E-mail</InputGroup.Text>
-                <Form.Control name="email" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={login['email']} />
-            </InputGroup>
-            </Col>
-        </Row>
+    const doLogin = async (event) => {
+        event.preventDefault();
 
-        <Row className="mb-3 pr-0 justify-content-md-center">
-            <Col>
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="basic-addon1">Senha</InputGroup.Text>
-                <Form.Control name="password" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={login['password']} />
-            </InputGroup>
-            </Col>
-        </Row>
+        try {
+            var response = await Login(login);
 
-        <Row className="mb-3 pr-0 d-flex">
-            <div className="float-end d-flex">
-                <Button variant="primary" className="ms-3" type="submit"> 
-                    Login
-                </Button>
-            </div>
-        </Row>
-    </Container>
+            if (response.isValid) {
+
+                authContext.logIn(response.data);
+
+                toastContext.addToast({
+                    title: 'Sucesso', hideDelay: 5000,
+                    description: 'Login efetuado com sucesso.'
+                });
+
+                setErrorMessage(<>&nbsp;</>);
+                navigate('/');
+            }
+            else {
+                setErrorMessage(response.errors.map(x => <>{x.errorMessage}<br /></>));
+            }
+
+        } catch (error) {
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Erro de sistema ao fazer login.'
+            });
+            console.error(error);
+        }
+    }
+
+    const checkRedirect = () => {
+        if (authContext.auth.authenticated) {
+            navigate('/');
+        }
+    };
+
+    useEffect(() => {
+        checkRedirect();
+    }, [authContext.auth]);
+
+    return (
+        <Container fluid className="login">
+            <h3>Login</h3>
+            <hr />
+            <Row className="mb-3 pr-0 justify-content-md-center">
+                <Col>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Text id="basic-addon1">Usuario</InputGroup.Text>
+                        <Form.Control name="userName" aria-describedby="basic-addon1" placeholder="Celular ou email" onChange={handleChangeEvent} value={login['email']} />
+                    </InputGroup>
+                </Col>
+            </Row>
+
+            <Row className="mb-3 pr-0 justify-content-md-center">
+                <Col>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Text id="basic-addon1">Senha</InputGroup.Text>
+                        <Form.Control name="password" type="password" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={login['password']} />
+                    </InputGroup>
+                </Col>
+            </Row>
+
+            <Row>
+                <small className="login-error">{errorMessage}</small>
+            </Row>
+
+            <Row className="mb-3 pr-0 d-flex float-end">
+                <div className="float-end d-flex">
+                    <Button variant="primary" className="ms-3" type="submit" onClick={doLogin}>Entrar</Button>
+                </div>
+            </Row>
+        </Container>
+    );
 }

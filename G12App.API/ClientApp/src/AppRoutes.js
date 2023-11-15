@@ -1,11 +1,10 @@
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { Cells } from "./pages/Cells";
 import { CellDetails } from "./pages/Cells/details";
 import { Members } from "./pages/Members";
 import { MemberDetails } from "./pages/Members/details";
 import { Report } from "./pages/Report";
+import { LoginPage } from "./pages/Login";
 
 const AppRoutes = [
   {
@@ -43,6 +42,11 @@ const AppRoutes = [
   {
     path: '/log-report',
     element: <Report key="log-report" />
+  },
+  {
+    path: '/login',
+    element: <LoginPage key="login" />,
+    public: true
   }
 ];
 

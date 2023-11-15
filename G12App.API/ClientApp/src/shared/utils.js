@@ -40,4 +40,19 @@ const FromBRDate = (dateString) => {
     return null;
 }
 
-export { HandleDateMask, ToBRDate, FromBRDate }
+const StringifyResponseErrors = (errors) => {
+    if(errors == null)
+        return '';
+
+    var response = [];
+    for (let key of Object.keys(errors)) {
+        for (let error of errors[key]) {
+            response.push(error);
+            response.push(<br />);
+        }
+    }
+    
+    return response;
+};
+
+export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors }

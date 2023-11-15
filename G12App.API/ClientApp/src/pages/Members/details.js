@@ -3,14 +3,17 @@ import { InputGroup, Form, Col, Row, Button, Container, Spinner, FormCheck } fro
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { GetMember, CreateMember, UpdateMember, DeleteMember } from '../../services/Member.service';
 import MemberPicker from '../../components/MemberPicker';
-import { HandleDateMask, FromBRDate, ToBRDate } from '../../shared/utils';
-
-import './style.css';
+import { FromBRDate, ToBRDate, StringifyResponseErrors } from '../../shared/utils';
+import { useToastContext } from '../../contexts/ToastContext';
 import moment from "moment";
 import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
 
+import './style.css';
+
 export const MemberDetails = () => {
+
+    let toastContext = useToastContext();
 
     const emptyMember = {
         id: 0,
@@ -103,18 +106,25 @@ export const MemberDetails = () => {
             }
 
             if (result.isValid) {
-                alert('Cadastro salvo com sucesso!');
-                if(registerMore)
-                    navigate('/new-member', {state: { registerMore: true }});
-                else 
+                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                    description: 'Cadastro salvo com sucesso!'
+                  });
+
+                if (registerMore)
+                    navigate('/new-member', { state: { registerMore: true } });
+                else
                     navigate('/members/' + result.data.id);
             } else {
-                alert('Erro ao salvar cadastro.');
+                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                    description: <>{'Erro ao salvar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
+                  });
             }
 
         }
         catch (e) {
-            alert('Erro ao salvar cadastro.');
+            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+                description: 'Erro de sistema ao salvar cadastro.'
+              });
         }
 
         setLoading(false);
@@ -133,15 +143,21 @@ export const MemberDetails = () => {
             var result = await DeleteMember(member.id);
 
             if (result.isValid) {
-                alert('Cadastro deletado com sucesso!');
+                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                    description: 'Cadastro deletado com sucesso!'
+                  });
                 navigate('/members');
             } else {
-                alert('Erro ao deletar cadastro.');
+                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                    description: <>{'Erro ao deletar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
+                  });
             }
 
         }
         catch (e) {
-            alert('Erro ao deletar cadastro.');
+            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+                description: 'Erro de sistema ao deletar cadastro.'
+              });
         }
 
         setLoading(false);
@@ -238,12 +254,12 @@ export const MemberDetails = () => {
                                     {(params.id && <Button variant="danger" type="submit" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
 
                                     <div className="float-end d-flex">
-                                        {(!params.id ?                                     
-                                        <InputGroup className="pt-1 me-3" as={Col}>
-                                            <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas" 
-                                                onChange={(event) => setRegisterMore(event.target.checked)} /> 
-                                        </InputGroup>: 
-                                        '')}
+                                        {(!params.id ?
+                                            <InputGroup className="pt-1 me-3" as={Col}>
+                                                <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas"
+                                                    onChange={(event) => setRegisterMore(event.target.checked)} />
+                                            </InputGroup> :
+                                            '')}
 
                                         <Button variant="primary" className="ms-3" type="submit" onClick={SaveMember}>
                                             Salvar {(params.id ? "alteracoes" : "cadastro")}

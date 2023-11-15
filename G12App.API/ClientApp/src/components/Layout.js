@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import { NavMenu } from './NavMenu';
+import { useAuthenticationContext } from '../contexts/AuthenticationContext';
 import './style.css';
 
-export class Layout extends Component {
-  static displayName = Layout.name;
+export const Layout = ({children}) => {
+  
+  const displayName = Layout.name;
+  const authContext = useAuthenticationContext();
 
-  render() {
-    return (
-      <div>
-        <NavMenu />
-        <Container tag="main">
-          {this.props.children}
-        </Container>
-      </div>
-    );
-  }
+  return (
+    <div>
+      { authContext.auth.authenticated ? <NavMenu /> : <></> }
+      <Container tag="main" >
+        {children}
+      </Container >
+    </div >
+  );
 }

@@ -70,7 +70,7 @@ const UpdateMember = async (member) => {
         },
     });
 
-    var obj = await response.json();
+    let obj = await response.json();
 
     return obj;
 }

@@ -25,8 +25,8 @@ namespace G12App.Application.Services
         }
         public async Task<ServiceResult<ResponseLoginDTO>> Login(LoginDTO login)
         {
-            if (login == null || string.IsNullOrWhiteSpace(login.UserName))
-                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Usuário não encontrado");
+            if (login == null || string.IsNullOrWhiteSpace(login.UserName) || string.IsNullOrWhiteSpace(login.Password))
+                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Preencha o usuario e senha.");
 
             var query = new Query<MemberFilter>()
             {
@@ -40,10 +40,10 @@ namespace G12App.Application.Services
             var user = result.Data.FirstOrDefault();
 
             if (user == null )
-                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Usuário não encontrado");
+                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Usuário não encontrado.");
 
             if (login.Password != user.Password)
-                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Senha incorreta");
+                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Senha incorreta.");
 
             var response = new ResponseLoginDTO
             {

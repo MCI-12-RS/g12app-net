@@ -4,12 +4,16 @@ using G12App.API.Middleware;
 using G12App.Domain;
 using G12App.Domain.Model;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using G12App.Domain.Messages;
+using Newtonsoft.Json;
 
 namespace G12App.API
 {
@@ -19,8 +23,26 @@ namespace G12App.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters().AddValidatorsFromAssemblyContaining<Member>();
+            builder.Services
+                .AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssemblyContaining<Member>();
+
+
+
             builder.Services.AddControllersWithViews()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        return new BadRequestObjectResult(
+                            new ServiceResult(
+                                context.ModelState.Values
+                                    .SelectMany(x => x.Errors)
+                                    .Select(x => new Error(x.ErrorMessage))
+                            ));
+                    };
+                })
                 .AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;

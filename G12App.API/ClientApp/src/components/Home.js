@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
-import { Alert, Card } from 'react-bootstrap';
+import { Alert, Button, Card } from 'react-bootstrap';
 
-export class Home extends Component {
-  static displayName = Home.name;
+import { useToastContext } from '../contexts/ToastContext';
 
-  render() {
-    return (
-      <>
-        <div>
-          <h1>Dashboard</h1>
-          <hr />
-          
-          <Alert variant="info">Bem-vindo usuário!</Alert>
-        </div>
-      </>
-    );
-  }
-}
+export const Home = () => {
+  const displayName = Home.name;
+
+  let toastContext = useToastContext();
+
+  const addToast = () => {
+    let id = Math.random()*1000;
+    toastContext.addToast({
+      id: id,
+      title: 'Sucesso',
+      hideDelay: 5000,
+      description: 'Mensagem de sucesso ' + id
+    });
+  };
+
+  return (
+    <>
+      <div>
+        <h1>Dashboard</h1>
+        <hr />
+        <Button onClick={addToast}>Adicionar Toast</Button>
+        <Alert variant="info">Bem-vindo usuário!</Alert>
+      </div>
+    </>
+  );
+};
