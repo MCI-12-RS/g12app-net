@@ -49,7 +49,7 @@ namespace G12App.Application.Services
             {
                 UserName = login.UserName,
                 Token = GenerateAccessToken(user),
-                MemberId = user.Id.Value,
+                MemberId = user.Id.GetValueOrDefault(),
                 Name = user.Name,
 
             };

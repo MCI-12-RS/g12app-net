@@ -1,7 +1,8 @@
+import { FetchPrivate } from '../shared/utils';
 
 const SearchMembers = async (search, pagination, sort) => {
     
-    var response = await fetch('/api/member/search', {
+    var response = await FetchPrivate('/api/member/search', {
         method: 'POST',
         body: JSON.stringify({
             "pagination": {
@@ -35,7 +36,7 @@ const SearchMembers = async (search, pagination, sort) => {
 
 const GetMember = async (id) => {
     
-    var response = await fetch('/api/member/' + id, {
+    var response = await FetchPrivate('/api/member/' + id, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
@@ -48,7 +49,7 @@ const GetMember = async (id) => {
 }
 
 const CreateMember = async (member) => {      
-      var response = await fetch('/api/member', {
+      var response = await FetchPrivate('/api/member', {
           method: 'POST',
           body: JSON.stringify(member),
           headers: {
@@ -62,7 +63,7 @@ const CreateMember = async (member) => {
 }
 
 const UpdateMember = async (member) => {
-    var response = await fetch('/api/member/' + member.id, {
+    var response = await FetchPrivate('/api/member/' + member.id, {
         method: 'PUT',
         body: JSON.stringify(member),
         headers: {
@@ -76,7 +77,7 @@ const UpdateMember = async (member) => {
 }
 
 const DeleteMember = async (id) => {      
-    var response = await fetch('/api/member/' + id, {
+    var response = await FetchPrivate('/api/member/' + id, {
         method: 'DELETE',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',

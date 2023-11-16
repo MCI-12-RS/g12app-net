@@ -34,6 +34,12 @@ const AuthenticationContextProvider = ({ children }) => {
         });
     };
 
+    const getHeaders = () => {
+        return {
+            'Authorization': 'Bearer ' + auth.user.token
+        };
+    };
+
     useEffect(() => {
         const storedAuth = localStorage.getItem('auth');
         if (storedAuth) {
@@ -43,10 +49,12 @@ const AuthenticationContextProvider = ({ children }) => {
 
     useEffect(() => {
         localStorage.setItem('auth', JSON.stringify(auth));
+        localStorage.setItem('authDate', new Date());
+        localStorage.setItem('jwtToken', auth?.user?.token);
     }, [auth]);
 
     return (
-        <Provider value={{ auth, logOff, logIn }}>
+        <Provider value={{ auth, logOff, logIn, getHeaders }}>
             {children}
         </Provider>
     );

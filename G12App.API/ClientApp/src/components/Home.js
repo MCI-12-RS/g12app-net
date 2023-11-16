@@ -23,8 +23,6 @@ export const Home = () => {
       <div>
         <h1>Dashboard</h1>
         <hr />
-        <Button onClick={addToast}>Adicionar Toast</Button>
-        <Alert variant="info">Bem-vindo usuário!</Alert>
       </div>
     </>
   );

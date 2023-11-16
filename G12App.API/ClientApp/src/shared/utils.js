@@ -55,4 +55,17 @@ const StringifyResponseErrors = (errors) => {
     return response;
 };
 
-export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors }
+const FetchPrivate = (url, options = {}) => {
+    var token = localStorage.getItem('jwtToken');
+
+  if (token) {
+    options.headers = {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
+  return fetch(url, options);
+};
+
+export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors, FetchPrivate };

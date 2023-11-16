@@ -1,62 +1,53 @@
-import React, { Component } from 'react';
-import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import React from 'react';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+
+import { useAuthenticationContext } from '../../contexts/AuthenticationContext';
 
 import './style.css';
 import logo from '../../images/logo.png';
 
-export class NavMenu extends Component {
-  static displayName = NavMenu.name;
+export const NavMenu = () => {
 
-  constructor (props) {
-    super(props);
+  const authContext = useAuthenticationContext();
 
-    this.toggleNavbar = this.toggleNavbar.bind(this);
-    this.state = {
-      collapsed: true
-    };
-  }
+  return (
+    <header>
+      <Navbar expand="lg" className="bg-body-tertiary" bg="dark">
+        <Container>
+          <Navbar.Brand as={Link} to="/">
+            <img className="logo" width="64" height="64" src={logo} />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
 
-  toggleNavbar () {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  }
+              <NavDropdown title="Pessoas" id="basic-nav-dropdown" renderMenuOnMount={true}>
+                <NavDropdown.Item as={Link} to="/members">Gerenciar pessoas</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/new-member">Cadastrar pessoa</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item as={Link} to="/ministries">Ver ministérios</NavDropdown.Item>
+              </NavDropdown>
 
-  render() {
-    return (
-      <header>        
-        <Navbar expand="lg" className="bg-body-tertiary" bg="dark">
-            <Container>
-            <Navbar.Brand as={Link} to="/">
-              <img className="logo" width="64" height="64" src={logo} />
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto">
-                <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
-               
-                <NavDropdown title="Pessoas" id="basic-nav-dropdown" renderMenuOnMount={true}>
-                  <NavDropdown.Item as={Link} to="/members">Gerenciar pessoas</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/new-member">Cadastrar pessoa</NavDropdown.Item>
-                  <NavDropdown.Divider />                  
-                  <NavDropdown.Item as={Link} to="/ministries">Ver ministérios</NavDropdown.Item>
-                </NavDropdown>
-                
-                <NavDropdown title="Células" id="basic-nav-dropdown" renderMenuOnMount={true}>
-                  <NavDropdown.Item as={Link} to="/cells">Gerenciar células</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/new-cell">Cadastrar célula</NavDropdown.Item>
-                  <NavDropdown.Divider /> 
-                  <NavDropdown.Item as={Link} to="/log-report">Registrar relatório</NavDropdown.Item>
+              <NavDropdown title="Células" id="basic-nav-dropdown" renderMenuOnMount={true}>
+                <NavDropdown.Item as={Link} to="/cells">Gerenciar células</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/new-cell">Cadastrar célula</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item as={Link} to="/log-report">Registrar relatório</NavDropdown.Item>
 
-                </NavDropdown> 
-                
-              </Nav>
-            
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-      </header>
-    );
-  }
-}
+              </NavDropdown>
+
+            </Nav>
+
+            <Nav className="ml-auto">
+              <Nav.Link className="greeting-text">Ola {authContext.auth.user.name}!</Nav.Link> 
+              <Nav.Link onClick={authContext.logOff}>Sair</Nav.Link>
+            </Nav>
+
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
+  );
+};

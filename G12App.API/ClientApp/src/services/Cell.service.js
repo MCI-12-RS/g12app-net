@@ -1,6 +1,7 @@
+import { FetchPrivate } from '../shared/utils';
 
 const SearchCells = async (search, pagination, sort) => {
-    var response = await fetch('/api/cell/search', {
+    var response = await FetchPrivate('/api/cell/search', {
         method: 'POST',
         body: JSON.stringify({
             "pagination":{
@@ -35,7 +36,7 @@ const SearchCells = async (search, pagination, sort) => {
 }
 
 const GetCell = async (id) => {
-    var response = await fetch('/api/cell/' + id, {
+    var response = await FetchPrivate('/api/cell/' + id, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json; charset=UTF-8'
@@ -49,7 +50,7 @@ const GetCell = async (id) => {
 }
 
 const CreateCell = async (cell) => {
-    var response = await fetch('/api/cell', {
+    var response = await FetchPrivate('/api/cell', {
         method: 'POST',
         body: JSON.stringify(cell),
         headers: {
@@ -63,7 +64,7 @@ const CreateCell = async (cell) => {
 }
 
 const UpdateCell = async (cell) => {
-    var response = await fetch('/api/cell/' + cell.id, {
+    var response = await FetchPrivate('/api/cell/' + cell.id, {
         method: 'PUT',
         body: JSON.stringify(cell),
         headers: {
@@ -77,7 +78,7 @@ const UpdateCell = async (cell) => {
 }
 
 const DeleteCell = async (id) => {
-    var response = await fetch('/api/cell/' + id, {
+    var response = await FetchPrivate('/api/cell/' + id, {
         method: 'DELETE',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
