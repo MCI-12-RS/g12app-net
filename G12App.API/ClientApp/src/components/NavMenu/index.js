@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Badge } from 'react-bootstrap';
 import { Link, useLocation } from "react-router-dom";
 
 import { useToastContext } from '../../contexts/ToastContext';
@@ -15,13 +15,13 @@ export const NavMenu = () => {
 
   const doLogoff = () => {
     authContext.logOff();
-    
+
     toastContext.addToast({
       title: 'Ate a proxima!', hideDelay: 5000,
       description: 'Logout efetuado com sucesso.'
-  });
+    });
   }
-  
+
   return (
     <header>
       <Navbar expand="lg" className="bg-body-tertiary" bg="dark">
@@ -52,7 +52,10 @@ export const NavMenu = () => {
             </Nav>
 
             <Nav className="ml-auto">
-              <Nav.Link className="greeting-text">Logado como: {authContext.auth.user.name}</Nav.Link> 
+
+              <Nav.Link className="greeting-text">
+                <Badge pill bg="info" text="dark">Logado como: {authContext.auth.user.name}</Badge>
+              </Nav.Link>
               <Nav.Link onClick={doLogoff}>Sair</Nav.Link>
             </Nav>
 

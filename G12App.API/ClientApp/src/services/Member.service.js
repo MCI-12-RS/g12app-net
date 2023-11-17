@@ -1,7 +1,6 @@
 import { FetchPrivate } from '../shared/utils';
 
 const SearchMembers = async (search, pagination, sort) => {
-    
     var response = await FetchPrivate('/api/member/search', {
         method: 'POST',
         body: JSON.stringify({

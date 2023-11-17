@@ -47,10 +47,8 @@ export const LoginPage = () => {
                 });
 
                 setErrorMessage(<>&nbsp;</>);
-
-                navigate(location.state?.from?.pathname ?? '/');
             }
-            else {                
+            else {
                 setLoading(false);
                 setErrorMessage(response.errors.map(x => <>{x.errorMessage}<br /></>));
             }
@@ -80,7 +78,7 @@ export const LoginPage = () => {
         <Container fluid className="login">
 
             <img className="logo" width="200" height="200" src={logo} />
-            
+
             {loading ? <Spinner animation="border" /> : <></>}
 
             <Form className={loading ? 'invisible' : ''}>
@@ -107,6 +105,7 @@ export const LoginPage = () => {
 
                 <Row>
                     <small className="login-error">{errorMessage}</small>
+                    <small className="login-error">&nbsp;</small>
                 </Row>
 
                 <Row className="mb-3 pr-0">
