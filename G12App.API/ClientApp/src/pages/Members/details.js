@@ -258,7 +258,7 @@ export const MemberDetails = () => {
                                 <Row className="mb-3 pr-0 d-flex">
 
                                     <Col xs={12}>
-                                        {(params.id && <Button variant="danger" type="submit" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
+                                        {(params.id && <Button variant="danger" type="button" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
 
                                         <div className="float-end d-flex">
                                             {(!params.id ?

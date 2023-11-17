@@ -73,3 +73,16 @@ html {
 .greeting-text{
   cursor: default;
 }
+
+.navbar .nav-link, .navbar .nav-item {
+  font-weight: bold;
+}
+
+.navbar * {
+  text-transform: uppercase;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.navbar .badge {
+  zoom: 1.1;
+}

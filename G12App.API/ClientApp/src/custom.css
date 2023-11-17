@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+
+* {
+  font-family: 'Roboto';
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: uppercase;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+}
+
+input, textarea, select, button {
+  font-family: 'Arial', sans-serif;
+}
+
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;

@@ -69,6 +69,7 @@ const FetchPrivate = (url, options = {}) => {
 };
 
 const FormatMemberPickerLabel = (member) => {
+    if(member == null) return '';
     var leader = (member.computedG12Leader ?? member.computedLeadershipName);
     if (leader) leader += ' / ';
     return (leader ?? '') + member.name;

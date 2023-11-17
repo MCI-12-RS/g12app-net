@@ -27,7 +27,7 @@ export const Cells = () => {
       name: 'Liderança',
       render: (cell) => <>
         <span><b>Líder: </b>{cell.lead?.name}</span><br />
-        <span><b>G12: </b>{cell.lead?.leadership?.name}</span>
+        <span><b>G12: </b>{cell.lead?.computedG12Leader}</span>
       </>
     },
     {

@@ -25,7 +25,7 @@ const ToastContextProvider = ({ children }) => {
       <ToastContainer
           className="p-3"
           position="bottom-end"          
-          style={{ zIndex: 1 }}
+          style={{ zIndex: 9 + " !important" }}
         >
       {toasts.map((toast) => (
         <Toast
