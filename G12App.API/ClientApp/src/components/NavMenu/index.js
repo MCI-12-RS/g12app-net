@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { useToastContext } from '../../contexts/ToastContext';
 import { useAuthenticationContext } from '../../contexts/AuthenticationContext';
@@ -21,7 +21,7 @@ export const NavMenu = () => {
       description: 'Logout efetuado com sucesso.'
   });
   }
-
+  
   return (
     <header>
       <Navbar expand="lg" className="bg-body-tertiary" bg="dark">

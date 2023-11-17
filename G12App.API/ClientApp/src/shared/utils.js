@@ -68,4 +68,10 @@ const FetchPrivate = (url, options = {}) => {
   return fetch(url, options);
 };
 
-export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors, FetchPrivate };
+const FormatMemberPickerLabel = (member) => {
+    var leader = (member.computedG12Leader ?? member.computedLeadershipName);
+    if (leader) leader += ' / ';
+    return (leader ?? '') + member.name;
+};
+
+export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors, FetchPrivate, FormatMemberPickerLabel };

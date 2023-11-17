@@ -35,7 +35,7 @@ namespace G12App.Workers
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                //await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
                 await using var scope = _serviceProvider.CreateAsyncScope();
                 var memberService = scope.ServiceProvider.GetRequiredService<IMemberService>();
                 try
@@ -77,7 +77,7 @@ namespace G12App.Workers
 
                 foreach (var children in result.Data.Where(x => x.Id.HasValue))
                 {
-                    await memberService.ConsolidateMemberComputedData(children.Id.Value);
+                    await memberService.ConsolidateMemberComputedData(children.Id.GetValueOrDefault());
                     await ConsolidateChildrenMembersData(memberService, children);
                 }
 

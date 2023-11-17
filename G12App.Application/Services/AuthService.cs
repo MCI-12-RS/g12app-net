@@ -39,7 +39,7 @@ namespace G12App.Application.Services
             var result = await _memberService.GetMembers(query);
             var user = result.Data.FirstOrDefault();
 
-            if (user == null )
+            if (user == null)
                 return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Usuário não encontrado.");
 
             if (login.Password != user.Password)
@@ -64,9 +64,9 @@ namespace G12App.Application.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, member.Name),
-                    new Claim("MemberId", member.Id.ToString()),
-                    new Claim(ClaimTypes.Email, member.Email),
+                    new(ClaimTypes.Name, member.Name),
+                    new("MemberId", member.Id.ToString()),
+                    new(ClaimTypes.Email, member.Email),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

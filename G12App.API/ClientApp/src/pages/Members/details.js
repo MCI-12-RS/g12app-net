@@ -3,7 +3,7 @@ import { InputGroup, Form, Col, Row, Button, Container, Spinner, FormCheck } fro
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { GetMember, CreateMember, UpdateMember, DeleteMember } from '../../services/Member.service';
 import MemberPicker from '../../components/MemberPicker';
-import { FromBRDate, ToBRDate, StringifyResponseErrors } from '../../shared/utils';
+import { FromBRDate, ToBRDate, StringifyResponseErrors, FormatMemberPickerLabel } from '../../shared/utils';
 import { useToastContext } from '../../contexts/ToastContext';
 import moment from "moment";
 import { AddressDetails } from "../../components/Address";
@@ -246,7 +246,7 @@ export const MemberDetails = () => {
                                         <MemberPicker label="Lideranca"
                                             setValue={(value) => handleSelectChangeEvent('leadershipId', value)}
                                             notInIds={[member.id]}
-                                            selectedLabel={member.leadership?.name}
+                                            selectedLabel={FormatMemberPickerLabel(member.leadership)}
                                             selectedValue={member.leadership?.id} />
                                     </Col>
                                 </Row>

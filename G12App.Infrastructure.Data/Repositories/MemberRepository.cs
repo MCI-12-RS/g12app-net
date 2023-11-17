@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using G12App.Domain.Extensions;
+﻿using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
@@ -78,6 +77,8 @@ namespace G12App.Infrastructure.Data.Repositories
         {
             _context.Attach(member);
             _context.Entry(member).State = EntityState.Modified;
+            if (member.HomeAddress != null)
+                _context.Entry(member.HomeAddress).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return member;
         }

@@ -4,7 +4,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { CreateCell, DeleteCell, GetCell, UpdateCell } from '../../services/Cell.service';
 import MemberPicker from '../../components/MemberPicker';
 import { useToastContext } from '../../contexts/ToastContext';
-import { StringifyResponseErrors } from '../../shared/utils';
+import { StringifyResponseErrors, FormatMemberPickerLabel } from '../../shared/utils';
 import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
 
@@ -171,21 +171,21 @@ export const CellDetails = () => {
                                 <Col>
                                     <MemberPicker label="Líder"
                                         setValue={(value) => handleSelectChangeEvent('leadId', value)}
-                                        selectedLabel={cell.lead?.name}
+                                        selectedLabel={FormatMemberPickerLabel(cell.lead)}
                                         selectedValue={cell.lead?.id} />
                                 </Col>
 
                                 <Col>
                                     <MemberPicker label="Timóteo"
                                         setValue={(value) => handleSelectChangeEvent('timothyId', value)}
-                                        selectedLabel={cell.timothy?.name}
+                                        selectedLabel={FormatMemberPickerLabel(cell.timothy)}
                                         selectedValue={cell.timothy?.id} />
                                 </Col>
 
                                 <Col>
                                     <MemberPicker label="Anfitrião"
                                         setValue={(value) => handleSelectChangeEvent('hostId', value)}
-                                        selectedLabel={cell.host?.name}
+                                        selectedLabel={FormatMemberPickerLabel(cell.host)}
                                         selectedValue={cell.host?.id} />
                                 </Col>
                             </Row>

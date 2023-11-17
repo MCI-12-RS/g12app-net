@@ -1,5 +1,8 @@
 ﻿using G12App.Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace G12App.Infrastructure.Data.Context
 {
@@ -29,99 +32,76 @@ namespace G12App.Infrastructure.Data.Context
 
         private static void SeedData(ModelBuilder builder)
         {
-            builder.Entity<Address>().HasData(new Address()
-            {
-                Id = 1,
-                Street = "Biguas",
-                Number = "600",
-                City = "Alvorada",
-                Neighborhood = "Porto Verde",
-                Notes = string.Empty,
-                PostalCode = "94858540",
-                State = "RS",
-            });
-
-            builder.Entity<Address>().HasData(new Address()
-            {
-                Id = 2,
-                Street = "Oscar Schick",
-                Number = "0",
-                City = "Alvorada",
-                Neighborhood = "Formosa",
-                Notes = string.Empty,
-                PostalCode = "00000000",
-                State = "RS",
-            });
-
-            builder.Entity<Address>().HasData(new Address()
-            {
-                Id = 3,
-                Street = "Rua da Figueira",
-                Number = "0",
-                City = "Alvorada",
-                Neighborhood = "Sumare",
-                Notes = string.Empty,
-                PostalCode = "00000000",
-                State = "RS",
-            });
+            var pass1 = MD5.HashData(Encoding.UTF8.GetBytes("rafael")).Aggregate(string.Empty, (a, b) => a += b.ToString("x2"));
+            var pass2 = MD5.HashData(Encoding.UTF8.GetBytes("adriano")).Aggregate(string.Empty, (a, b) => a += b.ToString("x2"));
 
             builder.Entity<Member>().HasData(new Member()
             {
                 Id = 1,
                 Name = "Samuel Colares",
-                BirthDate = new System.DateTime(1993, 05, 10),
-                Email = "aaaaa@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
-                HomeAddressId = 2,
-                MinistryLevel = 0
+                MinistryLevel = 1
             });
 
             builder.Entity<Member>().HasData(new Member()
             {
                 Id = 2,
                 Name = "Eduardo Coelho",
-                BirthDate = new System.DateTime(1993, 05, 10),
-                Email = "bbbbbb@gmail.com",
                 Gender = Domain.Model.Enum.Gender.Male,
-                HomeAddressId = 3,
                 LeadershipId = 1,
-                MinistryLevel = 1,
+                MinistryLevel = 12,
             });
 
             builder.Entity<Member>().HasData(new Member()
             {
                 Id = 3,
-                Name = "Rafael Alves",
-                BirthDate = new System.DateTime(1993, 05, 10),
-                Email = "rafaeljorgealves@gmail.com",
-                Gender = Domain.Model.Enum.Gender.Male,
-                HomeAddressId = 1,
-                LeadershipId = 2,
-                MinistryLevel = 2,
+                Name = "Anderson Pereira",
+                LeadershipId = 1,
+                MinistryLevel = 12,
             });
 
-            builder.Entity<Cell>().HasData(new Cell()
+            builder.Entity<Member>().HasData(new Member()
+            {
+                Id = 4,
+                Name = "Rafael Alves",
+                Email = "rafaeljorgealves@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                Password = pass1,
+                LeadershipId = 2,
+                MinistryLevel = 144,
+            });
+
+            builder.Entity<Member>().HasData(new Member()
+            {
+                Id = 5,
+                Name = "Adriano Ramos",
+                Email = "adrircorrea123@gmail.com",
+                Gender = Domain.Model.Enum.Gender.Male,
+                Password = pass2,
+                LeadershipId = 3,
+                MinistryLevel = 144,
+            });
+
+            builder.Entity<Cell>().HasData(new Cell
             {
                 Id = 1,
-                LeadId = 3,
-                HostId = 3,
-                TimothyId = 2,
-                WeekDay = System.DayOfWeek.Tuesday,
-                PlaceId = 1,
-                Time = new System.TimeOnly(20, 00).ToString(),
+                LeadId = 4,
+                HostId = 4,
+                TimothyId = 4,
+                WeekDay = System.DayOfWeek.Thursday,
+                Time = new System.TimeOnly(20, 30).ToString(),
                 CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,
             });
 
-            builder.Entity<Cell>().HasData(new Cell()
+            builder.Entity<Cell>().HasData(new Cell
             {
                 Id = 2,
-                LeadId = 2,
-                HostId = 3,
-                TimothyId = 2,
-                WeekDay = System.DayOfWeek.Wednesday,
-                PlaceId = 3,
-                CellType = Domain.Model.Enum.CellType.Discipleship,
+                LeadId = 5,
+                HostId = 5,
+                TimothyId = 5,
+                WeekDay = System.DayOfWeek.Saturday,
+                CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,
             });
         }

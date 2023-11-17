@@ -5,6 +5,7 @@ import { useAuthenticationContext } from "../../contexts/AuthenticationContext";
 import './style.css';
 import { Login } from "../../services/Auth.service";
 import { useNavigate, useLocation } from "react-router-dom";
+import md5 from 'md5';
 
 import logo from '../../images/logo-login.png';
 
@@ -13,6 +14,7 @@ export const LoginPage = () => {
     const toastContext = useToastContext();
     const authContext = useAuthenticationContext();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const emptyLogin = {
         userName: '',
@@ -33,7 +35,7 @@ export const LoginPage = () => {
 
         try {
             setLoading(true);
-            var response = await Login(login);
+            var response = await Login({ ...login, password: md5(login.password) });
 
             if (response.isValid) {
 
@@ -45,7 +47,8 @@ export const LoginPage = () => {
                 });
 
                 setErrorMessage(<>&nbsp;</>);
-                navigate('/');
+
+                navigate(location.state?.from?.pathname ?? '/');
             }
             else {                
                 setLoading(false);
@@ -64,7 +67,8 @@ export const LoginPage = () => {
 
     const checkRedirect = () => {
         if (authContext.auth.authenticated) {
-            navigate('/');
+            setLoading(true);
+            navigate(location.state?.from?.pathname ?? '/', { replace: true });
         }
     };
 
