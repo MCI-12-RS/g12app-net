@@ -1,6 +1,14 @@
 .container-fluid.login {
     max-width: 400px;
-    margin: 50px auto 0 auto;
+    margin: 20px auto 0 auto;
+    background-color: rgba(100, 100, 100, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.container-fluid.login invisible {
+    opacity: 0;
 }
 
 .container-fluid.login hr {
@@ -9,4 +17,22 @@
 
 .container-fluid.login .login-error{
     color: brown;
+}
+
+.container-fluid.login > img {
+    display: block;    
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.container-fluid.login button {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.container-fluid.login .spinner-border {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
 }

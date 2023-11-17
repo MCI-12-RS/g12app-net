@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
+import { useToastContext } from '../../contexts/ToastContext';
 import { useAuthenticationContext } from '../../contexts/AuthenticationContext';
 
 import './style.css';
@@ -9,7 +10,17 @@ import logo from '../../images/logo.png';
 
 export const NavMenu = () => {
 
+  const toastContext = useToastContext();
   const authContext = useAuthenticationContext();
+
+  const doLogoff = () => {
+    authContext.logOff();
+    
+    toastContext.addToast({
+      title: 'Ate a proxima!', hideDelay: 5000,
+      description: 'Logout efetuado com sucesso.'
+  });
+  }
 
   return (
     <header>
@@ -41,8 +52,8 @@ export const NavMenu = () => {
             </Nav>
 
             <Nav className="ml-auto">
-              <Nav.Link className="greeting-text">Ola {authContext.auth.user.name}!</Nav.Link> 
-              <Nav.Link onClick={authContext.logOff}>Sair</Nav.Link>
+              <Nav.Link className="greeting-text">Logado como: {authContext.auth.user.name}</Nav.Link> 
+              <Nav.Link onClick={doLogoff}>Sair</Nav.Link>
             </Nav>
 
           </Navbar.Collapse>

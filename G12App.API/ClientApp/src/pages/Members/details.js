@@ -106,25 +106,28 @@ export const MemberDetails = () => {
             }
 
             if (result.isValid) {
-                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                toastContext.addToast({
+                    title: 'Sucesso', hideDelay: 5000,
                     description: 'Cadastro salvo com sucesso!'
-                  });
+                });
 
                 if (registerMore)
                     navigate('/new-member', { state: { registerMore: true } });
                 else
                     navigate('/members/' + result.data.id);
             } else {
-                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                toastContext.addToast({
+                    title: 'Erro', hideDelay: 10000,
                     description: <>{'Erro ao salvar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
-                  });
+                });
             }
 
         }
         catch (e) {
-            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
                 description: 'Erro de sistema ao salvar cadastro.'
-              });
+            });
         }
 
         setLoading(false);
@@ -143,21 +146,24 @@ export const MemberDetails = () => {
             var result = await DeleteMember(member.id);
 
             if (result.isValid) {
-                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                toastContext.addToast({
+                    title: 'Sucesso', hideDelay: 5000,
                     description: 'Cadastro deletado com sucesso!'
-                  });
+                });
                 navigate('/members');
             } else {
-                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                toastContext.addToast({
+                    title: 'Erro', hideDelay: 10000,
                     description: <>{'Erro ao deletar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
-                  });
+                });
             }
 
         }
         catch (e) {
-            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
                 description: 'Erro de sistema ao deletar cadastro.'
-              });
+            });
         }
 
         setLoading(false);
@@ -170,105 +176,107 @@ export const MemberDetails = () => {
             {loading ?
                 (<Spinner animation="border" />) : (
                     <>
-                        <Container fluid>
-                            <h6>Dados pessoais</h6>
-                            <Row className="mb-3 pr-0 justify-content-md-center">
-                                <Col>
-                                    <InputGroup className="mb-3" as={Col}>
-                                        <InputGroup.Text id="basic-addon1">Nome</InputGroup.Text>
-                                        <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['name']} />
-                                    </InputGroup>
-                                </Col>
+                        <Form>
+                            <Container fluid>
+                                <h6>Dados pessoais</h6>
+                                <Row className="mb-3 pr-0 justify-content-md-center">
+                                    <Col>
+                                        <InputGroup className="mb-3" as={Col}>
+                                            <InputGroup.Text id="basic-addon1">Nome</InputGroup.Text>
+                                            <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['name']} />
+                                        </InputGroup>
+                                    </Col>
 
-                                <Col>
-                                    <InputGroup className="mb-3 pr-0" as={Col}>
-                                        <InputGroup.Text id="basic-addon2">Email</InputGroup.Text>
-                                        <Form.Control name="email" aria-describedby="basic-addon2" onChange={handleChangeEvent}
-                                            value={member.email} />
-                                    </InputGroup>
-                                </Col>
+                                    <Col>
+                                        <InputGroup className="mb-3 pr-0" as={Col}>
+                                            <InputGroup.Text id="basic-addon2">Email</InputGroup.Text>
+                                            <Form.Control name="email" aria-describedby="basic-addon2" onChange={handleChangeEvent}
+                                                value={member.email} />
+                                        </InputGroup>
+                                    </Col>
 
-                                <Col>
-                                    <InputGroup className="mb-3 pr-0" as={Col}>
-                                        <InputGroup.Text id="basic-addon2">Sexo</InputGroup.Text>
-                                        <Form.Select name="gender" defaultValue={member.gender} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
-                                            <option value="Male">Masculino</option>
-                                            <option value="Female">Feminino</option>
-                                        </Form.Select>
-                                    </InputGroup>
-                                </Col>
-                            </Row>
+                                    <Col>
+                                        <InputGroup className="mb-3 pr-0" as={Col}>
+                                            <InputGroup.Text id="basic-addon2">Sexo</InputGroup.Text>
+                                            <Form.Select name="gender" defaultValue={member.gender} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
+                                                <option value="Male">Masculino</option>
+                                                <option value="Female">Feminino</option>
+                                            </Form.Select>
+                                        </InputGroup>
+                                    </Col>
+                                </Row>
 
-                            <Row className="mb-3 pr-0 justify-content-md-center">
-                                <Col>
+                                <Row className="mb-3 pr-0 justify-content-md-center">
+                                    <Col>
 
-                                    <InputGroup className="mb-3 pr-0" as={Col}>
-                                        <InputGroup.Text id="basic-addon2">Data de Nascimento</InputGroup.Text>
-                                        <InputMask mask="99/99/9999" value={member['birthDate']} onChange={handleChangeEvent}>
-                                            <Form.Control type="text" name="birthDate"
-                                                aria-describedby="basic-addon2" />
-                                        </InputMask>
-                                        <InputGroup.Text id="basic-addon2">{getAge() + ' anos'}</InputGroup.Text>
-                                    </InputGroup>
-                                </Col>
+                                        <InputGroup className="mb-3 pr-0" as={Col}>
+                                            <InputGroup.Text id="basic-addon2">Data de Nascimento</InputGroup.Text>
+                                            <InputMask mask="99/99/9999" value={member['birthDate']} onChange={handleChangeEvent}>
+                                                <Form.Control type="text" name="birthDate"
+                                                    aria-describedby="basic-addon2" />
+                                            </InputMask>
+                                            <InputGroup.Text id="basic-addon2">{getAge() + ' anos'}</InputGroup.Text>
+                                        </InputGroup>
+                                    </Col>
 
-                                <Col>
-                                    <InputGroup className="mb-3 pr-0" as={Col}>
-                                        <InputGroup.Text id="basic-addon2">Celular / Whatsapp</InputGroup.Text>
-                                        <InputMask mask="(99) 99999-9999" value={member['mobileNumber']} onChange={handleChangeEvent}>
-                                            <Form.Control name="mobileNumber" aria-describedby="basic-addon2" />
-                                        </InputMask>
-                                    </InputGroup>
-                                </Col>
+                                    <Col>
+                                        <InputGroup className="mb-3 pr-0" as={Col}>
+                                            <InputGroup.Text id="basic-addon2">Celular / Whatsapp</InputGroup.Text>
+                                            <InputMask mask="(99) 99999-9999" value={member['mobileNumber']} onChange={handleChangeEvent}>
+                                                <Form.Control name="mobileNumber" aria-describedby="basic-addon2" />
+                                            </InputMask>
+                                        </InputGroup>
+                                    </Col>
 
-                                <Col>
-                                    <InputGroup className="mb-3" as={Col}>
-                                        <InputGroup.Text id="basic-addon1">Telefone</InputGroup.Text>
-                                        <InputMask mask="(99) 9999-9999" value={member['phoneNumber']} onChange={handleChangeEvent}>
-                                            <Form.Control name="phoneNumber" aria-describedby="basic-addon1" />
-                                        </InputMask>
-                                    </InputGroup>
-                                </Col>
-                            </Row>
-                        </Container>
+                                    <Col>
+                                        <InputGroup className="mb-3" as={Col}>
+                                            <InputGroup.Text id="basic-addon1">Telefone</InputGroup.Text>
+                                            <InputMask mask="(99) 9999-9999" value={member['phoneNumber']} onChange={handleChangeEvent}>
+                                                <Form.Control name="phoneNumber" aria-describedby="basic-addon1" />
+                                            </InputMask>
+                                        </InputGroup>
+                                    </Col>
+                                </Row>
+                            </Container>
 
-                        <Container fluid>
-                            <h6>Ministerial</h6>
-                            <Row className="mb-3 pr-0 justify-content-md-center">
-                                <Col>
-                                    <MemberPicker label="Lideranca"
-                                        setValue={(value) => handleSelectChangeEvent('leadershipId', value)}
-                                        notInIds={[member.id]}
-                                        selectedLabel={member.leadership?.name}
-                                        selectedValue={member.leadership?.id} />
-                                </Col>
-                            </Row>
-                        </Container>
+                            <Container fluid>
+                                <h6>Ministerial</h6>
+                                <Row className="mb-3 pr-0 justify-content-md-center">
+                                    <Col>
+                                        <MemberPicker label="Lideranca"
+                                            setValue={(value) => handleSelectChangeEvent('leadershipId', value)}
+                                            notInIds={[member.id]}
+                                            selectedLabel={member.leadership?.name}
+                                            selectedValue={member.leadership?.id} />
+                                    </Col>
+                                </Row>
+                            </Container>
 
-                        <AddressDetails address={member.homeAddress} setAddress={(address) => handleSelectChangeEvent('homeAddress', address)} />
+                            <AddressDetails address={member.homeAddress} setAddress={(address) => handleSelectChangeEvent('homeAddress', address)} />
 
-                        <Container fluid>
-                            <Row className="mb-3 pr-0 d-flex">
+                            <Container fluid>
+                                <Row className="mb-3 pr-0 d-flex">
 
-                                <Col xs={12}>
-                                    {(params.id && <Button variant="danger" type="submit" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
+                                    <Col xs={12}>
+                                        {(params.id && <Button variant="danger" type="submit" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
 
-                                    <div className="float-end d-flex">
-                                        {(!params.id ?
-                                            <InputGroup className="pt-1 me-3" as={Col}>
-                                                <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas"
-                                                    onChange={(event) => setRegisterMore(event.target.checked)} />
-                                            </InputGroup> :
-                                            '')}
+                                        <div className="float-end d-flex">
+                                            {(!params.id ?
+                                                <InputGroup className="pt-1 me-3" as={Col}>
+                                                    <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas"
+                                                        onChange={(event) => setRegisterMore(event.target.checked)} />
+                                                </InputGroup> :
+                                                '')}
 
-                                        <Button variant="primary" className="ms-3" type="submit" onClick={SaveMember}>
-                                            Salvar {(params.id ? "alteracoes" : "cadastro")}
-                                        </Button>
-                                    </div>
-                                </Col>
+                                            <Button variant="primary" className="ms-3" type="submit" onClick={SaveMember}>
+                                                Salvar {(params.id ? "alteracoes" : "cadastro")}
+                                            </Button>
+                                        </div>
+                                    </Col>
 
-                            </Row>
-                        </Container>
+                                </Row>
+                            </Container>
+                        </Form>
                     </>
                 )}
         </>

@@ -78,7 +78,7 @@ export const Report = () => {
         if (result.isValid) {
             setCell(result.data);
             setReport({
-                ...report, 
+                ...report,
                 cellId: result.data.id,
                 hostId: result.data.hostId,
                 timothyId: result.data.timothyId,
@@ -154,111 +154,113 @@ export const Report = () => {
         <>
             <h1>Registrar relatório</h1>
             <>
-                <Container fluid>
-                    <h6>Selecione a célula</h6>
+                <Form>
+                    <Container fluid>
+                        <h6>Selecione a célula</h6>
 
-                    <Row className="mb-3 pr-0">
-                        <Col>
-                            <CellPicker label="Insira o nome do líder:"
-                                setValue={(value) => handleSelectChangeEvent('cellId', value)} />
-                        </Col>
-                    </Row>
+                        <Row className="mb-3 pr-0">
+                            <Col>
+                                <CellPicker label="Insira o nome do líder:"
+                                    setValue={(value) => handleSelectChangeEvent('cellId', value)} />
+                            </Col>
+                        </Row>
 
 
-                    <h6>Dados da Célula</h6>
-                    <Row className="mb-3 pr-0" as={Col}>
-                        <Col>
-                            <InputGroup.Text id="basic-addon1">Líder: {cell.lead?.name}</InputGroup.Text>
-                        </Col>
+                        <h6>Dados da Célula</h6>
+                        <Row className="mb-3 pr-0" as={Col}>
+                            <Col>
+                                <InputGroup.Text id="basic-addon1">Líder: {cell.lead?.name}</InputGroup.Text>
+                            </Col>
 
-                        <Col>
-                            <InputGroup.Text id="basic-addon1">Timóteo: {cell.host?.name}</InputGroup.Text>
-                        </Col>
+                            <Col>
+                                <InputGroup.Text id="basic-addon1">Timóteo: {cell.host?.name}</InputGroup.Text>
+                            </Col>
 
-                        <Col>
-                            <InputGroup.Text id="basic-addon1">Anfitrião: {cell.host?.name}</InputGroup.Text>
-                        </Col>
-                    </Row>
+                            <Col>
+                                <InputGroup.Text id="basic-addon1">Anfitrião: {cell.host?.name}</InputGroup.Text>
+                            </Col>
+                        </Row>
 
-                    <Row className="mb-3 pr-0" as={Col}>
-                        <Col>
-                            <InputGroup.Text id="basic-addon1">Líder G12: {cell.lead?.leadership?.name}</InputGroup.Text>
-                        </Col>
+                        <Row className="mb-3 pr-0" as={Col}>
+                            <Col>
+                                <InputGroup.Text id="basic-addon1">Líder G12: {cell.lead?.leadership?.name}</InputGroup.Text>
+                            </Col>
 
-                        <Col>
-                            <InputGroup.Text id="basic-addon1">Modalidade: {translateCellType(cell.cellType)}</InputGroup.Text>
-                        </Col>
-                    </Row>
+                            <Col>
+                                <InputGroup.Text id="basic-addon1">Modalidade: {translateCellType(cell.cellType)}</InputGroup.Text>
+                            </Col>
+                        </Row>
 
-                    <Row className="mb-3 pr-0" as={Col}>
-                        <Col xs={7}>
-                            <InputGroup.Text id="basic-addon1">Rua: {cell.place?.street}</InputGroup.Text>
-                        </Col>
+                        <Row className="mb-3 pr-0" as={Col}>
+                            <Col xs={7}>
+                                <InputGroup.Text id="basic-addon1">Rua: {cell.place?.street}</InputGroup.Text>
+                            </Col>
 
-                        <Col xs={2}>
-                            <InputGroup.Text id="basic-addon1">Número: {cell.place?.number}</InputGroup.Text>
-                        </Col>
+                            <Col xs={2}>
+                                <InputGroup.Text id="basic-addon1">Número: {cell.place?.number}</InputGroup.Text>
+                            </Col>
 
-                        <Col>
-                            <InputGroup.Text id="basic-addon1">Bairro: {cell.place?.neighborhood}</InputGroup.Text>
-                        </Col>
-                    </Row>
+                            <Col>
+                                <InputGroup.Text id="basic-addon1">Bairro: {cell.place?.neighborhood}</InputGroup.Text>
+                            </Col>
+                        </Row>
 
-                    <Row>
-                        <h6>Dados do Relatório</h6>
-                    </Row>
+                        <Row>
+                            <h6>Dados do Relatório</h6>
+                        </Row>
 
-                    <Row>
-                        <Col>
-                            <InputGroup className="mb-3 pr-0" as={Col}>
-                                <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
-                                <InputMask mask="99/99/9999" value={report.dateOnly} onChange={handleChangeEvent}>
-                                    <Form.Control type="text" name="dateOnly"
-                                        aria-describedby="basic-addon2" />
-                                </InputMask>
-                            </InputGroup>
-                        </Col>
+                        <Row>
+                            <Col>
+                                <InputGroup className="mb-3 pr-0" as={Col}>
+                                    <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
+                                    <InputMask mask="99/99/9999" value={report.dateOnly} onChange={handleChangeEvent}>
+                                        <Form.Control type="text" name="dateOnly"
+                                            aria-describedby="basic-addon2" />
+                                    </InputMask>
+                                </InputGroup>
+                            </Col>
 
-                        <Col>
-                            <InputGroup className="mb-3 pr-0" as={Col}>
-                                <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
-                                <InputMask mask="99:99" value={report.timeOnly} onChange={handleChangeEvent}>
-                                    <Form.Control type="text" name="timeOnly"
-                                        aria-describedby="basic-addon2" />
-                                </InputMask>
-                            </InputGroup>
-                        </Col>
-                    </Row>
+                            <Col>
+                                <InputGroup className="mb-3 pr-0" as={Col}>
+                                    <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
+                                    <InputMask mask="99:99" value={report.timeOnly} onChange={handleChangeEvent}>
+                                        <Form.Control type="text" name="timeOnly"
+                                            aria-describedby="basic-addon2" />
+                                    </InputMask>
+                                </InputGroup>
+                            </Col>
+                        </Row>
 
-                    <Row className="mb-3 pr-0">
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
-                            <Form.Control id="basic-url" name="subject" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
-                        </InputGroup>
-                    </Row>
-
-                    <Row className="mb-3 pr-0">
-                        <Col>
-                            <MemberPicker label="Participantes" isMulti={true}
-                                setValue={(value) => handleSelectChangeEvent('members', value)} />
-                        </Col>
-                    </Row>
-                    <Row>
-
-                        <Col>
+                        <Row className="mb-3 pr-0">
                             <InputGroup className="mb-3" as={Col}>
-                                <InputGroup.Text id="basic-addon3">Visitantes:</InputGroup.Text>
-                                <Form.Control id="basic-url" name="visitors" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
+                                <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
+                                <Form.Control id="basic-url" name="subject" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
                             </InputGroup>
-                        </Col>
-                    </Row>
-                </Container>
+                        </Row>
 
-                <Container fluid>
-                    <Button variant="primary" className="ms-3" type="submit" onClick={submitReport}>
-                        Enviar relatório
-                    </Button>
-                </Container>
+                        <Row className="mb-3 pr-0">
+                            <Col>
+                                <MemberPicker label="Participantes" isMulti={true}
+                                    setValue={(value) => handleSelectChangeEvent('members', value)} />
+                            </Col>
+                        </Row>
+                        <Row>
+
+                            <Col>
+                                <InputGroup className="mb-3" as={Col}>
+                                    <InputGroup.Text id="basic-addon3">Visitantes:</InputGroup.Text>
+                                    <Form.Control id="basic-url" name="visitors" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
+                                </InputGroup>
+                            </Col>
+                        </Row>
+                    </Container>
+
+                    <Container fluid>
+                        <Button variant="primary" className="ms-3" type="submit" onClick={submitReport}>
+                            Enviar relatório
+                        </Button>
+                    </Container>
+                </Form>
             </>
         </>
     )

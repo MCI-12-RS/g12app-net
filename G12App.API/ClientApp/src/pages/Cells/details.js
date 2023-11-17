@@ -95,25 +95,28 @@ export const CellDetails = () => {
             }
 
             if (result.isValid) {
-                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                toastContext.addToast({
+                    title: 'Sucesso', hideDelay: 5000,
                     description: 'Cadastro salvo com sucesso!'
-                  });
+                });
 
                 if (registerMore)
                     navigate('/new-cell', { state: { registerMore: true } });
                 else
                     navigate('/cells/' + result.data.id);
             } else {
-                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                toastContext.addToast({
+                    title: 'Erro', hideDelay: 10000,
                     description: <>{'Erro ao salvar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
-                  });
+                });
             }
 
         }
         catch (e) {
-            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
                 description: 'Erro de sistema ao salvar cadastro.'
-              });
+            });
         }
 
         setLoading(false);
@@ -132,21 +135,24 @@ export const CellDetails = () => {
             var result = await DeleteCell(cell.id);
 
             if (result.isValid) {
-                toastContext.addToast({ title: 'Sucesso', hideDelay: 5000, 
+                toastContext.addToast({
+                    title: 'Sucesso', hideDelay: 5000,
                     description: 'Cadastro deletado com sucesso!'
-                  });
+                });
                 navigate('/cells');
             } else {
-                toastContext.addToast({ title: 'Erro', hideDelay: 10000, 
+                toastContext.addToast({
+                    title: 'Erro', hideDelay: 10000,
                     description: <>{'Erro ao deletar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
-                  });
+                });
             }
 
         }
         catch (e) {
-            toastContext.addToast({ title: 'Erro', hideDelay: 5000, 
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
                 description: 'Erro de sistema ao deletar cadastro.'
-              });
+            });
         }
 
         setLoading(false);
@@ -158,86 +164,88 @@ export const CellDetails = () => {
                 <>
                     {(params.id ? <h1>Alterar cadastro de célula</h1> : <h1>Cadastrar nova célula</h1>)}
                     <hr />
-                    <Container fluid>
-                        <h6>Participantes</h6>
-                        <Row className="mb-3" as={Col}>
-                            <Col>
-                                <MemberPicker label="Líder"
-                                    setValue={(value) => handleSelectChangeEvent('leadId', value)}
-                                    selectedLabel={cell.lead?.name}
-                                    selectedValue={cell.lead?.id} />
-                            </Col>
+                    <Form>
+                        <Container fluid>
+                            <h6>Participantes</h6>
+                            <Row className="mb-3" as={Col}>
+                                <Col>
+                                    <MemberPicker label="Líder"
+                                        setValue={(value) => handleSelectChangeEvent('leadId', value)}
+                                        selectedLabel={cell.lead?.name}
+                                        selectedValue={cell.lead?.id} />
+                                </Col>
 
-                            <Col>
-                                <MemberPicker label="Timóteo"
-                                    setValue={(value) => handleSelectChangeEvent('timothyId', value)}
-                                    selectedLabel={cell.timothy?.name}
-                                    selectedValue={cell.timothy?.id} />
-                            </Col>
+                                <Col>
+                                    <MemberPicker label="Timóteo"
+                                        setValue={(value) => handleSelectChangeEvent('timothyId', value)}
+                                        selectedLabel={cell.timothy?.name}
+                                        selectedValue={cell.timothy?.id} />
+                                </Col>
 
-                            <Col>
-                                <MemberPicker label="Anfitrião"
-                                    setValue={(value) => handleSelectChangeEvent('hostId', value)}
-                                    selectedLabel={cell.host?.name}
-                                    selectedValue={cell.host?.id} />
-                            </Col>
-                        </Row>
-                    </Container>
+                                <Col>
+                                    <MemberPicker label="Anfitrião"
+                                        setValue={(value) => handleSelectChangeEvent('hostId', value)}
+                                        selectedLabel={cell.host?.name}
+                                        selectedValue={cell.host?.id} />
+                                </Col>
+                            </Row>
+                        </Container>
 
-                    <Container fluid>
-                        <h6>Data/Horário</h6>
-                        <Row ClassName="mb-3 pr-0">
-                            <Col>
-                                <InputGroup className="mb-3 pr-0" as={Col}>
-                                    <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
-                                    <Form.Select name="weekDay" defaultValue={cell.weekDay} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
-                                        <option value={null}>Selecione o dia</option>
-                                        <option value="Monday">Segunda-feira</option>
-                                        <option value="Tuesday">Terça-feira</option>
-                                        <option value="Wednesday">Quarta-feira</option>
-                                        <option value="Thursday">Quinta-feira</option>
-                                        <option value="Friday">Sexta-feira</option>
-                                        <option value="Saturday">Sábado</option>
-                                        <option value="Sunday">Domingo</option>
-                                    </Form.Select>
-                                </InputGroup>
-                            </Col>
+                        <Container fluid>
+                            <h6>Data/Horário</h6>
+                            <Row ClassName="mb-3 pr-0">
+                                <Col>
+                                    <InputGroup className="mb-3 pr-0" as={Col}>
+                                        <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
+                                        <Form.Select name="weekDay" defaultValue={cell.weekDay} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
+                                            <option value={null}>Selecione o dia</option>
+                                            <option value="Monday">Segunda-feira</option>
+                                            <option value="Tuesday">Terça-feira</option>
+                                            <option value="Wednesday">Quarta-feira</option>
+                                            <option value="Thursday">Quinta-feira</option>
+                                            <option value="Friday">Sexta-feira</option>
+                                            <option value="Saturday">Sábado</option>
+                                            <option value="Sunday">Domingo</option>
+                                        </Form.Select>
+                                    </InputGroup>
+                                </Col>
 
-                            <Col>
-                                <InputGroup className="mb-3 pr-0" as={Col}>
-                                    <InputGroup.Text id="basic-addon2">Horário</InputGroup.Text>
-                                    <InputMask mask="99:99" value={cell['time']} onChange={handleChangeEvent}>
-                                        <Form.Control name="time" aria-describedby="basic-addon2" />
-                                    </InputMask>
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    </Container>
+                                <Col>
+                                    <InputGroup className="mb-3 pr-0" as={Col}>
+                                        <InputGroup.Text id="basic-addon2">Horário</InputGroup.Text>
+                                        <InputMask mask="99:99" value={cell['time']} onChange={handleChangeEvent}>
+                                            <Form.Control name="time" aria-describedby="basic-addon2" />
+                                        </InputMask>
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                        </Container>
 
-                    <AddressDetails address={cell.place} setAddress={(address) => handleSelectChangeEvent('place', address)} />
+                        <AddressDetails address={cell.place} setAddress={(address) => handleSelectChangeEvent('place', address)} />
 
-                    <Container fluid>
-                        <Row className="mb-3 pr-0 d-flex">
+                        <Container fluid>
+                            <Row className="mb-3 pr-0 d-flex">
 
-                            <Col xs={12}>
-                                {(params.id && <Button variant="danger" type="submit" onClick={DeleteCellPrompt}>Deletar cadastro</Button>)}
+                                <Col xs={12}>
+                                    {(params.id && <Button variant="danger" type="submit" onClick={DeleteCellPrompt}>Deletar cadastro</Button>)}
 
-                                <div className="float-end d-flex">
-                                    {(!params.id ?
-                                        <InputGroup className="pt-1 me-3" as={Col}>
-                                            <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais células"
-                                                onChange={(event) => setRegisterMore(event.target.checked)} />
-                                        </InputGroup> :
-                                        '')}
+                                    <div className="float-end d-flex">
+                                        {(!params.id ?
+                                            <InputGroup className="pt-1 me-3" as={Col}>
+                                                <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais células"
+                                                    onChange={(event) => setRegisterMore(event.target.checked)} />
+                                            </InputGroup> :
+                                            '')}
 
-                                    <Button variant="primary" className="ms-3" type="submit" onClick={SaveCell}>
-                                        Salvar {(params.id ? "alteracoes" : "cadastro")}
-                                    </Button>
-                                </div>
-                            </Col>
+                                        <Button variant="primary" className="ms-3" type="submit" onClick={SaveCell}>
+                                            Salvar {(params.id ? "alteracoes" : "cadastro")}
+                                        </Button>
+                                    </div>
+                                </Col>
 
-                        </Row>
-                    </Container>
+                            </Row>
+                        </Container>
+                    </Form>
                 </>
             )
     )
