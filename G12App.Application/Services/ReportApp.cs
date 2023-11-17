@@ -11,7 +11,6 @@ namespace G12App.Application.Services
     {
         private readonly ICellService _cellService;
         private readonly IReportService _reportService;
-        private readonly IMapper _mapper;
 
         public ReportApp(ICellService cellService, IReportService reportService)
         {
