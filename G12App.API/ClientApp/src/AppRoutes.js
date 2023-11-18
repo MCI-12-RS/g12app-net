@@ -1,4 +1,4 @@
-import { Home } from "./components/Home";
+import { Home } from "./pages/Home";
 import { Cells } from "./pages/Cells";
 import { CellDetails } from "./pages/Cells/details";
 import { Members } from "./pages/Members";

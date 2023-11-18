@@ -37,8 +37,8 @@ export const NavMenu = () => {
               <NavDropdown title="Pessoas" id="basic-nav-dropdown" renderMenuOnMount={true}>
                 <NavDropdown.Item as={Link} to="/members">Gerenciar pessoas</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/new-member">Cadastrar pessoa</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/ministries">Ver ministérios</NavDropdown.Item>
+                {/* <NavDropdown.Divider />
+                <NavDropdown.Item as={Link} to="/ministries">Ver ministérios</NavDropdown.Item> */}
               </NavDropdown>
 
               <NavDropdown title="Células" id="basic-nav-dropdown" renderMenuOnMount={true}>
