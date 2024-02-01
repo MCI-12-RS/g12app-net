@@ -10,7 +10,7 @@ namespace G12App.Domain.DTOs
         public int? Id { get; set; }
         public string Subject { get; set; }
         public DateTime Date { get; set; }
-        public int Visitors { get; set; }
+        public string Visitors { get; set; }
         public List<int> FrequentersIds { get; set; }
         public List<Member> Members { get; set; }
         public int CellId { get; set; }

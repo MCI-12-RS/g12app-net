@@ -7,7 +7,11 @@ const LogReport = async (report) => {
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
         }
-    })
+    });
+
+    var obj = await response.json();
+
+    return obj;
 }
 
 export {LogReport}

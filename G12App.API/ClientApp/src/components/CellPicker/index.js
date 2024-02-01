@@ -11,7 +11,6 @@ const CellPicker = ({
     noOptionMessage,
     placeholder,
     minLength = 3,
-    noInIds,
     initialValue = 'Insira o nome do líder da célula...',
     selectedValue = null,
     selectedLabel = null,
@@ -25,7 +24,7 @@ const CellPicker = ({
 
     const loadCells = useCallback(
         debounce((inputValue, callback) => {
-            _loadCells(inputValue).then(options => callback(options))
+            _loadCells(inputValue).then(options => callback(options)).catch((error) => console.log(error));
         }, 500),
         []
     );
@@ -72,9 +71,8 @@ const CellPicker = ({
                 onChange={handleSelectChangeEvent}
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
-                defaultOptions={[{ label: initialValue, value: null }]}
-                placeholder="" loadOptions={loadCells}>
-            </AsyncSelect>
+                defaultOptions={[{ label: initialValue, value: 0 }]}
+                placeholder="" loadOptions={loadCells} />
         </InputGroup>
     )
 }

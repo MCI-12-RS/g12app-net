@@ -79,8 +79,7 @@ namespace G12App.Infrastructure.Data.Repositories
             _context.Entry(member).State = EntityState.Modified;
             if (member.HomeAddress != null && member.HomeAddress.Id > 0)
                     _context.Entry(member.HomeAddress).State = EntityState.Modified;
-
-
+            
             await _context.SaveChangesAsync();
             return member;
         }
