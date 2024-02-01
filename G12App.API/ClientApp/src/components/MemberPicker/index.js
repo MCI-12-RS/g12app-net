@@ -20,7 +20,8 @@ const MemberPicker = ({
     isMulti = false,
 }) => {
 
-    const [option, setOption] = React.useState({ label: selectedLabel, value: selectedValue });
+    const [option, setOption] = React.useState(null);
+    const [defaultOption, setDefaultOption] = React.useState([]);
 
     const getNoOptionsMessage = (data) => {
         if (data.inputValue?.length < minLength) return placeholder ?? "Digite para pesquisar...";
@@ -29,7 +30,7 @@ const MemberPicker = ({
 
     const loadMembers = useCallback(
         debounce((inputValue, callback) => {
-            _loadMembers(inputValue).then(options => callback(options))
+            _loadMembers(inputValue).then(options => callback(options)).catch((error) => console.log(error));
         }, 500),
         []
     );
@@ -58,13 +59,19 @@ const MemberPicker = ({
         setOption(option);
         if (setValue != null)
             setValue(option?.value);
-    } 
+    }
 
     const randomKey = (Math.random() * 1000).toFixed(0).toString();
 
     useEffect(() => {
-        if (option.value == null)
-            setOption({ label: initialValue, value: null });
+        if (!isMulti) {
+            setDefaultOption([{ label: initialValue, value: null }]);
+
+            if (option?.value == null)
+                setOption({ label: initialValue, value: null });
+            else
+                setOption({ label: selectedLabel, value: selectedValue });
+        }
     }, []);
 
     return (
@@ -75,11 +82,9 @@ const MemberPicker = ({
                 onChange={handleSelectChangeEvent}
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
-                defaultOptions={[{ label: initialValue, value: null }]}
+                defaultOptions={defaultOption}
                 placeholder="" loadOptions={loadMembers}
-                isMulti={isMulti}>
-
-            </AsyncSelect>
+                isMulti={isMulti} />
         </InputGroup>
     )
 }

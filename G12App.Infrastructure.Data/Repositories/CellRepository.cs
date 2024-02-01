@@ -1,4 +1,5 @@
-﻿using G12App.Domain.Extensions;
+﻿using AutoMapper.Execution;
+using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
@@ -65,6 +66,9 @@ namespace G12App.Infrastructure.Data.Repositories
         {
             _context.Attach(cell);
             _context.Entry(cell).State = EntityState.Modified;
+            if (cell.Place != null && cell.Place.Id > 0)
+                _context.Entry(cell.Place).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
             return cell;
         }
