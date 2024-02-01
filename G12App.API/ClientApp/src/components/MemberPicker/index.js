@@ -67,10 +67,10 @@ const MemberPicker = ({
         if (!isMulti) {
             setDefaultOption([{ label: initialValue, value: null }]);
 
-            if (option?.value == null)
-                setOption({ label: initialValue, value: null });
-            else
+            if (selectedValue != null)
                 setOption({ label: selectedLabel, value: selectedValue });
+            else if (option?.value == null)
+                setOption({ label: initialValue, value: null });
         }
     }, []);
 

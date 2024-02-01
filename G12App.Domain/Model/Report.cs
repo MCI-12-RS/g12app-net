@@ -9,7 +9,7 @@ namespace G12App.Domain.Model
     {
         public string Subject { get; set; }
         public DateTime Date { get; set; }
-        public int Visitors { get; set; }
+        public string Visitors { get; set; }
         public ICollection<Member> Members { get; set; }
         public int CellId { get; set; }
         public int LeadershipId { get; set; }

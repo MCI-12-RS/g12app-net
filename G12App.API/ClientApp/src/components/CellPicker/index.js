@@ -13,7 +13,7 @@ const CellPicker = ({
     minLength = 3,
     initialValue = 'Insira o nome do líder da célula...',
     selectedValue = null,
-    selectedLabel = null,
+    selectedLabel = null
 }) => { 
     const [option, setOption] = React.useState({ label: selectedLabel, value: selectedValue });
 
@@ -71,7 +71,7 @@ const CellPicker = ({
                 onChange={handleSelectChangeEvent}
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
-                defaultOptions={[{ label: initialValue, value: 0 }]}
+                defaultOptions={[{ label: initialValue, value: null }]}
                 placeholder="" loadOptions={loadCells} />
         </InputGroup>
     )
