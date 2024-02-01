@@ -30,6 +30,20 @@ namespace G12App.API.Controllers
             return result.AsActionResult();
         }
 
+        [HttpGet("{id}/reports")]
+        public async Task<IActionResult> GetReportsById([FromServices] IReportService reportService, int? id)
+        {
+            var result = await reportService.GetAllReports(new Query<ReportFilter>()
+            {
+                Pagination = new Pagination(1, 3),
+                Filter = new ReportFilter()
+                {
+                    CellId = id,
+                }
+            });
+            return result.AsActionResult();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add([FromServices] ICellService cellService, [FromBody] CellDTO cell)
         {
