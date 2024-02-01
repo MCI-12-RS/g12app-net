@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useCallback } from 'react';
 import { SearchCells } from "../../services/Cell.service";
 import { Col, InputGroup } from "react-bootstrap";
 import AsyncSelect from "react-select/async";
+import { debounce } from 'lodash';
 import './style.css';
 
 const CellPicker = ({
@@ -11,9 +12,10 @@ const CellPicker = ({
     placeholder,
     minLength = 3,
     noInIds,
+    initialValue = 'Insira o nome do líder da célula...',
     selectedValue = null,
     selectedLabel = null,
-}) => {
+}) => { 
     const [option, setOption] = React.useState({ label: selectedLabel, value: selectedValue });
 
     const getNoOptionsMessage = (data) => {
@@ -21,7 +23,14 @@ const CellPicker = ({
         return noOptionMessage ?? "Nenhuma célula encontrada";
     }
 
-    const loadCells = async (inputValue) => {
+    const loadCells = useCallback(
+        debounce((inputValue, callback) => {
+            _loadCells(inputValue).then(options => callback(options))
+        }, 500),
+        []
+    );
+
+    const _loadCells = async (inputValue) => {
         if (!inputValue || inputValue.length < minLength) {
             return [];
         }
@@ -36,8 +45,8 @@ const CellPicker = ({
         return result.data.map((cell) => ({
             label: 
             'Líder: ' + cell.lead?.name +
-            ' / Rua: ' + cell.place?.street +
-            ' / Bairro: ' + cell.place?.neighborhood,
+            (cell.place?.street ? ' / Rua: ' + cell.place?.street : '') +
+            (cell.place?.neighborhood ? ' / Bairro: ' + cell.place?.neighborhood : ''),
             value: cell.id
         }));
     }
@@ -47,6 +56,11 @@ const CellPicker = ({
         if (setValue != null)
             setValue(option?.value);
     }
+
+    useEffect(() => {
+        if (option.value == null)
+            setOption({ label: initialValue, value: null });
+    }, []);
 
     const randomKey = (Math.random() * 100).toFixed(0).toString();
 
@@ -58,9 +72,8 @@ const CellPicker = ({
                 onChange={handleSelectChangeEvent}
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
-                defaultOptions={[{ label: null, value: null }]}
+                defaultOptions={[{ label: initialValue, value: null }]}
                 placeholder="" loadOptions={loadCells}>
-
             </AsyncSelect>
         </InputGroup>
     )

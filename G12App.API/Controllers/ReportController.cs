@@ -36,8 +36,7 @@ namespace G12App.API.Controllers
             var result = await reportApp.LogReport(reportDTO);
             return result.AsActionResult();
         }
-
-
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromServices] IReportService reportService, int id)
         {

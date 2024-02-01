@@ -89,9 +89,9 @@ export const CellDetails = () => {
         try {
             var result;
             if (params.id) {
-                result = await UpdateCell({ ...cell, time: cell.time + ":00" });
+                result = await UpdateCell({ ...cell, time: (cell.time + ":00").substring(0, 8) });
             } else {
-                result = await CreateCell({ ...cell, time: cell.time + ":00" });
+                result = await CreateCell({ ...cell, time: (cell.time + ":00").substring(0, 8) });
             }
 
             if (result.isValid) {
@@ -170,6 +170,7 @@ export const CellDetails = () => {
                             <Row className="mb-3" as={Col}>
                                 <Col>
                                     <MemberPicker label="Líder"
+                                        initialValue="Selecione o líder da célula"
                                         setValue={(value) => handleSelectChangeEvent('leadId', value)}
                                         selectedLabel={FormatMemberPickerLabel(cell.lead)}
                                         selectedValue={cell.lead?.id} />
@@ -177,6 +178,7 @@ export const CellDetails = () => {
 
                                 <Col>
                                     <MemberPicker label="Timóteo"
+                                        initialValue="Selecione o timóteo da célula"
                                         setValue={(value) => handleSelectChangeEvent('timothyId', value)}
                                         selectedLabel={FormatMemberPickerLabel(cell.timothy)}
                                         selectedValue={cell.timothy?.id} />
@@ -184,6 +186,7 @@ export const CellDetails = () => {
 
                                 <Col>
                                     <MemberPicker label="Anfitrião"
+                                        initialValue="Selecione o anfitrião da célula"
                                         setValue={(value) => handleSelectChangeEvent('hostId', value)}
                                         selectedLabel={FormatMemberPickerLabel(cell.host)}
                                         selectedValue={cell.host?.id} />
@@ -238,7 +241,7 @@ export const CellDetails = () => {
                                             '')}
 
                                         <Button variant="primary" className="ms-3" type="submit" onClick={SaveCell}>
-                                            Salvar {(params.id ? "alteracoes" : "cadastro")}
+                                            Salvar {(params.id ? "alterações" : "cadastro")}
                                         </Button>
                                     </div>
                                 </Col>

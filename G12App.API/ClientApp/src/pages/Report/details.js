@@ -89,52 +89,28 @@ export const ReportDetails = () => {
         setLoading(false);
     };
 
-    const search = async () => {
-        setLoading(true);
-
-        const result = await SearchCells(searchData, pagination);
-        if (result.isValid) {
-            setCells(result.data);
-            setTotal(result.totalRecords ?? result.data.length);
-        }
-
-        setLoading(false);
-    };
-
-    const debounceEventTrigger = debounce(field => {
-        var currentValue = searchData[field.name] || '';
-        if (field.value != currentValue)
-            setSearchData({ ...searchData, [field.name]: field.value });
-    }, 500);
-
-    const handleSearchEvent = (event) => {
-        var field = event.target;
-        debounceEventTrigger(field);
-    };
-
     const submitReport = async () => {
         setLoading(true);
 
-        /*try {*/
-        var result;
+        try {
+            var result;
 
-        result = await LogReport({ ...report, date: FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00" });
-        if (result.isValid) {
-            alert('Relatório enviado com sucesso!');
-            navigate('/reports/' + result.data.id)
-        } else {
-            alert('Erro ao enviar relatório');
+            result = await LogReport({ ...report, date: FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00" });
+            if (result.isValid) {
+                alert('Relatório enviado com sucesso!');
+                navigate('/reports/' + result.data.id)
+            } else {
+                alert('Erro ao enviar relatório');
+            }
         }
-        //}
-        /*catch (e) {
+        catch (e) {
             alert('Erro ao enviar relatório.');
             console.error(e);
-        }*/
+        }
     };
 
     const handleSelectChangeEvent = (name, value) => {
-        fetchCell(value)
-
+        fetchCell(value);
     };
 
 
@@ -153,14 +129,15 @@ export const ReportDetails = () => {
     return (
         <>
             <h1>Registrar relatório</h1>
-            <>
+            <hr />
+            <> 
                 <Form>
                     <Container fluid>
                         <h6>Selecione a célula</h6>
 
                         <Row className="mb-3 pr-0">
                             <Col>
-                                <CellPicker label="Insira o nome do líder:"
+                                <CellPicker label="Célula:"
                                     setValue={(value) => handleSelectChangeEvent('cellId', value)} />
                             </Col>
                         </Row>
@@ -183,7 +160,7 @@ export const ReportDetails = () => {
 
                         <Row className="mb-3 pr-0" as={Col}>
                             <Col>
-                                <InputGroup.Text id="basic-addon1">Líder G12: {cell.lead?.leadership?.name}</InputGroup.Text>
+                                <InputGroup.Text id="basic-addon1">Líder G12: {cell.lead?.computedG12Leader}</InputGroup.Text>
                             </Col>
 
                             <Col>

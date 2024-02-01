@@ -6,14 +6,13 @@ import { debounce } from 'lodash';
 import { FormatMemberPickerLabel } from '../../shared/utils';
 import './style.css';
 
-const NoLeadershipText = 'Sem liderança (nível base)';
-
 const MemberPicker = ({
     label = 'Membro',
     ministryLevel,
     setValue,
     noOptionsMessage,
     placeholder,
+    initialValue = 'Sem liderança (nível base)',
     minLength = 2,
     notInIds = [],
     selectedValue = null,
@@ -59,13 +58,13 @@ const MemberPicker = ({
         setOption(option);
         if (setValue != null)
             setValue(option?.value);
-    }
+    } 
 
     const randomKey = (Math.random() * 1000).toFixed(0).toString();
 
     useEffect(() => {
         if (option.value == null)
-            setOption({ label: NoLeadershipText, value: null });
+            setOption({ label: initialValue, value: null });
     }, []);
 
     return (
@@ -76,7 +75,7 @@ const MemberPicker = ({
                 onChange={handleSelectChangeEvent}
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
-                defaultOptions={[{ label: NoLeadershipText, value: null }]}
+                defaultOptions={[{ label: initialValue, value: null }]}
                 placeholder="" loadOptions={loadMembers}
                 isMulti={isMulti}>
 

@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using G12App.API.Middleware;
 using G12App.Domain;
+using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using G12App.Domain.Messages;
-using Newtonsoft.Json;
 
 namespace G12App.API
 {

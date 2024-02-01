@@ -16,31 +16,34 @@ namespace G12App.API.Controllers
     public class CellController : ControllerBase
     {
         [HttpPost("search")]
-        
         public async Task<IActionResult> Get([FromServices] ICellService cellService, [FromBody] Query<CellFilter> query)
         {
             query = query ?? throw new ArgumentNullException(nameof(query));
             var result = await cellService.GetCell(query);
             return result.AsActionResult();
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromServices] ICellService cellService, int? id)
         {
             var result = await cellService.GetCellById(id);
             return result.AsActionResult();
         }
+
         [HttpPost]
         public async Task<IActionResult> Add([FromServices] ICellService cellService, [FromBody] CellDTO cell)
         {
             var result = await cellService.Add(cell);
             return result.AsActionResult();
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove([FromServices] ICellService cellService, int? id)
         {
             var result = await cellService.Remove(id);
             return result.AsActionResult();
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromServices] ICellService cellService,[FromBody] CellDTO cell, int id)
         {

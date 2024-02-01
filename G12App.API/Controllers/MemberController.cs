@@ -51,7 +51,5 @@ namespace G12App.API.Controllers
             var result = await memberService.Remove(id);
             return result.AsActionResult();
         }
-
-
     }
 }
