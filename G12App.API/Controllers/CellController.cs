@@ -31,14 +31,14 @@ namespace G12App.API.Controllers
         }
 
         [HttpGet("{id}/reports")]
-        public async Task<IActionResult> GetReportsById([FromServices] IReportService reportService, int? id)
+        public async Task<IActionResult> GetLastReportsByCellId([FromServices] IReportService reportService, int? id)
         {
             var result = await reportService.GetAllReports(new Query<ReportFilter>()
             {
                 Pagination = new Pagination(1, 3),
                 Sort = new Sort("CreationDate", true),
                 Filter = new ReportFilter()
-                {
+                {   
                     CellId = id,
                 }
             });

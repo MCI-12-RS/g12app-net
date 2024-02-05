@@ -89,4 +89,18 @@ const DeleteCell = async (id) => {
 
     return obj;
 }
-export {SearchCells, GetCell, CreateCell, UpdateCell, DeleteCell };
+
+const GetLastReportsByCellId = async (id) => {
+    var response = await FetchPrivate('/api/cell/' + id + 'reports', {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+    
+}
+export {SearchCells, GetCell, CreateCell, UpdateCell, DeleteCell, GetLastReportsByCellId };

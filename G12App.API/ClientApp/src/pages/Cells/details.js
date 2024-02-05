@@ -7,6 +7,7 @@ import { useToastContext } from '../../contexts/ToastContext';
 import { StringifyResponseErrors, FormatMemberPickerLabel } from '../../shared/utils';
 import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
+import Grid from '../../components/Grid';
 
 import './style.css';
 
@@ -246,6 +247,19 @@ export const CellDetails = () => {
                                     </div>
                                 </Col>
 
+                            </Row>
+                        </Container>
+
+                        <Container fluid>
+                            <Row ClassName="mb-3 pr-0">
+                                <Grid
+                                    columns={columns}
+                                    data={reports}
+                                    textTotal='Relatórios enviados:'
+                                    loading={loading}
+                                    pagination={pagination}
+                                    setPagination={setPagination}
+                                    totalRecords={total} />
                             </Row>
                         </Container>
                     </Form>
