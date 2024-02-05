@@ -36,6 +36,7 @@ namespace G12App.API.Controllers
             var result = await reportService.GetAllReports(new Query<ReportFilter>()
             {
                 Pagination = new Pagination(1, 3),
+                Sort = new Sort("CreationDate", true),
                 Filter = new ReportFilter()
                 {
                     CellId = id,
