@@ -21,7 +21,7 @@ namespace G12App.Tests
         {
             Subject = "Valid subject",
             Date = new DateTime(2023, 9, 28),
-            Visitors = 1,
+            Visitors = "string",
             CellId = 1,
             LeadershipId = 1,
             HostId = 1,
@@ -112,7 +112,7 @@ namespace G12App.Tests
             {
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = 1,
+                Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1,

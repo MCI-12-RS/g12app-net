@@ -18,7 +18,7 @@ namespace G12App.Application.Tests
                 Id = 1,
                 Subject = "Valid subject",
                 Date = DateTime.Now,
-                Visitors = 1,
+                Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -62,7 +62,7 @@ namespace G12App.Application.Tests
                 Id = 1,
                 Subject = "Valid subject",
                 Date = DateTime.Now.AddDays(1),
-                Visitors = 1,
+                Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -105,7 +105,7 @@ namespace G12App.Application.Tests
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = 1,
+                Visitors = "string",
                 CellId = 3,
                 LeadershipId = 1,
                 HostId = 1
@@ -148,7 +148,7 @@ namespace G12App.Application.Tests
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 09),
-                Visitors = 1,
+                Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -191,7 +191,7 @@ namespace G12App.Application.Tests
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 10, 10, 00, 00),
-                Visitors = 1,
+                Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -235,7 +235,7 @@ namespace G12App.Application.Tests
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = 1,
+                Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
