@@ -1,8 +1,6 @@
 import React from "react";
-import Grid from "../../components/Grid";
 
 export const Reports = () => {
-
 
     const columns = [
         {

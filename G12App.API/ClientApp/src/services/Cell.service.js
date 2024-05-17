@@ -17,12 +17,12 @@ const SearchCells = async (search, pagination, sort) => {
               "leadership": search.leadership,
               "host": search.host,
               "timoyhy": search.timoyhy,
-              "weekDay": search.weekDay == "" ? null : search.weekDay,
+              "weekDay": search.weekDay === "" ? null : search.weekDay,
               "homeAddress_Neighborhood": search.neighborhood,
               "homeAddress_City": search.city,
               "homeAddress_State": search.state,
               "homeAddress_Street": search.street,
-              "cellType": search.cellType == "" ? null : search.cellType,
+              "cellType": search.cellType === "" ? null : search.cellType,
             }
         }),
         headers: {

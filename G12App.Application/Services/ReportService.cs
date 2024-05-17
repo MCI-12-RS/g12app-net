@@ -5,9 +5,8 @@ using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
-using G12App.Domain.Extensions;
-using System.Net;
 using G12App.Domain.Querying.Filters;
+using System.Net;
 
 namespace G12App.Application.Services
 {
@@ -16,13 +15,16 @@ namespace G12App.Application.Services
         private readonly IReportRepository _reportRepository;
         private readonly IMapper _mapper;
         private readonly IEntityChangeTrackingService _changeTrackingService;
+        private readonly IMemberRepository _memberRepository;
 
         public ReportService(
-            IReportRepository reportRepository, 
+            IReportRepository reportRepository,
+            IMemberRepository memberRepository,
             IMapper mapper,
             IEntityChangeTrackingService changeTrackingService)
         {
             _reportRepository = reportRepository;
+            _memberRepository = memberRepository;
             _mapper = mapper;
             _changeTrackingService = changeTrackingService;
         }
@@ -30,7 +32,12 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO)
         {
             var reportEntity = _mapper.Map<Report>(reportDTO);
-            
+
+            if (reportDTO?.Frequenters != null && reportDTO.Frequenters.Any())
+                foreach (var memberId in reportDTO.Frequenters)
+                    reportEntity.Members.Add(
+                        await _memberRepository.GetMemberByIdAsync(memberId));
+
             _changeTrackingService.SetupCreationData(reportEntity);
             _changeTrackingService.SetupLastModifiedData(reportEntity);
 
@@ -39,7 +46,7 @@ namespace G12App.Application.Services
         }
 
         public async Task<ServiceResult> Delete(int id)
-        {   
+        {
             var reportEntity = await _reportRepository.GetReportById(id);
             if (reportEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado");
@@ -67,7 +74,7 @@ namespace G12App.Application.Services
 
         }
 
-        public async Task<ServiceResult<ReportDTO>> GetById (int id)
+        public async Task<ServiceResult<ReportDTO>> GetById(int id)
         {
             var reportEntity = await _reportRepository.GetReportById(id);
             return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(reportEntity));

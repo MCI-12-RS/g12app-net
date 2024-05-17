@@ -11,7 +11,7 @@ const HandleDateMask = (e) => {
     var len = input.value.length;
 
     if(len !== 1 || len !== 3) {
-        if(e.charCode == 47) {
+        if(e.charCode === 47) {
             e.preventDefault();
         }
     }

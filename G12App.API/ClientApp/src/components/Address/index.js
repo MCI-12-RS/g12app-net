@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { InputGroup, Form, Col, Row, Button, Container, FormLabel } from 'react-bootstrap';
-import { useParams, useNavigate } from "react-router-dom";
-import { GetMember, CreateMember, UpdateMember } from '../../services/Member.service';
-import MemberPicker from '../../components/MemberPicker';
-import { HandleDateMask, FromBRDate, ToBRDate } from '../../shared/utils';
-
+import { InputGroup, Form, Col, Row, Container } from 'react-bootstrap';
 import states from './states.json'
-import moment from "moment";
 
 export const AddressDetails = ({
     address = {},

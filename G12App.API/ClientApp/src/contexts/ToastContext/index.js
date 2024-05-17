@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
@@ -31,7 +31,7 @@ const ToastContextProvider = ({ children }) => {
         <Toast
         className="m-1"
         key={toast.id + toast.title}
-        show={toasts.some(x => x.id == toast.id)}
+        show={toasts.some(x => x.id === toast.id)}
         delay={toast.hideDelay !== undefined && toast.hideDelay} autohide={toast.hideDelay !== undefined}
         bg={toast.type}
         onClose={() => removeToast(toast)}

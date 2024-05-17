@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
@@ -113,9 +113,9 @@ export const ReportDetails = () => {
     };
 
     const handleSelectChangeEvent = (name, value) => {
-        if (name == 'cellId')
+        if (name === 'cellId')
             fetchCell(value);
-        if (name == 'members')
+        if (name === 'members')
             setReport({ ...report, frequenters: value });
     };
 
@@ -126,9 +126,9 @@ export const ReportDetails = () => {
     };
 
     const translateCellType = (cellType) => {
-        if (cellType == "Evangelistic")
+        if (cellType === "Evangelistic")
             return "Evangelística";
-        if (cellType == "Discipleship")
+        if (cellType === "Discipleship")
             return "Discipuladora"
     };
 

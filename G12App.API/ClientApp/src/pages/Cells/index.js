@@ -54,26 +54,26 @@ export const Cells = () => {
   ];
 
   const translateCellType = (cellType) => {
-    if (cellType == "Evangelistic")
+    if (cellType === "Evangelistic")
       return "Evangelística";
-    if (cellType == "Discipleship")
+    if (cellType === "Discipleship")
       return "Discipuladora"
   };
 
   const translateWeekDay = (weekDay) => {
-    if (weekDay == "Monday")
+    if (weekDay === "Monday")
     return "Segunda-Feira";
-    if (weekDay == "Tuesday")
+    if (weekDay === "Tuesday")
     return "Terça-Feira";
-    if (weekDay == "Wednesday")
+    if (weekDay === "Wednesday")
     return "Quarta-Feira";
-    if (weekDay == "Thursday")
+    if (weekDay === "Thursday")
     return "Quinta-Feira";
-    if (weekDay == "Friday")
+    if (weekDay === "Friday")
     return "Sexta-Feira";
-    if (weekDay == "Saturday")
+    if (weekDay === "Saturday")
     return "Sábado";
-    if (weekDay == "Sunday")
+    if (weekDay === "Sunday")
     return "Domingo";
   }
 

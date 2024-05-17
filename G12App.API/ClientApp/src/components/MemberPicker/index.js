@@ -55,10 +55,16 @@ const MemberPicker = ({
         ));
     }
 
-    const handleSelectChangeEvent = (option) => {
+    const handleSelectChangeEvent = (option) => {        
         setOption(option);
-        if (setValue != null)
-            setValue(option?.value);
+
+        if (!isMulti) {        
+            if (setValue != null)
+                setValue(option?.value);
+        } else {
+            if (setValue != null)
+                setValue(option?.map(x => x.value));
+        }
     }
 
     const randomKey = (Math.random() * 1000).toFixed(0).toString();

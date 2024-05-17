@@ -24,7 +24,7 @@ const Grid = ({
 
         <Spinner animation="border" /> :
         
-        totalRecords == 0 ?
+        totalRecords === 0 ?
 
         <p className="no-records"><em>Nenhum registro encontrado.</em></p> :
 
@@ -60,9 +60,9 @@ const Grid = ({
                         if(pagination.page > 2)
                             elements.push(<Pagination.Prev key="prev" onClick={() => setPage(pagination.page - 1)} />);
 
-                        elements.push(<Pagination.Item key="item-1" active={pagination.page == 1} onClick={() => setPage(1)}>1</Pagination.Item>);
+                        elements.push(<Pagination.Item key="item-1" active={pagination.page === 1} onClick={() => setPage(1)}>1</Pagination.Item>);
                         
-                        if(pages == 1)
+                        if(pages === 1)
                             return elements;
 
                         var prevPage = pagination.page - 1;
@@ -85,7 +85,7 @@ const Grid = ({
 
                         if(nextPage < pages)
                             elements.push(<Pagination.Item key={"item-" + pages} onClick={() => setPage(pages)}>{pages}</Pagination.Item>);
-
+ 
                         if(pagination.page < pages){
                             elements.push(<Pagination.Next key="item-next" onClick={() => setPage(pagination.page + 1)} />);
                             elements.push(<Pagination.Last key="item-last" onClick={() => setPage(pages)} />);
