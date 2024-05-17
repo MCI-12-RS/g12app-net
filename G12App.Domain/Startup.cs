@@ -6,7 +6,7 @@ namespace G12App.Domain
 {
     public static class Startup
     {
-        public static IServiceCollection RegisterDomain(this IServiceCollection servicesCollection, IConfiguration config)
+        public static IServiceCollection RegisterDomain(this IServiceCollection servicesCollection)
         {
             servicesCollection.AddAutoMapper(typeof(DomainToDTOMappingProfile));
             return servicesCollection;

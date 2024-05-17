@@ -10,7 +10,7 @@ namespace G12App.Application.Tests
     public class ReportAppTests
     {
         [Fact]
-        public async void LogReportTest()
+        public async Task LogReportTest()
         {
             //Arrange
             var report = new ReportDTO()
@@ -54,7 +54,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void LogReportTestShouldGetReportDateError()
+        public async Task LogReportTestShouldGetReportDateError()
         {
             //Arrange
             var report = new ReportDTO()
@@ -97,7 +97,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void LogReportShouldGetInvalIdCell()
+        public async Task LogReportShouldGetInvalIdCell()
         {
             //Arrange
             var report = new ReportDTO()
@@ -140,7 +140,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void LogReportShouldGetDateError()
+        public async Task LogReportShouldGetDateError()
         {
             //Arrange
             var report = new ReportDTO()
@@ -183,7 +183,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void LogReportShouldGetTimeError()
+        public async Task LogReportShouldGetTimeError()
         {
             //Arrange
             var report = new ReportDTO()
@@ -227,7 +227,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void LogReportShouldGetWeekError()
+        public async Task LogReportShouldGetWeekError()
         {
             //Arrange
             var report = new ReportDTO()

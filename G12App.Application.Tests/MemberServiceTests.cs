@@ -12,7 +12,7 @@ namespace G12App.Application.Tests
     public class MemberServiceTests
     {
         [Fact]
-        public async void AddMemberSeerviceIsOk()
+        public async Task AddMemberSeerviceIsOk()
         {
             var member = new Member()
             {
@@ -52,7 +52,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void RemoveMemberServiceIsOk()
+        public async Task RemoveMemberServiceIsOk()
         {
             var member = new Member()
             {
@@ -89,7 +89,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void GetMemberByIdIsOk()
+        public async Task GetMemberByIdIsOk()
         {
             var member = new Member()
             {
@@ -129,7 +129,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void UpdateMemberIsOk()
+        public async Task UpdateMemberIsOk()
         {
             var member = new Member()
             {

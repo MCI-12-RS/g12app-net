@@ -12,7 +12,7 @@ namespace G12App.Application.Tests
     public class ReportServiceTests
     {
         [Fact]
-        public async void AddReportTest()
+        public async Task AddReportTest()
         {
             //Arrange
             var report = new Report()
@@ -56,7 +56,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void GetReportById()
+        public async Task GetReportById()
         {
             //Arrange
             var report = new Report()
@@ -99,7 +99,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void RemoveTest()
+        public async Task RemoveTest()
         {
             //Arrange
             var report = new Report()

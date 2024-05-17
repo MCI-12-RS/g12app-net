@@ -12,7 +12,7 @@ namespace G12App.Application.Tests
     public class CellServiceTests
     {
         [Fact]
-        public async void RespositoryCreateIsOk()
+        public async Task RespositoryCreateIsOk()
         {
             var cell = new Cell()
             {
@@ -56,7 +56,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void RespositoryGetByIdIsOk()
+        public async Task RespositoryGetByIdIsOk()
         {
             var cell = new Cell()
             {
@@ -98,7 +98,7 @@ namespace G12App.Application.Tests
             result.Data.Should().Be(cellDto);
         }
         [Fact]
-        public async void RespositoryRemoveIsOk()
+        public async Task RespositoryRemoveIsOk()
         {
             var cell = new Cell()
             {
@@ -141,7 +141,7 @@ namespace G12App.Application.Tests
         }
 
         [Fact]
-        public async void RepositoryUpdateIsOk()
+        public async Task RepositoryUpdateIsOk()
         {
             var cell = new Cell()
             {

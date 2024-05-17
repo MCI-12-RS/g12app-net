@@ -50,6 +50,11 @@ export const CellDetails = () => {
     const [cell, setCell] = useState(emptyCell);
     const [registerMore, setRegisterMore] = useState(location.state?.registerMore ?? false);
 
+    const [reports, setReports] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [pagination, setPagination] = useState({ page: 1, pageSize: 10 });
+    const [columns, setColumns] = useState([]);
+
     useEffect(() => {
         if (location.state?.registerMore) {
             setRegisterMore(true);
@@ -249,7 +254,8 @@ export const CellDetails = () => {
 
                             </Row>
                         </Container>
-
+                        <hr/>
+                        <h6>Relátorios enviados</h6>
                         <Container fluid>
                             <Row ClassName="mb-3 pr-0">
                                 <Grid

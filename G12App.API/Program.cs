@@ -78,7 +78,7 @@ namespace G12App.API
             });
 
             builder.Services
-                .RegisterDomain(builder.Configuration)
+                .RegisterDomain()
                 .RegisterDatabase(builder.Configuration)
                 .RegisterInfrastructure()
                 .RegisterServices()
