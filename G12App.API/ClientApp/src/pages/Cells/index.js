@@ -44,13 +44,13 @@ export const Cells = () => {
     },
     {
       name: 'Dia da semana',
-      render: (cell) => translateWeekDay(cell.weekDay)
+      render: (cell) => <> {translateWeekDay(cell.weekDay)} <br /> {(cell.time || '').substring(0, 5)} </>
     },
     {
       name: '',
       render: (cell) => <Link to={"/cells/" + cell.id}><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
     }
-    
+
   ];
 
   const translateCellType = (cellType) => {
@@ -62,19 +62,19 @@ export const Cells = () => {
 
   const translateWeekDay = (weekDay) => {
     if (weekDay === "Monday")
-    return "Segunda-Feira";
+      return "Segunda-Feira";
     if (weekDay === "Tuesday")
-    return "Terça-Feira";
+      return "Terça-Feira";
     if (weekDay === "Wednesday")
-    return "Quarta-Feira";
+      return "Quarta-Feira";
     if (weekDay === "Thursday")
-    return "Quinta-Feira";
+      return "Quinta-Feira";
     if (weekDay === "Friday")
-    return "Sexta-Feira";
+      return "Sexta-Feira";
     if (weekDay === "Saturday")
-    return "Sábado";
+      return "Sábado";
     if (weekDay === "Sunday")
-    return "Domingo";
+      return "Domingo";
   }
 
   const search = async () => {
