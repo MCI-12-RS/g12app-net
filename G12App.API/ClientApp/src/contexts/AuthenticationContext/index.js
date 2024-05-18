@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { SetupAuth } from '../../shared/utils';
 
 const AuthenticationContext = React.createContext();
 export const useAuthenticationContext = () => useContext(AuthenticationContext);
@@ -19,7 +20,7 @@ const AuthenticationContextProvider = ({ children }) => {
     const [auth, setAuth] = React.useState(emptyAuth);
 
     const logOff = () => {
-        setAuth(emptyAuth);
+        SetupAuth(emptyAuth);
     };
 
     const logIn = (user) => {
@@ -48,9 +49,7 @@ const AuthenticationContextProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('auth', JSON.stringify(auth));
-        localStorage.setItem('authDate', new Date());
-        localStorage.setItem('jwtToken', auth?.user?.token);
+        SetupAuth(auth);
     }, [auth]);
 
     return (

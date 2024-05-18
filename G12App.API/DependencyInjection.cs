@@ -19,17 +19,6 @@ namespace G12App.API
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection RegisterServices(this IServiceCollection services)
-        {
-            services.AddTransient<IMemberService, MemberService>();
-            services.AddTransient<ICellService, CellService>();
-            services.AddTransient<IReportService, ReportService>();
-            services.AddTransient<IReportApp, ReportApp>();
-            services.AddTransient<IAuthService, AuthService>();
-            services.AddScoped<IEntityChangeTrackingService, EntityChangeTrackingService>();
-            return services;
-        }
-
         public static IServiceCollection RegisterJWT(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCors();

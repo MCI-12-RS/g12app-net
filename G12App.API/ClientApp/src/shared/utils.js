@@ -55,7 +55,7 @@ const StringifyResponseErrors = (errors) => {
     return response;
 };
 
-const FetchPrivate = (url, options = {}) => {
+const FetchPrivate = async (url, options = {}) => {
     var token = localStorage.getItem('jwtToken');
 
   if (token) {
@@ -65,8 +65,26 @@ const FetchPrivate = (url, options = {}) => {
     };
   }
 
-  return fetch(url, options);
+  var result = await fetch(url, options);
+  if(result.status === 401) {
+    CleanupAuth();
+    window.location.href = '/login';
+  }
+
+  return result;
 };
+
+const SetupAuth = (auth) => {
+    localStorage.setItem('auth', JSON.stringify(auth));
+    localStorage.setItem('authDate', new Date());
+    localStorage.setItem('jwtToken', auth?.user?.token);
+}
+
+const CleanupAuth = () => {
+    localStorage.removeItem('auth');
+    localStorage.removeItem('authDate');
+    localStorage.removeItem('jwtToken');
+}
 
 const FormatMemberPickerLabel = (member) => {
     if(member == null) return '';
@@ -75,4 +93,4 @@ const FormatMemberPickerLabel = (member) => {
     return (leader ?? '') + member.name;
 };
 
-export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors, FetchPrivate, FormatMemberPickerLabel };
+export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors, FetchPrivate, SetupAuth, CleanupAuth, FormatMemberPickerLabel };

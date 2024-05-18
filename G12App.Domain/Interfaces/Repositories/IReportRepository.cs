@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace G12App.Domain.Interfaces.Repositories
 {
-    public  interface IReportRepository
+    public interface IReportRepository
     {
         Task<IEnumerable<Report>> GetReportsAsync(Query<ReportFilter> query);
+        Task<int> CountReportsAsync(Query<ReportFilter> query);
         Task<Report> GetReportById(int Id);
-        Task<Report> Create (Report report);
-        Task<Report> Update (Report report);
-        Task<Report> Remove (Report report);
+        Task<Report> Create(Report report);
+        Task<Report> Update(Report report);
+        Task<Report> Remove(Report report);
     }
 }

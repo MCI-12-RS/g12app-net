@@ -38,13 +38,27 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
+        private IQueryable<Report> GetReportsQueryableAsync(Query<ReportFilter> query)
+        {
+            return _context.Reports
+                .IgnoreAutoIncludes()
+                .Where(x => x.IsDeleted == false)
+                .ApplyFilter(query);
+        }
+
         public async Task<IEnumerable<Report>> GetReportsAsync(Query<ReportFilter> query)
         {
-            return await _context.Reports
-                .Where(x => x.IsDeleted == false)
+            return await GetReportsQueryableAsync(query)
                 .ApplyPaging(query)
                 .ApplyFilter(query)
                 .ToListAsync();
+        }
+
+        public async Task<int> CountReportsAsync(Query<ReportFilter> query)
+        {
+            return await
+                this.GetReportsQueryableAsync(query)
+                    .CountAsync();
         }
 
         public async Task<Report> Remove(Report report)

@@ -39,6 +39,7 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<IReportRepository>();
+            var mockMemberRepo = new Mock<IMemberRepository>();
             var mapperMock = new Mock<IMapper>();
 
             mock.Setup(x => x.Create(It.IsAny<Report>())).ReturnsAsync(report);
@@ -46,7 +47,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
 
             //Act
-            var service = new ReportService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
+            var service = new ReportService(mock.Object, mockMemberRepo.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.Add(reportDto);
 
             //Arrange
@@ -83,13 +84,14 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<IReportRepository>();
+            var mockMemberRepo = new Mock<IMemberRepository>();
             var mapperMock = new Mock<IMapper>();
 
             mock.Setup(x => x.GetReportById(report.Id)).ReturnsAsync(report);
             mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
 
             //Act
-            var service = new ReportService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
+            var service = new ReportService(mock.Object, mockMemberRepo.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.GetById(report.Id);
 
             //Assert
@@ -126,6 +128,7 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<IReportRepository>();
+            var mockMemberRepo = new Mock<IMemberRepository>();
             var mapperMock = new Mock<IMapper>();
 
             mock.Setup(x => x.GetReportById(report.Id)).ReturnsAsync(report);
@@ -133,7 +136,7 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
 
             //Act
-            var service = new ReportService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
+            var service = new ReportService(mock.Object, mockMemberRepo.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
             var result = await service.Delete(report.Id);
 
             //Assert

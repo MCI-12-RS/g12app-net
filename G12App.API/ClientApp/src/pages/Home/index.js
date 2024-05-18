@@ -1,12 +1,14 @@
 import React from 'react';
 import { Card, Container } from 'react-bootstrap';
-
 import { useToastContext } from '../../contexts/ToastContext';
+import { GetDashboardData } from '../../services/Dashboard.service';
+import Spinner from 'react-bootstrap/Spinner';
 
 import './style.css';
 
 export const Home = () => {
   const [cards, setCards] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
   let toastContext = useToastContext();
 
   const addToast = () => {
@@ -19,17 +21,43 @@ export const Home = () => {
     });
   };
 
+  const SetCardsData = (data) => {
+
+    var arrCards = [];
+
+    if(data.totalMembers) 
+      arrCards.push({ type: 'info', title: <>Membros</>, value: data.totalMembers });
+
+    if(data.totalCells){
+      arrCards.push({ type: 'info', title: <>Celulas Ativas</>, value: data.totalCells });
+
+
+      var pendingReports = Math.max(0, data.totalCells - data.weekReports);
+      var pendingReportsType = pendingReports > 0 ? 'warning' : 'success';
+      arrCards.push({ type: pendingReportsType, title: <>Relatorios Pendentes</>, value: pendingReports });
+    }
+
+    setCards(arrCards);
+  }
+
   React.useEffect(() => {
-    setCards([
-      { type: 'info', title: <>Membros</>, value: 34 },
-      { type: 'info', title: <>Celulas Ativas</>, value: 34 },
-      { type: 'warning', title: <>Relatorios Pendentes</>, value: 10 },
-      { type: 'success', title: <>Consolidados <br />nesta semana</>, value: 8 },
-      { type: 'success', title: <>Visitantes em <br />celulas nesta semana</>, value: 8 },
-    ]);
+    setLoading(true);
+    GetDashboardData().then((data) => {
+      SetCardsData(data);
+    })
+    .catch((error) => {
+      console.log('Error while loading dashboard data.', error);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
   }, []);
 
   return (
+    loading ? 
+    
+    <Spinner animation="border" /> :
+
     <>
       <Container fluid className="dashboard">
         <h1>Dashboard</h1>

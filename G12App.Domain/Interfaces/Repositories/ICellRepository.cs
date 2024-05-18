@@ -9,9 +9,10 @@ namespace G12App.Domain.Interfaces.Repositories
     public interface ICellRepository
     {
         Task<IEnumerable<Cell>> GetCellsAsync(Query<CellFilter> query);
+        Task<int> CountCellsAsync(Query<CellFilter> query);
         Task<Cell> GetCellByIdAsync(int? id);
         Task<Cell> Create(Cell cell);
         Task<Cell> Update(Cell cell);
         Task<Cell> Remove(Cell cell);
-    }   
+    }
 }

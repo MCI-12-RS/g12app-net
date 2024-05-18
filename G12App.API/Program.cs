@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using G12App.API.Middleware;
+using G12App.Application;
 using G12App.Domain;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;

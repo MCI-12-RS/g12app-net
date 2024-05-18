@@ -1,5 +1,4 @@
-﻿using AutoMapper.Execution;
-using G12App.Domain.Extensions;
+﻿using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
@@ -20,6 +19,15 @@ namespace G12App.Infrastructure.Data.Repositories
         {
             _context = context;
         }
+
+        private IQueryable<Cell> GetCellsQueryableAsync(Query<CellFilter> query)
+        {
+            return _context.Cells
+                .IgnoreAutoIncludes()
+                .Where(x => x.IsDeleted == false)
+                .ApplyFilter(query);
+        }
+
         public async Task<Cell> Create(Cell cell)
         {
             _context.Add(cell);
@@ -37,10 +45,16 @@ namespace G12App.Infrastructure.Data.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
+        public async Task<int> CountCellsAsync(Query<CellFilter> query)
+        {
+            return await
+                this.GetCellsQueryableAsync(query)
+                    .CountAsync();
+        }
+
         public async Task<IEnumerable<Cell>> GetCellsAsync(Query<CellFilter> query)
         {
-            return await _context.Cells
-                .Where(x => x.IsDeleted == false)
+            return await GetCellsQueryableAsync(query)
                 .Include(x => x.Lead)
                 .Include(x => x.Lead.Leadership)
                 .Include(x => x.Host)

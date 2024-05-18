@@ -1,10 +1,10 @@
 ﻿using G12App.Domain.Model;
+using G12App.Domain.Model.Base;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using G12App.Domain.Model.Base;
 
 namespace G12App.Domain.Extensions
 {
@@ -121,6 +121,9 @@ namespace G12App.Domain.Extensions
 
             if (query.Filter.Date.HasValue)
                 queryable = queryable.Where(x => x.Date.Equals(query.Filter.Date));
+
+            if (query.Filter.StartDate.HasValue && query.Filter.EndDate.HasValue)
+                queryable = queryable.Where(x => x.Date >= query.Filter.StartDate.Value && x.Date <= query.Filter.EndDate.Value);
 
             if (query.Filter.CellType.HasValue)
                 queryable = queryable.Where(x => x.CellType.Equals(query.Filter.CellType));
