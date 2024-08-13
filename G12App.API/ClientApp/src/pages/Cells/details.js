@@ -11,6 +11,8 @@ import Grid from '../../components/Grid';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { GetReports } from "../../services/Report.service";
 import moment from "moment";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUp, faArrowDown, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './style.css';
 
@@ -58,6 +60,22 @@ export const CellDetails = () => {
     const [total, setTotal] = useState(1);
     const [reports, setReports] = useState([]);
 
+    const compare = (prev, curr) => {
+        if (prev == null || curr == null) return <></>;
+        return (curr > prev ? <strong className="text-success" style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faArrowUp} /></strong> :
+                curr < prev ? <strong className="text-danger" style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faArrowDown} /></strong> :
+                <strong className="text-info" style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faCircle} /></strong>);
+    }
+
+    const displayReportNumbers = (report, reports, index, property) => {
+        var prevReport = reports[index + 1];
+        var comparer = <></>;
+        if(prevReport != null)
+            comparer = compare(prevReport[property], report[property]);
+
+        return <>{(report[property] || 0).toString().padStart(2, '0')}&nbsp;&nbsp;&nbsp;{comparer}</>;
+    }
+
     const columns = [
         {
             name: '#',
@@ -73,11 +91,11 @@ export const CellDetails = () => {
         },
         {
             name: 'Batizados',
-            render: (report) => report.numMembers || 0
+            render: (report, index) => displayReportNumbers(report, reports, index, 'numMembers')
         },
         {
             name: 'Visitantes',
-            render: (report) => report.numVisitors || 0
+            render: (report, index) => displayReportNumbers(report, reports, index, 'numVisitors')
         }
     ];
 
@@ -100,15 +118,18 @@ export const CellDetails = () => {
         }
 
         var result = await GetCell(params.id);
-        if (result.isValid) {
+        if (result.isValid && result.data != null) {
             setCell(result.data)
             var reportResult = await GetReports({ cellId: params.id }, pagination, { sortBy: 'date', order: true });
             if (result.isValid) {
                 setReports(reportResult.data);
                 setTotal(reportResult.totalRecords ?? reportResult.data.length);
-                setChartXAxis(reportResult.data.map(x => x.dateOnly));
+                setChartXAxis(reportResult.data.map(x => x.dateOnly).reverse());
             }
+        } else {            
+            navigate('/cells');
         }
+
         setLoading(false);
     };
 
@@ -291,7 +312,7 @@ export const CellDetails = () => {
                             <>
                                 <hr />
                                 <br />
-                                <h5>Relátorios enviados</h5>
+                                <h5>Últimos Relátorios enviados</h5>
                                 <Container fluid>
                                     <Row className="mb-3 pr-0">
                                         <Grid
@@ -301,7 +322,8 @@ export const CellDetails = () => {
                                             loading={loading}
                                             pagination={pagination}
                                             setPagination={setPagination}
-                                            totalRecords={total} />
+                                            totalRecords={total}
+                                            displayPagination={false} />
                                     </Row>
                                 </Container>
                                 <br />
@@ -325,7 +347,7 @@ export const CellDetails = () => {
                                                     color: '#00AB82',
                                                     showMark: true
                                                 }]}
-                                                dataset={reports}
+                                                dataset={reports.reverse()}
                                                 height={300}
                                             />
                                         </div>

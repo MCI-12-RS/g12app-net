@@ -9,7 +9,8 @@ namespace G12App.Domain.Mappings
     {
         public DomainToDTOMappingProfile()
         {
-            CreateMap<Member, MemberDto>();
+            CreateMap<Member, MemberDto>()
+                .ForMember(x => x.Password, opt => opt.Ignore());
             CreateMap<MemberDto, Member>()
                 .ForMember(x => x.Leadership, opt => opt.Ignore());
 

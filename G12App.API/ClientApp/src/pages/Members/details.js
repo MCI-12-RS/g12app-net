@@ -10,10 +10,12 @@ import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
 
 import './style.css';
+import { useAuthenticationContext } from "../../contexts/AuthenticationContext";
 
 export const MemberDetails = () => {
 
-    let toastContext = useToastContext();
+    const toastContext = useToastContext();
+    const authContext = useAuthenticationContext();
 
     const emptyMember = {
         id: 0,
@@ -63,12 +65,14 @@ export const MemberDetails = () => {
         }
 
         var result = await GetMember(params.id);
-        if (result.isValid) {
+        if (result.isValid && result.data != null) {
             const member = result.data;
             if (member.birthDate) {
                 member.birthDate = ToBRDate(member.birthDate);
             }
             setMember(result.data);
+        } else {
+            navigate('/members');
         }
         setLoading(false);
     };
@@ -255,10 +259,31 @@ export const MemberDetails = () => {
                             <AddressDetails address={member.homeAddress} setAddress={(address) => handleSelectChangeEvent('homeAddress', address)} />
 
                             <Container fluid>
+                                <h6>Acesso</h6>
+                                <Row className="mb-3 pr-0 justify-content-md-center">
+
+                                    <Col>
+                                        <InputGroup className="mb-3" as={Col}>
+                                            <InputGroup.Text id="basic-addon1">Senha</InputGroup.Text>
+                                            <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['password']} />
+                                        </InputGroup>
+                                    </Col>
+
+                                    <Col>
+                                        <InputGroup className="mb-3" as={Col}>
+                                            <InputGroup.Text id="basic-addon1">Confirmar Senha</InputGroup.Text>
+                                            <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['confirmPassword']} />
+                                        </InputGroup>
+                                    </Col>
+                                </Row>
+                            </Container>
+
+                            <Container fluid>
                                 <Row className="mb-3 pr-0 d-flex">
 
                                     <Col xs={12}>
-                                        {(params.id && <Button variant="danger" type="button" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
+                                        {params.id == authContext.auth.user.memberId ? <></> : (
+                                            params.id && <Button variant="danger" type="button" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
 
                                         <div className="float-end d-flex">
                                             {(!params.id ?
