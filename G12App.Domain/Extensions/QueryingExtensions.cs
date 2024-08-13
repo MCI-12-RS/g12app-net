@@ -137,6 +137,9 @@ namespace G12App.Domain.Extensions
             if (query.Filter.TimothyId > 0)
                 queryable = queryable.Where(x => x.TimothyId.Equals(query.Filter.TimothyId));
 
+            if (query.Filter.CellId > 0)
+                queryable = queryable.Where(x => x.CellId.Equals(query.Filter.CellId));
+
             return queryable;
         }
 

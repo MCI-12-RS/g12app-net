@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navbar, Container, Nav, NavDropdown, Badge } from 'react-bootstrap';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useToastContext } from '../../contexts/ToastContext';
 import { useAuthenticationContext } from '../../contexts/AuthenticationContext';
@@ -12,14 +12,17 @@ export const NavMenu = () => {
 
   const toastContext = useToastContext();
   const authContext = useAuthenticationContext();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const doLogoff = () => {
     authContext.logOff();
-
     toastContext.addToast({
       title: 'Ate a proxima!', hideDelay: 5000,
       description: 'Logout efetuado com sucesso.'
     });
+    
+    //navigate('/login', { replace: true, state: { from: location } });
   }
 
   return (

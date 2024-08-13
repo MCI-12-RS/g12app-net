@@ -49,8 +49,8 @@ namespace G12App.Infrastructure.Data.Repositories
         public async Task<IEnumerable<Report>> GetReportsAsync(Query<ReportFilter> query)
         {
             return await GetReportsQueryableAsync(query)
+                .ApplySort(query)
                 .ApplyPaging(query)
-                .ApplyFilter(query)
                 .ToListAsync();
         }
 

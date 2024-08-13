@@ -91,8 +91,6 @@ const Grid = ({
                             elements.push(<Pagination.Last key="item-last" onClick={() => setPage(pages)} />);
                         }
 
-                        elements.forEach()
-
                         return elements;
                     })()}
                 </Pagination>

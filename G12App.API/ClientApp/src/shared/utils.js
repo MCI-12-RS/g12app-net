@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const HandleDateMask = (e) => {
+export const HandleDateMask = (e) => {
     let input = e.target;
     
     if(e.charCode < 47 || e.charCode > 57) {
@@ -26,36 +26,37 @@ const HandleDateMask = (e) => {
     return true;
 }; 
 
-const ToBRDate = (dateString) => {
+export const ToBRDate = (dateString) => {
     var date = moment(dateString);
     if(date.isValid())
         return date.format('DD/MM/YYYY');
     return null;
 }
 
-const FromBRDate = (dateString) => {
+export const FromBRDate = (dateString) => {
     var date = moment(dateString, 'DD/MM/YYYY');
     if(date.isValid()) 
         return date.format('YYYY-MM-DD');
     return null;
 }
 
-const StringifyResponseErrors = (errors) => {
+export const StringifyResponseErrors = (errors) => {    
     if(errors == null)
-        return '';
+        return <>Ocorreu um erro!</>;
 
-    var response = [];
-    for (let key of Object.keys(errors)) {
-        for (let error of errors[key]) {
-            response.push(error);
-            response.push(<br />);
-        }
+    if(Array.isArray(errors)) {
+        return errors.map(x => <>{x.errorMessage}<br /></>);
     }
     
-    return response;
+    if(typeof(errors) === typeof({})) {
+        return Object.keys(errors).map(x => <>{errors[x].errorMessage}<br /></>);
+    }
+
+    if(errors == null)
+        return <>Ocorreu um erro!</>;
 };
 
-const FetchPrivate = async (url, options = {}) => {
+export const FetchPrivate = async (url, options = {}) => {
     var token = localStorage.getItem('jwtToken');
 
   if (token) {
@@ -74,23 +75,45 @@ const FetchPrivate = async (url, options = {}) => {
   return result;
 };
 
-const SetupAuth = (auth) => {
+export const SetupAuth = (auth) => {
     localStorage.setItem('auth', JSON.stringify(auth));
     localStorage.setItem('authDate', new Date());
     localStorage.setItem('jwtToken', auth?.user?.token);
 }
 
-const CleanupAuth = () => {
+export const CleanupAuth = () => {
     localStorage.removeItem('auth');
     localStorage.removeItem('authDate');
     localStorage.removeItem('jwtToken');
 }
 
-const FormatMemberPickerLabel = (member) => {
+export const FormatMemberPickerLabel = (member) => {
     if(member == null) return '';
     var leader = (member.computedG12Leader ?? member.computedLeadershipName);
     if (leader) leader += ' / ';
     return (leader ?? '') + member.name;
 };
 
-export { HandleDateMask, ToBRDate, FromBRDate, StringifyResponseErrors, FetchPrivate, SetupAuth, CleanupAuth, FormatMemberPickerLabel };
+export const TranslateCellType = (cellType) => {
+    if (cellType === "Evangelistic")
+        return "Evangelística";
+    if (cellType === "Discipleship")
+        return "Discipuladora"
+};
+
+export const TranslateWeekDay = (weekDay) => {
+    if (weekDay === "Monday")
+        return "Segunda-Feira";
+    if (weekDay === "Tuesday")
+        return "Terça-Feira";
+    if (weekDay === "Wednesday")
+        return "Quarta-Feira";
+    if (weekDay === "Thursday")
+        return "Quinta-Feira";
+    if (weekDay === "Friday")
+        return "Sexta-Feira";
+    if (weekDay === "Saturday")
+        return "Sábado";
+    if (weekDay === "Sunday")
+        return "Domingo";
+}

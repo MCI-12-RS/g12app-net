@@ -40,7 +40,7 @@ export const MemberDetails = () => {
     const params = useParams();
     const location = useLocation();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [member, setMember] = useState(emptyMember);
     const [registerMore, setRegisterMore] = useState(location.state?.registerMore ?? false);
 

@@ -20,7 +20,7 @@ const AuthenticationContextProvider = ({ children }) => {
     const [auth, setAuth] = React.useState(emptyAuth);
 
     const logOff = () => {
-        SetupAuth(emptyAuth);
+        setAuth(emptyAuth);
     };
 
     const logIn = (user) => {
@@ -41,11 +41,15 @@ const AuthenticationContextProvider = ({ children }) => {
         };
     };
 
-    useEffect(() => {
+    const refreshAuthState = () => {        
         const storedAuth = localStorage.getItem('auth');
         if (storedAuth) {
             setAuth(JSON.parse(storedAuth));
         }
+    };
+
+    useEffect(() => {
+        refreshAuthState();
     }, []);
 
     useEffect(() => {
@@ -53,7 +57,7 @@ const AuthenticationContextProvider = ({ children }) => {
     }, [auth]);
 
     return (
-        <Provider value={{ auth, logOff, logIn, getHeaders }}>
+        <Provider value={{ auth, logOff, logIn, getHeaders, refreshAuthState }}>
             {children}
         </Provider>
     );

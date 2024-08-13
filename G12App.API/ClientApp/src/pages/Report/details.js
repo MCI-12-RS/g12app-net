@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { InputGroup, Container, Row, Button, Col, Form } from 'react-bootstrap';
+import { InputGroup, Container, Row, Button, Col, Form, Spinner } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import CellPicker from '../../components/CellPicker';
@@ -94,20 +94,22 @@ export const ReportDetails = () => {
                 navigate('/cells/' + report.cellId);
 
             } else {
+                
                 toastContext.addToast({
                     title: 'Erro', hideDelay: 10000,
-                    description: <>{'Erro ao salvar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
+                    description: StringifyResponseErrors(result.errors)
                 });
 
                 setLoading(false);
             }
+            
         }
         catch (e) {
+            console.error(e);
             toastContext.addToast({
                 title: 'Erro', hideDelay: 5000,
                 description: 'Erro de sistema ao enviar relatório.'
             });
-
             setLoading(false);
         }
     };
@@ -134,7 +136,7 @@ export const ReportDetails = () => {
 
     return (
         loading ?
-            (<div>Carregando...</div>) : (
+            (<Spinner animation="border" />) : (
                 <>
                     <h1>Registrar relatório</h1>
                     <hr />
@@ -219,7 +221,7 @@ export const ReportDetails = () => {
                                 <Row className="mb-3 pr-0">
                                     <InputGroup className="mb-3" as={Col}>
                                         <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
-                                        <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3" autoComplete='off' onChange={handleChangeEvent} />
+                                        <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3" autoComplete='off' onChange={handleChangeEvent} required="true" />
                                     </InputGroup>
                                 </Row>
 

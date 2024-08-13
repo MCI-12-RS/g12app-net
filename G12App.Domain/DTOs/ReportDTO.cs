@@ -18,5 +18,8 @@ namespace G12App.Domain.DTOs
         public int HostId { get; set; }
         public int TimothyId { get; set; }
         public CellType? CellType { get; set; }
+        public int NumVisitors { get; set; } = new Random().Next(3, 20);
+        public int NumMembers { get; set; } = new Random().Next(3, 20);
+        public string DateOnly => Date.ToString("dd/MM/yyyy");
     }
 }

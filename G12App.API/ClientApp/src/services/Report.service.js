@@ -14,4 +14,30 @@ const LogReport = async (report) => {
     return obj;
 }
 
-export {LogReport}
+const GetReports = async(search, pagination, sort = {}) => {
+    var response = await FetchPrivate('/api/report/search', {
+        method: 'POST',
+        body: JSON.stringify({
+            "pagination":{
+                "page": pagination.page,
+                "limit": pagination.limit
+            },
+            "sort": {
+                "sortBy": sort.sortBy,
+                "order": sort.order
+            },
+            "filter": {
+              "cellId": search.cellId
+            }
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        }
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
+export { LogReport, GetReports }

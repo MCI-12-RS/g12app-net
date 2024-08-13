@@ -4,6 +4,7 @@ import { Col, InputGroup } from "react-bootstrap";
 import AsyncSelect from "react-select/async";
 import { debounce } from 'lodash';
 import './style.css';
+import { TranslateWeekDay } from '../../shared/utils';
 
 const CellPicker = ({
     label = 'Célula',
@@ -44,8 +45,11 @@ const CellPicker = ({
         return result.data.map((cell) => ({
             label: 
             'Líder: ' + cell.lead?.name +
-            (cell.place?.street ? ' / Rua: ' + cell.place?.street : '') +
-            (cell.place?.neighborhood ? ' / Bairro: ' + cell.place?.neighborhood : ''),
+            (cell.place?.street || cell.place?.neighborhood ? ' | ' : '') +
+            (cell.place?.street ? ' Rua: ' + cell.place?.street + ( cell.place?.number ? ', ' + cell.place?.number : '' ) : '') +
+            (cell.place?.street && cell.place?.neighborhood ? ' - ' : '') +
+            (cell.place?.neighborhood ? cell.place?.neighborhood : '') +
+            (' | ' + TranslateWeekDay(cell.weekDay) + ' às ' + cell.time),
             value: cell.id
         }));
     }

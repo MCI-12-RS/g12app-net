@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { InputGroup, Form, Col, Row, Button, Container, FormCheck } from 'react-bootstrap';
+import { InputGroup, Form, Col, Row, Button, Container, FormCheck, Spinner } from 'react-bootstrap';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { CreateCell, DeleteCell, GetCell, UpdateCell } from '../../services/Cell.service';
 import MemberPicker from '../../components/MemberPicker';
@@ -8,6 +8,9 @@ import { StringifyResponseErrors, FormatMemberPickerLabel } from '../../shared/u
 import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
 import Grid from '../../components/Grid';
+import { LineChart } from '@mui/x-charts/LineChart';
+import { GetReports } from "../../services/Report.service";
+import moment from "moment";
 
 import './style.css';
 
@@ -46,14 +49,37 @@ export const CellDetails = () => {
     const params = useParams();
     const location = useLocation();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [cell, setCell] = useState(emptyCell);
     const [registerMore, setRegisterMore] = useState(location.state?.registerMore ?? false);
+    const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+    const [chartXAxis, setChartXAxis] = useState([]);
 
+    const [total, setTotal] = useState(1);
     const [reports, setReports] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [pagination, setPagination] = useState({ page: 1, pageSize: 10 });
-    const [columns, setColumns] = useState([]);
+
+    const columns = [
+        {
+            name: '#',
+            render: (member) => (member.id.toString() ?? '0').padStart(5, '0')
+        },
+        {
+            name: 'Data da Reunião',
+            render: (report) => (<><strong>{moment(report.date).format('DD/MM/yyyy')}</strong><br />{moment(report.date).format('HH:mm')}</>)
+        },
+        {
+            name: 'Tema',
+            render: (report) => report.subject
+        },
+        {
+            name: 'Batizados',
+            render: (report) => report.numMembers || 0
+        },
+        {
+            name: 'Visitantes',
+            render: (report) => report.numVisitors || 0
+        }
+    ];
 
     useEffect(() => {
         if (location.state?.registerMore) {
@@ -62,10 +88,10 @@ export const CellDetails = () => {
     }, []);
 
     useEffect(() => {
-        fetchUser();
+        fetchCell();
     }, [params]);
 
-    const fetchUser = async () => {
+    const fetchCell = async () => {
         setLoading(true);
         if (!params.id) {
             setCell(emptyCell);
@@ -76,6 +102,12 @@ export const CellDetails = () => {
         var result = await GetCell(params.id);
         if (result.isValid) {
             setCell(result.data)
+            var reportResult = await GetReports({ cellId: params.id }, pagination, { sortBy: 'date', order: true });
+            if (result.isValid) {
+                setReports(reportResult.data);
+                setTotal(reportResult.totalRecords ?? reportResult.data.length);
+                setChartXAxis(reportResult.data.map(x => x.dateOnly));
+            }
         }
         setLoading(false);
     };
@@ -165,8 +197,8 @@ export const CellDetails = () => {
     }
 
     return (
-        loading ?
-            (<div>Carregando...</div>) : (
+        loading ?        
+            (<Spinner animation="border" />) : (
                 <>
                     {(params.id ? <h1>Alterar cadastro de célula</h1> : <h1>Cadastrar nova célula</h1>)}
                     <hr />
@@ -202,7 +234,7 @@ export const CellDetails = () => {
 
                         <Container fluid>
                             <h6>Data/Horário</h6>
-                            <Row ClassName="mb-3 pr-0">
+                            <Row className="mb-3 pr-0">
                                 <Col>
                                     <InputGroup className="mb-3 pr-0" as={Col}>
                                         <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
@@ -254,20 +286,55 @@ export const CellDetails = () => {
 
                             </Row>
                         </Container>
-                        <hr/>
-                        <h6>Relátorios enviados</h6>
-                        <Container fluid>
-                            <Row ClassName="mb-3 pr-0">
-                                <Grid
-                                    columns={columns}
-                                    data={reports}
-                                    textTotal='Relatórios enviados:'
-                                    loading={loading}
-                                    pagination={pagination}
-                                    setPagination={setPagination}
-                                    totalRecords={total} />
-                            </Row>
-                        </Container>
+                        <br />
+                        {(params.id ? (
+                            <>
+                                <hr />
+                                <br />
+                                <h5>Relátorios enviados</h5>
+                                <Container fluid>
+                                    <Row className="mb-3 pr-0">
+                                        <Grid
+                                            columns={columns}
+                                            data={reports}
+                                            textTotal='relatórios enviados'
+                                            loading={loading}
+                                            pagination={pagination}
+                                            setPagination={setPagination}
+                                            totalRecords={total} />
+                                    </Row>
+                                </Container>
+                                <br />
+                                {(reports.length == 0 ? <></> :
+                                    <>
+                                        <hr />
+                                        <br />
+                                        <h5>Linha de evolução</h5>
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <LineChart
+                                                xAxis={[{ scaleType: 'point', data: chartXAxis }]}
+                                                series={[{
+                                                    dataKey: 'numMembers',
+                                                    label: 'Batizados',
+                                                    color: '#2CAAE1',
+                                                    showMark: true
+                                                },
+                                                {
+                                                    dataKey: 'numVisitors',
+                                                    label: 'Visitantes',
+                                                    color: '#00AB82',
+                                                    showMark: true
+                                                }]}
+                                                dataset={reports}
+                                                height={300}
+                                            />
+                                        </div>
+                                        <br />
+                                    </>
+                                )}
+                                <br />
+                            </>
+                        ) : '')}
                     </Form>
                 </>
             )

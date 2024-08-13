@@ -74,7 +74,7 @@ export const LoginPage = () => {
         checkRedirect();
     }, [authContext.auth]);
 
-    return (
+    return (authContext.auth.authenticated ? <></> : (
         <Container fluid className="login">
 
             <img className="logo" width="200" height="200" src={logo} />
@@ -115,5 +115,5 @@ export const LoginPage = () => {
                 </Row>
             </Form>
         </Container>
-    );
+    ));
 }

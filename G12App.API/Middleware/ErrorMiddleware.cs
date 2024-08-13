@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -40,7 +41,10 @@ namespace G12App.API.Middleware
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(result));
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(result, new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }));
         }
     }
 }

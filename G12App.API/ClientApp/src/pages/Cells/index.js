@@ -7,6 +7,7 @@ import Grid from '../../components/Grid';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { TranslateCellType, TranslateWeekDay } from '../../shared/utils.js';
 
 export const Cells = () => {
 
@@ -40,11 +41,11 @@ export const Cells = () => {
     },
     {
       name: 'Modalidade',
-      render: (cell) => translateCellType(cell.cellType)
+      render: (cell) => TranslateCellType(cell.cellType)
     },
     {
       name: 'Dia da semana',
-      render: (cell) => <> {translateWeekDay(cell.weekDay)} <br /> {(cell.time || '').substring(0, 5)} </>
+      render: (cell) => <> {TranslateWeekDay(cell.weekDay)} <br /> {(cell.time || '').substring(0, 5)} </>
     },
     {
       name: '',
@@ -53,34 +54,10 @@ export const Cells = () => {
 
   ];
 
-  const translateCellType = (cellType) => {
-    if (cellType === "Evangelistic")
-      return "Evangelística";
-    if (cellType === "Discipleship")
-      return "Discipuladora"
-  };
-
-  const translateWeekDay = (weekDay) => {
-    if (weekDay === "Monday")
-      return "Segunda-Feira";
-    if (weekDay === "Tuesday")
-      return "Terça-Feira";
-    if (weekDay === "Wednesday")
-      return "Quarta-Feira";
-    if (weekDay === "Thursday")
-      return "Quinta-Feira";
-    if (weekDay === "Friday")
-      return "Sexta-Feira";
-    if (weekDay === "Saturday")
-      return "Sábado";
-    if (weekDay === "Sunday")
-      return "Domingo";
-  }
-
   const search = async () => {
     setLoading(true);
 
-    const result = await SearchCells(searchData, pagination);
+    const result = await SearchCells(searchData, pagination, {});
     if (result.isValid) {
       setCells(result.data);
       setTotal(result.totalRecords ?? result.data.length);
