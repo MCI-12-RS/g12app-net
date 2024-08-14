@@ -117,3 +117,20 @@ export const TranslateWeekDay = (weekDay) => {
     if (weekDay === "Sunday")
         return "Domingo";
 }
+
+export const TranslateMomentWeekDay = (weekDay) => {
+    if (weekDay === "Monday")
+        return 1;
+    if (weekDay === "Tuesday")
+        return 2;
+    if (weekDay === "Wednesday")
+        return 3;
+    if (weekDay === "Thursday")
+        return 4;
+    if (weekDay === "Friday")
+        return 5;
+    if (weekDay === "Saturday")
+        return 6;
+    if (weekDay === "Sunday")
+        return 0;
+}

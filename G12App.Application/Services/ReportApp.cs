@@ -1,6 +1,8 @@
 ﻿using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
+using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using System.Globalization;
 using System.Net;
 
@@ -24,7 +26,7 @@ namespace G12App.Application.Services
             return week;
         }
 
-        private static (DateTime, DateTime) GetWeekSpan(DateTime dt)
+        private static (DateTime FirstDay, DateTime LastDay) GetWeekSpan(DateTime dt)
         {
             int diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;
             var startDate = dt.AddDays(-1 * diff).Date;
@@ -34,8 +36,22 @@ namespace G12App.Application.Services
 
         public async Task<ServiceResult<ReportDTO>> LogReport(ReportDTO reportDTO)
         {
+            var weekDates = GetWeekSpan(DateTime.Now);
+
             if (reportDTO.Date > DateTime.Now)
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "O relatório não pode ser enviado para uma data futura.");
+
+            if (GetWeekNum(reportDTO.Date) != GetWeekNum(DateTime.Now))
+                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, $"O relatório precisa ser da semana atual, de {weekDates.Item1.ToString("dd/MM/yyyy")} a {weekDates.Item2.ToString("dd/MM/yyyy")}.");
+
+            var existentReport = await _reportService.GetAllReports(new Query<ReportFilter>()
+            {
+                Filter = new ReportFilter() { StartDate = weekDates.FirstDay, EndDate = weekDates.LastDay, CellId = reportDTO.CellId },
+                Pagination = Pagination.SingleRecord,
+            });
+
+            if ((existentReport.Data?.Any()).GetValueOrDefault())
+                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, $"O relatório para esta semana já foi enviado (#{existentReport.Data.FirstOrDefault().Id}).");
 
             var cellResult = await _cellService.GetCellById(reportDTO.CellId);
             if (cellResult == null)
@@ -46,12 +62,6 @@ namespace G12App.Application.Services
 
             if (cellResult.Data.WeekDay == reportDTO.Date.DayOfWeek && cellResult.Data.Time > TimeOnly.FromDateTime(reportDTO.Date))
                 return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, $"O relatório não pode ser lançado antes do horário de cadastro da célula ({cellResult.Data.Time.ToString("HH:mm")}).");
-
-            if (GetWeekNum(reportDTO.Date) != GetWeekNum(DateTime.Now))
-            {
-                var dates = GetWeekSpan(DateTime.Now);
-                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, $"O relatório precisa ser da semana atual, de {dates.Item1.ToString("dd/MM/yyyy")} a {dates.Item2.ToString("dd/MM/yyyy")}.");
-            }
 
             return await _reportService.Add(reportDTO);
         }

@@ -4,6 +4,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,14 @@ namespace G12App.Infrastructure.Data.Repositories
     public class CellRepository : ICellRepository
     {
         private readonly AppContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CellRepository(AppContext context)
+        public CellRepository(
+            AppContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private IQueryable<Cell> GetCellsQueryableAsync(Query<CellFilter> query)
@@ -25,6 +30,7 @@ namespace G12App.Infrastructure.Data.Repositories
             return _context.Cells
                 .IgnoreAutoIncludes()
                 .Where(x => x.IsDeleted == false)
+                .ApplyMinistryFilter(_httpContextAccessor?.HttpContext?.User)
                 .ApplyFilter(query);
         }
 
@@ -37,12 +43,12 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public Task<Cell> GetCellByIdAsync(int? id)
         {
-            return _context.Cells
+            return GetCellsQueryableAsync(null)
                 .Include(x => x.Lead)
                 .Include(x => x.Host)
                 .Include(x => x.Timothy)
                 .Include(x => x.Place)
-                .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<int> CountCellsAsync(Query<CellFilter> query)

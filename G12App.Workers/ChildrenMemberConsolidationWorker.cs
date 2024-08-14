@@ -35,7 +35,7 @@ namespace G12App.Workers
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                //await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
                 await using var scope = _serviceProvider.CreateAsyncScope();
                 var memberService = scope.ServiceProvider.GetRequiredService<IMemberService>();
                 try
@@ -65,6 +65,7 @@ namespace G12App.Workers
                     Filter = new MemberFilter()
                     {
                         LeadershipId = member.Id,
+                        ChildrenMembersComputed = false
                     },
                     Pagination = new Pagination()
                     {

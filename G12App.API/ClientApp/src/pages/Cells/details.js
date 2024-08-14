@@ -111,6 +111,7 @@ export const CellDetails = () => {
 
     const fetchCell = async () => {
         setLoading(true);
+
         if (!params.id) {
             setCell(emptyCell);
             setLoading(false);
@@ -142,7 +143,8 @@ export const CellDetails = () => {
         setCell({ ...cell, [name]: value });
     };
 
-    const SaveCell = async () => {
+    const SaveCell = async (e) => {
+        e.preventDefault();
         setLoading(true);
 
         try {
@@ -327,7 +329,7 @@ export const CellDetails = () => {
                                     </Row>
                                 </Container>
                                 <br />
-                                {(reports.length == 0 ? <></> :
+                                {(reports.length === 0 ? <></> :
                                     <>
                                         <hr />
                                         <br />

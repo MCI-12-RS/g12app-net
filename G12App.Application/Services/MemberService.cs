@@ -2,6 +2,7 @@
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Mappings;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
@@ -26,19 +27,19 @@ namespace G12App.Application.Services
             _changeTrackingService = changeTrackingService;
         }
 
-        public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query<MemberFilter> query)
+        public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query<MemberFilter> query, bool preservePassword = false)
         {
             var memberEntity = await _memberRepository.GetMembersAsync(query);
             var totalMembers = memberEntity.Any() ? await _memberRepository.CountMembersAsync(query) : 0;
             return new ServiceResult<IEnumerable<MemberDto>>(
-                _mapper.Map<IEnumerable<MemberDto>>(memberEntity),
+                _mapper.Map<IEnumerable<MemberDto>>(memberEntity, opt => opt.Items[MappingConstants.PreservePassword] = preservePassword),
                 totalMembers);
         }
 
-        public async Task<ServiceResult<MemberDto>> GetMemberById(int? id)
+        public async Task<ServiceResult<MemberDto>> GetMemberById(int? id, bool preservePassword = false)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
-            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(memberEntity));
+            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(memberEntity, opt => opt.Items[MappingConstants.PreservePassword] = preservePassword));
         }
 
         public async Task<ServiceResult<MemberDto>> Add(MemberDto memberDTO)
@@ -100,12 +101,14 @@ namespace G12App.Application.Services
         private async Task UpdateComputedValues(Member memberEntity)
         {
             var leadershipList = new List<Member>();
+            var leadershipIdList = new List<int?>();
             var leadId = memberEntity.LeadershipId;
 
             while (leadId is > 0)
             {
                 var leader = await _memberRepository.GetMemberByIdAsync(leadId);
                 leadershipList.Add(leader);
+                leadershipIdList.Add(leadId);
                 leadId = leader.LeadershipId;
 
                 if (leadershipList.Count > 5)
@@ -116,10 +119,12 @@ namespace G12App.Application.Services
                 throw new Exception("Membro não pode ser discípulo de um discípulo.");
 
             leadershipList.Reverse();
+            leadershipIdList.Reverse();
 
             memberEntity.ComputedLeadershipName = leadershipList.LastOrDefault()?.Name ?? string.Empty;
             memberEntity.ComputedG12Leader = leadershipList.Skip(1).FirstOrDefault()?.Name;
             memberEntity.LeadershipTree = string.Join(" / ", leadershipList.Select(x => x.Name));
+            memberEntity.LeadershipIdTree = $"|{string.Join("|", leadershipIdList.Where(x => x.HasValue))}|";
             memberEntity.MinistryLevel = (int)Math.Pow(12, leadershipList.Count);
             memberEntity.ChildrenMembersComputed = false;
         }

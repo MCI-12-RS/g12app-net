@@ -26,10 +26,11 @@ namespace G12App.Infrastructure.Data.Tests
             CellType = Domain.Model.Enum.CellType.Evangelistic,
             ReportMandatory = true,
         };
+
         public CellRepositoryTests()
         {
 
-            _repository = new CellRepository(_fixture.Context);
+            _repository = new CellRepository(_fixture.Context, _fixture.HttpContextAccessor);
         }
 
         [Fact]
@@ -76,7 +77,7 @@ namespace G12App.Infrastructure.Data.Tests
         [Fact]
         public async Task TestToCreate()
         {
-            
+
             //Act
             var result = await _repository.Create(_defaultCellToCreate);
 

@@ -28,7 +28,7 @@ namespace G12App.Infrastructure.Data.Tests
 
         public ReportRepositoryTests()
         {
-            _repository = new ReportRepository(_fixture.Context);
+            _repository = new ReportRepository(_fixture.Context, _fixture.HttpContextAccessor);
         }
 
         [Fact]

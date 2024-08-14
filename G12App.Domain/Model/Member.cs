@@ -2,7 +2,6 @@
 using G12App.Domain.Model.Enum;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace G12App.Domain.Model
 {
@@ -40,7 +39,10 @@ namespace G12App.Domain.Model
 
         public string LeadershipTree { get; set; }
 
+        public string LeadershipIdTree { get; set; }
+
         public bool ChildrenMembersComputed { get; set; }
+
         public string Password { get; set; }
     }
 }

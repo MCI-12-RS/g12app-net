@@ -10,7 +10,17 @@ namespace G12App.Domain.Mappings
         public DomainToDTOMappingProfile()
         {
             CreateMap<Member, MemberDto>()
-                .ForMember(x => x.Password, opt => opt.Ignore());
+                .ForMember(x => x.Password, opt =>
+                {
+                    opt.PreCondition(c =>
+                    {
+                        if (c.TryGetItems(out var items))
+                            if (items.TryGetValue(MappingConstants.PreservePassword, out var preservePassword))
+                                return Convert.ToBoolean(preservePassword);
+                        return false;
+                    });
+                    opt.MapFrom(s => s.Password);
+                });
             CreateMap<MemberDto, Member>()
                 .ForMember(x => x.Leadership, opt => opt.Ignore());
 
@@ -37,7 +47,7 @@ namespace G12App.Domain.Mappings
                 .ForMember(x => x.Id, opt => opt.Ignore());
             CreateMap<Report, Report>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
-            
+
         }
     }
 }

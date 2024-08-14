@@ -4,6 +4,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,14 @@ namespace G12App.Infrastructure.Data.Repositories
     public class MemberRepository : IMemberRepository
     {
         private readonly AppContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MemberRepository(
-            AppContext context)
+            AppContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Member> Create(Member member)
@@ -30,11 +34,10 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> GetMemberByIdAsync(int? id)
         {
-            return await _context.Members
+            return await GetMembersQueryableAsync(null)
                     .Include(x => x.Leadership)
                     .Include(x => x.HomeAddress)
-                    .Where(x => x.Id == id && x.IsDeleted == false)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         private IQueryable<Member> GetMembersQueryableAsync(Query<MemberFilter> query)
@@ -42,6 +45,7 @@ namespace G12App.Infrastructure.Data.Repositories
             return _context.Members
                 .IgnoreAutoIncludes()
                 .Where(x => x.IsDeleted == false)
+                .ApplyMinistryFilter(_httpContextAccessor?.HttpContext?.User)
                 .ApplyFilter(query);
         }
 
@@ -78,8 +82,8 @@ namespace G12App.Infrastructure.Data.Repositories
             _context.Attach(member);
             _context.Entry(member).State = EntityState.Modified;
             if (member.HomeAddress != null && member.HomeAddress.Id > 0)
-                    _context.Entry(member.HomeAddress).State = EntityState.Modified;
-            
+                _context.Entry(member.HomeAddress).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
             return member;
         }

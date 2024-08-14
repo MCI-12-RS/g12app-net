@@ -5,6 +5,7 @@ using G12App.Domain.Querying.Filters;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace G12App.Domain.Extensions
 {
@@ -38,6 +39,9 @@ namespace G12App.Domain.Extensions
 
         public static IQueryable<Member> ApplyFilter(this IQueryable<Member> queryable, Query<MemberFilter> query)
         {
+            if (query == null)
+                return queryable;
+
             if (!string.IsNullOrWhiteSpace(query.Filter.Name))
                 queryable = queryable.Where(x => x.Name.ToLower().Contains(query.Filter.Name.ToLower()));
 
@@ -74,10 +78,31 @@ namespace G12App.Domain.Extensions
             return queryable;
         }
 
+        public static IQueryable<Member> ApplyMinistryFilter(this IQueryable<Member> queryable, ClaimsPrincipal user)
+        {
+            if (user == null)
+                return queryable;
+
+            var memberIdClaim = user.FindFirstValue(CustomClaims.MemberId);
+            if (!int.TryParse(memberIdClaim, out var memberId))
+                return queryable;
+
+            queryable = queryable.Where(x =>
+                x.LeadershipIdTree.Contains($"|{memberId}|") ||
+                x.Id.Equals(memberId));
+
+            return queryable;
+        }
+
         #endregion
+
+        #region Cell
 
         public static IQueryable<Cell> ApplyFilter(this IQueryable<Cell> queryable, Query<CellFilter> query)
         {
+            if (query == null)
+                return queryable;
+
             if (query.Filter.LeadId > 0)
                 queryable = queryable.Where(x => x.LeadId.Equals(query.Filter.LeadId));
 
@@ -114,8 +139,35 @@ namespace G12App.Domain.Extensions
             return queryable;
         }
 
+        public static IQueryable<Cell> ApplyMinistryFilter(this IQueryable<Cell> queryable, ClaimsPrincipal user)
+        {
+            if (user == null)
+                return queryable;
+
+            var memberIdClaim = user.FindFirstValue(CustomClaims.MemberId);
+            if (!int.TryParse(memberIdClaim, out var memberId))
+                return queryable;
+
+            queryable = queryable.Where(x =>
+                x.Lead.LeadershipIdTree.Contains($"|{memberId}|") ||
+                x.LeadId.Equals(memberId) ||
+                x.Host.LeadershipIdTree.Contains($"|{memberId}|") ||
+                x.HostId.Equals(memberId) ||
+                x.Timothy.LeadershipIdTree.Contains($"|{memberId}|") ||
+                x.TimothyId.Equals(memberId));
+
+            return queryable;
+        }
+
+        #endregion
+
+        #region Report
+
         public static IQueryable<Report> ApplyFilter(this IQueryable<Report> queryable, Query<ReportFilter> query)
         {
+            if (query == null)
+                return queryable;
+
             if (!string.IsNullOrWhiteSpace(query.Filter.Subject))
                 queryable = queryable.Where(x => x.Subject.ToLower().Contains(query.Filter.Subject.ToLower()));
 
@@ -143,5 +195,26 @@ namespace G12App.Domain.Extensions
             return queryable;
         }
 
+        public static IQueryable<Report> ApplyMinistryFilter(this IQueryable<Report> queryable, ClaimsPrincipal user)
+        {
+            if (user == null)
+                return queryable;
+
+            var memberIdClaim = user.FindFirstValue(CustomClaims.MemberId);
+            if (!int.TryParse(memberIdClaim, out var memberId))
+                return queryable;
+
+            queryable = queryable.Where(x =>
+                x.Lead.LeadershipIdTree.Contains($"|{memberId}|") ||
+                x.LeadershipId.Equals(memberId) ||
+                x.Host.LeadershipIdTree.Contains($"|{memberId}|") ||
+                x.HostId.Equals(memberId) ||
+                x.Timothy.LeadershipIdTree.Contains($"|{memberId}|") ||
+                x.TimothyId.Equals(memberId));
+
+            return queryable;
+        }
+
+        #endregion
     }
 }

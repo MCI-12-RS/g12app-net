@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { InputGroup, Container, Row, Button, Col, Form, Spinner } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import CellPicker from '../../components/CellPicker';
 import { LogReport } from "../../services/Report.service";
 import { useNavigate } from 'react-router-dom';
-import { FromBRDate } from '../../shared/utils';
+import { FromBRDate, ToBRDate, TranslateMomentWeekDay } from '../../shared/utils';
 import { useToastContext } from '../../contexts/ToastContext';
 import { StringifyResponseErrors } from '../../shared/utils';
 
 import './style.css';
 import InputMask from "react-input-mask";
+import moment from 'moment';
 
 export const ReportDetails = () => {
 
@@ -43,12 +44,10 @@ export const ReportDetails = () => {
         leadership: {
             name: ''
         },
-        weekDay: {
-            name: ''
-        },
+        weekDay: '',
         place: {
             street: '',
-            number: '',
+            number: '', 
             neighborhood: '',
             city: '',
             state: ''
@@ -59,6 +58,15 @@ export const ReportDetails = () => {
     const [report, setReport] = useState(emptyReport);
     window.setLoading = setLoading;
 
+    const getSuggestedDate = (cell) => {
+        var date = new Date();
+        var day = date.getDay();
+        var diff = TranslateMomentWeekDay(cell.weekDay) - day;
+        date.setDate(date.getDate() + diff);        
+        var val = ToBRDate(date.toISOString());
+        return val;
+    };
+
     const fetchCell = async (cellId) => {
         var result = await GetCell(cellId);
         if (result.isValid) {
@@ -68,13 +76,16 @@ export const ReportDetails = () => {
                 cellId: result.data.id,
                 hostId: result.data.hostId,
                 timothyId: result.data.timothyId,
-                leadershipId: result.data.leadId
+                leadershipId: result.data.leadId,
+                dateOnly: getSuggestedDate(result.data),
+                timeOnly: (result.data.time || '').substring(0, 5),
             });
 
         }
     };
 
-    const SubmitReport = async () => {
+    const SubmitReport = async (e) => {
+        e.preventDefault();
         setLoading(true);
 
         try {
@@ -221,7 +232,7 @@ export const ReportDetails = () => {
                                 <Row className="mb-3 pr-0">
                                     <InputGroup className="mb-3" as={Col}>
                                         <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
-                                        <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3" autoComplete='off' onChange={handleChangeEvent} required="true" />
+                                        <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3" autoComplete='off' onChange={handleChangeEvent} required={true} />
                                     </InputGroup>
                                 </Row>
 

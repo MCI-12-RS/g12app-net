@@ -36,7 +36,7 @@ namespace G12App.Application.Services
                     UserName = login.UserName,
                 }
             };
-            var result = await _memberService.GetMembers(query);
+            var result = await _memberService.GetMembers(query, true);
             var user = result.Data.FirstOrDefault();
 
             if (user == null)
@@ -62,12 +62,14 @@ namespace G12App.Application.Services
             var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
+                Subject = new ClaimsIdentity(
+                [
                     new(ClaimTypes.Name, member.Name),
-                    new("MemberId", member.Id.ToString()),
+                    new(CustomClaims.MemberId, member.Id.ToString()),
                     new(ClaimTypes.Email, member.Email),
-                }),
+                    new(CustomClaims.MinistryLevel, member.MinistryLevel?.ToString()),
+                    new(CustomClaims.LeadershipId, member.LeadershipId?.ToString()),
+                ]),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

@@ -47,11 +47,11 @@ export const Members = () => {
       render: (member) => member.name
     },
     {
-      name: 'Nivel',
+      name: 'Nível',
       render: (member) => translateMinistryLevel(member.ministryLevel)
     },
     {
-      name: 'Ministerio',
+      name: 'Ministério',
       render: (member) => getLeadership(member)
     },
     {

@@ -8,6 +8,7 @@ import { useToastContext } from '../../contexts/ToastContext';
 import moment from "moment";
 import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
+import md5 from 'md5';
 
 import './style.css';
 import { useAuthenticationContext } from "../../contexts/AuthenticationContext";
@@ -36,7 +37,9 @@ export const MemberDetails = () => {
         leadership: {
             id: null,
             name: ''
-        }
+        },
+        password: '',
+        confirmPassword: '',
     };
 
     const params = useParams();
@@ -51,7 +54,7 @@ export const MemberDetails = () => {
             setRegisterMore(true);
         }
     }, []);
-
+ 
     useEffect(() => {
         fetchUser();
     }, [params]);
@@ -98,15 +101,36 @@ export const MemberDetails = () => {
         return '-'
     }
 
-    const SaveMember = async () => {
+    const ValidateMember = () => {
+        var valid = true;
+
+        if (member.password !== member.confirmPassword) {
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Senhas não conferem.'
+            });
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    const SaveMember = async (e) => {
+        e.preventDefault();
         setLoading(true);
+
+        var valid = ValidateMember();
+        if (!valid) {
+            setLoading(false);
+            return false;
+        }
 
         try {
             var result;
             if (params.id) {
-                result = await UpdateMember({ ...member, birthDate: FromBRDate(member.birthDate) });
+                result = await UpdateMember({ ...member, birthDate: FromBRDate(member.birthDate), password: md5(member.password) });
             } else {
-                result = await CreateMember({ ...member, birthDate: FromBRDate(member.birthDate) });
+                result = await CreateMember({ ...member, birthDate: FromBRDate(member.birthDate), password: md5(member.password) });
             }
 
             if (result.isValid) {
@@ -247,7 +271,7 @@ export const MemberDetails = () => {
                                 <h6>Ministerial</h6>
                                 <Row className="mb-3 pr-0 justify-content-md-center">
                                     <Col>
-                                        <MemberPicker label="Lideranca"
+                                        <MemberPicker label="Liderança"
                                             setValue={(value) => handleSelectChangeEvent('leadershipId', value)}
                                             notInIds={[member.id]}
                                             selectedLabel={FormatMemberPickerLabel(member.leadership)}
@@ -265,14 +289,14 @@ export const MemberDetails = () => {
                                     <Col>
                                         <InputGroup className="mb-3" as={Col}>
                                             <InputGroup.Text id="basic-addon1">Senha</InputGroup.Text>
-                                            <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['password']} />
+                                            <Form.Control type="password" autoComplete="new-password" name="password" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['password']} />
                                         </InputGroup>
                                     </Col>
 
                                     <Col>
                                         <InputGroup className="mb-3" as={Col}>
                                             <InputGroup.Text id="basic-addon1">Confirmar Senha</InputGroup.Text>
-                                            <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['confirmPassword']} />
+                                            <Form.Control type="password" autoComplete="new-password" name="confirmPassword" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['confirmPassword']} />
                                         </InputGroup>
                                     </Col>
                                 </Row>
@@ -282,7 +306,7 @@ export const MemberDetails = () => {
                                 <Row className="mb-3 pr-0 d-flex">
 
                                     <Col xs={12}>
-                                        {params.id == authContext.auth.user.memberId ? <></> : (
+                                        {parseInt(params?.id) === authContext.auth.user.memberId ? <></> : (
                                             params.id && <Button variant="danger" type="button" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
 
                                         <div className="float-end d-flex">

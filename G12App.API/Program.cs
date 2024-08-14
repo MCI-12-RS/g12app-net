@@ -84,7 +84,8 @@ namespace G12App.API
                 .RegisterInfrastructure()
                 .RegisterServices()
                 .RegisterWorkers()
-                .RegisterJWT(builder.Configuration);
+                .RegisterJWT(builder.Configuration)
+                .AddHttpContextAccessor();
 
             var app = builder.Build();
             if (app.Environment.IsDevelopment())

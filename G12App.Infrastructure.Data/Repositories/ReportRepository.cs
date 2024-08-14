@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using AutoMapper.Execution;
-using G12App.Domain.Extensions;
+﻿using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +15,14 @@ namespace G12App.Infrastructure.Data.Repositories
     public class ReportRepository : IReportRepository
     {
         private readonly AppContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ReportRepository(AppContext context)
+        public ReportRepository(
+            AppContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Report> Create(Report report)
@@ -43,6 +46,7 @@ namespace G12App.Infrastructure.Data.Repositories
             return _context.Reports
                 .IgnoreAutoIncludes()
                 .Where(x => x.IsDeleted == false)
+                .ApplyMinistryFilter(_httpContextAccessor?.HttpContext?.User)
                 .ApplyFilter(query);
         }
 
@@ -74,8 +78,8 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Report> GetReportById(int Id)
         {
-            return await _context.Reports.FirstOrDefaultAsync
-                (x => x.Id == Id && x.IsDeleted == false);
+            return await GetReportsQueryableAsync(null)
+                .FirstOrDefaultAsync(x => x.Id == Id);
 
         }
     }
