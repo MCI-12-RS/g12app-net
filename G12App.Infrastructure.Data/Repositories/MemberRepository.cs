@@ -34,7 +34,7 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> GetMemberByIdAsync(int? id)
         {
-            return await GetMembersQueryableAsync(null)
+            return await _context.Members
                     .Include(x => x.Leadership)
                     .Include(x => x.HomeAddress)
                     .FirstOrDefaultAsync(x => x.Id == id);

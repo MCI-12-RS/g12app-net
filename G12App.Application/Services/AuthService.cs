@@ -23,6 +23,7 @@ namespace G12App.Application.Services
             _jwtSettings = jwtSettings.Value;
             _memberService = memberService;
         }
+
         public async Task<ServiceResult<ResponseLoginDTO>> Login(LoginDTO login)
         {
             if (login == null || string.IsNullOrWhiteSpace(login.UserName) || string.IsNullOrWhiteSpace(login.Password))
@@ -36,6 +37,7 @@ namespace G12App.Application.Services
                     UserName = login.UserName,
                 }
             };
+
             var result = await _memberService.GetMembers(query, true);
             var user = result.Data.FirstOrDefault();
 
@@ -51,8 +53,9 @@ namespace G12App.Application.Services
                 Token = GenerateAccessToken(user),
                 MemberId = user.Id.GetValueOrDefault(),
                 Name = user.Name,
-
+                Role = user.Role,
             };
+
             return new ServiceResult<ResponseLoginDTO>(response);
         }
 
@@ -69,6 +72,7 @@ namespace G12App.Application.Services
                     new(ClaimTypes.Email, member.Email),
                     new(CustomClaims.MinistryLevel, member.MinistryLevel?.ToString()),
                     new(CustomClaims.LeadershipId, member.LeadershipId?.ToString()),
+                    new(ClaimTypes.Role, string.IsNullOrWhiteSpace(member.Role) ? Roles.AppUser : member.Role)
                 ]),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

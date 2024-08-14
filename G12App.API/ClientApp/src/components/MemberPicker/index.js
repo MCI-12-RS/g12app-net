@@ -18,6 +18,7 @@ const MemberPicker = ({
     selectedValue = null,
     selectedLabel = null,
     isMulti = false,
+    changeValueEvent = () => { }
 }) => {
 
     const [option, setOption] = React.useState(null);
@@ -50,7 +51,8 @@ const MemberPicker = ({
         return result.data.map((member) => (
             {
                 label: FormatMemberPickerLabel(member),
-                value: member.id
+                value: member.id,
+                item: member                
             }
         ));
     }
@@ -59,11 +61,15 @@ const MemberPicker = ({
         setOption(option);
 
         if (!isMulti) {        
-            if (setValue != null)
+            if (setValue != null){
                 setValue(option?.value);
+                changeValueEvent(option);
+            }
         } else {
-            if (setValue != null)
-                setValue(option?.map(x => x.value));
+            if (setValue != null){
+                setValue(option?.map(x => x.value));                
+                changeValueEvent(option);
+            }
         }
     }
 

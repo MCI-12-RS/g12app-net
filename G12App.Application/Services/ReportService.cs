@@ -38,6 +38,18 @@ namespace G12App.Application.Services
                     reportEntity.Members.Add(
                         await _memberRepository.GetMemberByIdAsync(memberId));
 
+            if (reportDTO.LeadershipId != default && !reportDTO.Frequenters.Contains(reportDTO.LeadershipId))
+                reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.LeadershipId));
+
+            if (reportDTO.TimothyId != default && !reportDTO.Frequenters.Contains(reportDTO.TimothyId))
+                reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.TimothyId));
+
+            if (reportDTO.HostId != default && !reportDTO.Frequenters.Contains(reportDTO.HostId))
+                reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.HostId));
+
+            reportEntity.NumMembers = reportEntity.Members.Count();
+            reportEntity.NumVisitors = reportEntity.Visitors?.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)?.Count();
+
             _changeTrackingService.SetupCreationData(reportEntity);
             _changeTrackingService.SetupLastModifiedData(reportEntity);
 
@@ -60,7 +72,9 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query<ReportFilter> query)
         {
             var reportEntity = await _reportRepository.GetReportsAsync(query);
-            return new ServiceResult<IEnumerable<ReportDTO>>(_mapper.Map<IEnumerable<ReportDTO>>(reportEntity));
+            var totalMembers = reportEntity.Any() ? await _reportRepository.CountReportsAsync(query) : 0;
+            return new ServiceResult<IEnumerable<ReportDTO>>(
+                _mapper.Map<IEnumerable<ReportDTO>>(reportEntity), totalMembers);
         }
 
         public async Task<ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id)

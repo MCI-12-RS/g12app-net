@@ -20,6 +20,14 @@ export const CellDetails = () => {
 
     let toastContext = useToastContext();
 
+    const emptyPlace = {
+        street: '',
+        number: '',
+        neighborhood: '',
+        city: '',
+        state: ''
+    };
+
     const emptyCell = {
         lead: {
             name: ''
@@ -39,13 +47,7 @@ export const CellDetails = () => {
         weekDay: {
             name: ''
         },
-        place: {
-            street: '',
-            number: '',
-            neighborhood: '',
-            city: '',
-            state: ''
-        }
+        place: emptyPlace
     };
 
     const params = useParams();
@@ -53,6 +55,7 @@ export const CellDetails = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [cell, setCell] = useState(emptyCell);
+    const [place, setPlace] = useState(emptyPlace);
     const [registerMore, setRegisterMore] = useState(location.state?.registerMore ?? false);
     const [pagination, setPagination] = useState({ page: 1, limit: 10 });
     const [chartXAxis, setChartXAxis] = useState([]);
@@ -62,15 +65,15 @@ export const CellDetails = () => {
 
     const compare = (prev, curr) => {
         if (prev == null || curr == null) return <></>;
-        return (curr > prev ? <strong className="text-success" style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faArrowUp} /></strong> :
-                curr < prev ? <strong className="text-danger" style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faArrowDown} /></strong> :
-                <strong className="text-info" style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faCircle} /></strong>);
+        return (curr > prev ? <strong className="text-success" style={{ fontSize: '1.2em' }}><FontAwesomeIcon icon={faArrowUp} /></strong> :
+            curr < prev ? <strong className="text-danger" style={{ fontSize: '1.2em' }}><FontAwesomeIcon icon={faArrowDown} /></strong> :
+                <strong className="text-info" style={{ fontSize: '1.2em' }}><FontAwesomeIcon icon={faCircle} /></strong>);
     }
 
     const displayReportNumbers = (report, reports, index, property) => {
         var prevReport = reports[index + 1];
         var comparer = <></>;
-        if(prevReport != null)
+        if (prevReport != null)
             comparer = compare(prevReport[property], report[property]);
 
         return <>{(report[property] || 0).toString().padStart(2, '0')}&nbsp;&nbsp;&nbsp;{comparer}</>;
@@ -120,14 +123,15 @@ export const CellDetails = () => {
 
         var result = await GetCell(params.id);
         if (result.isValid && result.data != null) {
-            setCell(result.data)
+            setCell(result.data);
+            setPlace(result.data.place);
             var reportResult = await GetReports({ cellId: params.id }, pagination, { sortBy: 'date', order: true });
             if (result.isValid) {
                 setReports(reportResult.data);
                 setTotal(reportResult.totalRecords ?? reportResult.data.length);
                 setChartXAxis(reportResult.data.map(x => x.dateOnly).reverse());
             }
-        } else {            
+        } else {
             navigate('/cells');
         }
 
@@ -219,8 +223,25 @@ export const CellDetails = () => {
         setLoading(false);
     }
 
+    const AssignHostAddress = (option) => {
+        console.log(option);
+        if (option?.item?.homeAddress != null) {
+            let address = option?.item?.homeAddress;
+            if (address != null)
+                setPlace(address);
+        }
+    }
+
+    useEffect(() => {
+        console.log(JSON.stringify(cell))
+    }, [cell]);
+
+    useEffect(() => {
+        setCell({ ...cell, place: place });
+    }, [place]);
+
     return (
-        loading ?        
+        loading ?
             (<Spinner animation="border" />) : (
                 <>
                     {(params.id ? <h1>Alterar cadastro de célula</h1> : <h1>Cadastrar nova célula</h1>)}
@@ -250,6 +271,7 @@ export const CellDetails = () => {
                                         initialValue="Selecione o anfitrião da célula"
                                         setValue={(value) => handleSelectChangeEvent('hostId', value)}
                                         selectedLabel={FormatMemberPickerLabel(cell.host)}
+                                        changeValueEvent={(option) => AssignHostAddress(option)}
                                         selectedValue={cell.host?.id} />
                                 </Col>
                             </Row>
@@ -285,7 +307,7 @@ export const CellDetails = () => {
                             </Row>
                         </Container>
 
-                        <AddressDetails address={cell.place} setAddress={(address) => handleSelectChangeEvent('place', address)} />
+                        <AddressDetails address={place} setAddress={(address) => setPlace(address)} />
 
                         <Container fluid>
                             <Row className="mb-3 pr-0 d-flex">
@@ -349,7 +371,7 @@ export const CellDetails = () => {
                                                     color: '#00AB82',
                                                     showMark: true
                                                 }]}
-                                                dataset={reports.reverse()}
+                                                dataset={reports.map(x => x).reverse()}
                                                 height={300}
                                             />
                                         </div>

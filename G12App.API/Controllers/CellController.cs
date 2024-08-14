@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using G12App.Domain.Model;
 
 namespace G12App.API.Controllers
 {
@@ -46,6 +47,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> Add([FromServices] ICellService cellService, [FromBody] CellDTO cell)
         {
             var result = await cellService.Add(cell);
@@ -53,6 +55,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> Remove([FromServices] ICellService cellService, int? id)
         {
             var result = await cellService.Remove(id);
@@ -60,6 +63,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> Update([FromServices] ICellService cellService,[FromBody] CellDTO cell, int id)
         {
             cell.Id = id;

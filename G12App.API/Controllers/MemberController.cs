@@ -1,6 +1,7 @@
 ﻿using G12App.Domain.DTOs;
 using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> PostAsync([FromServices] IMemberService memberService, [FromBody] MemberDto member)
         {
             var result = await memberService.Add(member);
@@ -38,6 +40,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> UpdateAsync([FromServices] IMemberService memberService, [FromBody] MemberDto member, int id)
         {
             member.Id = id;
@@ -46,6 +49,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> RemoveAsync([FromServices] IMemberService memberService, int id)
         {
             var result = await memberService.Remove(id);

@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using G12App.Domain.DTOs;
-using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
-using G12App.Domain.Messages;
-using System.Net;
-using AutoMapper.Execution;
 using G12App.Domain.Querying.Filters;
+using System.Net;
 
 namespace G12App.Application.Services
 {
@@ -19,7 +17,7 @@ namespace G12App.Application.Services
         private readonly IEntityChangeTrackingService _changeTrackingService;
 
         public CellService(
-            ICellRepository cellRepository, 
+            ICellRepository cellRepository,
             IMapper mapper,
             IEntityChangeTrackingService changeTrackingService)
         {
@@ -47,9 +45,9 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query<CellFilter> query)
         {
             var cellEntity = await _cellRepository.GetCellsAsync(query);
-            return new ServiceResult<IEnumerable<CellDTO>>(_mapper.Map<IEnumerable<CellDTO>>(cellEntity));
-
-
+            var totalMembers = cellEntity.Any() ? await _cellRepository.CountCellsAsync(query) : 0;
+            return new ServiceResult<IEnumerable<CellDTO>>(
+                _mapper.Map<IEnumerable<CellDTO>>(cellEntity), totalMembers);
         }
 
         public async Task<ServiceResult> Remove(int? id)

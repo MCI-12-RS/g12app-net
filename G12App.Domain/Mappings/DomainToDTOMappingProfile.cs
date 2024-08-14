@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using G12App.Domain.DTOs;
+using G12App.Domain.Extensions;
 using G12App.Domain.Model;
+using Microsoft.AspNetCore.Http;
 using System;
 
 namespace G12App.Domain.Mappings
 {
     public class DomainToDTOMappingProfile : Profile
     {
-        public DomainToDTOMappingProfile()
+        public DomainToDTOMappingProfile(IHttpContextAccessor httpContextAccessor)
         {
             CreateMap<Member, MemberDto>()
                 .ForMember(x => x.Password, opt =>
@@ -22,7 +24,20 @@ namespace G12App.Domain.Mappings
                     opt.MapFrom(s => s.Password);
                 });
             CreateMap<MemberDto, Member>()
-                .ForMember(x => x.Leadership, opt => opt.Ignore());
+                .ForMember(x => x.Leadership, opt => opt.Ignore())
+                .ForMember(x => x.Password, opt =>
+                {
+                    opt.PreCondition(x => !string.IsNullOrWhiteSpace(x.Password) &&
+                                        (httpContextAccessor.HttpContext.User.GetMemberId() == x.Id ||
+                                            httpContextAccessor.HttpContext.User.HasElevatedPermissions()));
+                    opt.MapFrom(s => s.Password);
+                })
+                .ForMember(x => x.Role, opt =>
+                {
+                    opt.PreCondition(x => !string.IsNullOrWhiteSpace(x.Role) &&
+                                            httpContextAccessor.HttpContext.User.IsSuperAdmin());
+                    opt.MapFrom(s => s.Role);
+                });
 
             CreateMap<Cell, CellDTO>()
                 .ForMember(x => x.Time, opt => opt.MapFrom(x => TimeOnly.Parse(x.Time)));

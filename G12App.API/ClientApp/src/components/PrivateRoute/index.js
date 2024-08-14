@@ -8,7 +8,6 @@ export const PrivateRoute = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log('PrivateRoute - Checking if user is authenticated', JSON.stringify(authContext));
         if(!authContext.auth.authenticated) {
             navigate('/login', { replace: true, state: { from: location } });
         }

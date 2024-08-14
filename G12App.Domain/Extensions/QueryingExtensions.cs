@@ -83,6 +83,9 @@ namespace G12App.Domain.Extensions
             if (user == null)
                 return queryable;
 
+            if (user.IsSuperAdmin())
+                return queryable;
+
             var memberIdClaim = user.FindFirstValue(CustomClaims.MemberId);
             if (!int.TryParse(memberIdClaim, out var memberId))
                 return queryable;
@@ -144,6 +147,9 @@ namespace G12App.Domain.Extensions
             if (user == null)
                 return queryable;
 
+            if (user.IsSuperAdmin())
+                return queryable;
+
             var memberIdClaim = user.FindFirstValue(CustomClaims.MemberId);
             if (!int.TryParse(memberIdClaim, out var memberId))
                 return queryable;
@@ -198,6 +204,9 @@ namespace G12App.Domain.Extensions
         public static IQueryable<Report> ApplyMinistryFilter(this IQueryable<Report> queryable, ClaimsPrincipal user)
         {
             if (user == null)
+                return queryable;
+
+            if (user.IsSuperAdmin())
                 return queryable;
 
             var memberIdClaim = user.FindFirstValue(CustomClaims.MemberId);

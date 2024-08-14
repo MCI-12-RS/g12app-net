@@ -51,8 +51,15 @@ export const Members = () => {
       render: (member) => translateMinistryLevel(member.ministryLevel)
     },
     {
-      name: 'Ministério',
+      name: 'Liderança',
       render: (member) => getLeadership(member)
+    },
+    {
+      name: 'Ministério',
+      render: (member) => <>
+        <strong>{member.totalDisciples || 0}</strong> Discípulos<br />
+        <strong>{member.totalCells || 0}</strong> Células
+      </>
     },
     {
       name: 'Bairro',

@@ -2,29 +2,24 @@ import React, { useState, useEffect } from "react";
 import { InputGroup, Form, Col, Row, Container } from 'react-bootstrap';
 import states from './states.json'
 
+export const GetEmptyAddress = () => ({
+    street: '',
+    number: '',
+    neighborhood: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    notes: ''
+});
+
 export const AddressDetails = ({
     address = {},
     setAddress = () => {}
 }) => {
 
-    const [value, setValue] = useState({
-        street: '',
-        number: '',
-        neighborhood: '',
-        city: '',
-        state: '',
-        postalCode: '',
-        notes: '',
-        ...address        
-    });
-
     const handleChangeEvent = (event) => {
-        setValue({ ...value, [event.target.name]: event.target.value });        
+        setAddress({ ...address, [event.target.name]: event.target.value });        
     }
-
-    useEffect(() => {
-        setAddress(value);
-    }, [value]);
     
     return (
         <>        
@@ -35,7 +30,7 @@ export const AddressDetails = ({
                         <InputGroup className="mb-3" as={Col}>
                             <InputGroup.Text id="basic-addon1">Rua</InputGroup.Text>
                             <Form.Control name="street" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                            value={value.street} />
+                            value={address.street} />
                         </InputGroup>
                     </Col>
 
@@ -43,7 +38,7 @@ export const AddressDetails = ({
                         <InputGroup className="mb-3 pr-0" as={Col}>
                             <InputGroup.Text id="basic-addon2">Numero</InputGroup.Text>
                             <Form.Control type="text" name="number"
-                                aria-describedby="basic-addon2" maxLength={10} value={value.number}
+                                aria-describedby="basic-addon2" maxLength={10} value={address.number}
                                 onChange={handleChangeEvent} />
                         </InputGroup>
                     </Col>
@@ -54,7 +49,7 @@ export const AddressDetails = ({
                         <InputGroup className="mb-3" as={Col}>
                             <InputGroup.Text id="basic-addon1">Bairro</InputGroup.Text>
                             <Form.Control name="neighborhood" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                                value={value.neighborhood} />
+                                value={address.neighborhood} />
                         </InputGroup>
                     </Col>
 
@@ -63,14 +58,14 @@ export const AddressDetails = ({
                             <InputGroup.Text id="basic-addon2">Cidade</InputGroup.Text>
                             <Form.Control type="text" name="city" 
                                 aria-describedby="basic-addon2" onChange={handleChangeEvent}
-                                value={value.city} />
+                                value={address.city} />
                         </InputGroup>
                     </Col>
                     
                     <Col xs={4}>
                         <InputGroup className="mb-3 pr-0" as={Col}>
                             <InputGroup.Text id="basic-addon2">Estado</InputGroup.Text>
-                            <Form.Select name="state" defaultValue={value.state} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
+                            <Form.Select name="state" defaultValue={address.state} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
                                 {states.map((state) => (
                                     <option key={state.acronym} value={state.acronym}>{state.name}</option>
                                 ))}
@@ -84,7 +79,7 @@ export const AddressDetails = ({
                         <InputGroup className="mb-3" as={Col}>
                             <InputGroup.Text id="basic-addon1">CEP</InputGroup.Text>
                             <Form.Control name="postalCode" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                                value={value.postalCode} />
+                                value={address.postalCode} />
                         </InputGroup>
                     </Col>
 
@@ -93,7 +88,7 @@ export const AddressDetails = ({
                             <InputGroup.Text id="basic-addon2">Referencia</InputGroup.Text>
                             <Form.Control type="text" pattern="\d{2}\/\d{2}\/\d{2}" name="notes" 
                                 aria-describedby="basic-addon2" onChange={handleChangeEvent}
-                                value={value.notes} />
+                                value={address.notes} />
                         </InputGroup>
                     </Col>
                 </Row>

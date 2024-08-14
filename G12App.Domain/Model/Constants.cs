@@ -8,4 +8,13 @@
 
         public const string LeadershipId = nameof(LeadershipId);
     }
+
+    public static class Roles
+    {
+        public const string AppUser = nameof(AppUser);
+
+        public const string AppAdmin = nameof(AppAdmin);
+
+        public const string AppSuperAdmin = nameof(AppSuperAdmin);
+    }
 }

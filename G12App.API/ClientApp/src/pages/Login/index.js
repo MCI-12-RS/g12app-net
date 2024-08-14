@@ -67,6 +67,7 @@ export const LoginPage = () => {
         if (authContext.auth.authenticated) {
             setLoading(true);
             navigate(location.state?.from?.pathname ?? '/', { replace: true });
+            //navigate('/', { replace: true });
         }
     };
 

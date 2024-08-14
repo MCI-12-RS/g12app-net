@@ -30,5 +30,11 @@ namespace G12App.Domain.Model
         public int TimothyId { get; set; }
 
         public CellType? CellType { get; set; }
+
+        public decimal Contribution { get; set; }
+
+        public int NumMembers { get; set; }
+
+        public int? NumVisitors { get; set; }
     }
 }

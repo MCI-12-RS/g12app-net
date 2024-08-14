@@ -14,7 +14,8 @@ const CellPicker = ({
     minLength = 3,
     initialValue = 'Insira o nome do líder da célula...',
     selectedValue = null,
-    selectedLabel = null
+    selectedLabel = null,
+    changeValueEvent = () => { }
 }) => { 
     const [option, setOption] = React.useState({ label: selectedLabel, value: selectedValue });
 
@@ -50,14 +51,17 @@ const CellPicker = ({
             (cell.place?.street && cell.place?.neighborhood ? ' - ' : '') +
             (cell.place?.neighborhood ? cell.place?.neighborhood : '') +
             (' | ' + TranslateWeekDay(cell.weekDay) + ' às ' + cell.time),
-            value: cell.id
+            value: cell.id,
+            item: cell
         }));
     }
 
     const handleSelectChangeEvent = (option) => {
         setOption(option);
-        if (setValue != null)
+        if (setValue != null){
             setValue(option?.value);
+            changeValueEvent(option);
+        }
     }
 
     useEffect(() => {

@@ -1,6 +1,7 @@
 ﻿using G12App.Domain.DTOs;
 using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,7 @@ namespace G12App.API.Controllers
         }
         
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> Delete([FromServices] IReportService reportService, int id)
         {
             var result = await reportService.Delete(id);
@@ -45,6 +47,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> Update([FromServices] IReportService reportService, [FromBody] ReportDTO reportDTO, int id)
         {
             var result = await reportService.Update(reportDTO, id);

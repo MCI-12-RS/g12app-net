@@ -134,3 +134,11 @@ export const TranslateMomentWeekDay = (weekDay) => {
     if (weekDay === "Sunday")
         return 0;
 }
+
+export const MoneyToDecimal = (value) => {
+    let decimal = value;
+    decimal = decimal.replace('R$', '');
+    decimal = decimal.replace('.', '');
+    decimal = decimal.replace(',', '.');
+    return parseFloat(decimal);
+}

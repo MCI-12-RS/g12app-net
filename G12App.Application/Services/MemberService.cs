@@ -57,7 +57,8 @@ namespace G12App.Application.Services
 
         public async Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id)
         {
-            var memberEntity = _mapper.Map<Member>(memberDTO);
+            var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            memberEntity = _mapper.Map(memberDTO, memberEntity);
 
             _changeTrackingService.SetupLastModifiedData(memberEntity);
             await UpdateComputedValues(memberEntity);
@@ -102,17 +103,21 @@ namespace G12App.Application.Services
         {
             var leadershipList = new List<Member>();
             var leadershipIdList = new List<int?>();
+
             var leadId = memberEntity.LeadershipId;
+            Member leader = memberEntity.Leadership;
 
             while (leadId is > 0)
             {
-                var leader = await _memberRepository.GetMemberByIdAsync(leadId);
+                leader = leader ?? await _memberRepository.GetMemberByIdAsync(leadId);
                 leadershipList.Add(leader);
                 leadershipIdList.Add(leadId);
-                leadId = leader.LeadershipId;
 
                 if (leadershipList.Count > 5)
                     break;
+
+                leadId = leader.LeadershipId;
+                leader = leader.Leadership;
             }
 
             if (leadershipList.Select(x => x.Id).Distinct().Count() != leadershipList.Count)

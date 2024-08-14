@@ -13,7 +13,8 @@ const AuthenticationContextProvider = ({ children }) => {
         user: {
             name: '',
             email: '',
-            token: ''
+            token: '',
+            role: ''
         }
     };
 
@@ -30,7 +31,8 @@ const AuthenticationContextProvider = ({ children }) => {
                 memberId: user.memberId,                
                 name: user.name,
                 userName: user.userName,
-                token: user.token
+                token: user.token,
+                role: user.role
             }
         });
     };

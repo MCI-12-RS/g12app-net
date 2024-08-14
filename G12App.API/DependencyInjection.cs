@@ -1,7 +1,6 @@
-﻿using G12App.API.Middleware;
-using G12App.Application.Services;
+﻿using AutoMapper;
+using G12App.API.Middleware;
 using G12App.Domain.Interfaces.Repositories;
-using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Infrastructure.Data.Context;
@@ -9,6 +8,7 @@ using G12App.Infrastructure.Data.Repositories;
 using G12App.Workers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,7 +53,14 @@ namespace G12App.API
             services.AddTransient<ICellRepository, CellRepository>();
             services.AddTransient<IReportRepository, ReportRepository>();
 
-            services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            services.AddSingleton(provider =>
+            {
+                var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+                return new MapperConfiguration(cfg =>
+                    cfg.AddProfile(new DomainToDTOMappingProfile(httpContextAccessor))
+                )
+                .CreateMapper();
+            });
 
             services.AddSingleton<ErrorMiddleware>();
 

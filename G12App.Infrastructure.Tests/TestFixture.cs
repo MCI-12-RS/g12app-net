@@ -25,12 +25,17 @@ namespace G12App.Infrastructure.Data.Tests
 
             Context = new AppContext(contextOptions);
             Context.Database.EnsureCreated();
-            Mapper = new Mapper(new MapperConfiguration(x => x.AddProfile<DomainToDTOMappingProfile>()));
 
             HttpContextAccessor = Mock.Of<IHttpContextAccessor>();
+
+            Mapper = new MapperConfiguration(cfg =>
+                cfg.AddProfile(new DomainToDTOMappingProfile(HttpContextAccessor))
+            )
+            .CreateMapper();
         }
 
-        ~TestFixture(){
+        ~TestFixture()
+        {
             Context.Database.EnsureDeleted();
         }
     }

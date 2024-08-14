@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputGroup, Container, Row, Button, Col, Form, Spinner } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import CellPicker from '../../components/CellPicker';
 import { LogReport } from "../../services/Report.service";
 import { useNavigate } from 'react-router-dom';
-import { FromBRDate, ToBRDate, TranslateMomentWeekDay } from '../../shared/utils';
+import { FromBRDate, MoneyToDecimal, ToBRDate, TranslateMomentWeekDay } from '../../shared/utils';
 import { useToastContext } from '../../contexts/ToastContext';
 import { StringifyResponseErrors } from '../../shared/utils';
+import $ from 'jquery';
 
 import './style.css';
 import InputMask from "react-input-mask";
 import moment from 'moment';
+import { CurrencyInput } from 'react-currency-mask';
 
 export const ReportDetails = () => {
 
@@ -20,12 +22,12 @@ export const ReportDetails = () => {
 
     const emptyReport = {
         subject: '',
-        visitors: '',
         frequenters: [],
         cellId: null,
         dateOnly: null,
-        timeOnly: null
-
+        timeOnly: null,
+        visitors: [],
+        contribution: 'R$ 0,00'
     };
 
     const emptyCell = {
@@ -47,12 +49,13 @@ export const ReportDetails = () => {
         weekDay: '',
         place: {
             street: '',
-            number: '', 
+            number: '',
             neighborhood: '',
             city: '',
             state: ''
         }
     };
+
     const [loading, setLoading] = useState(false);
     const [cell, setCell] = useState(emptyCell);
     const [report, setReport] = useState(emptyReport);
@@ -62,7 +65,7 @@ export const ReportDetails = () => {
         var date = new Date();
         var day = date.getDay();
         var diff = TranslateMomentWeekDay(cell.weekDay) - day;
-        date.setDate(date.getDate() + diff);        
+        date.setDate(date.getDate() + diff);
         var val = ToBRDate(date.toISOString());
         return val;
     };
@@ -78,7 +81,7 @@ export const ReportDetails = () => {
                 timothyId: result.data.timothyId,
                 leadershipId: result.data.leadId,
                 dateOnly: getSuggestedDate(result.data),
-                timeOnly: (result.data.time || '').substring(0, 5),
+                timeOnly: (result.data.time || '').substring(0, 5)
             });
 
         }
@@ -93,7 +96,11 @@ export const ReportDetails = () => {
             delete reportToSend.dateOnly;
             delete reportToSend.timeOnly;
 
-            var result = await LogReport({ ...reportToSend, date: FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00" });
+            var result = await LogReport({
+                ...reportToSend,
+                date: FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00",
+                contribution: MoneyToDecimal(report.contribution)
+            });
 
             if (result.isValid) {
 
@@ -105,7 +112,7 @@ export const ReportDetails = () => {
                 navigate('/cells/' + report.cellId);
 
             } else {
-                
+
                 toastContext.addToast({
                     title: 'Erro', hideDelay: 10000,
                     description: StringifyResponseErrors(result.errors)
@@ -113,7 +120,7 @@ export const ReportDetails = () => {
 
                 setLoading(false);
             }
-            
+
         }
         catch (e) {
             console.error(e);
@@ -144,6 +151,28 @@ export const ReportDetails = () => {
         if (cellType === "Discipleship")
             return "Discipuladora"
     };
+
+    const handleVisitorChange = (e) => {
+        var index = e.target.parentElement.parentElement.parentElement.getAttribute('index');
+        var newVisitors = report.visitors;
+        newVisitors[index] = e.target.value;
+        setReport({ ...report, visitors: newVisitors });
+    };
+
+    const addVisitor = () => {
+        setReport({ ...report, visitors: [...report.visitors, ''] });
+    }
+
+    const removeVisitor = (e) => {
+        var index = e.target.parentElement.parentElement.parentElement.getAttribute('index');
+        var newVisitors = report.visitors;
+        newVisitors.splice(index, 1);
+        setReport({ ...report, visitors: newVisitors });
+    };
+
+    useEffect(() => {
+        console.log(report);
+    }, [report])
 
     return (
         loading ?
@@ -189,7 +218,7 @@ export const ReportDetails = () => {
                                     </Col>
                                 </Row>
 
-                                <Row className="mb-3 pr-0" as={Col}>
+                                <Row className="mb-4 pr-0" as={Col}>
                                     <Col xs={7}>
                                         <InputGroup.Text id="basic-addon1">Rua: {cell.place?.street}</InputGroup.Text>
                                     </Col>
@@ -207,7 +236,7 @@ export const ReportDetails = () => {
                                     <h6>Dados do Relatório</h6>
                                 </Row>
 
-                                <Row>
+                                <Row className="pr-0">
                                     <Col>
                                         <InputGroup className="mb-3 pr-0" as={Col}>
                                             <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
@@ -219,7 +248,7 @@ export const ReportDetails = () => {
                                     </Col>
 
                                     <Col>
-                                        <InputGroup className="mb-3 pr-0" as={Col}>
+                                        <InputGroup as={Col}>
                                             <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
                                             <InputMask mask="99:99" value={report.timeOnly} onChange={handleChangeEvent}>
                                                 <Form.Control type="text" name="timeOnly"
@@ -229,29 +258,57 @@ export const ReportDetails = () => {
                                     </Col>
                                 </Row>
 
-                                <Row className="mb-3 pr-0">
-                                    <InputGroup className="mb-3" as={Col}>
-                                        <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
-                                        <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3" autoComplete='off' onChange={handleChangeEvent} required={true} />
-                                    </InputGroup>
-                                </Row>
-
-                                <Row className="mb-3 pr-0">
-                                    <Col>
-                                        <MemberPicker label="Participantes" isMulti={true}
-                                            setValue={(value) => handleSelectChangeEvent('members', value)} 
-                                            value={report.frequenters}/>
-                                    </Col>
-                                </Row>
-                                <Row>
-
+                                <Row className="pr-0">
                                     <Col>
                                         <InputGroup className="mb-3" as={Col}>
-                                            <InputGroup.Text id="basic-addon3">Visitantes:</InputGroup.Text>
-                                            <Form.Control id="basic-url" name="visitors" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleChangeEvent} />
+                                            <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
+                                            <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3"
+                                                autoComplete='off' onChange={handleChangeEvent} required={true} />
+                                        </InputGroup>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <InputGroup className="mb-3" as={Col}>
+                                            <InputGroup.Text id="basic-addon3">Oferta:</InputGroup.Text>
+                                            <CurrencyInput
+                                                value={report.contribution}
+                                                onChangeValue={(event, originalValue, maskedValue) => {
+                                                    handleChangeEvent(event);
+                                                }}
+                                                InputElement={<Form.Control id="basic-url" name="contribution" aria-describedby="basic-addon3"
+                                                    autoComplete='off' />}
+                                            />
                                         </InputGroup>
                                     </Col>
                                 </Row>
+
+                                <Row className="mb-4 pr-0">
+                                    <Col>
+                                        <MemberPicker label="Participantes" isMulti={true}
+                                            setValue={(value) => handleSelectChangeEvent('members', value)}
+                                            value={report.frequenters} />
+                                    </Col>
+                                </Row>
+                                <div className="mb-5">
+                                    <Row className="mb-2">
+                                        <Col>
+                                            <h6>Visitantes</h6>
+                                        </Col>
+                                        <Col>
+                                            <Button variant="success" className="float-right" onClick={addVisitor}>+</Button>
+                                        </Col>
+                                    </Row>
+                                    {report.visitors.map((visitor, index) => (
+                                        <Row key={index} index={index}>
+                                            <Col>
+                                                <InputGroup className="mb-3" as={Col}>
+                                                    <Form.Control id="basic-url" name={"visitors[" + index + "]"} value={visitor} aria-describedby="basic-addon3"
+                                                        autoComplete='off' onChange={handleVisitorChange} />
+                                                    <Button tabIndex={-1} variant="danger" className="float-right" onClick={removeVisitor}>-</Button>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                    ))}
+                                </div>
                             </Container>
 
                             <Container fluid>

@@ -34,9 +34,10 @@ export const Cells = () => {
     {
       name: 'Localização',
       render: (cell) => <>
-        <span><b>Rua: </b>{cell.place?.street}</span><br />
-        <span><b>Bairro: </b>{cell.place?.neighborhood}</span><br />
-        <span><b>Cidade: </b>{cell.place?.city}</span>
+        {!cell.place?.street && !cell.place?.neighborhood && !cell.place?.city ? 'Não informado' : ''}
+        {cell.place?.street && (<><span><b>Rua: </b>{cell.place?.street}</span><br /></>)}
+        {cell.place?.neighborhood && (<><span><b>Bairro: </b>{cell.place?.neighborhood}</span><br /></>)}
+        {cell.place?.city && (<><span><b>Cidade: </b>{cell.place?.city}</span></>)}
       </>
     },
     {

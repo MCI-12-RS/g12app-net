@@ -12,17 +12,14 @@ export const NavMenu = () => {
 
   const toastContext = useToastContext();
   const authContext = useAuthenticationContext();
-  const location = useLocation();
-  const navigate = useNavigate();
 
   const doLogoff = () => {
     authContext.logOff();
+    window.history.replaceState({}, '')
     toastContext.addToast({
       title: 'Ate a proxima!', hideDelay: 5000,
       description: 'Logout efetuado com sucesso.'
     });
-    
-    //navigate('/login', { replace: true, state: { from: location } });
   }
 
   return (
@@ -37,20 +34,30 @@ export const NavMenu = () => {
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
 
-              <NavDropdown title="Pessoas" id="basic-nav-dropdown" renderMenuOnMount={true}>
-                <NavDropdown.Item as={Link} to="/members">Gerenciar pessoas</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/new-member">Cadastrar pessoa</NavDropdown.Item>
-                {/* <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/ministries">Ver ministérios</NavDropdown.Item> */}
-              </NavDropdown>
+              {authContext.auth.user.role !== 'AppUser' && (
+                <>
+                  <NavDropdown title="Pessoas" id="basic-nav-dropdown" renderMenuOnMount={true}>
+                    <NavDropdown.Item as={Link} to="/members">Gerenciar pessoas</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/new-member">Cadastrar pessoa</NavDropdown.Item>
+                  </NavDropdown>
 
-              <NavDropdown title="Células" id="basic-nav-dropdown" renderMenuOnMount={true}>
-                <NavDropdown.Item as={Link} to="/cells">Gerenciar células</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/new-cell">Cadastrar célula</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/log-report">Registrar relatório</NavDropdown.Item>
+                  <NavDropdown title="Células" id="basic-nav-dropdown" renderMenuOnMount={true}>
+                    <NavDropdown.Item as={Link} to="/cells">Gerenciar células</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/new-cell">Cadastrar célula</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item as={Link} to="/log-report">Registrar relatório</NavDropdown.Item>
+                  </NavDropdown>
+                </>
+              )}
 
-              </NavDropdown>
+              {authContext.auth.user.role === 'AppUser' && (
+                <>
+                  
+                  <Nav.Link as={Link} to="/members">Pessoas</Nav.Link>
+                  <Nav.Link as={Link} to="/cells">Células</Nav.Link>
+                  <Nav.Link as={Link} to="/log-report">Registrar Relatório</Nav.Link>
+                </>
+              )}
 
             </Nav>
 
