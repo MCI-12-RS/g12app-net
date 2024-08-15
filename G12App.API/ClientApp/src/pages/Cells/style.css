@@ -1,3 +1,28 @@
 .input-group-text {
     white-space: nowrap;
 }
+
+.cell-reports-list table th:nth-child(3), 
+.cell-reports-list table td:nth-child(3){
+    max-width: 100%;
+    min-width: 200px;
+}
+
+.cell-reports-list table th:nth-child(5), 
+.cell-reports-list table td:nth-child(5),
+.cell-reports-list table th:nth-child(6), 
+.cell-reports-list table td:nth-child(6) {
+    text-align: center;
+}
+
+.cell-reports-list .remove-button{
+    cursor: pointer;
+    color:red;
+    font-size: 1.5em;
+    margin: 0 5px;
+}
+
+textarea {
+    resize: none;
+    max-height: 100px;
+}

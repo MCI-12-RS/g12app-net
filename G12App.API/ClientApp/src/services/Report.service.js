@@ -40,4 +40,17 @@ const GetReports = async(search, pagination, sort = {}) => {
     return obj;
 }
 
-export { LogReport, GetReports }
+const DeleteReport = async (id) => {      
+    var response = await FetchPrivate('/api/report/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
+export { LogReport, GetReports, DeleteReport }

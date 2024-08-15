@@ -49,10 +49,6 @@ namespace G12App.API
 
         public static IServiceCollection RegisterInfrastructure(this IServiceCollection services)
         {
-            services.AddTransient<IMemberRepository, MemberRepository>();
-            services.AddTransient<ICellRepository, CellRepository>();
-            services.AddTransient<IReportRepository, ReportRepository>();
-
             services.AddSingleton(provider =>
             {
                 var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();

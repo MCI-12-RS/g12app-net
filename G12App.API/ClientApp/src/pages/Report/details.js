@@ -8,11 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { FromBRDate, MoneyToDecimal, ToBRDate, TranslateMomentWeekDay } from '../../shared/utils';
 import { useToastContext } from '../../contexts/ToastContext';
 import { StringifyResponseErrors } from '../../shared/utils';
-import $ from 'jquery';
 
 import './style.css';
 import InputMask from "react-input-mask";
-import moment from 'moment';
 import { CurrencyInput } from 'react-currency-mask';
 
 export const ReportDetails = () => {
@@ -27,7 +25,8 @@ export const ReportDetails = () => {
         dateOnly: null,
         timeOnly: null,
         visitors: [],
-        contribution: 'R$ 0,00'
+        contribution: 'R$ 0,00',
+        notes: ''
     };
 
     const emptyCell = {
@@ -99,7 +98,8 @@ export const ReportDetails = () => {
             var result = await LogReport({
                 ...reportToSend,
                 date: FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00",
-                contribution: MoneyToDecimal(report.contribution)
+                contribution: MoneyToDecimal(report.contribution),
+                visitors: report.visitors
             });
 
             if (result.isValid) {
@@ -272,7 +272,7 @@ export const ReportDetails = () => {
                                             <CurrencyInput
                                                 value={report.contribution}
                                                 onChangeValue={(event, originalValue, maskedValue) => {
-                                                    handleChangeEvent(event);
+                                                    handleChangeEvent({ target: { name: 'contribution', value: maskedValue } });
                                                 }}
                                                 InputElement={<Form.Control id="basic-url" name="contribution" aria-describedby="basic-addon3"
                                                     autoComplete='off' />}
@@ -281,13 +281,24 @@ export const ReportDetails = () => {
                                     </Col>
                                 </Row>
 
-                                <Row className="mb-4 pr-0">
+                                <Row className="pr-0">
                                     <Col>
                                         <MemberPicker label="Participantes" isMulti={true}
                                             setValue={(value) => handleSelectChangeEvent('members', value)}
                                             value={report.frequenters} />
                                     </Col>
                                 </Row>
+
+                                <Row className="mb-5 pr-0">
+                                    <Col>
+                                        <InputGroup>
+                                            <InputGroup.Text>Observações</InputGroup.Text>
+                                            <Form.Control as="textarea" aria-label="Observações" name="notes" value={report.notes} aria-describedby="basic-addon3"
+                                            autoComplete='off' onChange={handleChangeEvent} />
+                                        </InputGroup>
+                                    </Col>
+                                </Row>
+
                                 <div className="mb-5">
                                     <Row className="mb-2">
                                         <Col>
@@ -317,6 +328,9 @@ export const ReportDetails = () => {
                                 </Button>
                             </Container>
                         </Form>
+                        <br/>
+                        <br/>
+                        <br/>
                     </>
                 </>
             )

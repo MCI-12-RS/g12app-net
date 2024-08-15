@@ -12,6 +12,7 @@ namespace G12App.Infrastructure.Data.Context
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Cell> Cells { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportMember> ReportMembers { get; set; }
 
         public AppContext(DbContextOptions<AppContext> options) : base(options)
         {
@@ -88,7 +89,7 @@ namespace G12App.Infrastructure.Data.Context
                 LeadId = 4,
                 HostId = 4,
                 TimothyId = 4,
-                WeekDay = System.DayOfWeek.Thursday,
+                WeekDay = System.DayOfWeek.Monday,
                 Time = new System.TimeOnly(20, 30).ToString(),
                 CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,

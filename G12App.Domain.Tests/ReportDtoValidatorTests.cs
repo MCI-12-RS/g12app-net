@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using G12App.Domain.DTOs;
 using G12App.Domain.Validators;
 
@@ -23,7 +22,7 @@ namespace G12App.Domain.Tests
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = "",
+                Visitors = new List<string> { "a" },
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -47,7 +46,7 @@ namespace G12App.Domain.Tests
                     Id = 1,
                     Subject = "",
                     Date = new DateTime(2023, 9, 28),
-                    Visitors = "a",
+                    Visitors = new List<string>{ "a" },
                     CellId = 1,
                     LeadershipId = 1,
                     HostId = 1
@@ -64,7 +63,7 @@ namespace G12App.Domain.Tests
                     Id = 1,
                     Subject = "Valid subject",
                     Date = DateTime.MinValue,
-                    Visitors = "a",
+                    Visitors = new List<string>{ "a" },
                     CellId = 1,
                     LeadershipId = 1,
                     HostId = 1
@@ -81,7 +80,7 @@ namespace G12App.Domain.Tests
                     Id = 1,
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
-                    Visitors = "a",
+                    Visitors = new List<string>{ "a" },
                     CellId = 0,
                     LeadershipId = 1,
                     HostId = 1
@@ -98,7 +97,7 @@ namespace G12App.Domain.Tests
                     Id = 1,
                     Subject = "Valid subject",
                     Date = new DateTime(2023, 9, 28),
-                    Visitors = "a",
+                    Visitors = new List<string>{ "a" },
                     CellId = 1,
                     LeadershipId = 0,
                     HostId = 1

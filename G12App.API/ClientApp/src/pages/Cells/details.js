@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { InputGroup, Form, Col, Row, Button, Container, FormCheck, Spinner } from 'react-bootstrap';
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { CreateCell, DeleteCell, GetCell, UpdateCell } from '../../services/Cell.service';
 import MemberPicker from '../../components/MemberPicker';
 import { useToastContext } from '../../contexts/ToastContext';
-import { StringifyResponseErrors, FormatMemberPickerLabel } from '../../shared/utils';
+import { StringifyResponseErrors, FormatMemberPickerLabel, DecimalToMoney } from '../../shared/utils';
 import { AddressDetails } from "../../components/Address";
 import InputMask from "react-input-mask";
 import Grid from '../../components/Grid';
 import { LineChart } from '@mui/x-charts/LineChart';
-import { GetReports } from "../../services/Report.service";
+import { DeleteReport, GetReports } from "../../services/Report.service";
 import moment from "moment";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUp, faArrowDown, faCircle } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUp, faArrowDown, faCircle, faMagnifyingGlass, faCross, faRemove, faRemoveFormat } from '@fortawesome/free-solid-svg-icons'
+import { useAuthenticationContext } from "../../contexts/AuthenticationContext";
 
 import './style.css';
 
 export const CellDetails = () => {
 
     let toastContext = useToastContext();
+    let authContext = useAuthenticationContext();
 
     const emptyPlace = {
         street: '',
@@ -79,6 +81,42 @@ export const CellDetails = () => {
         return <>{(report[property] || 0).toString().padStart(2, '0')}&nbsp;&nbsp;&nbsp;{comparer}</>;
     }
 
+    const DeleteReportPrompt = async (e, reportId) => {
+        e.preventDefault();
+        window.confirm('Tem certeza que deseja deletar o relatório?') && await ConfirmDeleteReport(reportId);
+        return false;
+    }
+
+    const ConfirmDeleteReport = async (id) => {
+        setLoading(true);
+
+        try {
+            var result = await DeleteReport(id);
+
+            if (result.isValid) {
+                toastContext.addToast({
+                    title: 'Sucesso', hideDelay: 5000,
+                    description: 'Cadastro deletado com sucesso!'
+                });
+                navigate('/cells/' + params.id, { refresh: true });
+            } else {
+                toastContext.addToast({
+                    title: 'Erro', hideDelay: 10000,
+                    description: <>{'Erro ao deletar cadastro.'}<br />{StringifyResponseErrors(result.errors)}</>
+                });
+            }
+
+        }
+        catch (e) {
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Erro de sistema ao deletar cadastro.'
+            });
+        }
+
+        setLoading(false);
+    }
+
     const columns = [
         {
             name: '#',
@@ -93,12 +131,21 @@ export const CellDetails = () => {
             render: (report) => report.subject
         },
         {
-            name: 'Batizados',
+            name: 'Oferta',
+            render: (report) => DecimalToMoney(report.contribution)
+        },
+        {
+            name: 'Participantes',
             render: (report, index) => displayReportNumbers(report, reports, index, 'numMembers')
         },
         {
             name: 'Visitantes',
             render: (report, index) => displayReportNumbers(report, reports, index, 'numVisitors')
+        },
+        {
+            name: '',
+            render: (report) => authContext.auth.user.role !== 'AppUser' &&
+                    <FontAwesomeIcon icon={faRemove} className="remove-button" title="Remover relatório" onClick={(e) => DeleteReportPrompt(e, report.id)} />
         }
     ];
 
@@ -189,11 +236,11 @@ export const CellDetails = () => {
 
     const DeleteCellPrompt = async (e) => {
         e.preventDefault();
-        window.confirm('Tem certeza que deseja deletar o cadastro?') && await ConfirmDeleteMember();
+        window.confirm('Tem certeza que deseja deletar o cadastro?') && await ConfirmDeleteCell();
         return false;
     }
 
-    const ConfirmDeleteMember = async () => {
+    const ConfirmDeleteCell = async () => {
         setLoading(true);
 
         try {
@@ -338,7 +385,7 @@ export const CellDetails = () => {
                                 <br />
                                 <h5>Últimos Relátorios enviados</h5>
                                 <Container fluid>
-                                    <Row className="mb-3 pr-0">
+                                    <Row className="mb-3 pr-0 cell-reports-list">
                                         <Grid
                                             columns={columns}
                                             data={reports}
@@ -347,7 +394,8 @@ export const CellDetails = () => {
                                             pagination={pagination}
                                             setPagination={setPagination}
                                             totalRecords={total}
-                                            displayPagination={false} />
+                                            displayPagination={false}
+                                        />
                                     </Row>
                                 </Container>
                                 <br />
@@ -361,7 +409,7 @@ export const CellDetails = () => {
                                                 xAxis={[{ scaleType: 'point', data: chartXAxis }]}
                                                 series={[{
                                                     dataKey: 'numMembers',
-                                                    label: 'Batizados',
+                                                    label: 'Participantes',
                                                     color: '#2CAAE1',
                                                     showMark: true
                                                 },

@@ -5,6 +5,8 @@ using G12App.Application;
 using G12App.Domain;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
+using G12App.Infrastructure.Data;
+using G12App.Infrastructure.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,8 +29,6 @@ namespace G12App.API
                 .AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<Member>();
-
-
 
             builder.Services.AddControllersWithViews()
                 .ConfigureApiBehaviorOptions(options =>
@@ -82,9 +82,11 @@ namespace G12App.API
                 .RegisterDomain()
                 .RegisterDatabase(builder.Configuration)
                 .RegisterInfrastructure()
+                .RegisterRepositories()
                 .RegisterServices()
                 .RegisterWorkers()
                 .RegisterJWT(builder.Configuration)
+                .RegisterEvents()
                 .AddHttpContextAccessor();
 
             var app = builder.Build();

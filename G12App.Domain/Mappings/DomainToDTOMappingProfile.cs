@@ -4,6 +4,7 @@ using G12App.Domain.Extensions;
 using G12App.Domain.Model;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Linq;
 
 namespace G12App.Domain.Mappings
 {
@@ -50,7 +51,11 @@ namespace G12App.Domain.Mappings
 
             CreateMap<Address, AddressDto>().ReverseMap();
 
-            CreateMap<Report, ReportDTO>().ReverseMap();
+            CreateMap<Report, ReportDTO>()
+                .ForMember(x => x.Visitors, opt => opt.MapFrom(m => m.Visitors.Split("|", StringSplitOptions.RemoveEmptyEntries)));
+
+            CreateMap<ReportDTO, Report>()
+                .ForMember(x => x.Visitors, opt => opt.MapFrom(m => string.Join("|", m.Visitors.Where(x => !string.IsNullOrWhiteSpace(x)))));
 
             CreateMap<Member, Member>()
                 .ForMember(x => x.Id, opt => opt.Ignore());

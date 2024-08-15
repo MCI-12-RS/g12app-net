@@ -33,6 +33,8 @@ namespace G12App.Domain.Model
 
         public decimal Contribution { get; set; }
 
+        public string Notes { get; set; }
+
         public int NumMembers { get; set; }
 
         public int? NumVisitors { get; set; }

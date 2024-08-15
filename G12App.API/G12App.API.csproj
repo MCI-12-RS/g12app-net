@@ -37,6 +37,7 @@
 		<ProjectReference Include="..\G12App.Application\G12App.Application.csproj" />
 		<ProjectReference Include="..\G12App.Domain\G12App.Domain.csproj" />
 		<ProjectReference Include="..\G12App.Infrastructure.Data\G12App.Infrastructure.Data.csproj" />
+		<ProjectReference Include="..\G12App.Infrastructure.Events\G12App.Infrastructure.Events.csproj" />
 		<ProjectReference Include="..\G12App.Workers\G12App.Workers.csproj" />
 	</ItemGroup>
 

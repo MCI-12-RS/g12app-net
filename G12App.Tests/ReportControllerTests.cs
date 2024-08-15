@@ -6,6 +6,7 @@ using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -112,7 +113,7 @@ namespace G12App.Tests
             {
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = "string",
+                Visitors = new List<string> { "a" },
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1,

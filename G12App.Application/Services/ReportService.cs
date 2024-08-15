@@ -38,17 +38,17 @@ namespace G12App.Application.Services
                     reportEntity.Members.Add(
                         await _memberRepository.GetMemberByIdAsync(memberId));
 
-            if (reportDTO.LeadershipId != default && !reportDTO.Frequenters.Contains(reportDTO.LeadershipId))
+            if (reportDTO.LeadershipId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.LeadershipId))
                 reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.LeadershipId));
 
-            if (reportDTO.TimothyId != default && !reportDTO.Frequenters.Contains(reportDTO.TimothyId))
+            if (reportDTO.TimothyId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.TimothyId))
                 reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.TimothyId));
 
-            if (reportDTO.HostId != default && !reportDTO.Frequenters.Contains(reportDTO.HostId))
+            if (reportDTO.HostId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.HostId))
                 reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.HostId));
 
             reportEntity.NumMembers = reportEntity.Members.Count();
-            reportEntity.NumVisitors = reportEntity.Visitors?.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)?.Count();
+            reportEntity.NumVisitors = reportDTO.Visitors.Where(x => !string.IsNullOrWhiteSpace(x)).Count();
 
             _changeTrackingService.SetupCreationData(reportEntity);
             _changeTrackingService.SetupLastModifiedData(reportEntity);

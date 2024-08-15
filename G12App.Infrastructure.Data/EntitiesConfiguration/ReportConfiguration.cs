@@ -10,7 +10,7 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasMany(x => x.Members).WithMany(x => x.Reports);
+            builder.HasMany(x => x.Members).WithMany(x => x.Reports).UsingEntity<ReportMember>();
 
             builder.HasOne(x => x.Lead).WithMany().HasForeignKey(x => x.LeadershipId).OnDelete(DeleteBehavior.ClientNoAction);
 

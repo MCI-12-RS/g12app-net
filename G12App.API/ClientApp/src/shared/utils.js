@@ -1,5 +1,10 @@
 import moment from 'moment';
 
+export const BrazilCurrencyFormat = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+});
+
 export const HandleDateMask = (e) => {
     let input = e.target;
     
@@ -136,9 +141,15 @@ export const TranslateMomentWeekDay = (weekDay) => {
 }
 
 export const MoneyToDecimal = (value) => {
-    let decimal = value;
-    decimal = decimal.replace('R$', '');
-    decimal = decimal.replace('.', '');
-    decimal = decimal.replace(',', '.');
+    let decimal = value || '';
+    
+    decimal = decimal.replace('R$', '')
+                     .replace(/\./g, '')
+                     .replace(/,/g, '.');
+                     
     return parseFloat(decimal);
+}
+
+export const DecimalToMoney = (value) => {  
+    return BrazilCurrencyFormat.format(value | 0);
 }
