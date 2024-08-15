@@ -2,7 +2,9 @@ import moment from 'moment';
 
 export const BrazilCurrencyFormat = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BRL'
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
 });
 
 export const HandleDateMask = (e) => {
@@ -151,5 +153,5 @@ export const MoneyToDecimal = (value) => {
 }
 
 export const DecimalToMoney = (value) => {  
-    return BrazilCurrencyFormat.format(value | 0);
+    return BrazilCurrencyFormat.format(value);
 }

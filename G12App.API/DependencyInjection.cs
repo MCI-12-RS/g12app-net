@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using G12App.API.Middleware;
-using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Infrastructure.Data.Context;
-using G12App.Infrastructure.Data.Repositories;
 using G12App.Workers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -65,12 +63,34 @@ namespace G12App.API
 
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppContext>(options => options.UseSqlServer(
-                configuration["ConnectionStrings:AppContext"],
-                opt => opt.EnableRetryOnFailure(
-                    maxRetryCount: 10,
-                    maxRetryDelay: System.TimeSpan.FromSeconds(30),
-                    errorNumbersToAdd: null)));
+            var mySqlServerConnString = configuration["ConnectionStrings:MySql_AppContext"];
+            var postgreServerConnString = configuration["ConnectionStrings:Postgre_AppContext"];
+            var sqlServerConnString = configuration["ConnectionStrings:SqlServer_AppContext"];
+
+            if (!string.IsNullOrWhiteSpace(mySqlServerConnString))
+                return
+                    services.AddDbContext<AppContext>(options => options.UseMySql(
+                        mySqlServerConnString, new MySqlServerVersion(new System.Version(5, 7))));
+
+
+            if (!string.IsNullOrWhiteSpace(postgreServerConnString))
+            {
+                return
+                    services.AddDbContext<AppContext>(options => options.UseNpgsql(postgreServerConnString, opt =>
+                    {
+                        opt.EnableRetryOnFailure(10, System.TimeSpan.FromSeconds(10), null);
+
+                    }));
+            }
+
+            if (!string.IsNullOrWhiteSpace(sqlServerConnString))
+                return
+                    services.AddDbContext<AppContext>(options => options.UseSqlServer(
+                        sqlServerConnString,
+                        opt => opt.EnableRetryOnFailure(
+                            maxRetryCount: 10,
+                            maxRetryDelay: System.TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null)));
 
             return services;
         }
