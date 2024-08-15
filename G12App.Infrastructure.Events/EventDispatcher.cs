@@ -13,7 +13,7 @@ namespace G12App.Infrastructure.Events
         }
 
         public ValueTask DispatchEvent<TEvent>(TEvent ev) where TEvent : IEvent
-            => _eventQueue.AddEvent(ev);
+            => _eventQueue.AddEvent(ev, CancellationToken.None);
 
         public ValueTask DispatchEvent<TEvent>()
             where TEvent : class, IEvent, new()
