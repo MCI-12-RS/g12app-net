@@ -1,9 +1,11 @@
-﻿namespace G12App.Domain.Interfaces.Events
+﻿using System.Threading.Tasks;
+
+namespace G12App.Domain.Interfaces.Events
 {
     public interface IEventDispatcher
     {
-        void DispatchEvent<TEvent>() where TEvent : class, IEvent, new();
+        ValueTask DispatchEvent<TEvent>() where TEvent : class, IEvent, new();
 
-        void DispatchEvent<TEvent>(TEvent ev) where TEvent : IEvent;
+        ValueTask DispatchEvent<TEvent>(TEvent ev) where TEvent : IEvent;
     }
 }

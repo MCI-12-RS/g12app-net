@@ -4,8 +4,8 @@ namespace G12App.Infrastructure.Events.Interfaces
 {
     public interface IEventQueue
     {
-        void AddEvent(IEvent ev);
+        ValueTask AddEvent(IEvent ev);
 
-        IEvent Dequeue();
+        ValueTask<IEvent> Dequeue(CancellationToken token);
     }
 }

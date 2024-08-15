@@ -12,12 +12,10 @@ namespace G12App.Infrastructure.Events
             _eventQueue = eventQueue;
         }
 
-        public void DispatchEvent<TEvent>(TEvent ev) where TEvent : IEvent
-        {
-            _eventQueue.AddEvent(ev);
-        }
+        public ValueTask DispatchEvent<TEvent>(TEvent ev) where TEvent : IEvent
+            => _eventQueue.AddEvent(ev);
 
-        public void DispatchEvent<TEvent>()
+        public ValueTask DispatchEvent<TEvent>()
             where TEvent : class, IEvent, new()
                 => this.DispatchEvent(new TEvent());
     }
