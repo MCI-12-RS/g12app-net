@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using G12App.Application.Events;
 using G12App.Domain.DTOs;
+using G12App.Domain.Interfaces.Events;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
@@ -15,24 +17,30 @@ namespace G12App.Application.Services
         private readonly ICellRepository _cellRepository;
         private readonly IMapper _mapper;
         private readonly IEntityChangeTrackingService _changeTrackingService;
+        private readonly IEventDispatcher _eventDispatcher;
 
         public CellService(
             ICellRepository cellRepository,
             IMapper mapper,
-            IEntityChangeTrackingService changeTrackingService)
+            IEntityChangeTrackingService changeTrackingService,
+            IEventDispatcher eventDispatcher)
         {
             _cellRepository = cellRepository;
             _mapper = mapper;
             _changeTrackingService = changeTrackingService;
+            _eventDispatcher = eventDispatcher;
         }
 
         public async Task<ServiceResult<CellDTO>> Add(CellDTO cellDTO)
         {
             var cellEntity = _mapper.Map<Cell>(cellDTO);
+
             _changeTrackingService.SetupCreationData(cellEntity);
             _changeTrackingService.SetupLastModifiedData(cellEntity);
 
             var cell = await _cellRepository.Create(cellEntity);
+            await _eventDispatcher.DispatchEvent(new CellUpserted(cell.Id));
+
             return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
         }
 
@@ -66,7 +74,10 @@ namespace G12App.Application.Services
             var cellEntity = _mapper.Map<Cell>(cellDTO);
 
             _changeTrackingService.SetupLastModifiedData(cellEntity);
+
             var cell = await _cellRepository.Update(cellEntity);
+            await _eventDispatcher.DispatchEvent(new CellUpserted(cell.Id));
+
             return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
         }
     }

@@ -1,10 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace G12App.Domain.Interfaces.Events
 {
     public interface IEvent
     {
-        Task Handle(CancellationToken token);
+        Task Handle(IServiceProvider serviceProvider, CancellationToken token);
     }
 }

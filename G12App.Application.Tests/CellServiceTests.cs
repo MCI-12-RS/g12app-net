@@ -6,6 +6,7 @@ using G12App.Domain.DTOs;
 using G12App.Application.Services;
 using FluentAssertions;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Interfaces.Events;
 
 namespace G12App.Application.Tests
 {
@@ -46,7 +47,8 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
 
             //Act
-            var service = new CellService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
+            var service = new CellService(mock.Object, mapperMock.Object, 
+                            Mock.Of<IEntityChangeTrackingService>(), Mock.Of<IEventDispatcher>());
             var result = await service.Add(cellDto);
 
             //Assert
@@ -89,7 +91,8 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
 
             //Act
-            var service = new CellService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
+            var service = new CellService(mock.Object, mapperMock.Object, 
+                            Mock.Of<IEntityChangeTrackingService>(), Mock.Of<IEventDispatcher>());
             var result = await service.GetCellById(cell.Id);
 
             //Assert
@@ -132,7 +135,8 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
 
             //Act
-            var service = new CellService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
+            var service = new CellService(mock.Object, mapperMock.Object, 
+                            Mock.Of<IEntityChangeTrackingService>(), Mock.Of<IEventDispatcher>());
             var result = await service.Remove(cell.Id);
 
             //Assert
@@ -176,7 +180,8 @@ namespace G12App.Application.Tests
             mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
 
             //Act
-            var service = new CellService(mock.Object, mapperMock.Object, Mock.Of<IEntityChangeTrackingService>());
+            var service = new CellService(mock.Object, mapperMock.Object, 
+                            Mock.Of<IEntityChangeTrackingService>(), Mock.Of<IEventDispatcher>());
             var result = await service.Update(cellDto, cell.Id);
 
             //Assert

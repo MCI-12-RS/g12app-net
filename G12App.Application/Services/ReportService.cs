@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using G12App.Application.Events;
 using G12App.Domain.DTOs;
+using G12App.Domain.Interfaces.Events;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
@@ -15,18 +17,21 @@ namespace G12App.Application.Services
         private readonly IReportRepository _reportRepository;
         private readonly IMapper _mapper;
         private readonly IEntityChangeTrackingService _changeTrackingService;
+        private readonly IEventDispatcher _eventDispatcher;
         private readonly IMemberRepository _memberRepository;
 
         public ReportService(
             IReportRepository reportRepository,
             IMemberRepository memberRepository,
             IMapper mapper,
-            IEntityChangeTrackingService changeTrackingService)
+            IEntityChangeTrackingService changeTrackingService,
+            IEventDispatcher eventDispatcher)
         {
             _reportRepository = reportRepository;
             _memberRepository = memberRepository;
             _mapper = mapper;
             _changeTrackingService = changeTrackingService;
+            _eventDispatcher = eventDispatcher;
         }
 
         public async Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO)
@@ -54,6 +59,8 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(reportEntity);
 
             var report = await _reportRepository.Create(reportEntity);
+            await _eventDispatcher.DispatchEvent(new ReportLogged(report.Id, report.CellId));
+
             return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(report));
         }
 
@@ -84,6 +91,7 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(reportEntity);
 
             var report = await _reportRepository.Update(reportEntity);
+
             return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(report));
 
         }

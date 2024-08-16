@@ -1,5 +1,6 @@
 ﻿using G12App.Domain.Interfaces.Events;
 using G12App.Infrastructure.Events.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -8,13 +9,16 @@ namespace G12App.Infrastructure.Events
     public class EventWorker : BackgroundService
     {
         private readonly IEventQueue _eventQueue;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<EventWorker> _logger;
 
         public EventWorker(
             IEventQueue eventQueue,
+            IServiceProvider serviceProvider,
             ILogger<EventWorker> logger)
         {
             _eventQueue = eventQueue;
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
@@ -32,7 +36,8 @@ namespace G12App.Infrastructure.Events
                         continue;
                     }
 
-                    await ev.Handle(stoppingToken);
+                    await using var scope = _serviceProvider.CreateAsyncScope();
+                    await ev.Handle(scope.ServiceProvider, stoppingToken);
                 }
                 catch (Exception ex)
                 {

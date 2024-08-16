@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using G12App.Application.Events;
 using G12App.Domain.DTOs;
+using G12App.Domain.Interfaces.Events;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Mappings;
@@ -16,15 +18,18 @@ namespace G12App.Application.Services
         private readonly IMemberRepository _memberRepository;
         private readonly IMapper _mapper;
         private readonly IEntityChangeTrackingService _changeTrackingService;
+        private readonly IEventDispatcher _eventDispatcher;
 
         public MemberService(
             IMemberRepository memberRepository,
             IMapper mapper,
-            IEntityChangeTrackingService changeTrackingService)
+            IEntityChangeTrackingService changeTrackingService,
+            IEventDispatcher eventDispatcher)
         {
             _memberRepository = memberRepository;
             _mapper = mapper;
             _changeTrackingService = changeTrackingService;
+            _eventDispatcher = eventDispatcher;
         }
 
         public async Task<ServiceResult<IEnumerable<MemberDto>>> GetMembers(Query<MemberFilter> query, bool preservePassword = false)
@@ -52,6 +57,8 @@ namespace G12App.Application.Services
             await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Create(memberEntity);
+            await _eventDispatcher.DispatchEvent(new MemberUpserted(member.Id));
+
             return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
         }
 
@@ -64,6 +71,8 @@ namespace G12App.Application.Services
             await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Update(memberEntity);
+            await _eventDispatcher.DispatchEvent(new MemberUpserted(member.Id));
+
             return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
         }
 
