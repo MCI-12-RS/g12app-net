@@ -67,11 +67,11 @@ namespace G12App.Application.Services
             {
                 Subject = new ClaimsIdentity(
                 [
-                    new(ClaimTypes.Name, member.Name),
-                    new(CustomClaims.MemberId, member.Id.ToString()),
-                    new(ClaimTypes.Email, member.Email),
-                    new(CustomClaims.MinistryLevel, member.MinistryLevel?.ToString()),
-                    new(CustomClaims.LeadershipId, member.LeadershipId?.ToString()),
+                    new(ClaimTypes.Name, member.Name ?? string.Empty),
+                    new(CustomClaims.MemberId, member.Id.ToString() ?? string.Empty),
+                    new(ClaimTypes.Email, member.Email ?? string.Empty),
+                    new(CustomClaims.MinistryLevel, member.MinistryLevel?.ToString() ?? string.Empty),
+                    new(CustomClaims.LeadershipId, member.LeadershipId?.ToString() ?? string.Empty),
                     new(ClaimTypes.Role, string.IsNullOrWhiteSpace(member.Role) ? Roles.AppUser : member.Role)
                 ]),
                 Expires = DateTime.UtcNow.AddDays(1),
