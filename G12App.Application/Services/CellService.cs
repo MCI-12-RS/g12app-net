@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using G12App.Application.Events;
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Events;
@@ -39,7 +40,26 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(cellEntity);
 
             var cell = await _cellRepository.Create(cellEntity);
-            await _eventDispatcher.DispatchEvent(new CellUpserted(cell.Id));
+            var resultCellDto = _mapper.Map<CellDTO>(cell);
+
+            await _eventDispatcher.DispatchEvent(new CellUpserted(null, resultCellDto));
+
+            return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
+        }
+
+        public async Task<ServiceResult<CellDTO>> Update(CellDTO cellDTO, int id)
+        {
+            var cellEntity = await _cellRepository.GetCellByIdAsync(id);
+            var sourceCellDto = _mapper.Map<Cell, CellDTO>(cellEntity);
+
+            cellEntity = _mapper.Map(cellDTO, cellEntity);
+
+            _changeTrackingService.SetupLastModifiedData(cellEntity);
+
+            var cell = await _cellRepository.Update(cellEntity);
+            var resultCellDto = _mapper.Map<CellDTO>(cell);
+
+            await _eventDispatcher.DispatchEvent(new CellUpserted(sourceCellDto, resultCellDto));
 
             return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
         }
@@ -67,18 +87,6 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(cellEntity);
             await _cellRepository.Remove(cellEntity);
             return new ServiceResult();
-        }
-
-        public async Task<ServiceResult<CellDTO>> Update(CellDTO cellDTO, int id)
-        {
-            var cellEntity = _mapper.Map<Cell>(cellDTO);
-
-            _changeTrackingService.SetupLastModifiedData(cellEntity);
-
-            var cell = await _cellRepository.Update(cellEntity);
-            await _eventDispatcher.DispatchEvent(new CellUpserted(cell.Id));
-
-            return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
         }
     }
 }

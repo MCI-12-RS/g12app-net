@@ -59,9 +59,11 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(reportEntity);
 
             var report = await _reportRepository.Create(reportEntity);
-            await _eventDispatcher.DispatchEvent(new ReportLogged(report.Id, report.CellId));
+            var resultReportDto = _mapper.Map<ReportDTO>(report);
 
-            return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(report));
+            await _eventDispatcher.DispatchEvent(new ReportLogged(null, resultReportDto));
+
+            return new ServiceResult<ReportDTO>(resultReportDto);
         }
 
         public async Task<ServiceResult> Delete(int id)

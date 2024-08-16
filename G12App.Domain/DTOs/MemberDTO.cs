@@ -22,5 +22,7 @@ namespace G12App.Domain.DTOs
         public string LeadershipTree { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
+        public int? TotalDisciples { get; set; }
+        public int? TotalCells { get; set; }
     }
 }

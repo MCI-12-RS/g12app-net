@@ -1,19 +1,23 @@
 ﻿using G12App.Domain.Interfaces.Events;
-using G12App.Infrastructure.Events.Interfaces;
-using System.Threading.Channels;
+using System.Collections.Concurrent;
 
 namespace G12App.Infrastructure.Events
 {
     public class EventQueue : IEventQueue
     {
-        private readonly Channel<IEvent> _channel = Channel.CreateUnbounded<IEvent>();
-        private ChannelReader<IEvent> Reader => _channel.Reader;
-        private ChannelWriter<IEvent> Writer => _channel.Writer;
+        private readonly ConcurrentQueue<IEvent> _queue = new ConcurrentQueue<IEvent>();
 
         public ValueTask AddEvent(IEvent ev, CancellationToken token)
-            => Writer.WriteAsync(ev, token);
+        {
+            _queue.Enqueue(ev);
+            return ValueTask.CompletedTask;
+        }
 
         public ValueTask<IEvent> Dequeue(CancellationToken token)
-            => Reader.ReadAsync();
+        {
+            IEvent ev = null;
+            _queue.TryDequeue(out ev);
+            return ValueTask.FromResult(ev);
+        }
     }
 }

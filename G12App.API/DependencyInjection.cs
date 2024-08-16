@@ -3,7 +3,6 @@ using G12App.API.Middleware;
 using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Infrastructure.Data.Context;
-using G12App.Workers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -97,7 +96,7 @@ namespace G12App.API
 
         public static IServiceCollection RegisterWorkers(this IServiceCollection services)
         {
-            services.AddHostedService<ChildrenMemberConsolidationWorker>();
+            // services.AddHostedService<ChildrenMemberConsolidationWorker>();
             return services;
         }
 

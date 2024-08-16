@@ -20,5 +20,6 @@ namespace G12App.Domain.Querying.Filters
         public string HomeAddress_State { get; set; }
         public string HomeAddress_Street { get; set; }
         public CellType? CellType { get; set; }
+        public int? LeadIdAllLevels { get; set; }
     }
 }

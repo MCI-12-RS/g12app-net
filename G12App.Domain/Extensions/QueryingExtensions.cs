@@ -75,6 +75,9 @@ namespace G12App.Domain.Extensions
             if (query.Filter.LeadershipId.HasValue)
                 queryable = queryable.Where(x => query.Filter.LeadershipId.Equals(x.LeadershipId));
 
+            if (query.Filter.LeadershipIdAllLevels.HasValue)
+                queryable = queryable.Where(x => x.LeadershipIdTree.Contains($"|{query.Filter.LeadershipIdAllLevels}|"));
+
             return queryable;
         }
 
@@ -113,7 +116,7 @@ namespace G12App.Domain.Extensions
                 queryable = queryable.Where(x => x.Lead.Name.ToLower().Contains(query.Filter.Lead));
 
             if (!string.IsNullOrWhiteSpace(query.Filter.Leadership))
-                queryable = queryable.Where(x => x.Lead.Leadership.Name.ToLower().Contains(query.Filter.Leadership));
+                queryable = queryable.Where(x => x.Lead.ComputedG12Leader.ToLower().Contains(query.Filter.Leadership));
 
             if (query.Filter.HostId > 0)
                 queryable = queryable.Where(x => x.HostId.Equals(query.Filter.HostId));
@@ -138,6 +141,10 @@ namespace G12App.Domain.Extensions
 
             if (query.Filter.CellType.HasValue)
                 queryable = queryable.Where(x => x.CellType.Equals(query.Filter.CellType));
+
+            if (query.Filter.LeadIdAllLevels.HasValue)
+                queryable = queryable.Where(x => x.Lead.LeadershipIdTree.Contains($"|{query.Filter.LeadIdAllLevels}|") || 
+                                x.LeadId.Equals(query.Filter.LeadIdAllLevels));
 
             return queryable;
         }

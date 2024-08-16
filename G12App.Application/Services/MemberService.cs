@@ -54,26 +54,32 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupCreationData(memberEntity);
             _changeTrackingService.SetupLastModifiedData(memberEntity);
 
-            await UpdateComputedValues(memberEntity);
+            //await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Create(memberEntity);
-            await _eventDispatcher.DispatchEvent(new MemberUpserted(member.Id));
+            var resultMemberDto = _mapper.Map<MemberDto>(member);
 
-            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
+            await _eventDispatcher.DispatchEvent(new MemberUpserted(null, resultMemberDto));
+
+            return new ServiceResult<MemberDto>(resultMemberDto);
         }
 
         public async Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            var sourceMemberDto = _mapper.Map<Member, MemberDto>(memberEntity);
+
             memberEntity = _mapper.Map(memberDTO, memberEntity);
 
             _changeTrackingService.SetupLastModifiedData(memberEntity);
-            await UpdateComputedValues(memberEntity);
+            //await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Update(memberEntity);
-            await _eventDispatcher.DispatchEvent(new MemberUpserted(member.Id));
+            var resultMemberDto = _mapper.Map<MemberDto>(member);
 
-            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(member));
+            await _eventDispatcher.DispatchEvent(new MemberUpserted(sourceMemberDto, resultMemberDto));
+
+            return new ServiceResult<MemberDto>(resultMemberDto);
         }
 
         public async Task<ServiceResult<MemberDto>> ConsolidateMemberComputedData(int id)

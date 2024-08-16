@@ -1,11 +1,13 @@
-﻿namespace G12App.Application.Events
+﻿using G12App.Domain.DTOs;
+
+namespace G12App.Application.Events
 {
     public class ReportLogged : BaseEvent
     {
-        private readonly int _cellId;
-        private readonly int _reportId;
+        private readonly ReportDTO _before;
+        private readonly ReportDTO _after;
 
-        public ReportLogged(int reportId, int cellId)
-            => (_reportId, _cellId) = (reportId, cellId);
+        public ReportLogged(ReportDTO before, ReportDTO after)
+            => (_before, _after) = (before, after);
     }
 }

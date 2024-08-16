@@ -22,5 +22,7 @@
         public int? LeadershipId { get; set; }
 
         public bool? ChildrenMembersComputed { get; set; }
+
+        public int? LeadershipIdAllLevels { get; set; }
     }
 }

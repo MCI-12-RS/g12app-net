@@ -1,5 +1,4 @@
 ﻿using G12App.Domain.Interfaces.Events;
-using G12App.Infrastructure.Events.Interfaces;
 
 namespace G12App.Infrastructure.Events
 {

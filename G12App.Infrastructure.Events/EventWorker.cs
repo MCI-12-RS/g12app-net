@@ -1,5 +1,4 @@
 ﻿using G12App.Domain.Interfaces.Events;
-using G12App.Infrastructure.Events.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
