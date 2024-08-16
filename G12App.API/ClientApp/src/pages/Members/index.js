@@ -7,6 +7,7 @@ import Grid from '../../components/Grid';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { RenderGridAddress } from '../../shared/utils';
 
 export const Members = () => {
 
@@ -62,12 +63,8 @@ export const Members = () => {
       </>
     },
     {
-      name: 'Bairro',
-      render: (member) => (member.homeAddress?.neighborhood ?? '').length ? member.homeAddress?.neighborhood : '-'
-    },
-    {
-      name: 'Cidade',
-      render: (member) => (member.homeAddress?.city ?? '').length ? member.homeAddress?.city : '-'
+      name: 'Endereço',
+      render: (member) => RenderGridAddress(member.homeAddress)
     },
     {
       name: '',
@@ -119,7 +116,7 @@ export const Members = () => {
 
             <InputGroup className="mb-3 pr-0" as={Col}>
               <InputGroup.Text id="basic-addon3">Liderança</InputGroup.Text>
-              <Form.Control id="basic-url" name="name" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+              <Form.Control id="basic-url" name="leadershipName" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
             </InputGroup>
           </Row>
           

@@ -155,3 +155,12 @@ export const MoneyToDecimal = (value) => {
 export const DecimalToMoney = (value) => {  
     return BrazilCurrencyFormat.format(value);
 }
+
+export const RenderGridAddress = (address) => {
+    return <>
+        {!address?.street && !address?.neighborhood && !address?.city ? 'Não informado' : ''}
+        {address?.street && (<><span><b>Rua: </b>{address?.street}{address?.number ? ', ' + address?.number : ''}</span><br /></>)}
+        {address?.neighborhood && (<><span><b>Bairro: </b>{address?.neighborhood}</span><br /></>)}
+        {address?.city && (<><span><b>Cidade: </b>{address?.city}{address?.state ? ' / ' + address?.state : ''}</span></>)}
+      </>
+}
