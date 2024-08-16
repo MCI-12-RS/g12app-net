@@ -341,7 +341,7 @@ export const MemberDetails = () => {
                                         <Col>
                                             <ul>
                                                 <li><strong>Usuário:</strong> Pode visualizar seu ministério, cadastrar relatórios de células.</li>
-                                                <li><strong>Administrator:</strong> Pode visualizar seu ministério, gerenciar membros, células e relatórios.</li>
+                                                <li><strong>Administrator:</strong> Pode visualizar seu ministério, gerenciar membros, células e cadastrar relatórios.</li>
                                                 <li><strong>Super Administrador:</strong> Pode gerenciar todos membros, células e relatórios, independente de ministério.</li>
                                             </ul>
                                         </Col>
