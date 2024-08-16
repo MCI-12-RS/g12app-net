@@ -271,17 +271,12 @@ export const CellDetails = () => {
     }
 
     const AssignHostAddress = (option) => {
-        console.log(option);
         if (option?.item?.homeAddress != null) {
             let address = option?.item?.homeAddress;
             if (address != null)
                 setPlace(address);
         }
     }
-
-    useEffect(() => {
-        console.log(JSON.stringify(cell))
-    }, [cell]);
 
     useEffect(() => {
         setCell({ ...cell, place: place });

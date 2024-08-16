@@ -170,10 +170,6 @@ export const ReportDetails = () => {
         setReport({ ...report, visitors: newVisitors });
     };
 
-    useEffect(() => {
-        console.log(report);
-    }, [report])
-
     return (
         loading ?
             (<Spinner animation="border" />) : (
