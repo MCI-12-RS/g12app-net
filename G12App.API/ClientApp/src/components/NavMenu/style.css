@@ -23,6 +23,7 @@ a.navbar-brand {
 html {
   font-size: 14px;
 }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -85,4 +86,28 @@ html {
 
 .navbar .badge {
   zoom: 1.1;
+}
+
+@media only screen and (max-width: 480px) {
+  .dashboard .card .card-text {
+      min-height: 60px;
+  }
+
+  .me-auto.navbar-nav{
+    float: left;
+  }
+
+  .ml-auto.navbar-nav {
+    float: right;
+    text-align: right;
+  }
+
+  .ml-auto.navbar-nav > * {
+    margin-right: 0 !important;
+  }
+
+  .dropdown-menu{
+    position: absolute !important;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px !important;
+  }
 }

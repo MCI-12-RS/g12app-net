@@ -24,7 +24,7 @@ export const NavMenu = () => {
 
   return (
     <header>
-      <Navbar expand="lg" className="bg-body-tertiary" bg="dark">
+      <Navbar expand="lg" className="bg-body-tertiary navbar-dark" bg="dark" data-bs-theme="dark">
         <Container>
           <Navbar.Brand as={Link} to="/">
             <img className="logo" width="64" height="64" src={logo} />
