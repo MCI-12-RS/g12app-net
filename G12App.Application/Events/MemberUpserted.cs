@@ -21,19 +21,22 @@ namespace G12App.Application.Events
             var memberService = serviceProvider.GetRequiredService<IMemberService>();
             var memberRepository = serviceProvider.GetRequiredService<IMemberRepository>();
             var cellRepository = serviceProvider.GetRequiredService<ICellRepository>();
+            var isNew = _before != null;
 
-            var diff = ObjectComparer.CompareObjects(_before, _after);
+            var diff = new List<PropertyDifference>();
+            if (!isNew)
+                diff = ObjectComparer.CompareObjects(_before, _after);
 
             // Consolidate computed values for children
             var childrenConsolidationProps = new[] { nameof(MemberDto.Name), nameof(MemberDto.LeadershipId) };
-            if (childrenConsolidationProps.Any(p => diff.Any(d => d.PropertyPath.Contains(p))))
+            if (isNew || childrenConsolidationProps.Any(p => diff.Any(d => d.PropertyPath.Contains(p))))
                 await ConsolidateChildrenMembersData(memberService, _after);
 
             // Check if leadership was changed
-            if (!diff.Any(d => d.PropertyPath.Contains(nameof(MemberDto.LeadershipId))))
+            if (!isNew && !diff.Any(d => d.PropertyPath.Contains(nameof(MemberDto.LeadershipId))))
                 return;
 
-            if (_before != null)
+            if (!isNew)
             {
                 await ConsolidateMemberChildrenRecurrently(memberRepository, _before.LeadershipId.GetValueOrDefault());
                 await ConsolidateMemberCellsRecurrently(cellRepository, memberRepository, _before.LeadershipId.GetValueOrDefault());
