@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
 using G12App.Application.Events;
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Events;
@@ -32,7 +31,7 @@ namespace G12App.Application.Services
             _eventDispatcher = eventDispatcher;
         }
 
-        public async Task<ServiceResult<CellDTO>> Add(CellDTO cellDTO)
+        public async Task<ServiceResult<CellDto>> Add(CellDto cellDTO)
         {
             var cellEntity = _mapper.Map<Cell>(cellDTO);
 
@@ -40,42 +39,42 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(cellEntity);
 
             var cell = await _cellRepository.Create(cellEntity);
-            var resultCellDto = _mapper.Map<CellDTO>(cell);
+            var resultCellDto = _mapper.Map<CellDto>(cell);
 
             await _eventDispatcher.DispatchEvent(new CellUpserted(null, resultCellDto));
 
-            return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
+            return new ServiceResult<CellDto>(_mapper.Map<CellDto>(cell));
         }
 
-        public async Task<ServiceResult<CellDTO>> Update(CellDTO cellDTO, int id)
+        public async Task<ServiceResult<CellDto>> Update(CellDto cellDTO, int id)
         {
             var cellEntity = await _cellRepository.GetCellByIdAsync(id);
-            var sourceCellDto = _mapper.Map<Cell, CellDTO>(cellEntity);
+            var sourceCellDto = _mapper.Map<Cell, CellDto>(cellEntity);
 
             cellEntity = _mapper.Map(cellDTO, cellEntity);
 
             _changeTrackingService.SetupLastModifiedData(cellEntity);
 
             var cell = await _cellRepository.Update(cellEntity);
-            var resultCellDto = _mapper.Map<CellDTO>(cell);
+            var resultCellDto = _mapper.Map<CellDto>(cell);
 
             await _eventDispatcher.DispatchEvent(new CellUpserted(sourceCellDto, resultCellDto));
 
-            return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cell));
+            return new ServiceResult<CellDto>(_mapper.Map<CellDto>(cell));
         }
 
-        public async Task<ServiceResult<CellDTO>> GetCellById(int? id)
+        public async Task<ServiceResult<CellDto>> GetCellById(int? id)
         {
             var cellEntity = await _cellRepository.GetCellByIdAsync(id);
-            return new ServiceResult<CellDTO>(_mapper.Map<CellDTO>(cellEntity));
+            return new ServiceResult<CellDto>(_mapper.Map<CellDto>(cellEntity));
         }
 
-        public async Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query<CellFilter> query)
+        public async Task<ServiceResult<IEnumerable<CellDto>>> GetCell(Query<CellFilter> query)
         {
             var cellEntity = await _cellRepository.GetCellsAsync(query);
             var totalMembers = cellEntity.Any() ? await _cellRepository.CountCellsAsync(query) : 0;
-            return new ServiceResult<IEnumerable<CellDTO>>(
-                _mapper.Map<IEnumerable<CellDTO>>(cellEntity), totalMembers);
+            return new ServiceResult<IEnumerable<CellDto>>(
+                _mapper.Map<IEnumerable<CellDto>>(cellEntity), totalMembers);
         }
 
         public async Task<ServiceResult> Remove(int? id)
@@ -84,8 +83,13 @@ namespace G12App.Application.Services
             if (cellEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado.");
 
+            var sourceCellDto = _mapper.Map<Cell, CellDto>(cellEntity);
+
             _changeTrackingService.SetupLastModifiedData(cellEntity);
             await _cellRepository.Remove(cellEntity);
+
+            await _eventDispatcher.DispatchEvent(new CellUpserted(sourceCellDto, null));
+
             return new ServiceResult();
         }
     }

@@ -27,7 +27,7 @@ namespace G12App.Application.Tests
                 ReportMandatory = true,
             };
 
-            var cellDto = new CellDTO()
+            var cellDto = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -44,7 +44,7 @@ namespace G12App.Application.Tests
 
             mock.Setup(x => x.Create(It.IsAny<Cell>())).ReturnsAsync(cell);
             mapperMock.Setup(x => x.Map<Cell>(cellDto)).Returns(cell);
-            mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
+            mapperMock.Setup(x => x.Map<CellDto>(cell)).Returns(cellDto);
 
             //Act
             var service = new CellService(mock.Object, mapperMock.Object, 
@@ -54,7 +54,7 @@ namespace G12App.Application.Tests
             //Assert
             mapperMock.Verify(x => x.Map<Cell>(cellDto));
             mock.Verify(x => x.Create(cell));
-            mapperMock.Verify(x => x.Map<CellDTO>(cell));
+            mapperMock.Verify(x => x.Map<CellDto>(cell));
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace G12App.Application.Tests
                 ReportMandatory = true,
             };
 
-            var cellDto = new CellDTO()
+            var cellDto = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -88,7 +88,7 @@ namespace G12App.Application.Tests
             var mapperMock = new Mock<IMapper>();
 
             mock.Setup(x => x.GetCellByIdAsync(cell.Id)).ReturnsAsync(cell);
-            mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
+            mapperMock.Setup(x => x.Map<CellDto>(cell)).Returns(cellDto);
 
             //Act
             var service = new CellService(mock.Object, mapperMock.Object, 
@@ -97,7 +97,7 @@ namespace G12App.Application.Tests
 
             //Assert
             mock.Verify(x => x.GetCellByIdAsync(cell.Id));
-            mapperMock.Verify(x => x.Map<CellDTO>(cell));
+            mapperMock.Verify(x => x.Map<CellDto>(cell));
             result.Data.Should().Be(cellDto);
         }
         [Fact]
@@ -115,7 +115,7 @@ namespace G12App.Application.Tests
                 ReportMandatory = true,
             };
 
-            var cellDto = new CellDTO()
+            var cellDto = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -132,7 +132,7 @@ namespace G12App.Application.Tests
 
             mock.Setup(x => x.GetCellByIdAsync(cell.Id)).ReturnsAsync(cell);
             mock.Setup(x => x.Remove(It.IsAny<Cell>())).ReturnsAsync(cell);
-            mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
+            mapperMock.Setup(x => x.Map<CellDto>(cell)).Returns(cellDto);
 
             //Act
             var service = new CellService(mock.Object, mapperMock.Object, 
@@ -159,7 +159,7 @@ namespace G12App.Application.Tests
                 ReportMandatory = true,
             };
 
-            var cellDto = new CellDTO()
+            var cellDto = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -177,7 +177,7 @@ namespace G12App.Application.Tests
 
             mapperMock.Setup(x => x.Map<Cell>(cellDto)).Returns(cell);
             mock.Setup(x => x.Update(It.IsAny<Cell>())).ReturnsAsync(cell);
-            mapperMock.Setup(x => x.Map<CellDTO>(cell)).Returns(cellDto);
+            mapperMock.Setup(x => x.Map<CellDto>(cell)).Returns(cellDto);
 
             //Act
             var service = new CellService(mock.Object, mapperMock.Object, 

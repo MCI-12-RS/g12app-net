@@ -32,7 +32,7 @@ namespace G12App.API.Controllers
         }
 
         [HttpPost("log")]
-        public async Task<IActionResult> PostReport([FromServices] IReportApp reportApp, [FromBody] ReportDTO reportDTO)
+        public async Task<IActionResult> PostReport([FromServices] IReportApp reportApp, [FromBody] ReportDto reportDTO)
         {
             var result = await reportApp.LogReport(reportDTO);
             return result.AsActionResult();
@@ -48,7 +48,7 @@ namespace G12App.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
-        public async Task<IActionResult> Update([FromServices] IReportService reportService, [FromBody] ReportDTO reportDTO, int id)
+        public async Task<IActionResult> Update([FromServices] IReportService reportService, [FromBody] ReportDto reportDTO, int id)
         {
             var result = await reportService.Update(reportDTO, id);
             return result.AsActionResult();

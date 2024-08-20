@@ -29,11 +29,9 @@ namespace G12App.Infrastructure.Events
                 try
                 {
                     ev = await _eventQueue.Dequeue(stoppingToken);
+                    await Task.Delay(TimeSpan.FromSeconds(3), stoppingToken);
                     if (ev == null)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
                         continue;
-                    }
 
                     await using var scope = _serviceProvider.CreateAsyncScope();
                     await ev.Handle(scope.ServiceProvider, stoppingToken);

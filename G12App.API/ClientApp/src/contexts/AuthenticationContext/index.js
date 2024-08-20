@@ -32,7 +32,8 @@ const AuthenticationContextProvider = ({ children }) => {
                 name: user.name,
                 userName: user.userName,
                 token: user.token,
-                role: user.role
+                role: user.role,
+                g12LeadershipName: user.g12LeadershipName,
             }
         });
     };

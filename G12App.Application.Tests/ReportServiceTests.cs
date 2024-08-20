@@ -27,12 +27,12 @@ namespace G12App.Application.Tests
                 HostId = 1
             };
 
-            var reportDto = new ReportDTO()
+            var reportDto = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -45,7 +45,7 @@ namespace G12App.Application.Tests
 
             mock.Setup(x => x.Create(It.IsAny<Report>())).ReturnsAsync(report);
             mapperMock.Setup(x => x.Map<Report>(reportDto)).Returns(report);
-            mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
+            mapperMock.Setup(x => x.Map<ReportDto>(report)).Returns(reportDto);
 
             //Act
             var service = new ReportService(mock.Object, mockMemberRepo.Object, mapperMock.Object, 
@@ -55,7 +55,7 @@ namespace G12App.Application.Tests
             //Arrange
             mapperMock.Verify(x => x.Map<Report>(reportDto));
             mock.Verify(x => x.Create(report));
-            mapperMock.Verify(x => x.Map<ReportDTO>(report));
+            mapperMock.Verify(x => x.Map<ReportDto>(report));
         }
 
         [Fact]
@@ -73,12 +73,12 @@ namespace G12App.Application.Tests
                 HostId = 1
             };
 
-            var reportDto = new ReportDTO()
+            var reportDto = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -90,7 +90,7 @@ namespace G12App.Application.Tests
             var mapperMock = new Mock<IMapper>();
 
             mock.Setup(x => x.GetReportById(report.Id)).ReturnsAsync(report);
-            mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
+            mapperMock.Setup(x => x.Map<ReportDto>(report)).Returns(reportDto);
 
             //Act
             var service = new ReportService(mock.Object, mockMemberRepo.Object, mapperMock.Object, 
@@ -99,7 +99,7 @@ namespace G12App.Application.Tests
 
             //Assert
             mock.Verify(x => x.GetReportById(report.Id));
-            mapperMock.Verify(x => x.Map<ReportDTO>(report));
+            mapperMock.Verify(x => x.Map<ReportDto>(report));
             result.Data.Should().Be(reportDto);
         }
 
@@ -118,12 +118,12 @@ namespace G12App.Application.Tests
                 HostId = 1
             };
 
-            var reportDto = new ReportDTO()
+            var reportDto = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
@@ -136,7 +136,7 @@ namespace G12App.Application.Tests
 
             mock.Setup(x => x.GetReportById(report.Id)).ReturnsAsync(report);
             mock.Setup(x => x.Remove(It.IsAny<Report>())).ReturnsAsync(report);
-            mapperMock.Setup(x => x.Map<ReportDTO>(report)).Returns(reportDto);
+            mapperMock.Setup(x => x.Map<ReportDto>(report)).Returns(reportDto);
 
             //Act
             var service = new ReportService(mock.Object, mockMemberRepo.Object, mapperMock.Object, 

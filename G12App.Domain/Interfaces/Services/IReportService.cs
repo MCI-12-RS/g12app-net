@@ -12,10 +12,10 @@ namespace G12App.Domain.Interfaces.Services
 {
     public interface IReportService
     {
-        Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query<ReportFilter> query);
-        Task<ServiceResult<ReportDTO>> GetById (int id);
-        Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO);
-        Task <ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id);
+        Task<ServiceResult<IEnumerable<ReportDto>>> GetAllReports(Query<ReportFilter> query);
+        Task<ServiceResult<ReportDto>> GetById (int id);
+        Task<ServiceResult<ReportDto>> Add(ReportDto reportDTO);
+        Task <ServiceResult<ReportDto>> Update(ReportDto reportDTO, int id);
         Task<ServiceResult> Delete(int id);
     }
 }

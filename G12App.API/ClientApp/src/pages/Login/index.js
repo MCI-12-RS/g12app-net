@@ -35,7 +35,10 @@ export const LoginPage = () => {
 
         try {
             setLoading(true);
-            var response = await Login({ ...login, password: md5(login.password) });
+            var response = await Login({ 
+                userName: (login.userName || '').trim(),
+                password: md5(login.password) 
+            });
 
             if (response.isValid) {
 

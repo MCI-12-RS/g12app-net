@@ -60,10 +60,18 @@ export const MemberDetails = () => {
         fetchUser();
     }, [params]);
 
+    const formatPhoneNumber = (phoneNumber) => {
+        if (!phoneNumber) return '';
+        phoneNumber = phoneNumber.replace(/[^0-9]/g, '');
+        return `(${phoneNumber.substring(0, 2)}) ${phoneNumber.substring(2, 7)}-${phoneNumber.substring(7, 11)}`;
+    }
+
+
     const fetchUser = async () => {
         setLoading(true);
         if (!params.id) {
             setMember(emptyMember);
+            setMember({...member, leadershipId: authContext.auth.user.memberId});
             setLoading(false);
             return;
         }
@@ -71,10 +79,20 @@ export const MemberDetails = () => {
         var result = await GetMember(params.id);
         if (result.isValid && result.data != null) {
             const member = result.data;
+            
             if (member.birthDate) {
                 member.birthDate = ToBRDate(member.birthDate);
             }
-            setMember(result.data);
+
+            if(member.mobileNumber){
+                member.mobileNumber = formatPhoneNumber(member.mobileNumber);
+            }
+
+            if(member.phoneNumber){
+                member.phoneNumber = formatPhoneNumber(member.phoneNumber);
+            }
+
+            setMember(member);
         } else {
             navigate('/members');
         }
@@ -121,6 +139,24 @@ export const MemberDetails = () => {
         return parseInt(params?.id) === authContext.auth.user.memberId;
     }
 
+    const GetMemberPickerLabel = () => {
+        if(!params.id){
+            var leader = (authContext.auth.user.g12LeadershipName ?? '');
+            if (leader) leader += ' / ';
+            return (leader ?? '') + authContext.auth.user.name;
+        }
+        
+        return FormatMemberPickerLabel(member.leadership)
+    };
+
+    const GetMemberPickerId = () => {
+        if(!params.id){
+            return authContext.auth.user.memberId;
+        }
+
+        return member.leadership?.id
+    };
+
     const SaveMember = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -133,11 +169,19 @@ export const MemberDetails = () => {
 
         try {
             var result;
+            
+            var payload = { 
+                ...member, 
+                birthDate: FromBRDate(member.birthDate), 
+                password: (member.password || '').length ? md5(member.password) : null,
+                mobileNumber: (member.mobileNumber || '').replace(/[^0-9]/g, ''),
+                phoneNumber: (member.phoneNumber || '').replace(/[^0-9]/g, ''),
+             };
 
             if (params.id) {
-                result = await UpdateMember({ ...member, birthDate: FromBRDate(member.birthDate), password: (member.password || '').length ? md5(member.password) : null });
+                result = await UpdateMember(payload);
             } else {
-                result = await CreateMember({ ...member, birthDate: FromBRDate(member.birthDate), password: (member.password || '').length ? md5(member.password) : null });
+                result = await CreateMember(payload);
             }
 
             if (result.isValid) {
@@ -207,8 +251,8 @@ export const MemberDetails = () => {
 
     return (
         <>
-            {(params.id ?                 
-                authContext.auth.user.role !== 'AppUser' ? <h1>Alterar cadastro de pessoa</h1> : <h1>Dados de Pessoa</h1>  :
+            {(params.id ?
+                authContext.auth.user.role !== 'AppUser' ? <h1>Alterar cadastro de pessoa</h1> : <h1>Dados de Pessoa</h1> :
                 <h1>Cadastrar nova pessoa</h1>)}
             <hr />
             {loading ?
@@ -284,8 +328,8 @@ export const MemberDetails = () => {
                                         <MemberPicker label="Liderança"
                                             setValue={(value) => handleSelectChangeEvent('leadershipId', value)}
                                             notInIds={[member.id]}
-                                            selectedLabel={FormatMemberPickerLabel(member.leadership)}
-                                            selectedValue={member.leadership?.id} />
+                                            selectedLabel={GetMemberPickerLabel()}
+                                            selectedValue={GetMemberPickerId()} />
                                     </Col>
                                 </Row>
                             </Container>
@@ -326,7 +370,7 @@ export const MemberDetails = () => {
                                         <Col>
                                             <InputGroup className="mb-3 pr-0" as={Col}>
                                                 <InputGroup.Text id="basic-addon2">Função</InputGroup.Text>
-                                                <Form.Select name="role" defaultValue={member.role} aria-describedby="basic-addon2" 
+                                                <Form.Select name="role" defaultValue={member.role} aria-describedby="basic-addon2"
                                                     onChange={handleChangeEvent} disabled={IsCurrentMember() ? "disabled" : false}>
                                                     <option value="AppUser">Usuário</option>
                                                     <option value="AppAdmin">Administrador</option>
@@ -351,33 +395,32 @@ export const MemberDetails = () => {
 
                             )}
 
+                            <Container fluid>
+                                <Row className="mb-3 pr-0 d-flex">
 
-                            {authContext.auth.user.role !== 'AppUser' && (
+                                    <Col xs={12}>
+                                        {!IsCurrentMember() && (
+                                            params.id && <Button variant="danger" type="button" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
 
-                                <Container fluid>
-                                    <Row className="mb-3 pr-0 d-flex">
+                                        <div className="float-end d-flex">
+                                            {(!params.id ?
+                                                <InputGroup className="pt-1 me-3" as={Col}>
+                                                    <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas"
+                                                        onChange={(event) => setRegisterMore(event.target.checked)} />
+                                                </InputGroup> :
+                                                '')}
 
-                                        <Col xs={12}>
-                                            {!IsCurrentMember() && (
-                                                params.id && <Button variant="danger" type="button" onClick={DeleteMemberPrompt}>Deletar cadastro</Button>)}
-
-                                            <div className="float-end d-flex">
-                                                {(!params.id ?
-                                                    <InputGroup className="pt-1 me-3" as={Col}>
-                                                        <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas"
-                                                            onChange={(event) => setRegisterMore(event.target.checked)} />
-                                                    </InputGroup> :
-                                                    '')}
-
+                                            {(authContext.auth.user.role !== 'AppUser' || IsCurrentMember()) && (
                                                 <Button variant="primary" className="ms-3" type="submit" onClick={SaveMember}>
                                                     Salvar {(params.id ? "alterações" : "cadastro")}
                                                 </Button>
-                                            </div>
-                                        </Col>
+                                            )}
+                                        </div>
+                                    </Col>
 
-                                    </Row>
-                                </Container>
-                            )}
+                                </Row>
+                            </Container>
+
                         </Form>
                         <br />
                         <br />

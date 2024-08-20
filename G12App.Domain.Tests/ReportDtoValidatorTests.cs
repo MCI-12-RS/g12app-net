@@ -17,7 +17,7 @@ namespace G12App.Domain.Tests
         public async Task ShouldGetNoErrorsForValidReport()
         {
             //Arrange
-            var report = new ReportDTO()
+            var report = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
@@ -41,7 +41,7 @@ namespace G12App.Domain.Tests
             //Test 1 
             new object[]
             {
-                new ReportDTO()
+                new ReportDto()
                 {
                     Id = 1,
                     Subject = "",
@@ -58,7 +58,7 @@ namespace G12App.Domain.Tests
             //Test 2
             new object[]
             {
-                new ReportDTO()
+                new ReportDto()
                 {
                     Id = 1,
                     Subject = "Valid subject",
@@ -75,7 +75,7 @@ namespace G12App.Domain.Tests
             //Test 3
             new object[]
             {
-                new ReportDTO()
+                new ReportDto()
                 {
                     Id = 1,
                     Subject = "Valid subject",
@@ -92,7 +92,7 @@ namespace G12App.Domain.Tests
             //Test 4
             new object[]
             {
-                new ReportDTO()
+                new ReportDto()
                 {
                     Id = 1,
                     Subject = "Valid subject",
@@ -109,7 +109,7 @@ namespace G12App.Domain.Tests
 
         [Theory]
         [MemberData(nameof(ShouldGetErrorsForInvalidReport_Data))]
-        public async Task ShouldGetErrorForInvalidReportData(ReportDTO dto, string errorMessage)
+        public async Task ShouldGetErrorForInvalidReportData(ReportDto dto, string errorMessage)
         {
             //Act
             var result = await _validator.ValidateAsync(dto);

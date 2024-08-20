@@ -6,6 +6,6 @@ namespace G12App.Domain.Interfaces.Services
 {
     public interface IAuthService
     {
-        Task<ServiceResult<ResponseLoginDTO>> Login(LoginDTO login);
+        Task<ServiceResult<ResponseLoginDto>> Login(LoginDto login);
     }
 }

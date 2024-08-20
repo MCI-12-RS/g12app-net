@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace G12App.Domain.DTOs
 {
-    public class ReportDTO
+    public class ReportDto
     {
         public int? Id { get; set; }
         public string Subject { get; set; }

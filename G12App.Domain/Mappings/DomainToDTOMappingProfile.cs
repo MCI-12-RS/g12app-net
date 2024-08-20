@@ -40,10 +40,10 @@ namespace G12App.Domain.Mappings
                     opt.MapFrom(s => s.Role);
                 });
 
-            CreateMap<Cell, CellDTO>()
+            CreateMap<Cell, CellDto>()
                 .ForMember(x => x.Time, opt => opt.MapFrom(x => TimeOnly.Parse(x.Time)));
 
-            CreateMap<CellDTO, Cell>()
+            CreateMap<CellDto, Cell>()
                 .ForMember(x => x.Lead, opt => opt.Ignore())
                 .ForMember(x => x.Host, opt => opt.Ignore())
                 .ForMember(x => x.Timothy, opt => opt.Ignore())
@@ -51,10 +51,10 @@ namespace G12App.Domain.Mappings
 
             CreateMap<Address, AddressDto>().ReverseMap();
 
-            CreateMap<Report, ReportDTO>()
+            CreateMap<Report, ReportDto>()
                 .ForMember(x => x.Visitors, opt => opt.MapFrom(m => m.Visitors.Split("|", StringSplitOptions.RemoveEmptyEntries)));
 
-            CreateMap<ReportDTO, Report>()
+            CreateMap<ReportDto, Report>()
                 .ForMember(x => x.Visitors, opt => opt.MapFrom(m => string.Join("|", m.Visitors.Where(x => !string.IsNullOrWhiteSpace(x)))));
 
             CreateMap<Member, Member>()

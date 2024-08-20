@@ -7,7 +7,7 @@ namespace G12App.Application.Events
     public abstract class BaseEvent : IEvent
     {
         protected ILogger Logger;
-        protected object EntityId { get; }
+        protected abstract object EntityId { get; }
 
         public async Task Handle(IServiceProvider serviceProvider, CancellationToken token)
         {

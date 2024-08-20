@@ -19,7 +19,7 @@ namespace G12App.Tests
     public class CellControllerTests
     {
         private readonly TestsFixture _testsFixture = new TestsFixture();
-        private readonly CellDTO dfcell = new CellDTO()
+        private readonly CellDto dfcell = new CellDto()
         {
             Id = 1,
             LeadId = 1,
@@ -67,7 +67,7 @@ namespace G12App.Tests
         public async Task CreateTest()
         {
             //Arrange
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 LeadId = 1,
                 HostId = 1,
@@ -112,7 +112,7 @@ namespace G12App.Tests
                 Encoding.UTF8,
                 "application/json");
             var postResponse = await _testsFixture.HttpClient.PostAsync("api/cell/", cellJson);
-            var jsonCell = await postResponse.Content.ReadFromJsonAsync<ServiceResult<CellDTO>>(_testsFixture.JsonSerializerOptions);
+            var jsonCell = await postResponse.Content.ReadFromJsonAsync<ServiceResult<CellDto>>(_testsFixture.JsonSerializerOptions);
 
             //Act
             var response = await _testsFixture.HttpClient.DeleteAsync("api/cell/" + jsonCell.Data.Id);
@@ -140,7 +140,7 @@ namespace G12App.Tests
                 Encoding.UTF8,
                 "application/json");
             var postResponse = await _testsFixture.HttpClient.PostAsync("api/cell/", cellJson);
-            var jsonCell = await postResponse.Content.ReadFromJsonAsync<ServiceResult<CellDTO>>(_testsFixture.JsonSerializerOptions);
+            var jsonCell = await postResponse.Content.ReadFromJsonAsync<ServiceResult<CellDto>>(_testsFixture.JsonSerializerOptions);
 
             var toUpCell = new Cell()
             {
@@ -159,7 +159,7 @@ namespace G12App.Tests
 
             //Act
             var result = await _testsFixture.HttpClient.PutAsync("/api/cell/" + jsonCell.Data.Id, toUpCellJson);
-            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<CellDTO>>(_testsFixture.JsonSerializerOptions);
+            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<CellDto>>(_testsFixture.JsonSerializerOptions);
 
             //Assert
             result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

@@ -34,11 +34,11 @@ namespace G12App.Application.Services
             _eventDispatcher = eventDispatcher;
         }
 
-        public async Task<ServiceResult<ReportDTO>> Add(ReportDTO reportDTO)
+        public async Task<ServiceResult<ReportDto>> Add(ReportDto reportDTO)
         {
             var reportEntity = _mapper.Map<Report>(reportDTO);
 
-            if (reportDTO?.Frequenters != null && reportDTO.Frequenters.Any())
+            if (reportDTO?.Frequenters != null && reportDTO.Frequenters.Count != 0)
                 foreach (var memberId in reportDTO.Frequenters)
                     reportEntity.Members.Add(
                         await _memberRepository.GetMemberByIdAsync(memberId));
@@ -52,18 +52,18 @@ namespace G12App.Application.Services
             if (reportDTO.HostId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.HostId))
                 reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.HostId));
 
-            reportEntity.NumMembers = reportEntity.Members.Count();
+            reportEntity.NumMembers = reportEntity.Members.Count;
             reportEntity.NumVisitors = reportDTO.Visitors.Where(x => !string.IsNullOrWhiteSpace(x)).Count();
 
             _changeTrackingService.SetupCreationData(reportEntity);
             _changeTrackingService.SetupLastModifiedData(reportEntity);
 
             var report = await _reportRepository.Create(reportEntity);
-            var resultReportDto = _mapper.Map<ReportDTO>(report);
+            var resultReportDto = _mapper.Map<ReportDto>(report);
 
             await _eventDispatcher.DispatchEvent(new ReportLogged(null, resultReportDto));
 
-            return new ServiceResult<ReportDTO>(resultReportDto);
+            return new ServiceResult<ReportDto>(resultReportDto);
         }
 
         public async Task<ServiceResult> Delete(int id)
@@ -78,15 +78,15 @@ namespace G12App.Application.Services
             return new ServiceResult();
         }
 
-        public async Task<ServiceResult<IEnumerable<ReportDTO>>> GetAllReports(Query<ReportFilter> query)
+        public async Task<ServiceResult<IEnumerable<ReportDto>>> GetAllReports(Query<ReportFilter> query)
         {
             var reportEntity = await _reportRepository.GetReportsAsync(query);
             var totalMembers = reportEntity.Any() ? await _reportRepository.CountReportsAsync(query) : 0;
-            return new ServiceResult<IEnumerable<ReportDTO>>(
-                _mapper.Map<IEnumerable<ReportDTO>>(reportEntity), totalMembers);
+            return new ServiceResult<IEnumerable<ReportDto>>(
+                _mapper.Map<IEnumerable<ReportDto>>(reportEntity), totalMembers);
         }
 
-        public async Task<ServiceResult<ReportDTO>> Update(ReportDTO reportDTO, int id)
+        public async Task<ServiceResult<ReportDto>> Update(ReportDto reportDTO, int id)
         {
             var reportEntity = _mapper.Map<Report>(reportDTO);
 
@@ -94,14 +94,14 @@ namespace G12App.Application.Services
 
             var report = await _reportRepository.Update(reportEntity);
 
-            return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(report));
+            return new ServiceResult<ReportDto>(_mapper.Map<ReportDto>(report));
 
         }
 
-        public async Task<ServiceResult<ReportDTO>> GetById(int id)
+        public async Task<ServiceResult<ReportDto>> GetById(int id)
         {
             var reportEntity = await _reportRepository.GetReportById(id);
-            return new ServiceResult<ReportDTO>(_mapper.Map<ReportDTO>(reportEntity));
+            return new ServiceResult<ReportDto>(_mapper.Map<ReportDto>(reportEntity));
         }
     }
 }

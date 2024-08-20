@@ -4,7 +4,7 @@ using System;
 
 namespace G12App.Domain.Validators
 {
-    public class ReportDTOValidator : AbstractValidator<ReportDTO>
+    public class ReportDTOValidator : AbstractValidator<ReportDto>
     {
         public const string Subject_ErrorMessage = "Insira um tema válido";
         public const string Date_ErrorMessage = "Insira uma data válida";

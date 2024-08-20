@@ -4,10 +4,12 @@ namespace G12App.Application.Events
 {
     public class ReportLogged : BaseEvent
     {
-        private readonly ReportDTO _before;
-        private readonly ReportDTO _after;
+        private readonly ReportDto _before;
+        private readonly ReportDto _after;
 
-        public ReportLogged(ReportDTO before, ReportDTO after)
+        protected override object EntityId => _after?.Id ?? _before?.Id;
+
+        public ReportLogged(ReportDto before, ReportDto after)
             => (_before, _after) = (before, after);
     }
 }

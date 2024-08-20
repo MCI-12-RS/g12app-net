@@ -9,10 +9,10 @@ namespace G12App.Domain.Interfaces.Services
 {
     public interface ICellService
     {
-        Task<ServiceResult<IEnumerable<CellDTO>>> GetCell(Query<CellFilter> query);
-        Task<ServiceResult<CellDTO>> GetCellById(int? id);
-        Task<ServiceResult<CellDTO>> Add(CellDTO cellDTO);
-        Task<ServiceResult<CellDTO>> Update(CellDTO cellDTO, int id);
+        Task<ServiceResult<IEnumerable<CellDto>>> GetCell(Query<CellFilter> query);
+        Task<ServiceResult<CellDto>> GetCellById(int? id);
+        Task<ServiceResult<CellDto>> Add(CellDto cellDTO);
+        Task<ServiceResult<CellDto>> Update(CellDto cellDTO, int id);
         Task <ServiceResult>Remove(int? id);
     }
 }

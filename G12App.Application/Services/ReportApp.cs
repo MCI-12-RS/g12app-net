@@ -34,15 +34,15 @@ namespace G12App.Application.Services
             return (startDate, startDate.AddDays(6));
         }
 
-        public async Task<ServiceResult<ReportDTO>> LogReport(ReportDTO reportDTO)
+        public async Task<ServiceResult<ReportDto>> LogReport(ReportDto reportDTO)
         {
             var weekDates = GetWeekSpan(DateTime.Now);
 
             if (reportDTO.Date > DateTime.Now)
-                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "O relatório não pode ser enviado para uma data futura.");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, "O relatório não pode ser enviado para uma data futura.");
 
             if (GetWeekNum(reportDTO.Date) != GetWeekNum(DateTime.Now))
-                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, $"O relatório precisa ser da semana atual, de {weekDates.Item1.ToString("dd/MM/yyyy")} a {weekDates.Item2.ToString("dd/MM/yyyy")}.");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório precisa ser da semana atual, de {weekDates.Item1.ToString("dd/MM/yyyy")} a {weekDates.Item2.ToString("dd/MM/yyyy")}.");
 
             var existentReport = await _reportService.GetAllReports(new Query<ReportFilter>()
             {
@@ -51,17 +51,17 @@ namespace G12App.Application.Services
             });
 
             if ((existentReport.Data?.Any()).GetValueOrDefault())
-                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, $"O relatório para esta semana já foi enviado (#{existentReport.Data.FirstOrDefault().Id}).");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório para esta semana já foi enviado (#{existentReport.Data.FirstOrDefault().Id}).");
 
             var cellResult = await _cellService.GetCellById(reportDTO.CellId);
             if (cellResult == null)
-                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "Célula não encontrada.");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, "Célula não encontrada.");
 
             if (cellResult.Data.WeekDay > reportDTO.Date.DayOfWeek)
-                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, "O relatório não pode ser lançado antes da data de cadastro da célula.");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, "O relatório não pode ser lançado antes da data de cadastro da célula.");
 
             if (cellResult.Data.WeekDay == reportDTO.Date.DayOfWeek && cellResult.Data.Time > TimeOnly.FromDateTime(reportDTO.Date))
-                return new ServiceResult<ReportDTO>(null, HttpStatusCode.BadRequest, $"O relatório não pode ser lançado antes do horário de cadastro da célula ({cellResult.Data.Time.ToString("HH:mm")}).");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório não pode ser lançado antes do horário de cadastro da célula ({cellResult.Data.Time.ToString("HH:mm")}).");
 
             return await _reportService.Add(reportDTO);
         }

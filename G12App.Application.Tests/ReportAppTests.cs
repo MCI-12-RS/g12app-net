@@ -13,18 +13,18 @@ namespace G12App.Application.Tests
         public async Task LogReportTest()
         {
             //Arrange
-            var report = new ReportDTO()
+            var report = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = DateTime.Now,
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
             };
 
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -39,9 +39,9 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<ICellService>();
-            mock.Setup(x => x.GetCellById(report.CellId)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            mock.Setup(x => x.GetCellById(report.CellId)).ReturnsAsync(new ServiceResult<CellDto>(cell));
             var mockReportService = new Mock<IReportService>();
-            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDto>(report));
 
             //Act
             var app = new ReportApp(mock.Object, mockReportService.Object);
@@ -57,18 +57,18 @@ namespace G12App.Application.Tests
         public async Task LogReportTestShouldGetReportDateError()
         {
             //Arrange
-            var report = new ReportDTO()
+            var report = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = DateTime.Now.AddDays(1),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
             };
 
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -82,9 +82,9 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<ICellService>();
-            mock.Setup(x => x.GetCellById(report.CellId)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            mock.Setup(x => x.GetCellById(report.CellId)).ReturnsAsync(new ServiceResult<CellDto>(cell));
             var mockReportService = new Mock<IReportService>();
-            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDto>(report));
 
             //Act
             var app = new ReportApp(mock.Object, mockReportService.Object);
@@ -100,18 +100,18 @@ namespace G12App.Application.Tests
         public async Task LogReportShouldGetInvalIdCell()
         {
             //Arrange
-            var report = new ReportDTO()
+            var report = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 3,
                 LeadershipId = 1,
                 HostId = 1
             };
 
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -125,9 +125,9 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<ICellService>();
-            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDto>(cell));
             var mockReportService = new Mock<IReportService>();
-            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDto>(report));
 
             //Act
             var app = new ReportApp(mock.Object, mockReportService.Object);
@@ -143,18 +143,18 @@ namespace G12App.Application.Tests
         public async Task LogReportShouldGetDateError()
         {
             //Arrange
-            var report = new ReportDTO()
+            var report = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 09),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
             };
 
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -168,9 +168,9 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<ICellService>();
-            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDto>(cell));
             var mockReportService = new Mock<IReportService>();
-            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDto>(report));
 
             //Act
             var app = new ReportApp(mock.Object, mockReportService.Object);
@@ -186,18 +186,18 @@ namespace G12App.Application.Tests
         public async Task LogReportShouldGetTimeError()
         {
             //Arrange
-            var report = new ReportDTO()
+            var report = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 10, 10, 10, 00, 00),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
             };
 
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -212,9 +212,9 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<ICellService>();
-            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDto>(cell));
             var mockReportService = new Mock<IReportService>();
-            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDto>(report));
 
             //Act
             var app = new ReportApp(mock.Object, mockReportService.Object);
@@ -230,18 +230,18 @@ namespace G12App.Application.Tests
         public async Task LogReportShouldGetWeekError()
         {
             //Arrange
-            var report = new ReportDTO()
+            var report = new ReportDto()
             {
                 Id = 1,
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
-                Visitors = new List<string> { "a" },
+                Visitors = ["a"],
                 CellId = 1,
                 LeadershipId = 1,
                 HostId = 1
             };
 
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -255,9 +255,9 @@ namespace G12App.Application.Tests
 
             //Mock
             var mock = new Mock<ICellService>();
-            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDTO>(cell));
+            mock.Setup(x => x.GetCellById(1)).ReturnsAsync(new ServiceResult<CellDto>(cell));
             var mockReportService = new Mock<IReportService>();
-            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDTO>(report));
+            mockReportService.Setup(x => x.Add(report)).ReturnsAsync(new ServiceResult<ReportDto>(report));
 
             //Act
             var app = new ReportApp(mock.Object, mockReportService.Object);

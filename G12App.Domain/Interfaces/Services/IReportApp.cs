@@ -6,6 +6,6 @@ namespace G12App.Domain.Interfaces.Services
 {
     public interface IReportApp
     {
-        Task<ServiceResult<ReportDTO>> LogReport(ReportDTO reportDTO);
+        Task<ServiceResult<ReportDto>> LogReport(ReportDto reportDTO);
     }
 }

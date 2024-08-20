@@ -14,7 +14,7 @@ namespace G12App.API.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost("login")]
-        public async Task<IActionResult> Authenticate([FromServices] IAuthService authService, [FromBody] LoginDTO loginDTO)
+        public async Task<IActionResult> Authenticate([FromServices] IAuthService authService, [FromBody] LoginDto loginDTO)
         {
             var result = await authService.Login(loginDTO);
             return result.AsActionResult();

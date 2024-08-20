@@ -16,7 +16,7 @@ namespace G12App.Domain.Tests
         public async Task ShouldGetNoErrorsForValidCell()
         {
             //Arrange
-            var cell = new CellDTO()
+            var cell = new CellDto()
             {
                 Id = 1,
                 LeadId = 1,
@@ -43,7 +43,7 @@ namespace G12App.Domain.Tests
             new object[] {
 
                 // dto
-                new CellDTO()
+                new CellDto()
                 {
                     Id = 1,
                     LeadId = 0,
@@ -62,7 +62,7 @@ namespace G12App.Domain.Tests
             // Test 2
             new object[] {
                 // dto
-                new CellDTO()
+                new CellDto()
                 {
                     Id = 1,
                     LeadId = 1,
@@ -81,7 +81,7 @@ namespace G12App.Domain.Tests
             // Test 3
             new object[] {
                 // dto
-                new CellDTO()
+                new CellDto()
                 {
                     Id = 1,
                     LeadId = 1,
@@ -100,7 +100,7 @@ namespace G12App.Domain.Tests
             // Test 4
             new object[] {
                 // dto
-                new CellDTO()
+                new CellDto()
                 {
                     Id = 1,
                     LeadId = 1,
@@ -119,7 +119,7 @@ namespace G12App.Domain.Tests
 
         [Theory]
         [MemberData(nameof(ShouldGetErrorForInvalidCell_Data))]
-        public async Task ShouldGetErrorForInvalidCell_MemberData(CellDTO dto, string errorMessage)
+        public async Task ShouldGetErrorForInvalidCell_MemberData(CellDto dto, string errorMessage)
         {
             //Act
             var result = await _validator.ValidateAsync(dto);

@@ -74,7 +74,7 @@ namespace G12App.Workers
                     }
                 });
 
-                childrenMembers = result.IsValid ? result.Data : new List<MemberDto>();
+                childrenMembers = result.IsValid ? result.Data : [];
 
                 foreach (var children in result.Data.Where(x => x.Id.HasValue))
                 {

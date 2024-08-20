@@ -7,6 +7,8 @@
         public const string MinistryLevel = nameof(MinistryLevel);
 
         public const string LeadershipId = nameof(LeadershipId);
+
+        public const string G12LeadershipName = nameof(G12LeadershipName);
     }
 
     public static class Roles

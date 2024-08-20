@@ -9,21 +9,25 @@ namespace G12App.Application.Events
 {
     public class CellUpserted : BaseEvent
     {
-        private readonly CellDTO _before;
-        private readonly CellDTO _after;
+        private readonly CellDto _before;
+        private readonly CellDto _after;
 
-        public CellUpserted(CellDTO before, CellDTO after)
+        protected override object EntityId => _after?.Id ?? _before?.Id;
+
+        public CellUpserted(CellDto before, CellDto after)
             => (_before, _after) = (before, after);
 
         protected override async Task HandleInternal(IServiceProvider serviceProvider, CancellationToken token)
         {
             var memberRepository = serviceProvider.GetRequiredService<IMemberRepository>();
             var cellRepository = serviceProvider.GetRequiredService<ICellRepository>();
+            var isNew = _before == null;
+            var isDeleted = _after == null;
 
             var diff = ObjectComparer.CompareObjects(_before, _after);
 
             // Check if leadership was changed
-            if (!diff.Any(d => d.PropertyPath.Contains(nameof(CellDTO.LeadId))))
+            if (!diff.Any(d => d.PropertyPath.Contains(nameof(CellDto.LeadId))))
                 return;
 
             if (_before != null)

@@ -89,7 +89,7 @@ namespace G12App.Tests
                 "application/json");
 
             var createResponse = await _testsFixture.HttpClient.PostAsync("/api/report/log", reportJson);
-            var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
+            var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDto>>(_testsFixture.JsonSerializerOptions);
 
             //Act
             var result = await _testsFixture.HttpClient.DeleteAsync("/api/report/" + postResponse.Data.Id);
@@ -107,9 +107,9 @@ namespace G12App.Tests
                Encoding.UTF8,
                "application/json");
             var createResponse = await _testsFixture.HttpClient.PostAsync("/api/report/", dfRepJson);
-            var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
+            var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDto>>(_testsFixture.JsonSerializerOptions);
 
-            var repToUpdate = new ReportDTO()
+            var repToUpdate = new ReportDto()
             {
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
@@ -126,7 +126,7 @@ namespace G12App.Tests
 
             //Act
             var result = await _testsFixture.HttpClient.PutAsync("/api/report/" + postResponse.Data.Id, toUpRepJson);
-            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
+            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<ReportDto>>(_testsFixture.JsonSerializerOptions);
 
             //Assert
             result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -142,11 +142,11 @@ namespace G12App.Tests
                Encoding.UTF8,
                "application/json");
             var createResponse = await _testsFixture.HttpClient.PostAsync("/api/report/log", dfRepJson);
-            var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
+            var postResponse = await createResponse.Content.ReadFromJsonAsync<ServiceResult<ReportDto>>(_testsFixture.JsonSerializerOptions);
 
             //Act
             var result = await _testsFixture.HttpClient.GetAsync("/api/report/" + postResponse.Data.Id);
-            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<ReportDTO>>(_testsFixture.JsonSerializerOptions);
+            var resultJson = await result.Content.ReadFromJsonAsync<ServiceResult<ReportDto>>(_testsFixture.JsonSerializerOptions);
 
             //Assert
             result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

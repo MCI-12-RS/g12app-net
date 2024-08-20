@@ -13,6 +13,6 @@ namespace G12App.Infrastructure.Events
             => Writer.WriteAsync(ev, token);
 
         public ValueTask<IEvent> Dequeue(CancellationToken token)
-            => Reader.ReadAsync();
+            => Reader.ReadAsync(token);
     }
 }

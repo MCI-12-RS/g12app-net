@@ -54,7 +54,7 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupCreationData(memberEntity);
             _changeTrackingService.SetupLastModifiedData(memberEntity);
 
-            //await UpdateComputedValues(memberEntity);
+            await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Create(memberEntity);
             var resultMemberDto = _mapper.Map<MemberDto>(member);
@@ -72,7 +72,7 @@ namespace G12App.Application.Services
             memberEntity = _mapper.Map(memberDTO, memberEntity);
 
             _changeTrackingService.SetupLastModifiedData(memberEntity);
-            //await UpdateComputedValues(memberEntity);
+            await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Update(memberEntity);
             var resultMemberDto = _mapper.Map<MemberDto>(member);
@@ -109,8 +109,13 @@ namespace G12App.Application.Services
             if (memberEntity == null)
                 return new ServiceResult(HttpStatusCode.NotFound, "Não encontrado.");
 
+            var sourceMemberDto = _mapper.Map<Member, MemberDto>(memberEntity);
+
             _changeTrackingService.SetupLastModifiedData(memberEntity);
             await _memberRepository.Remove(memberEntity);
+
+            await _eventDispatcher.DispatchEvent(new MemberUpserted(sourceMemberDto, null));
+
             return new ServiceResult();
         }
 

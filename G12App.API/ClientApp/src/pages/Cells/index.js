@@ -33,7 +33,7 @@ export const Cells = () => {
     },
     {
       name: 'Localização',
-      render: (cell) => RenderGridAddress(cell.address)
+      render: (cell) => RenderGridAddress(cell.place)
     },
     {
       name: 'Modalidade',

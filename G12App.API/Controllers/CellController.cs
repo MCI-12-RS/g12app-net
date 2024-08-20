@@ -48,7 +48,7 @@ namespace G12App.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
-        public async Task<IActionResult> Add([FromServices] ICellService cellService, [FromBody] CellDTO cell)
+        public async Task<IActionResult> Add([FromServices] ICellService cellService, [FromBody] CellDto cell)
         {
             var result = await cellService.Add(cell);
             return result.AsActionResult();
@@ -64,7 +64,7 @@ namespace G12App.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
-        public async Task<IActionResult> Update([FromServices] ICellService cellService,[FromBody] CellDTO cell, int id)
+        public async Task<IActionResult> Update([FromServices] ICellService cellService,[FromBody] CellDto cell, int id)
         {
             cell.Id = id;
             var result = await cellService.Update(cell, id);

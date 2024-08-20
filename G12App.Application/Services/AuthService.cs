@@ -24,10 +24,10 @@ namespace G12App.Application.Services
             _memberService = memberService;
         }
 
-        public async Task<ServiceResult<ResponseLoginDTO>> Login(LoginDTO login)
+        public async Task<ServiceResult<ResponseLoginDto>> Login(LoginDto login)
         {
             if (login == null || string.IsNullOrWhiteSpace(login.UserName) || string.IsNullOrWhiteSpace(login.Password))
-                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Preencha o usuario e senha.");
+                return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Preencha o usuario e senha.");
 
             var query = new Query<MemberFilter>()
             {
@@ -42,21 +42,22 @@ namespace G12App.Application.Services
             var user = result.Data.FirstOrDefault();
 
             if (user == null)
-                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Usuário não encontrado.");
+                return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Usuário não encontrado.");
 
             if (login.Password != user.Password)
-                return new ServiceResult<ResponseLoginDTO>(null, HttpStatusCode.BadRequest, "Senha incorreta.");
+                return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Senha incorreta.");
 
-            var response = new ResponseLoginDTO
+            var response = new ResponseLoginDto
             {
                 UserName = login.UserName,
                 Token = GenerateAccessToken(user),
                 MemberId = user.Id.GetValueOrDefault(),
                 Name = user.Name,
                 Role = user.Role,
+                G12LeadershipName = user.ComputedG12Leader,
             };
 
-            return new ServiceResult<ResponseLoginDTO>(response);
+            return new ServiceResult<ResponseLoginDto>(response);
         }
 
         private string GenerateAccessToken(MemberDto member)
@@ -72,7 +73,8 @@ namespace G12App.Application.Services
                     new(ClaimTypes.Email, member.Email ?? string.Empty),
                     new(CustomClaims.MinistryLevel, member.MinistryLevel?.ToString() ?? string.Empty),
                     new(CustomClaims.LeadershipId, member.LeadershipId?.ToString() ?? string.Empty),
-                    new(ClaimTypes.Role, string.IsNullOrWhiteSpace(member.Role) ? Roles.AppUser : member.Role)
+                    new(ClaimTypes.Role, string.IsNullOrWhiteSpace(member.Role) ? Roles.AppUser : member.Role),
+                    new(CustomClaims.G12LeadershipName, member.ComputedG12Leader ?? string.Empty),
                 ]),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

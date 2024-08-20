@@ -3,7 +3,7 @@ using G12App.Domain.DTOs;
 
 namespace G12App.Domain.Validators
 {
-    public class CellDtoValidator : AbstractValidator<CellDTO>
+    public class CellDtoValidator : AbstractValidator<CellDto>
     {
         public const string LeadID_ErrorMessage = "Insira um ID válido";
         public const string HostID_ErrorMessage = "Insira um ID válido";

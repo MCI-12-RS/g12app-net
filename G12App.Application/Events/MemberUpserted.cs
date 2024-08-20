@@ -13,6 +13,8 @@ namespace G12App.Application.Events
         private readonly MemberDto _before;
         private readonly MemberDto _after;
 
+        protected override object EntityId => _after?.Id ?? _before?.Id;
+
         public MemberUpserted(MemberDto before, MemberDto after)
             => (_before, _after) = (before, after);
 
@@ -21,32 +23,36 @@ namespace G12App.Application.Events
             var memberService = serviceProvider.GetRequiredService<IMemberService>();
             var memberRepository = serviceProvider.GetRequiredService<IMemberRepository>();
             var cellRepository = serviceProvider.GetRequiredService<ICellRepository>();
-            var isNew = _before != null;
+            var isNew = _before == null;
+            var isDeleted = _after == null;
 
             var diff = new List<PropertyDifference>();
-            if (!isNew)
+            if (!isNew && !isDeleted)
                 diff = ObjectComparer.CompareObjects(_before, _after);
 
             // Consolidate computed values for children
             var childrenConsolidationProps = new[] { nameof(MemberDto.Name), nameof(MemberDto.LeadershipId) };
-            if (isNew || childrenConsolidationProps.Any(p => diff.Any(d => d.PropertyPath.Contains(p))))
+            if (!isDeleted && (isNew || childrenConsolidationProps.Any(p => diff.Any(d => d.PropertyPath.Contains(p)))))
                 await ConsolidateChildrenMembersData(memberService, _after);
 
             // Check if leadership was changed
-            if (!isNew && !diff.Any(d => d.PropertyPath.Contains(nameof(MemberDto.LeadershipId))))
+            if (!isNew && !isDeleted && !diff.Any(d => d.PropertyPath.Contains(nameof(MemberDto.LeadershipId))))
                 return;
 
             if (!isNew)
             {
-                await ConsolidateMemberChildrenRecurrently(memberRepository, _before.LeadershipId.GetValueOrDefault());
-                await ConsolidateMemberCellsRecurrently(cellRepository, memberRepository, _before.LeadershipId.GetValueOrDefault());
+                await ConsolidateMemberChildrenRecursively(memberRepository, _before.LeadershipId.GetValueOrDefault());
+                await ConsolidateMemberCellsRecursively(cellRepository, memberRepository, _before.LeadershipId.GetValueOrDefault());
             }
 
-            await ConsolidateMemberChildrenRecurrently(memberRepository, _after.LeadershipId.GetValueOrDefault());
-            await ConsolidateMemberCellsRecurrently(cellRepository, memberRepository, _after.LeadershipId.GetValueOrDefault());
+            if (!isDeleted)
+            {
+                await ConsolidateMemberChildrenRecursively(memberRepository, _after.LeadershipId.GetValueOrDefault());
+                await ConsolidateMemberCellsRecursively(cellRepository, memberRepository, _after.LeadershipId.GetValueOrDefault());
+            }
         }
 
-        private async Task ConsolidateMemberCellsRecurrently(
+        private async Task ConsolidateMemberCellsRecursively(
             ICellRepository cellRepository, IMemberRepository memberRepository, int leadershipId)
         {
             var currExec = 0;
@@ -70,7 +76,7 @@ namespace G12App.Application.Events
             }
         }
 
-        private async Task ConsolidateMemberChildrenRecurrently(IMemberRepository memberRepository, int leadershipId)
+        private async Task ConsolidateMemberChildrenRecursively(IMemberRepository memberRepository, int leadershipId)
         {
             var currExec = 0;
             while (leadershipId > 0 && ++currExec <= 5)
@@ -116,7 +122,7 @@ namespace G12App.Application.Events
                     }
                 });
 
-                childrenMembers = result.IsValid ? result.Data : new List<MemberDto>();
+                childrenMembers = result.IsValid ? result.Data : [];
 
                 foreach (var children in result.Data.Where(x => x.Id.HasValue))
                 {
