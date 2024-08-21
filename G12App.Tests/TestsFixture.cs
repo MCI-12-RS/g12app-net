@@ -21,14 +21,14 @@ namespace G12App.Tests
                     {
                         builder.ConfigureTestServices(services =>
                         {
-                            var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppContext>));
+                            var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
                             if (descriptor != null)
                                 services.Remove(descriptor);
 
                             var conn = new SqliteConnection("Filename=:memory:");
                             conn.Open();
 
-                            services.AddDbContext<AppContext>(options => options.UseSqlite(conn));
+                            services.AddDbContext<AppDbContext>(options => options.UseSqlite(conn));
                         });
                     });
 

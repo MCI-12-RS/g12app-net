@@ -10,7 +10,7 @@ namespace G12App.Infrastructure.Data.Tests
 {
     public class TestFixture
     {
-        public AppContext Context;
+        public AppDbContext Context;
         public IMapper Mapper;
         public IHttpContextAccessor HttpContextAccessor;
 
@@ -19,11 +19,11 @@ namespace G12App.Infrastructure.Data.Tests
             var connection = new SqliteConnection("Filename=:memory:");
             connection.Open();
 
-            var contextOptions = new DbContextOptionsBuilder<AppContext>()
+            var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
                 .UseSqlite(connection)
                 .Options;
 
-            Context = new AppContext(contextOptions);
+            Context = new AppDbContext(contextOptions);
             Context.Database.EnsureCreated();
 
             HttpContextAccessor = Mock.Of<IHttpContextAccessor>();

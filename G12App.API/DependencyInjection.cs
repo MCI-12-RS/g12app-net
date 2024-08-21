@@ -19,9 +19,12 @@ namespace G12App.API
         public static IServiceCollection RegisterJWT(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCors();
-            var jwtSection = configuration.GetSection("JWTSettings");
+            var jwtSection = configuration.GetSection(nameof(JWTSettings));
             services.Configure<JWTSettings>(jwtSection);
             var appSetings = jwtSection.Get<JWTSettings>();
+
+            services.Configure<AdminUser>(
+                configuration.GetSection(nameof(AdminUser)));
 
             var key = Encoding.ASCII.GetBytes(appSetings.SecretKey);
             services.AddAuthentication(x =>
@@ -63,28 +66,16 @@ namespace G12App.API
         public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             var mySqlServerConnString = configuration["ConnectionStrings:MySql_AppContext"];
-            var postgreServerConnString = configuration["ConnectionStrings:Postgre_AppContext"];
             var sqlServerConnString = configuration["ConnectionStrings:SqlServer_AppContext"];
 
             if (!string.IsNullOrWhiteSpace(mySqlServerConnString))
                 return
-                    services.AddDbContext<AppContext>(options => options.UseMySql(
+                    services.AddDbContext<AppDbContext>(options => options.UseMySql(
                         mySqlServerConnString, new MySqlServerVersion(new System.Version(5, 7))));
-
-
-            if (!string.IsNullOrWhiteSpace(postgreServerConnString))
-            {
-                return
-                    services.AddDbContext<AppContext>(options => options.UseNpgsql(postgreServerConnString, opt =>
-                    {
-                        opt.EnableRetryOnFailure(10, System.TimeSpan.FromSeconds(10), null);
-
-                    }));
-            }
 
             if (!string.IsNullOrWhiteSpace(sqlServerConnString))
                 return
-                    services.AddDbContext<AppContext>(options => options.UseSqlServer(
+                    services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
                         sqlServerConnString,
                         opt => opt.EnableRetryOnFailure(
                             maxRetryCount: 10,
@@ -107,8 +98,8 @@ namespace G12App.API
         public static void Configure(this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
-            var context = serviceScope.ServiceProvider.GetRequiredService<AppContext>();
-            context.Database.EnsureCreated();
+            var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.Database.Migrate();
         }
     }
 }

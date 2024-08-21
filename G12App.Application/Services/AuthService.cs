@@ -17,35 +17,54 @@ namespace G12App.Application.Services
     {
         private readonly IMemberService _memberService;
         private readonly JWTSettings _jwtSettings;
+        private readonly AdminUser _adminUser;
 
-        public AuthService(IMemberService memberService, IOptions<JWTSettings> jwtSettings)
+        public AuthService(
+            IMemberService memberService,
+            IOptions<JWTSettings> jwtSettings,
+            IOptions<AdminUser> adminUser
+            )
         {
-            _jwtSettings = jwtSettings.Value;
             _memberService = memberService;
+            _jwtSettings = jwtSettings.Value;
+            _adminUser = adminUser.Value;
         }
 
         public async Task<ServiceResult<ResponseLoginDto>> Login(LoginDto login)
         {
-            if (login == null || string.IsNullOrWhiteSpace(login.UserName) || string.IsNullOrWhiteSpace(login.Password))
-                return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Preencha o usuario e senha.");
-
-            var query = new Query<MemberFilter>()
+            MemberDto user = null;
+            if (login.UserName == _adminUser.UserName && login.Password == _adminUser.Password)
             {
-                Pagination = new Pagination(1, 1),
-                Filter = new MemberFilter()
+                user = new MemberDto()
                 {
-                    UserName = login.UserName,
-                }
-            };
+                    Id = -1,
+                    Name = nameof(AdminUser),
+                    Role = Roles.AppSuperAdmin,
+                };
+            }
+            else
+            {
+                if (login == null || string.IsNullOrWhiteSpace(login.UserName) || string.IsNullOrWhiteSpace(login.Password))
+                    return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Preencha o usuario e senha.");
 
-            var result = await _memberService.GetMembers(query, true);
-            var user = result.Data.FirstOrDefault();
+                var query = new Query<MemberFilter>()
+                {
+                    Pagination = new Pagination(1, 1),
+                    Filter = new MemberFilter()
+                    {
+                        UserName = login.UserName,
+                    }
+                };
 
-            if (user == null)
-                return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Usuário não encontrado.");
+                var result = await _memberService.GetMembers(query, true);
+                user = result.Data.FirstOrDefault();
 
-            if (login.Password != user.Password)
-                return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Senha incorreta.");
+                if (user == null)
+                    return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Usuário não encontrado.");
+
+                if (login.Password != user.Password)
+                    return new ServiceResult<ResponseLoginDto>(null, HttpStatusCode.BadRequest, "Senha incorreta.");
+            }
 
             var response = new ResponseLoginDto
             {

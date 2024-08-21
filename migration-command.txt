@@ -1,0 +1,1 @@
+dotnet ef migrations add InitialCreate --context AppDbContext -s .\G12App.API\G12App.API.csproj -p .\G12App.Infrastructure.Data\G12App.Infrastructure.Data.csproj

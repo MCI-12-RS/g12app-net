@@ -8,17 +8,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace G12App.Application.Events
 {
-    public class MemberUpserted : BaseEvent
+    public class MemberChanged : BaseEvent
     {
         private readonly MemberDto _before;
         private readonly MemberDto _after;
 
-        protected override object EntityId => _after?.Id ?? _before?.Id;
+        protected sealed override object EntityId => _after?.Id ?? _before?.Id;
 
-        public MemberUpserted(MemberDto before, MemberDto after)
+        public MemberChanged(MemberDto before, MemberDto after)
             => (_before, _after) = (before, after);
 
-        protected override async Task HandleInternal(IServiceProvider serviceProvider, CancellationToken token)
+        protected sealed override async Task HandleInternal(IServiceProvider serviceProvider, CancellationToken token)
         {
             var memberService = serviceProvider.GetRequiredService<IMemberService>();
             var memberRepository = serviceProvider.GetRequiredService<IMemberRepository>();

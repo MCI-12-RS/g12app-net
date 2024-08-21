@@ -7,7 +7,7 @@ import Grid from '../../components/Grid';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { RenderGridAddress } from '../../shared/utils';
+import { RenderGridAddress, TranslateMinistryLevel } from '../../shared/utils';
 
 export const Members = () => {
 
@@ -20,14 +20,6 @@ export const Members = () => {
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
   const [sort, setSort] = React.useState({sortBy: 'ministryLevel', order: false});
-
-  const translateMinistryLevel = (ministryLevel) => {
-    switch(ministryLevel){
-      case 1: return 'Pastores';
-      case 12: return 'G12';
-      default: return ministryLevel;
-    }
-  };
 
   const getLeadership = (member) => {
     switch(member.ministryLevel){
@@ -49,7 +41,7 @@ export const Members = () => {
     },
     {
       name: 'Nível',
-      render: (member) => translateMinistryLevel(member.ministryLevel)
+      render: (member) => TranslateMinistryLevel(member.ministryLevel)
     },
     {
       name: 'Liderança',

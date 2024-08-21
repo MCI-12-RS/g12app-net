@@ -14,11 +14,11 @@ namespace G12App.Infrastructure.Data.Repositories
 {
     public class MemberRepository : IMemberRepository
     {
-        private readonly AppContext _context;
+        private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MemberRepository(
-            AppContext context,
+            AppDbContext context,
             IHttpContextAccessor httpContextAccessor)
         {
             _context = context;

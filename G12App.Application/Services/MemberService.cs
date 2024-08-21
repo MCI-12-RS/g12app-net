@@ -59,7 +59,7 @@ namespace G12App.Application.Services
             var member = await _memberRepository.Create(memberEntity);
             var resultMemberDto = _mapper.Map<MemberDto>(member);
 
-            await _eventDispatcher.DispatchEvent(new MemberUpserted(null, resultMemberDto));
+            await _eventDispatcher.DispatchEvent(new MemberCreated(resultMemberDto));
 
             return new ServiceResult<MemberDto>(resultMemberDto);
         }
@@ -77,7 +77,7 @@ namespace G12App.Application.Services
             var member = await _memberRepository.Update(memberEntity);
             var resultMemberDto = _mapper.Map<MemberDto>(member);
 
-            await _eventDispatcher.DispatchEvent(new MemberUpserted(sourceMemberDto, resultMemberDto));
+            await _eventDispatcher.DispatchEvent(new MemberUpdated(sourceMemberDto, resultMemberDto));
 
             return new ServiceResult<MemberDto>(resultMemberDto);
         }
@@ -114,7 +114,7 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(memberEntity);
             await _memberRepository.Remove(memberEntity);
 
-            await _eventDispatcher.DispatchEvent(new MemberUpserted(sourceMemberDto, null));
+            await _eventDispatcher.DispatchEvent(new MemberDeleted(sourceMemberDto));
 
             return new ServiceResult();
         }

@@ -164,3 +164,11 @@ export const RenderGridAddress = (address) => {
         {address?.city && (<><span><b>Cidade: </b>{address?.city}{address?.state ? ' / ' + address?.state : ''}</span></>)}
       </>
 }
+
+export const TranslateMinistryLevel = (ministryLevel) => {
+    switch(ministryLevel){
+      case 1: return 'Pastores';
+      case 12: return 'G12';
+      default: return ministryLevel;
+    }
+  };

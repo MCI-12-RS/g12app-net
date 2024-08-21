@@ -38,5 +38,7 @@ namespace G12App.Domain.Model
         public int NumMembers { get; set; }
 
         public int? NumVisitors { get; set; }
+
+        public bool WeekCellSkipped { get; set; }
     }
 }

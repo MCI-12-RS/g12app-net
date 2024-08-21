@@ -127,8 +127,21 @@ export const CellDetails = () => {
             render: (report) => (<><strong>{moment(report.date).format('DD/MM/yyyy')}</strong><br />{moment(report.date).format('HH:mm')}</>)
         },
         {
-            name: 'Tema',
-            render: (report) => report.subject
+            name: 'Detalhes',
+            render: (report) => {
+                return (
+                    report.weekCellSkipped ?
+                        <>
+                            <span><b>Não houve célula.</b></span> 
+                            <br/>
+                            <span><b>Observações:</b> {report.notes}</span>
+                        </>
+                        :
+                        <>
+                            <span><b>Tema:</b> {report.subject}</span>
+                        </>
+                )
+            }
         },
         {
             name: 'Oferta',

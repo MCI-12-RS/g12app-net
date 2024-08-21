@@ -41,7 +41,7 @@ namespace G12App.Application.Services
             var cell = await _cellRepository.Create(cellEntity);
             var resultCellDto = _mapper.Map<CellDto>(cell);
 
-            await _eventDispatcher.DispatchEvent(new CellUpserted(null, resultCellDto));
+            await _eventDispatcher.DispatchEvent(new CellCreated(resultCellDto));
 
             return new ServiceResult<CellDto>(_mapper.Map<CellDto>(cell));
         }
@@ -58,7 +58,7 @@ namespace G12App.Application.Services
             var cell = await _cellRepository.Update(cellEntity);
             var resultCellDto = _mapper.Map<CellDto>(cell);
 
-            await _eventDispatcher.DispatchEvent(new CellUpserted(sourceCellDto, resultCellDto));
+            await _eventDispatcher.DispatchEvent(new CellUpdated(sourceCellDto, resultCellDto));
 
             return new ServiceResult<CellDto>(_mapper.Map<CellDto>(cell));
         }
@@ -88,7 +88,7 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(cellEntity);
             await _cellRepository.Remove(cellEntity);
 
-            await _eventDispatcher.DispatchEvent(new CellUpserted(sourceCellDto, null));
+            await _eventDispatcher.DispatchEvent(new CellDeleted(sourceCellDto));
 
             return new ServiceResult();
         }

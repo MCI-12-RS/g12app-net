@@ -12,12 +12,13 @@ const MemberPicker = ({
     setValue,
     noOptionsMessage,
     placeholder,
-    initialValue = 'Sem liderança (nível base)',
+    initialValue = 'Sem liderança',
     minLength = 2,
     notInIds = [],
     selectedValue = null,
     selectedLabel = null,
     isMulti = false,
+    disabled = false,
     changeValueEvent = () => { }
 }) => {
 
@@ -95,6 +96,7 @@ const MemberPicker = ({
                 noOptionsMessage={getNoOptionsMessage}
                 value={option}
                 defaultOptions={defaultOption}
+                isDisabled={disabled}
                 placeholder="" loadOptions={loadMembers}
                 isMulti={isMulti} />
         </InputGroup>

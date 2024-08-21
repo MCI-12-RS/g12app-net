@@ -7,17 +7,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace G12App.Application.Events
 {
-    public class CellUpserted : BaseEvent
+    public abstract class CellChanged : BaseEvent
     {
         private readonly CellDto _before;
         private readonly CellDto _after;
 
-        protected override object EntityId => _after?.Id ?? _before?.Id;
+        protected sealed override object EntityId => _after?.Id ?? _before?.Id;
 
-        public CellUpserted(CellDto before, CellDto after)
+        public CellChanged(CellDto before, CellDto after)
             => (_before, _after) = (before, after);
 
-        protected override async Task HandleInternal(IServiceProvider serviceProvider, CancellationToken token)
+        protected sealed override async Task HandleInternal(IServiceProvider serviceProvider, CancellationToken token)
         {
             var memberRepository = serviceProvider.GetRequiredService<IMemberRepository>();
             var cellRepository = serviceProvider.GetRequiredService<ICellRepository>();

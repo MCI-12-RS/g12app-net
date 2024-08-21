@@ -7,7 +7,7 @@ import Grid from '../../components/Grid';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { RenderGridAddress, TranslateCellType, TranslateWeekDay } from '../../shared/utils.js';
+import { RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay } from '../../shared/utils.js';
 
 export const Cells = () => {
 
@@ -27,8 +27,8 @@ export const Cells = () => {
     {
       name: 'Liderança',
       render: (cell) => <>
-        <span><b>Líder: </b>{cell.lead?.name}</span><br />
-        <span><b>G12: </b>{cell.lead?.computedG12Leader}</span>
+        <span><b>Líder: </b>{cell.lead?.name} <small>({TranslateMinistryLevel(cell.lead?.ministryLevel)})</small></span><br />
+        {cell.lead?.computedG12Leader && (<span><b>G12: </b>{cell.lead?.computedG12Leader}</span>)}
       </>
     },
     {

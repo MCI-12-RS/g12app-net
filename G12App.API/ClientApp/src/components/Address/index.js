@@ -85,9 +85,8 @@ export const AddressDetails = ({
 
                     <Col xs={8}>
                         <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Referencia</InputGroup.Text>
-                            <Form.Control type="text" pattern="\d{2}\/\d{2}\/\d{2}" name="notes" 
-                                aria-describedby="basic-addon2" onChange={handleChangeEvent}
+                            <InputGroup.Text id="basic-addon2">Complemento</InputGroup.Text>
+                            <Form.Control type="text" name="notes" aria-describedby="basic-addon2" onChange={handleChangeEvent}
                                 value={address.notes} />
                         </InputGroup>
                     </Col>

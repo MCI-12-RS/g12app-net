@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { InputGroup, Container, Row, Button, Col, Form, Spinner } from 'react-bootstrap';
+import { InputGroup, Container, Row, Button, Col, Form, Spinner, FormCheck } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import CellPicker from '../../components/CellPicker';
@@ -26,7 +26,8 @@ export const ReportDetails = () => {
         timeOnly: null,
         visitors: [],
         contribution: 'R$ 0,00',
-        notes: ''
+        notes: '',
+        weekCellSkipped: false
     };
 
     const emptyCell = {
@@ -58,6 +59,7 @@ export const ReportDetails = () => {
     const [loading, setLoading] = useState(false);
     const [cell, setCell] = useState(emptyCell);
     const [report, setReport] = useState(emptyReport);
+    const [errors, setErrors] = useState({});
     window.setLoading = setLoading;
 
     const getSuggestedDate = (cell) => {
@@ -86,8 +88,45 @@ export const ReportDetails = () => {
         }
     };
 
+    const ValidateForm = () => {
+        var errors = {};
+
+        if (!report.cellId) {
+            errors.cellId = 'Selecione uma célula digitando o nome do líder para listá-las.';
+        }
+
+        if (!report.weekCellSkipped) {
+            if (!report.dateOnly) {
+                errors.dateOnly = 'Insira a data da célula';
+            }
+
+            if (!report.timeOnly) {
+                errors.timeOnly = 'Insira o horário da célula';
+            }
+
+            if (!report.subject) {
+                errors.subject = 'Insira o tema ministrado';
+            }
+        }
+
+        if (report.weekCellSkipped && report.notes.trim().length === 0) {
+            errors.notes = 'Por favor, justifique a interrupção da célula.';
+        }
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    }
+
     const SubmitReport = async (e) => {
         e.preventDefault();
+
+        var form = e.currentTarget;
+
+        if (!ValidateForm()) {
+            e.stopPropagation();
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -97,9 +136,11 @@ export const ReportDetails = () => {
 
             var result = await LogReport({
                 ...reportToSend,
-                date: FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00",
                 contribution: MoneyToDecimal(report.contribution),
-                visitors: report.visitors
+                visitors: report.visitors,                
+                date: report.weekCellSkipped ?
+                        FromBRDate(getSuggestedDate(cell)) + "T" + (cell.time || '').substring(0, 5)  + ":00" :
+                        FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00"
             });
 
             if (result.isValid) {
@@ -177,14 +218,17 @@ export const ReportDetails = () => {
                     <h1>Registrar relatório</h1>
                     <hr />
                     <>
-                        <Form>
+                        <Form noValidate onSubmit={SubmitReport}>
                             <Container fluid>
                                 <h6>Selecione a célula</h6>
 
                                 <Row className="mb-3 pr-0">
                                     <Col>
-                                        <CellPicker label="Célula:"
-                                            setValue={(value) => handleSelectChangeEvent('cellId', value)} />
+                                        <CellPicker label="Célula:" setValue={(value) => handleSelectChangeEvent('cellId', value)} />
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.cellId}
+                                        </Form.Control.Feedback>
+                                        <br />
                                     </Col>
                                 </Row>
 
@@ -232,24 +276,38 @@ export const ReportDetails = () => {
                                     <h6>Dados do Relatório</h6>
                                 </Row>
 
+                                <Row className="mb-3 pr-0">
+                                    <Col>
+                                        <InputGroup className="pt-1 me-3" as={Col}>
+                                            <FormCheck type="checkbox" id="weekCellSkipped" name="weekCellSkipped"
+                                                defaultChecked={report.weekCellSkipped} value={report.weekCellSkipped} label="Não houve célula"
+                                                onChange={(event) => handleChangeEvent({ target: { name: 'weekCellSkipped', value: event.target.checked } })} />
+                                        </InputGroup>
+                                    </Col>
+                                </Row>
+
                                 <Row className="pr-0">
                                     <Col>
                                         <InputGroup className="mb-3 pr-0" as={Col}>
                                             <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
-                                            <InputMask mask="99/99/9999" value={report.dateOnly} onChange={handleChangeEvent}>
-                                                <Form.Control type="text" name="dateOnly"
-                                                    aria-describedby="basic-addon2" />
+                                            <InputMask mask="99/99/9999" value={report.dateOnly} onChange={handleChangeEvent} disabled={report.weekCellSkipped}>
+                                                <Form.Control type="text" name="dateOnly" aria-describedby="basic-addon2" />
                                             </InputMask>
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.dateOnly}
+                                            </Form.Control.Feedback>
                                         </InputGroup>
                                     </Col>
 
                                     <Col>
                                         <InputGroup as={Col}>
                                             <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
-                                            <InputMask mask="99:99" value={report.timeOnly} onChange={handleChangeEvent}>
-                                                <Form.Control type="text" name="timeOnly"
-                                                    aria-describedby="basic-addon2" />
+                                            <InputMask mask="99:99" value={report.timeOnly} onChange={handleChangeEvent} disabled={report.weekCellSkipped}>
+                                                <Form.Control type="text" name="timeOnly" aria-describedby="basic-addon2" />
                                             </InputMask>
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.timeOnly}
+                                            </Form.Control.Feedback>
                                         </InputGroup>
                                     </Col>
                                 </Row>
@@ -259,14 +317,17 @@ export const ReportDetails = () => {
                                         <InputGroup className="mb-3" as={Col}>
                                             <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
                                             <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3"
-                                                autoComplete='off' onChange={handleChangeEvent} required={true} />
+                                                autoComplete='off' onChange={handleChangeEvent} disabled={report.weekCellSkipped} />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.subject}
+                                            </Form.Control.Feedback>
                                         </InputGroup>
                                     </Col>
                                     <Col xs={4}>
                                         <InputGroup className="mb-3" as={Col}>
                                             <InputGroup.Text id="basic-addon3">Oferta:</InputGroup.Text>
                                             <CurrencyInput
-                                                value={report.contribution}
+                                                value={report.contribution} disabled={report.weekCellSkipped}
                                                 onChangeValue={(event, originalValue, maskedValue) => {
                                                     handleChangeEvent({ target: { name: 'contribution', value: maskedValue } });
                                                 }}
@@ -281,7 +342,7 @@ export const ReportDetails = () => {
                                     <Col>
                                         <MemberPicker label="Participantes" isMulti={true}
                                             setValue={(value) => handleSelectChangeEvent('members', value)}
-                                            value={report.frequenters} />
+                                            value={report.frequenters} disabled={report.weekCellSkipped} />
                                     </Col>
                                 </Row>
 
@@ -290,7 +351,10 @@ export const ReportDetails = () => {
                                         <InputGroup>
                                             <InputGroup.Text>Observações</InputGroup.Text>
                                             <Form.Control as="textarea" aria-label="Observações" name="notes" value={report.notes} aria-describedby="basic-addon3"
-                                            autoComplete='off' onChange={handleChangeEvent} />
+                                                autoComplete='off' onChange={handleChangeEvent} />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.notes}
+                                            </Form.Control.Feedback>
                                         </InputGroup>
                                     </Col>
                                 </Row>
@@ -319,14 +383,14 @@ export const ReportDetails = () => {
                             </Container>
 
                             <Container fluid>
-                                <Button variant="primary" className="ms-3" type="submit" onClick={SubmitReport}>
+                                <Button variant="primary" className="ms-3" type="submit">
                                     Enviar relatório
                                 </Button>
                             </Container>
                         </Form>
-                        <br/>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
+                        <br />
                     </>
                 </>
             )

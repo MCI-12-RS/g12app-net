@@ -15,11 +15,13 @@ namespace G12App.Domain.Validators
         {
             RuleFor(x => x.Subject)
                 .NotEmpty()
+                .When(x => !x.WeekCellSkipped)
                 .WithMessage(Subject_ErrorMessage);
 
             RuleFor(x => x.Date)
                 .NotEmpty()
                 .GreaterThan(DateTime.MinValue)
+                .When(x => !x.WeekCellSkipped)
                 .WithMessage(Date_ErrorMessage);
 
             RuleFor(x => x.CellId)
