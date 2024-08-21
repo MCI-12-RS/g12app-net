@@ -40,7 +40,6 @@ namespace G12App.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> UpdateAsync([FromServices] IMemberService memberService, [FromBody] MemberDto member, int id)
         {
             member.Id = id;
