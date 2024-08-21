@@ -274,7 +274,7 @@ export const CellDetails = () => {
         if (option?.item?.homeAddress != null) {
             let address = option?.item?.homeAddress;
             if (address != null)
-                setPlace(address);
+                setPlace({...address, id: null});
         }
     }
 
