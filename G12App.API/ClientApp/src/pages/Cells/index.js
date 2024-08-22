@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Col, Row, Accordion } from 'react-bootstrap';
+import { Form, Col, Row, Accordion, Container } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { SearchCells } from '../../services/Cell.service.js';
 import { debounce } from 'lodash';
@@ -93,71 +93,75 @@ export const Cells = () => {
         <h1>Células</h1>
         <hr />
 
-        <Accordion className="mb-3" { ... !isMobile && ({defaultActiveKey:['0'], alwaysOpen: true})}>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>
-              Filtros
-            </Accordion.Header>
+        <Container fluid className="filter-box">
 
-            <Accordion.Body>
+          <Accordion className="mb-3" {... !isMobile && ({ defaultActiveKey: ['0'], alwaysOpen: true })}>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>
+                Filtros
+              </Accordion.Header>
 
-              <Row className="mb-3 pr-3">
-                <Form.Group className="mb-3" as={Col}>
-                  <Form.Label>Liderança</Form.Label>
-                  <Form.Control id="basic-url" name="lead" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
+              <Accordion.Body>
 
-                <Form.Group className="mb-3 pr-3" as={Col}>
-                  <Form.Label>G12</Form.Label>
-                  <Form.Control id="basic-url" name="leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
-              </Row>
+                <Row className="pr-3">
+                  <Form.Group className="mb-3" as={Col}>
+                    <Form.Label>Liderança</Form.Label>
+                    <Form.Control id="basic-url" name="lead" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
 
-              <Row className="mb-3 pr-3">
-                <Form.Group className="mb-3" as={Col}>
-                  <Form.Label>Rua</Form.Label>
-                  <Form.Control id="basic-url" name="street" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label>G12</Form.Label>
+                    <Form.Control id="basic-url" name="leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
+                </Row>
 
-                <Form.Group className="mb-3 pr-3" as={Col}>
-                  <Form.Label>Bairro</Form.Label>
-                  <Form.Control id="basic-url" name="neighborhood" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
-              </Row>
+                <Row className=" pr-3">
+                  <Form.Group className="mb-3" as={Col}>
+                    <Form.Label>Rua</Form.Label>
+                    <Form.Control id="basic-url" name="street" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
 
-              <Row className="mb-3 pr-3">
-                <Form.Group className="mb-3" as={Col}>
-                  <Form.Label>Cidade</Form.Label>
-                  <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label>Bairro</Form.Label>
+                    <Form.Control id="basic-url" name="neighborhood" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
+                </Row>
 
-                <Form.Group className="mb-3 pr-3" as={Col}>
-                  <Form.Label>Modalidade</Form.Label>
-                  <Form.Select name="cellType" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
-                    <option value="">Todas</option>
-                    <option value="Evangelistic">Evangelística</option>
-                    <option value="Discipleship">Discipuladora</option>
-                    <option value="Macrocell">Macrocélula</option>
-                  </Form.Select>
-                </Form.Group >
+                <Row className="pr-3">
+                  <Form.Group className="mb-3" as={Col}>
+                    <Form.Label>Cidade</Form.Label>
+                    <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
 
-                <Form.Group className="mb-3 pr-3" xs={12} md={4} as={Col}>
-                  <Form.Label>Dia da Semana</Form.Label>
-                  <Form.Select name="weekDay" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
-                    <option value="">Selecione o dia</option>
-                    <option value="Monday">Segunda-feira</option>
-                    <option value="Tuesday">Terça-feira</option>
-                    <option value="Wednesday">Quarta-feira</option>
-                    <option value="Thursday">Quinta-feira</option>
-                    <option value="Friday">Sexta-feira</option>
-                    <option value="Saturday">Sábado</option>
-                    <option value="Sunday">Domingo</option>
-                  </Form.Select>
-                </Form.Group>
-              </Row>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label>Modalidade</Form.Label>
+                    <Form.Select name="cellType" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                      <option value="">Todas</option>
+                      <option value="Evangelistic">Evangelística</option>
+                      <option value="Discipleship">Discipuladora</option>
+                      <option value="Macrocell">Macrocélula</option>
+                    </Form.Select>
+                  </Form.Group >
+
+                  <Form.Group className="mb-3 pr-3" xs={12} md={4} as={Col}>
+                    <Form.Label>Dia da Semana</Form.Label>
+                    <Form.Select name="weekDay" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                      <option value="">Selecione o dia</option>
+                      <option value="Monday">Segunda-feira</option>
+                      <option value="Tuesday">Terça-feira</option>
+                      <option value="Wednesday">Quarta-feira</option>
+                      <option value="Thursday">Quinta-feira</option>
+                      <option value="Friday">Sexta-feira</option>
+                      <option value="Saturday">Sábado</option>
+                      <option value="Sunday">Domingo</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Row>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+
+        </Container>
 
         <div className="row">
           <Grid

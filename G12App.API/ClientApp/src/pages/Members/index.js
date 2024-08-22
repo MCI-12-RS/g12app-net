@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { InputGroup, Form, Col, Row, Spinner, Accordion } from 'react-bootstrap';
+import { InputGroup, Form, Col, Row, Spinner, Accordion, Container } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
@@ -104,40 +104,41 @@ export const Members = () => {
         <h1>Pessoas</h1>
         <hr />
 
+        <Container fluid className="filter-box">
+          <Accordion className="mb-3" {... !isMobile && ({ defaultActiveKey: ['0'], alwaysOpen: true })}>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>
+                Filtros
+              </Accordion.Header>
 
-        <Accordion className="mb-3" { ... !isMobile && ({defaultActiveKey:['0'], alwaysOpen: true})}>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>
-              Filtros
-            </Accordion.Header>
+              <Accordion.Body>
+                <Row className="pr-3">
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label>Nome</Form.Label>
+                    <Form.Control id="basic-url" name="name" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
 
-            <Accordion.Body>
-              <Row className="mb-3 pr-0">
-                <Form.Group className="mb-3" as={Col}>
-                  <Form.Label>Nome</Form.Label>
-                  <Form.Control id="basic-url" name="name" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label id="basic-addon3">Liderança</Form.Label>
+                    <Form.Control id="basic-url" name="leadershipName" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
+                </Row>
 
-                <Form.Group className="mb-3 pr-0" as={Col}>
-                  <Form.Label id="basic-addon3">Liderança</Form.Label>
-                  <Form.Control id="basic-url" name="leadershipName" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
-              </Row>
+                <Row className="pr-3">
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label id="basic-addon3">Bairro</Form.Label>
+                    <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
 
-              <Row className="mb-3 pr-0">
-                <Form.Group className="mb-3" as={Col}>
-                  <Form.Label id="basic-addon3">Bairro</Form.Label>
-                  <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
-
-                <Form.Group className="mb-3 pr-0" as={Col}>
-                  <Form.Label id="basic-addon3">Cidade</Form.Label>
-                  <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-                </Form.Group>
-              </Row>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label id="basic-addon3">Cidade</Form.Label>
+                    <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                  </Form.Group>
+                </Row>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        </Container>
 
         <div className="row">
           <Grid

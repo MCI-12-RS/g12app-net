@@ -79,10 +79,18 @@ code {
   border-radius: 0 !important;
   -webkit-tap-highlight-color: #111 !important;
   box-shadow: none !important;
+  background-color: transparent !important;
+  margin-bottom: 0 !important;
 }
 
 .accordion-header {
   background: none;
+}
+
+.accordion-body {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .accordion-header button {
@@ -101,9 +109,10 @@ code {
   color: #000 !important;
   box-shadow: none !important;
   margin-bottom: 0 !important;
+  padding: 0 !important;
 }
 
-form .container-fluid{
+.container-fluid{
   background-color: rgba(0, 0, 0, 0.05);
   padding: 20px;
   margin: 10px 0;
@@ -112,4 +121,8 @@ form .container-fluid{
 
 .form-check {
   margin-top: 3px;
+}
+
+.container-fluid.filter-box{
+  margin-bottom: 50px;
 }
