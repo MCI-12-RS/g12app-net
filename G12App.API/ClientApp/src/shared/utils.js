@@ -97,7 +97,7 @@ export const CleanupAuth = () => {
 export const FormatMemberPickerLabel = (member) => {
     if (member == null) return '';
     var leader = (member.computedG12Leader ?? member.computedLeadershipName);
-    return member.name + (leader ? ' (' + leader + ')' : '');
+    return FormatFirstLastName(member.name) + (leader ? ' (' + FormatFirstLastName(leader) + ')' : '');
 };
 
 export const TranslateCellType = (cellType) => {
