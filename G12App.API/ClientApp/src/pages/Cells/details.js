@@ -379,7 +379,7 @@ export const CellDetails = () => {
                                 <Col xs={12} md={4}>
                                     <Form.Group as={Col} hasValidation className="mb-3 pr-0">
                                         <Form.Label>Modalidade</Form.Label>
-                                        <Form.Select required name="type" defaultValue={cell.type}>
+                                        <Form.Select required name="cellType" defaultValue={cell.cellType} onChange={handleChangeEvent}>
                                             <option value="Evangelistic">Evangelística</option>
                                             <option value="Discipleship">Discipuladora</option>
                                             <option value="Macrocell">Macrocélula</option>
