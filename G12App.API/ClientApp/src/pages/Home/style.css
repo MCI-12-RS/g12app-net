@@ -60,3 +60,8 @@
     background-color: rgba(13, 71, 161, 0.9) !important;
     color: rgba(255, 255, 255, 1) !important;
 }
+
+.dashboard.container-fluid,
+.dashboard .container-fluid {
+    background: none;
+}
