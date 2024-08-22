@@ -4,7 +4,7 @@ import { Col, Form, InputGroup } from "react-bootstrap";
 import AsyncSelect from "react-select/async";
 import { debounce } from 'lodash';
 import './style.css';
-import { TranslateWeekDay } from '../../shared/utils';
+import { TranslateWeekDayShort } from '../../shared/utils';
 
 const CellPicker = ({
     label = 'Célula',
@@ -50,7 +50,7 @@ const CellPicker = ({
                 (cell.place?.street ? ' Rua: ' + cell.place?.street + (cell.place?.number ? ', ' + cell.place?.number : '') : '') +
                 (cell.place?.street && cell.place?.neighborhood ? ' - ' : '') +
                 (cell.place?.neighborhood ? cell.place?.neighborhood : '') +
-                (' | ' + TranslateWeekDay(cell.weekDay) + ' às ' + cell.time),
+                (' | ' + TranslateWeekDayShort(cell.weekDay) + ' às ' + cell.time.substring(0, 5)),
             value: cell.id,
             item: cell
         }));
@@ -74,7 +74,7 @@ const CellPicker = ({
     return (
         <>
             {label && (<Form.Label>{label}</Form.Label>)}
-            <InputGroup className="mb-3" as={Col}>
+            <InputGroup>
                 <AsyncSelect
                     name={"cell" + randomKey} className="async-select"
                     onChange={handleSelectChangeEvent}

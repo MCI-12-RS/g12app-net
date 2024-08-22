@@ -90,7 +90,7 @@ const MemberPicker = ({
     return (
         <>
             {label && (<Form.Label>{label}</Form.Label>)}
-            <InputGroup className="mb-3" as={Col}>
+            <InputGroup>
                 <AsyncSelect
                     name={"member" + randomKey} aria-describedby="basic-addon1" className="async-select"
                     onChange={handleSelectChangeEvent}

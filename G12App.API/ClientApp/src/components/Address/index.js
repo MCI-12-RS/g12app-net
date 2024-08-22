@@ -7,7 +7,7 @@ export const GetEmptyAddress = () => ({
     number: '',
     neighborhood: '',
     city: '',
-    state: '',
+    state: 'RS',
     postalCode: '',
     notes: ''
 });

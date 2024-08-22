@@ -113,14 +113,18 @@ export const ReportDetails = () => {
             errors.notes = 'Por favor, justifique a interrupção da célula.';
         }
 
+        if(Object.keys(errors).length > 0)
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Verifique os erros no formulário para prosseguir o cadastro.'
+            });
+
         setErrors(errors);
         return Object.keys(errors).length === 0;
     }
 
     const SubmitReport = async (e) => {
         e.preventDefault();
-
-        var form = e.currentTarget;
 
         if (!ValidateForm()) {
             e.stopPropagation();
@@ -245,7 +249,7 @@ export const ReportDetails = () => {
                                             <Col xs={12} md={4} className="mb-3 pr-0">
                                                 <InputGroup>
                                                     <InputGroup.Text>Timóteo</InputGroup.Text>
-                                                    <Form.Control value={cell.host?.name} disabled readOnly />
+                                                    <Form.Control value={cell.timothy?.name} disabled readOnly />
                                                 </InputGroup>
                                             </Col>
 
@@ -274,7 +278,7 @@ export const ReportDetails = () => {
                                         </Row>
 
                                         <Row className="mb-4 pr-0">
-                                            <Col xs={12} md={7} className="mb-3 pr-0">
+                                            <Col xs={12} md={4} className="mb-3 pr-0">
                                                 <InputGroup>
                                                     <InputGroup.Text>Logradouro</InputGroup.Text>
                                                     <Form.Control value={cell.place?.street} disabled readOnly />
@@ -284,7 +288,7 @@ export const ReportDetails = () => {
                                             <Col xs={12} md={4} className="mb-3 pr-0">
                                                 <InputGroup>
                                                     <InputGroup.Text>Número</InputGroup.Text>
-                                                    <Form.Control value={cell.place?.streenumbert} disabled readOnly />
+                                                    <Form.Control value={cell.place?.number} disabled readOnly />
                                                 </InputGroup>
                                             </Col>
 
@@ -308,7 +312,7 @@ export const ReportDetails = () => {
 
                                 <Row className="mb-3 pr-0">
                                     <Col>
-                                        <Form.Group className="pt-1 me-3">
+                                        <Form.Group className="mt-1">
                                             <FormCheck type="checkbox" id="weekCellSkipped" name="weekCellSkipped"
                                                 defaultChecked={report.weekCellSkipped} value={report.weekCellSkipped} label="Não houve célula"
                                                 onChange={(event) => handleChangeEvent({ target: { name: 'weekCellSkipped', value: event.target.checked } })} />
@@ -376,7 +380,7 @@ export const ReportDetails = () => {
                                     </Col>
                                 </Row>
 
-                                <Row className="mb-5 pr-0">
+                                <Row className="mb-0 pr-0">
                                     <Col>
                                         <Form.Group>
                                             <Form.Label>Observações</Form.Label>
@@ -392,9 +396,7 @@ export const ReportDetails = () => {
                             </Container>
 
                             <Container fluid>
-
-
-                                <div className="mb-5">
+                                <div>
                                     <Row className="mb-2">
                                         <Col>
                                             <h6>Visitantes</h6>
@@ -405,12 +407,12 @@ export const ReportDetails = () => {
                                     </Row>
                                     {report.visitors.map((visitor, index) => (
                                         <Row key={index} index={index}>
-                                            <Col>
-                                                <Form.Group className="mb-3">
+                                            <Col className="mb-3">
+                                                <InputGroup>
                                                     <Form.Control id="basic-url" name={"visitors[" + index + "]"} value={visitor} aria-describedby="basic-addon3"
                                                         autoComplete='off' onChange={handleVisitorChange} />
                                                     <Button tabIndex={-1} variant="danger" className="float-right" onClick={removeVisitor}>-</Button>
-                                                </Form.Group>
+                                                </InputGroup>
                                             </Col>
                                         </Row>
                                     ))}

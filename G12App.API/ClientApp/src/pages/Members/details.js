@@ -31,7 +31,7 @@ export const MemberDetails = () => {
             number: '',
             neighborhood: '',
             city: '',
-            state: ''
+            state: 'RS'
         },
         leadershipId: null,
         leadership: {
@@ -48,6 +48,7 @@ export const MemberDetails = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [member, setMember] = useState(emptyMember);
+    const [errors, setErrors] = useState({});
     const [registerMore, setRegisterMore] = useState(location.state?.registerMore ?? false);
 
     useEffect(() => {
@@ -120,19 +121,37 @@ export const MemberDetails = () => {
         return ''
     }
 
-    const ValidateMember = () => {
-        var valid = true;
+    const ValidateForm = () => {
+        let errors = {};
 
         if ((member.password || '').length)
             if (member.password !== member.confirmPassword) {
-                toastContext.addToast({
-                    title: 'Erro', hideDelay: 5000,
-                    description: 'Senhas não conferem.'
-                });
-                valid = false;
+                errors.password = 'Senhas não conferem';
             }
 
-        return valid;
+        if(member.name.length < 3 || member.name.split(' ').length < 2)
+            errors.name = 'Insira nome e sobrenome';
+
+        if (member.email && (!member.email.includes('@') || !member.email.includes('.')))
+            errors.email = 'Email inválido';
+
+        if(!member.email && !member.mobileNumber){
+            errors.email = 'É necessário e-mail ou celular para que o usuário faça login';
+            errors.mobileNumber = 'É necessário e-mail ou celular para que o usuário faça login';
+        }
+
+        if(!params.id && !member.password)
+            errors.password = 'Defina uma senha inicial para que o usuário faça login';
+
+        setErrors(errors);
+
+        if(Object.keys(errors).length > 0)
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Verifique os erros no formulário para prosseguir o cadastro.'
+            });
+
+        return Object.keys(errors).length === 0;
     }
 
     const IsCurrentMember = () => {
@@ -159,13 +178,13 @@ export const MemberDetails = () => {
 
     const SaveMember = async (e) => {
         e.preventDefault();
-        setLoading(true);
 
-        var valid = ValidateMember();
-        if (!valid) {
-            setLoading(false);
-            return false;
+        if (!ValidateForm()) {
+            e.stopPropagation();
+            return;
         }
+
+        setLoading(true);
 
         try {
             var result;
@@ -258,14 +277,17 @@ export const MemberDetails = () => {
             {loading ?
                 (<Spinner animation="border" />) : (
                     <>
-                        <Form>
+                        <Form onSubmit={SaveMember}>
                             <Container fluid>
                                 <h6>Dados pessoais</h6>
                                 <Row className="mb-3 pr-0 justify-content-md-center">
-                                    <Col xs={12} md={4}> 
+                                    <Col xs={12} md={4}>
                                         <Form.Group className="mb-3">
                                             <Form.Label id="basic-addon1">Nome</Form.Label>
                                             <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['name']} />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.name}
+                                            </Form.Control.Feedback>
                                         </Form.Group >
                                     </Col>
 
@@ -274,6 +296,9 @@ export const MemberDetails = () => {
                                             <Form.Label id="basic-addon2">Email</Form.Label>
                                             <Form.Control name="email" aria-describedby="basic-addon2" onChange={handleChangeEvent}
                                                 value={member.email} />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.email}
+                                            </Form.Control.Feedback>
                                         </Form.Group >
                                     </Col>
 
@@ -307,6 +332,9 @@ export const MemberDetails = () => {
                                             <InputMask mask="(99) 99999-9999" value={member['mobileNumber']} onChange={handleChangeEvent}>
                                                 <Form.Control name="mobileNumber" aria-describedby="basic-addon2" />
                                             </InputMask>
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.mobileNumber}
+                                            </Form.Control.Feedback>
                                         </Form.Group >
                                     </Col>
 
@@ -330,6 +358,9 @@ export const MemberDetails = () => {
                                             notInIds={[member.id]}
                                             selectedLabel={GetMemberPickerLabel()}
                                             selectedValue={GetMemberPickerId()} />
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.leadershipId}
+                                        </Form.Control.Feedback>
                                     </Col>
                                 </Row>
                             </Container>
@@ -345,6 +376,9 @@ export const MemberDetails = () => {
                                             <Form.Group className="mb-3">
                                                 <Form.Label id="basic-addon1">Senha</Form.Label>
                                                 <Form.Control type="password" autoComplete="new-password" name="password" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['password']} />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {errors.password}
+                                                </Form.Control.Feedback>
                                             </Form.Group >
                                         </Col>
                                         <Col xs={12} md={6}>
@@ -407,7 +441,7 @@ export const MemberDetails = () => {
                                                 '')}
 
                                             {(authContext.auth.user.role !== 'AppUser' || IsCurrentMember()) && (
-                                                <Button variant="primary" className="ms-3" type="submit" onClick={SaveMember}>
+                                                <Button variant="primary" className="ms-3" type="submit">
                                                     Salvar {(params.id ? "alterações" : "cadastro")}
                                                 </Button>
                                             )}

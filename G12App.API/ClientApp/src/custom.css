@@ -126,3 +126,11 @@ code {
 .container-fluid.filter-box{
   margin-bottom: 50px;
 }
+
+.toast-container {
+  position: fixed !important;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 20px;
+}

@@ -125,6 +125,23 @@ export const TranslateWeekDay = (weekDay) => {
         return "Domingo";
 }
 
+export const TranslateWeekDayShort = (weekDay) => {
+    if (weekDay === "Monday")
+        return "Segunda";
+    if (weekDay === "Tuesday")
+        return "Terça";
+    if (weekDay === "Wednesday")
+        return "Quarta";
+    if (weekDay === "Thursday")
+        return "Quinta";
+    if (weekDay === "Friday")
+        return "Sexta";
+    if (weekDay === "Saturday")
+        return "Sábado";
+    if (weekDay === "Sunday")
+        return "Domingo";
+}
+
 export const TranslateMomentWeekDay = (weekDay) => {
     if (weekDay === "Monday")
         return 1;
@@ -159,7 +176,7 @@ export const DecimalToMoney = (value) => {
 export const RenderGridAddress = (address) => {
     return <span>
         {!address?.street && !address?.neighborhood && !address?.city ? 'Não informado' : ''}
-        {address?.street && (<><span><b>Rua: </b>{address?.street}{address?.number ? ', ' + address?.number : ''}</span><br /></>)}
+        {address?.street && (<><span>{address?.street}{address?.number ? ', ' + address?.number : ''}</span><br /></>)}
         {address?.neighborhood && (<><span><b>Bairro: </b>{address?.neighborhood}</span><br /></>)}
         {address?.city && (<><span><b>Cidade: </b>{address?.city}{address?.state ? ' / ' + address?.state : ''}</span></>)}
       </span>
