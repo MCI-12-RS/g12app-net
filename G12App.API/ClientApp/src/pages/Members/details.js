@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { InputGroup, Form, Col, Row, Button, Container, Spinner, FormCheck } from 'react-bootstrap';
+import { Form, Col, Row, Button, Container, Spinner, FormCheck } from 'react-bootstrap';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { GetMember, CreateMember, UpdateMember, DeleteMember } from '../../services/Member.service';
 import MemberPicker from '../../components/MemberPicker';
@@ -71,7 +71,7 @@ export const MemberDetails = () => {
         setLoading(true);
         if (!params.id) {
             setMember(emptyMember);
-            setMember({...member, leadershipId: authContext.auth.user.memberId});
+            setMember({ ...member, leadershipId: authContext.auth.user.memberId });
             setLoading(false);
             return;
         }
@@ -79,16 +79,16 @@ export const MemberDetails = () => {
         var result = await GetMember(params.id);
         if (result.isValid && result.data != null) {
             const member = result.data;
-            
+
             if (member.birthDate) {
                 member.birthDate = ToBRDate(member.birthDate);
             }
 
-            if(member.mobileNumber){
+            if (member.mobileNumber) {
                 member.mobileNumber = formatPhoneNumber(member.mobileNumber);
             }
 
-            if(member.phoneNumber){
+            if (member.phoneNumber) {
                 member.phoneNumber = formatPhoneNumber(member.phoneNumber);
             }
 
@@ -113,11 +113,11 @@ export const MemberDetails = () => {
             var date = moment(FromBRDate(member.birthDate));
             if (date.isValid()) {
                 var y = moment().diff(date, 'years');
-                return y > 100 ? '-' : y;
+                return y > 100 ? '' : y;
             }
         }
 
-        return '-'
+        return ''
     }
 
     const ValidateMember = () => {
@@ -140,17 +140,17 @@ export const MemberDetails = () => {
     }
 
     const GetMemberPickerLabel = () => {
-        if(!params.id){
+        if (!params.id) {
             var leader = (authContext.auth.user.g12LeadershipName ?? '');
             if (leader) leader += ' / ';
             return (leader ?? '') + authContext.auth.user.name;
         }
-        
+
         return FormatMemberPickerLabel(member.leadership)
     };
 
     const GetMemberPickerId = () => {
-        if(!params.id){
+        if (!params.id) {
             return authContext.auth.user.memberId;
         }
 
@@ -169,14 +169,14 @@ export const MemberDetails = () => {
 
         try {
             var result;
-            
-            var payload = { 
-                ...member, 
-                birthDate: FromBRDate(member.birthDate), 
+
+            var payload = {
+                ...member,
+                birthDate: FromBRDate(member.birthDate),
                 password: (member.password || '').length ? md5(member.password) : null,
                 mobileNumber: (member.mobileNumber || '').replace(/[^0-9]/g, ''),
                 phoneNumber: (member.phoneNumber || '').replace(/[^0-9]/g, ''),
-             };
+            };
 
             if (params.id) {
                 result = await UpdateMember(payload);
@@ -262,68 +262,68 @@ export const MemberDetails = () => {
                             <Container fluid>
                                 <h6>Dados pessoais</h6>
                                 <Row className="mb-3 pr-0 justify-content-md-center">
-                                    <Col>
-                                        <InputGroup className="mb-3" as={Col}>
-                                            <InputGroup.Text id="basic-addon1">Nome</InputGroup.Text>
+                                    <Col xs={12} md={4}> 
+                                        <Form.Group className="mb-3">
+                                            <Form.Label id="basic-addon1">Nome</Form.Label>
                                             <Form.Control name="name" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['name']} />
-                                        </InputGroup>
+                                        </Form.Group >
                                     </Col>
 
-                                    <Col>
-                                        <InputGroup className="mb-3 pr-0" as={Col}>
-                                            <InputGroup.Text id="basic-addon2">Email</InputGroup.Text>
+                                    <Col xs={12} md={4}>
+                                        <Form.Group className="mb-3 pr-0">
+                                            <Form.Label id="basic-addon2">Email</Form.Label>
                                             <Form.Control name="email" aria-describedby="basic-addon2" onChange={handleChangeEvent}
                                                 value={member.email} />
-                                        </InputGroup>
+                                        </Form.Group >
                                     </Col>
 
-                                    <Col>
-                                        <InputGroup className="mb-3 pr-0" as={Col}>
-                                            <InputGroup.Text id="basic-addon2">Sexo</InputGroup.Text>
+                                    <Col xs={12} md={4}>
+                                        <Form.Group className="mb-3 pr-0">
+                                            <Form.Label id="basic-addon2">Sexo</Form.Label>
                                             <Form.Select name="gender" defaultValue={member.gender} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
                                                 <option value="Male">Masculino</option>
                                                 <option value="Female">Feminino</option>
                                             </Form.Select>
-                                        </InputGroup>
+                                        </Form.Group >
                                     </Col>
                                 </Row>
 
                                 <Row className="mb-3 pr-0 justify-content-md-center">
-                                    <Col>
+                                    <Col xs={12} md={4}>
 
-                                        <InputGroup className="mb-3 pr-0" as={Col}>
-                                            <InputGroup.Text id="basic-addon2">Data de Nascimento</InputGroup.Text>
+                                        <Form.Group className="mb-3 pr-0">
+                                            <Form.Label id="basic-addon2">Data de Nascimento</Form.Label>
                                             <InputMask mask="99/99/9999" value={member['birthDate']} onChange={handleChangeEvent}>
                                                 <Form.Control type="text" name="birthDate"
                                                     aria-describedby="basic-addon2" />
                                             </InputMask>
-                                            <InputGroup.Text id="basic-addon2">{getAge() + ' anos'}</InputGroup.Text>
-                                        </InputGroup>
+                                            {getAge() && (<Form.Label id="basic-addon2">{getAge() + ' anos'}</Form.Label>)}
+                                        </Form.Group >
                                     </Col>
 
-                                    <Col>
-                                        <InputGroup className="mb-3 pr-0" as={Col}>
-                                            <InputGroup.Text id="basic-addon2">Celular / Whatsapp</InputGroup.Text>
+                                    <Col xs={12} md={4}>
+                                        <Form.Group className="mb-3 pr-0">
+                                            <Form.Label id="basic-addon2">Celular / Whatsapp</Form.Label>
                                             <InputMask mask="(99) 99999-9999" value={member['mobileNumber']} onChange={handleChangeEvent}>
                                                 <Form.Control name="mobileNumber" aria-describedby="basic-addon2" />
                                             </InputMask>
-                                        </InputGroup>
+                                        </Form.Group >
                                     </Col>
 
-                                    <Col>
-                                        <InputGroup className="mb-3" as={Col}>
-                                            <InputGroup.Text id="basic-addon1">Telefone</InputGroup.Text>
+                                    <Col xs={12} md={4}>
+                                        <Form.Group className="mb-0">
+                                            <Form.Label id="basic-addon1">Telefone</Form.Label>
                                             <InputMask mask="(99) 9999-9999" value={member['phoneNumber']} onChange={handleChangeEvent}>
                                                 <Form.Control name="phoneNumber" aria-describedby="basic-addon1" />
                                             </InputMask>
-                                        </InputGroup>
+                                        </Form.Group >
                                     </Col>
                                 </Row>
                             </Container>
 
                             <Container fluid>
                                 <h6>Ministerial</h6>
-                                <Row className="mb-3 pr-0 justify-content-md-center">
+                                <Row className="mb-0 pr-0 justify-content-md-center">
                                     <Col>
                                         <MemberPicker label="Liderança"
                                             setValue={(value) => handleSelectChangeEvent('leadershipId', value)}
@@ -341,19 +341,17 @@ export const MemberDetails = () => {
                                 <Container fluid>
                                     <h6>Acesso</h6>
                                     <Row className="mb-3 pr-0 justify-content-md-center">
-
-                                        <Col>
-                                            <InputGroup className="mb-3" as={Col}>
-                                                <InputGroup.Text id="basic-addon1">Senha</InputGroup.Text>
+                                        <Col xs={12} md={6}>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label id="basic-addon1">Senha</Form.Label>
                                                 <Form.Control type="password" autoComplete="new-password" name="password" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['password']} />
-                                            </InputGroup>
+                                            </Form.Group >
                                         </Col>
-
-                                        <Col>
-                                            <InputGroup className="mb-3" as={Col}>
-                                                <InputGroup.Text id="basic-addon1">Confirmar Senha</InputGroup.Text>
+                                        <Col xs={12} md={6}>
+                                            <Form.Group className="mb-0">
+                                                <Form.Label id="basic-addon1">Confirmar Senha</Form.Label>
                                                 <Form.Control type="password" autoComplete="new-password" name="confirmPassword" aria-describedby="basic-addon1" onChange={handleChangeEvent} value={member['confirmPassword']} />
-                                            </InputGroup>
+                                            </Form.Group >
                                         </Col>
                                     </Row>
                                 </Container>
@@ -366,10 +364,9 @@ export const MemberDetails = () => {
                                     <h6>Permissões</h6>
 
                                     <Row className="mb-3 pr-0 justify-content-md-center">
-
                                         <Col>
-                                            <InputGroup className="mb-3 pr-0" as={Col}>
-                                                <InputGroup.Text id="basic-addon2">Função</InputGroup.Text>
+                                            <Form.Group className="mb-3 pr-0">
+                                                <Form.Label id="basic-addon2">Função</Form.Label>
                                                 <Form.Select name="role" defaultValue={member.role} aria-describedby="basic-addon2"
                                                     onChange={handleChangeEvent} disabled={IsCurrentMember() ? "disabled" : false}>
                                                     <option value="AppUser">Usuário</option>
@@ -377,11 +374,10 @@ export const MemberDetails = () => {
                                                     {authContext.auth.user.role === 'AppSuperAdmin' &&
                                                         (<option value="AppSuperAdmin">Super Administrador</option>)}
                                                 </Form.Select>
-                                            </InputGroup>
+                                            </Form.Group >
                                         </Col>
                                     </Row>
-                                    <Row className="mb-3 pr-0 justify-content-md-center">
-
+                                    <Row className="mb-0 pr-0 justify-content-md-center">
                                         <Col>
                                             <ul>
                                                 <li><strong>Usuário:</strong> Pode visualizar seu ministério, cadastrar relatórios de células.</li>
@@ -396,7 +392,7 @@ export const MemberDetails = () => {
                             )}
 
                             <Container fluid>
-                                <Row className="mb-3 pr-0 d-flex">
+                                <Row className="mb-0 pr-0 d-flex">
 
                                     <Col xs={12}>
                                         {!IsCurrentMember() && (
@@ -404,10 +400,10 @@ export const MemberDetails = () => {
 
                                         <div className="float-end d-flex">
                                             {(!params.id ?
-                                                <InputGroup className="pt-1 me-3" as={Col}>
-                                                    <FormCheck type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas"
+                                                <Form.Group className="pt-1 me-3">
+                                                    <FormCheck name="register-more" id="register-more" type="checkbox" defaultChecked={registerMore} label="Cadastrar mais pessoas"
                                                         onChange={(event) => setRegisterMore(event.target.checked)} />
-                                                </InputGroup> :
+                                                </Form.Group > :
                                                 '')}
 
                                             {(authContext.auth.user.role !== 'AppUser' || IsCurrentMember()) && (
@@ -422,8 +418,6 @@ export const MemberDetails = () => {
                             </Container>
 
                         </Form>
-                        <br />
-                        <br />
                     </>
                 )}
         </>

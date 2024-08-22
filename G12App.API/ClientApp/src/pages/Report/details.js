@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { InputGroup, Container, Row, Button, Col, Form, Spinner, FormCheck } from 'react-bootstrap';
+import { Container, Row, Button, Col, Form, Spinner, FormCheck, InputGroup } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
 import CellPicker from '../../components/CellPicker';
@@ -137,10 +137,10 @@ export const ReportDetails = () => {
             var result = await LogReport({
                 ...reportToSend,
                 contribution: MoneyToDecimal(report.contribution),
-                visitors: report.visitors,                
+                visitors: report.visitors,
                 date: report.weekCellSkipped ?
-                        FromBRDate(getSuggestedDate(cell)) + "T" + (cell.time || '').substring(0, 5)  + ":00" :
-                        FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00"
+                    FromBRDate(getSuggestedDate(cell)) + "T" + (cell.time || '').substring(0, 5) + ":00" :
+                    FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00"
             });
 
             if (result.isValid) {
@@ -220,57 +220,87 @@ export const ReportDetails = () => {
                     <>
                         <Form noValidate onSubmit={SubmitReport}>
                             <Container fluid>
-                                <h6>Selecione a célula</h6>
+                                <h6>Célula</h6>
 
-                                <Row className="mb-3 pr-0">
+                                <Row className="mb-0 pr-0">
                                     <Col>
-                                        <CellPicker label="Célula:" setValue={(value) => handleSelectChangeEvent('cellId', value)} />
+                                        <CellPicker label="" setValue={(value) => handleSelectChangeEvent('cellId', value)} />
                                         <Form.Control.Feedback type="invalid">
                                             {errors.cellId}
                                         </Form.Control.Feedback>
-                                        <br />
                                     </Col>
                                 </Row>
 
+                                {cell && cell.id && (
+                                    <>
+                                        <h6>Dados da Célula selecionada</h6>
+                                        <Row className="mb-3 pr-0">
+                                            <Col xs={12} md={4} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Líder</InputGroup.Text>
+                                                    <Form.Control value={cell.lead?.name} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
 
-                                <h6>Dados da Célula</h6>
-                                <Row className="mb-3 pr-0" as={Col}>
-                                    <Col>
-                                        <InputGroup.Text id="basic-addon1">Líder: {cell.lead?.name}</InputGroup.Text>
-                                    </Col>
+                                            <Col xs={12} md={4} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Timóteo</InputGroup.Text>
+                                                    <Form.Control value={cell.host?.name} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
 
-                                    <Col>
-                                        <InputGroup.Text id="basic-addon1">Timóteo: {cell.host?.name}</InputGroup.Text>
-                                    </Col>
+                                            <Col xs={12} md={4} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Anfitrião</InputGroup.Text>
+                                                    <Form.Control value={cell.host?.name} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
 
-                                    <Col>
-                                        <InputGroup.Text id="basic-addon1">Anfitrião: {cell.host?.name}</InputGroup.Text>
-                                    </Col>
-                                </Row>
+                                        <Row className="mb-3 pr-0">
+                                            <Col xs={12} md={6} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Líder G12</InputGroup.Text>
+                                                    <Form.Control value={cell.lead?.computedG12Leader} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
 
-                                <Row className="mb-3 pr-0" as={Col}>
-                                    <Col>
-                                        <InputGroup.Text id="basic-addon1">Líder G12: {cell.lead?.computedG12Leader}</InputGroup.Text>
-                                    </Col>
+                                            <Col xs={12} md={6} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Modalidade</InputGroup.Text>
+                                                    <Form.Control value={translateCellType(cell.cellType)} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
 
-                                    <Col>
-                                        <InputGroup.Text id="basic-addon1">Modalidade: {translateCellType(cell.cellType)}</InputGroup.Text>
-                                    </Col>
-                                </Row>
+                                        <Row className="mb-4 pr-0">
+                                            <Col xs={12} md={7} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Logradouro</InputGroup.Text>
+                                                    <Form.Control value={cell.place?.street} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
 
-                                <Row className="mb-4 pr-0" as={Col}>
-                                    <Col xs={7}>
-                                        <InputGroup.Text id="basic-addon1">Rua: {cell.place?.street}</InputGroup.Text>
-                                    </Col>
+                                            <Col xs={12} md={4} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Número</InputGroup.Text>
+                                                    <Form.Control value={cell.place?.streenumbert} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
 
-                                    <Col xs={2}>
-                                        <InputGroup.Text id="basic-addon1">Número: {cell.place?.number}</InputGroup.Text>
-                                    </Col>
+                                            <Col xs={12} md={4} className="mb-3 pr-0">
+                                                <InputGroup>
+                                                    <InputGroup.Text>Bairro</InputGroup.Text>
+                                                    <Form.Control value={cell.place?.neighborhood} disabled readOnly />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row>
+                                    </>
+                                )}
 
-                                    <Col>
-                                        <InputGroup.Text id="basic-addon1">Bairro: {cell.place?.neighborhood}</InputGroup.Text>
-                                    </Col>
-                                </Row>
+                            </Container>
+
+                            <Container fluid>
 
                                 <Row>
                                     <h6>Dados do Relatório</h6>
@@ -278,54 +308,54 @@ export const ReportDetails = () => {
 
                                 <Row className="mb-3 pr-0">
                                     <Col>
-                                        <InputGroup className="pt-1 me-3" as={Col}>
+                                        <Form.Group className="pt-1 me-3">
                                             <FormCheck type="checkbox" id="weekCellSkipped" name="weekCellSkipped"
                                                 defaultChecked={report.weekCellSkipped} value={report.weekCellSkipped} label="Não houve célula"
                                                 onChange={(event) => handleChangeEvent({ target: { name: 'weekCellSkipped', value: event.target.checked } })} />
-                                        </InputGroup>
+                                        </Form.Group>
                                     </Col>
                                 </Row>
 
                                 <Row className="pr-0">
-                                    <Col>
-                                        <InputGroup className="mb-3 pr-0" as={Col}>
-                                            <InputGroup.Text id="basic-addon2">Data:</InputGroup.Text>
+                                    <Col xs={12} md={6}>
+                                        <Form.Group className="mb-3 pr-0">
+                                            <Form.Label id="basic-addon2">Data:</Form.Label>
                                             <InputMask mask="99/99/9999" value={report.dateOnly} onChange={handleChangeEvent} disabled={report.weekCellSkipped}>
                                                 <Form.Control type="text" name="dateOnly" aria-describedby="basic-addon2" />
                                             </InputMask>
                                             <Form.Control.Feedback type="invalid">
                                                 {errors.dateOnly}
                                             </Form.Control.Feedback>
-                                        </InputGroup>
+                                        </Form.Group>
                                     </Col>
 
-                                    <Col>
-                                        <InputGroup as={Col}>
-                                            <InputGroup.Text id="basic-addon2">Horário:</InputGroup.Text>
+                                    <Col xs={12} md={6} className="mb-3">
+                                        <Form.Group>
+                                            <Form.Label id="basic-addon2">Horário:</Form.Label>
                                             <InputMask mask="99:99" value={report.timeOnly} onChange={handleChangeEvent} disabled={report.weekCellSkipped}>
                                                 <Form.Control type="text" name="timeOnly" aria-describedby="basic-addon2" />
                                             </InputMask>
                                             <Form.Control.Feedback type="invalid">
                                                 {errors.timeOnly}
                                             </Form.Control.Feedback>
-                                        </InputGroup>
+                                        </Form.Group>
                                     </Col>
                                 </Row>
 
                                 <Row className="pr-0">
-                                    <Col>
-                                        <InputGroup className="mb-3" as={Col}>
-                                            <InputGroup.Text id="basic-addon3">Tema:</InputGroup.Text>
+                                    <Col xs={12} md={8} className="mb-3">
+                                        <Form.Group>
+                                            <Form.Label id="basic-addon3">Tema:</Form.Label>
                                             <Form.Control id="basic-url" name="subject" value={report.subject} aria-describedby="basic-addon3"
                                                 autoComplete='off' onChange={handleChangeEvent} disabled={report.weekCellSkipped} />
                                             <Form.Control.Feedback type="invalid">
                                                 {errors.subject}
                                             </Form.Control.Feedback>
-                                        </InputGroup>
+                                        </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
-                                        <InputGroup className="mb-3" as={Col}>
-                                            <InputGroup.Text id="basic-addon3">Oferta:</InputGroup.Text>
+                                    <Col xs={12} md={4} className="mb-3">
+                                        <Form.Group>
+                                            <Form.Label id="basic-addon3">Oferta:</Form.Label>
                                             <CurrencyInput
                                                 value={report.contribution} disabled={report.weekCellSkipped}
                                                 onChangeValue={(event, originalValue, maskedValue) => {
@@ -334,7 +364,7 @@ export const ReportDetails = () => {
                                                 InputElement={<Form.Control id="basic-url" name="contribution" aria-describedby="basic-addon3"
                                                     autoComplete='off' />}
                                             />
-                                        </InputGroup>
+                                        </Form.Group>
                                     </Col>
                                 </Row>
 
@@ -348,16 +378,21 @@ export const ReportDetails = () => {
 
                                 <Row className="mb-5 pr-0">
                                     <Col>
-                                        <InputGroup>
-                                            <InputGroup.Text>Observações</InputGroup.Text>
+                                        <Form.Group>
+                                            <Form.Label>Observações</Form.Label>
                                             <Form.Control as="textarea" aria-label="Observações" name="notes" value={report.notes} aria-describedby="basic-addon3"
                                                 autoComplete='off' onChange={handleChangeEvent} />
                                             <Form.Control.Feedback type="invalid">
                                                 {errors.notes}
                                             </Form.Control.Feedback>
-                                        </InputGroup>
+                                        </Form.Group>
                                     </Col>
                                 </Row>
+
+                            </Container>
+
+                            <Container fluid>
+
 
                                 <div className="mb-5">
                                     <Row className="mb-2">
@@ -371,11 +406,11 @@ export const ReportDetails = () => {
                                     {report.visitors.map((visitor, index) => (
                                         <Row key={index} index={index}>
                                             <Col>
-                                                <InputGroup className="mb-3" as={Col}>
+                                                <Form.Group className="mb-3">
                                                     <Form.Control id="basic-url" name={"visitors[" + index + "]"} value={visitor} aria-describedby="basic-addon3"
                                                         autoComplete='off' onChange={handleVisitorChange} />
                                                     <Button tabIndex={-1} variant="danger" className="float-right" onClick={removeVisitor}>-</Button>
-                                                </InputGroup>
+                                                </Form.Group>
                                             </Col>
                                         </Row>
                                     ))}
@@ -383,14 +418,19 @@ export const ReportDetails = () => {
                             </Container>
 
                             <Container fluid>
-                                <Button variant="primary" className="ms-3" type="submit">
-                                    Enviar relatório
-                                </Button>
+                                <Row className="mb-0 pr-0 d-flex">
+
+                                    <Col xs={12}>
+                                        <div className="float-end d-flex">
+                                            <Button variant="primary" className="ms-3" type="submit">
+                                                Enviar relatório
+                                            </Button>
+                                        </div>
+                                    </Col>
+
+                                </Row>
                             </Container>
                         </Form>
-                        <br />
-                        <br />
-                        <br />
                     </>
                 </>
             )

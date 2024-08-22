@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { SearchCells } from "../../services/Cell.service";
-import { Col, InputGroup } from "react-bootstrap";
+import { Col, Form, InputGroup } from "react-bootstrap";
 import AsyncSelect from "react-select/async";
 import { debounce } from 'lodash';
 import './style.css';
@@ -16,7 +16,7 @@ const CellPicker = ({
     selectedValue = null,
     selectedLabel = null,
     changeValueEvent = () => { }
-}) => { 
+}) => {
     const [option, setOption] = React.useState({ label: selectedLabel, value: selectedValue });
 
     const getNoOptionsMessage = (data) => {
@@ -44,13 +44,13 @@ const CellPicker = ({
         if (!result.isValid) return [];
 
         return result.data.map((cell) => ({
-            label: 
-            'Líder: ' + cell.lead?.name +
-            (cell.place?.street || cell.place?.neighborhood ? ' | ' : '') +
-            (cell.place?.street ? ' Rua: ' + cell.place?.street + ( cell.place?.number ? ', ' + cell.place?.number : '' ) : '') +
-            (cell.place?.street && cell.place?.neighborhood ? ' - ' : '') +
-            (cell.place?.neighborhood ? cell.place?.neighborhood : '') +
-            (' | ' + TranslateWeekDay(cell.weekDay) + ' às ' + cell.time),
+            label:
+                'Líder: ' + cell.lead?.name +
+                (cell.place?.street || cell.place?.neighborhood ? ' | ' : '') +
+                (cell.place?.street ? ' Rua: ' + cell.place?.street + (cell.place?.number ? ', ' + cell.place?.number : '') : '') +
+                (cell.place?.street && cell.place?.neighborhood ? ' - ' : '') +
+                (cell.place?.neighborhood ? cell.place?.neighborhood : '') +
+                (' | ' + TranslateWeekDay(cell.weekDay) + ' às ' + cell.time),
             value: cell.id,
             item: cell
         }));
@@ -58,7 +58,7 @@ const CellPicker = ({
 
     const handleSelectChangeEvent = (option) => {
         setOption(option);
-        if (setValue != null){
+        if (setValue != null) {
             setValue(option?.value);
             changeValueEvent(option);
         }
@@ -72,16 +72,18 @@ const CellPicker = ({
     const randomKey = (Math.random() * 100).toFixed(0).toString();
 
     return (
-        <InputGroup className="mb-3" as={Col}>
-            <InputGroup.Text id="basic-addon1">{label}</InputGroup.Text>
-            <AsyncSelect
-                name={"cell" + randomKey} aria-describedby="basic-addon1" className="async-select"
-                onChange={handleSelectChangeEvent}
-                noOptionsMessage={getNoOptionsMessage}
-                value={option}
-                defaultOptions={[{ label: initialValue, value: null }]}
-                placeholder="" loadOptions={loadCells} />
-        </InputGroup>
+        <>
+            {label && (<Form.Label>{label}</Form.Label>)}
+            <InputGroup className="mb-3" as={Col}>
+                <AsyncSelect
+                    name={"cell" + randomKey} className="async-select"
+                    onChange={handleSelectChangeEvent}
+                    noOptionsMessage={getNoOptionsMessage}
+                    value={option}
+                    defaultOptions={[{ label: initialValue, value: null }]}
+                    placeholder="" loadOptions={loadCells} />
+            </InputGroup>
+        </>
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Col, InputGroup } from 'react-bootstrap';
+import { Col, Form, InputGroup } from 'react-bootstrap';
 import AsyncSelect from 'react-select/async';
 import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
@@ -53,22 +53,22 @@ const MemberPicker = ({
             {
                 label: FormatMemberPickerLabel(member),
                 value: member.id,
-                item: member                
+                item: member
             }
         ));
     }
 
-    const handleSelectChangeEvent = (option) => {        
+    const handleSelectChangeEvent = (option) => {
         setOption(option);
 
-        if (!isMulti) {        
-            if (setValue != null){
+        if (!isMulti) {
+            if (setValue != null) {
                 setValue(option?.value);
                 changeValueEvent(option);
             }
         } else {
-            if (setValue != null){
-                setValue(option?.map(x => x.value));                
+            if (setValue != null) {
+                setValue(option?.map(x => x.value));
                 changeValueEvent(option);
             }
         }
@@ -88,18 +88,20 @@ const MemberPicker = ({
     }, []);
 
     return (
-        <InputGroup className="mb-3" as={Col}>
-            <InputGroup.Text id="basic-addon1">{label}</InputGroup.Text>
-            <AsyncSelect
-                name={"member" + randomKey} aria-describedby="basic-addon1" className="async-select"
-                onChange={handleSelectChangeEvent}
-                noOptionsMessage={getNoOptionsMessage}
-                value={option}
-                defaultOptions={defaultOption}
-                isDisabled={disabled}
-                placeholder="" loadOptions={loadMembers}
-                isMulti={isMulti} />
-        </InputGroup>
+        <>
+            {label && (<Form.Label>{label}</Form.Label>)}
+            <InputGroup className="mb-3" as={Col}>
+                <AsyncSelect
+                    name={"member" + randomKey} aria-describedby="basic-addon1" className="async-select"
+                    onChange={handleSelectChangeEvent}
+                    noOptionsMessage={getNoOptionsMessage}
+                    value={option}
+                    defaultOptions={defaultOption}
+                    isDisabled={disabled}
+                    placeholder="" loadOptions={loadMembers}
+                    isMulti={isMulti} />
+            </InputGroup>
+        </>
     )
 }
 
