@@ -4,7 +4,7 @@ import { Col, Form, InputGroup } from "react-bootstrap";
 import AsyncSelect from "react-select/async";
 import { debounce } from 'lodash';
 import './style.css';
-import { TranslateWeekDayShort } from '../../shared/utils';
+import { FormatFirstLastName, TranslateWeekDayShort } from '../../shared/utils';
 
 const CellPicker = ({
     label = 'Célula',
