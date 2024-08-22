@@ -55,7 +55,7 @@ export const Members = () => {
     },
     {
       name: 'Ministério',
-      properties: { sm: 1 },
+      properties: { sm: 2 },
       render: (member) => <span>
         <span className="text-nowrap"><strong>{member.totalDisciples || 0}</strong> Discípulos</span><br />
         <span className="text-nowrap"><strong>{member.totalCells || 0}</strong> Células</span>
