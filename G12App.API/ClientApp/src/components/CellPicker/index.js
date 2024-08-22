@@ -45,7 +45,7 @@ const CellPicker = ({
 
         return result.data.map((cell) => ({
             label:
-                'Líder: ' + cell.lead?.name +
+                'Líder: ' + FormatFirstLastName(cell.lead?.name) + (cell.lead?.computedG12Leader ? ' | G12: ' + FormatFirstLastName(cell.lead?.computedG12Leader) : '') +
                 (cell.place?.street || cell.place?.neighborhood ? ' | ' : '') +
                 (cell.place?.street ? ' Rua: ' + cell.place?.street + (cell.place?.number ? ', ' + cell.place?.number : '') : '') +
                 (cell.place?.street && cell.place?.neighborhood ? ' - ' : '') +
