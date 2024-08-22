@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { InputGroup, Form, Col, Row, Button } from 'react-bootstrap';
+import { Form, Col, Row, Accordion } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { SearchCells } from '../../services/Cell.service.js';
 import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
+import { isMobile } from 'react-device-detect';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -25,14 +26,22 @@ export const Cells = () => {
 
   const columns = [
     {
+      name: '#',
+      properties: { md: 1 },
+      className: 'text-left',
+      render: (cell) => (cell.id.toString() ?? '0').padStart(4, '0')
+    },
+    {
       name: 'Liderança',
+      properties: { sm: 3 },
       render: (cell) => <>
-        <span><b>Líder: </b>{cell.lead?.name} <small>({TranslateMinistryLevel(cell.lead?.ministryLevel)})</small></span><br />
+        <span><b className="d-none d-md-inline">Líder: </b>{cell.lead?.name} <small>({TranslateMinistryLevel(cell.lead?.ministryLevel)})</small></span><br />
         {cell.lead?.computedG12Leader && (<span><b>G12: </b>{cell.lead?.computedG12Leader}</span>)}
       </>
     },
     {
       name: 'Localização',
+      properties: { sm: 3 },
       render: (cell) => RenderGridAddress(cell.place)
     },
     {
@@ -45,6 +54,7 @@ export const Cells = () => {
     },
     {
       name: '',
+      className: 'text-right actions',
       render: (cell) => <Link to={"/cells/" + cell.id}><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
     }
 
@@ -83,67 +93,73 @@ export const Cells = () => {
         <h1>Células</h1>
         <hr />
 
-        <div className="mb-3" as={Col}>
-          <h6>Filtros</h6>
+        <Accordion className="mb-3" { ... !isMobile && ({defaultActiveKey:['0'], alwaysOpen: true})}>
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>
+              Filtros
+            </Accordion.Header>
 
-          <Row className="mb-3 pr-0">
-            <InputGroup className="mb-3" as={Col}>
-              <InputGroup.Text id="basic-addon3">Liderança</InputGroup.Text>
-              <Form.Control id="basic-url" name="lead" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-            </InputGroup>
+            <Accordion.Body>
 
-            <InputGroup className="mb-3 pr-0" as={Col}>
-              <InputGroup.Text id="basic-addon3">G12</InputGroup.Text>
-              <Form.Control id="basic-url" name="leadership" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-            </InputGroup>
-          </Row>
+              <Row className="mb-3 pr-3">
+                <Form.Group className="mb-3" as={Col}>
+                  <Form.Label>Liderança</Form.Label>
+                  <Form.Control id="basic-url" name="lead" autoComplete='off' onKeyUp={handleSearchEvent} />
+                </Form.Group>
 
-          <Row className="mb-3 pr-0">
-            <InputGroup className="mb-3" as={Col}>
-              <InputGroup.Text id="basic-addon3">Rua</InputGroup.Text>
-              <Form.Control id="basic-url" name="street" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-            </InputGroup>
+                <Form.Group className="mb-3 pr-3" as={Col}>
+                  <Form.Label>G12</Form.Label>
+                  <Form.Control id="basic-url" name="leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
+                </Form.Group>
+              </Row>
 
-            <InputGroup className="mb-3 pr-0" as={Col}>
-              <InputGroup.Text id="basic-addon3">Bairro</InputGroup.Text>
-              <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-            </InputGroup>
-          </Row>
+              <Row className="mb-3 pr-3">
+                <Form.Group className="mb-3" as={Col}>
+                  <Form.Label>Rua</Form.Label>
+                  <Form.Control id="basic-url" name="street" autoComplete='off' onKeyUp={handleSearchEvent} />
+                </Form.Group>
 
-          <Row className="mb-3 pr-0">
-            <InputGroup className="mb-3" as={Col}>
-              <InputGroup.Text id="basic-addon3">Cidade</InputGroup.Text>
-              <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
-            </InputGroup>
+                <Form.Group className="mb-3 pr-3" as={Col}>
+                  <Form.Label>Bairro</Form.Label>
+                  <Form.Control id="basic-url" name="neighborhood" autoComplete='off' onKeyUp={handleSearchEvent} />
+                </Form.Group>
+              </Row>
 
-            <InputGroup className="mb-3 pr-0" as={Col}>
-              <InputGroup.Text id="basic-addon2">Modalidade</InputGroup.Text>
-              <Form.Select name="cellType" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
-                <option value="">Todas</option>
-                <option value="Evangelistic">Evangelística</option>
-                <option value="Discipleship">Discipuladora</option>
-                <option value="Macrocell">Macrocélula</option>
-              </Form.Select>
-            </InputGroup>
+              <Row className="mb-3 pr-3">
+                <Form.Group className="mb-3" as={Col}>
+                  <Form.Label>Cidade</Form.Label>
+                  <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                </Form.Group>
 
-            <InputGroup className="mb-3 pr-0" as={Col}>
-              <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
-              <Form.Select name="weekDay" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
-                <option value="">Selecione o dia</option>
-                <option value="Monday">Segunda-feira</option>
-                <option value="Tuesday">Terça-feira</option>
-                <option value="Wednesday">Quarta-feira</option>
-                <option value="Thursday">Quinta-feira</option>
-                <option value="Friday">Sexta-feira</option>
-                <option value="Saturday">Sábado</option>
-                <option value="Sunday">Domingo</option>
-              </Form.Select>
-            </InputGroup>
-          </Row>
-        </div>
+                <Form.Group className="mb-3 pr-3" as={Col}>
+                  <Form.Label>Modalidade</Form.Label>
+                  <Form.Select name="cellType" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <option value="">Todas</option>
+                    <option value="Evangelistic">Evangelística</option>
+                    <option value="Discipleship">Discipuladora</option>
+                    <option value="Macrocell">Macrocélula</option>
+                  </Form.Select>
+                </Form.Group >
+
+                <Form.Group className="mb-3 pr-3" xs={12} md={4} as={Col}>
+                  <Form.Label>Dia da Semana</Form.Label>
+                  <Form.Select name="weekDay" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <option value="">Selecione o dia</option>
+                    <option value="Monday">Segunda-feira</option>
+                    <option value="Tuesday">Terça-feira</option>
+                    <option value="Wednesday">Quarta-feira</option>
+                    <option value="Thursday">Quinta-feira</option>
+                    <option value="Friday">Sexta-feira</option>
+                    <option value="Saturday">Sábado</option>
+                    <option value="Sunday">Domingo</option>
+                  </Form.Select>
+                </Form.Group>
+              </Row>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
 
         <div className="row">
-          <h6>&nbsp;</h6>
           <Grid
             columns={columns}
             data={cells}
