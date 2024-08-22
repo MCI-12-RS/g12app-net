@@ -29,12 +29,12 @@ export const Home = () => {
       arrCards.push({ type: 'info', title: <>Membros</>, value: data.totalMembers });
 
     if(data.totalCells){
-      arrCards.push({ type: 'info', title: <>Celulas Ativas</>, value: data.totalCells });
+      arrCards.push({ type: 'info', title: <>Celulas<br/>Ativas</>, value: data.totalCells });
 
 
       var pendingReports = Math.max(0, data.totalCells - data.weekReports);
       var pendingReportsType = pendingReports > 0 ? 'warning' : 'success';
-      arrCards.push({ type: pendingReportsType, title: <>Relatorios Pendentes</>, value: pendingReports });
+      arrCards.push({ type: pendingReportsType, title: <>Relatorios<br/>Pendentes</>, value: pendingReports });
     }
 
     setCards(arrCards);

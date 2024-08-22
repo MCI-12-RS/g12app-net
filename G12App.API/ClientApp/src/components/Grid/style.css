@@ -1,9 +1,9 @@
-.total-records{
+.total-records {
     display: inline-block;
     font-size: 0.8em;
 }
 
-.pagination{
+.pagination {
     float: right;
 }
 
@@ -14,13 +14,93 @@
     font-weight: bold;
 }
 
-.loading{
+.loading {
     text-align: center;
     margin-top: 20px;
     font-size: 20px;
     font-weight: bold;
 }
 
-td {
+.table.grid .col {
     vertical-align: middle;
-  }
+}
+
+.table.grid .grid-header {
+    font-weight: bold;
+}
+
+.table.grid .grid-header .col {
+    padding: .5rem;
+}
+
+.table.grid .grid-item {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: rgba(222, 226, 230) solid 1px;
+    border-left: 0;
+    border-right: 0;
+    position: relative;
+}
+
+.table.grid .grid-item+.grid-item {
+    border-top: 0;
+}
+
+.table.grid .grid-item.odd {
+    background-color: rgba(0, 0, 0, 0.00);
+}
+
+.table.grid .grid-item [class^='col-'],
+.table.grid .grid-item [class*=' col-'],
+.table.grid .grid-item .col {
+    padding-left: 0 !important;
+}
+
+.grid-cell-content {
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    padding-left: 0;
+}
+
+.block .grid-cell-content {
+    display: block;
+}
+
+.block .grid-cell-content.d-md-flex {
+    display: block;
+}
+
+.grid-cell-content.d-md-flex {
+    display: inline-flex;
+}
+
+.table.grid br {
+    display: block;
+}
+
+
+.inside-column-name {
+    font-weight: bold;
+    margin-right: 3px;
+    min-width: 120px;
+    display: inline-block;
+    width: auto !important;
+    vertical-align: middle;
+    font-size: 1.03em;
+}
+
+.inside-column-value {
+    display: inline-block;
+    width: auto !important;
+    vertical-align: middle;
+}
+
+@media (max-width: 576px) {
+    .actions {
+        position: absolute;
+        top: 38%;
+        right: 0px;
+        zoom: 1.3;
+    }
+}

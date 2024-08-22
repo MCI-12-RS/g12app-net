@@ -1,5 +1,5 @@
 import React from "react";
-import { Pagination, Spinner } from "react-bootstrap";
+import { Col, Container, Pagination, Row, Spinner } from 'react-bootstrap'
 import "./style.css";
 
 const Grid = ({
@@ -30,24 +30,26 @@ const Grid = ({
                 <p className="no-records"><em>Nenhum registro encontrado.</em></p> :
 
                 <div>
-                    <table className="table table-striped" aria-labelledby="tableLabel">
-                        <thead>
-                            <tr key="columns">
-                                {columns.map(column =>
-                                    <th key={column.name}>{column.name}</th>
-                                )}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.map((item, index) =>
-                            (<tr key={item.id}>
-                                {columns.map(column =>
-                                    <td key={column.name + '-' + item.id}>{column.render(item, index)}</td>
-                                )}
-                            </tr>)
+                    <Container className="table grid">
+                        <Row className="grid-header d-none d-md-flex">
+                            {columns.map(column =>
+                                <Col key={column.name} className={"col " + (column?.className ?? '')} {...column.properties}>{column.name}</Col>
                             )}
-                        </tbody>
-                    </table>
+                        </Row>
+                        {data.map((item, index) =>
+                        (<Row key={item.id} className={"grid-item d-block d-md-flex " + ((index % 2) === 0 ? 'even' : 'odd')} >
+                            {columns.map((column) =>
+                                <Col key={column.name + '-' + item.id} className={"align-middle col " + (column?.className ?? '')} {...column.properties}>
+                                    <span className="mobile-grid-value d-inline-block d-md-none">
+                                        <strong className="inside-column-name">{column.name}</strong>
+                                        <span className="inside-column-value">{column.render(item, index)}</span>
+                                    </span>
+                                    <div className="grid-cell-content d-none d-md-inline-flex">{column.render(item, index)}</div>
+                                </Col>
+                            )}
+                        </Row>)
+                        )}
+                    </Container>
 
                     {(displayPagination &&
                         <div className="pagination-container">

@@ -6,10 +6,24 @@
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+html{
+  overflow-y: scroll;
+}
+
+h1, h2, h3, h4, h5, h6, .accordion-header * {
   text-transform: uppercase;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: bold;
+  margin-bottom: 15px;
+}
+
+h1{
+  margin-bottom: 0;
+}
+
+hr{
+  margin: 0;
+  margin-bottom: 20px;
 }
 
 input, textarea, select, button {
@@ -37,4 +51,65 @@ code {
 
 .invalid-feedback{
   display: block !important;
+}
+
+.form-label{
+  margin-bottom: 0;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.accordion, .accordion-item{
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  outline: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  -webkit-tap-highlight-color: #111 !important;
+  box-shadow: none !important;
+}
+
+.accordion-header {
+  background: none;
+}
+
+.accordion-header button {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  outline: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  color: #000 !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+}
+
+form .container-fluid{
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.form-check {
+  margin-top: 3px;
 }

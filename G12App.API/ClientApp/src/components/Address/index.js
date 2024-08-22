@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { InputGroup, Form, Col, Row, Container } from 'react-bootstrap';
+import { Form, Col, Row, Container } from 'react-bootstrap';
 import states from './states.json'
 
 export const GetEmptyAddress = () => ({
@@ -27,68 +27,68 @@ export const AddressDetails = ({
                 <h6>Endereco</h6>
                 <Row className="mb-3 pr-0 justify-content-md-center">
                     <Col xs={8}>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">Rua</InputGroup.Text>
+                        <Form.Label className="mb-3" as={Col}>
+                            <Form.Group  id="basic-addon1">Logradouro</Form.Group >
                             <Form.Control name="street" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
                             value={address.street} />
-                        </InputGroup>
+                        </Form.Label>
                     </Col>
 
                     <Col xs={4}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Numero</InputGroup.Text>
+                        <Form.Label className="mb-3 pr-0" as={Col}>
+                            <Form.Group  id="basic-addon2">Número</Form.Group >
                             <Form.Control type="text" name="number"
                                 aria-describedby="basic-addon2" maxLength={10} value={address.number}
                                 onChange={handleChangeEvent} />
-                        </InputGroup>
+                        </Form.Label>
                     </Col>
                 </Row>
                 
                 <Row className="mb-3 pr-0 justify-content-md-center">
                     <Col xs={4}>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">Bairro</InputGroup.Text>
-                            <Form.Control name="neighborhood" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                                value={address.neighborhood} />
-                        </InputGroup>
+                        <Form.Label className="mb-3" as={Col}>
+                            <Form.Group  id="basic-addon1">CEP</Form.Group >
+                            <Form.Control name="postalCode" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
+                                value={address.postalCode} />
+                        </Form.Label>
                     </Col>
 
-                    <Col xs={4}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Cidade</InputGroup.Text>
+                    <Col xs={8}>
+                        <Form.Label className="mb-3 pr-0" as={Col}>
+                            <Form.Group  id="basic-addon2">Complemento</Form.Group >
+                            <Form.Control type="text" name="notes" aria-describedby="basic-addon2" onChange={handleChangeEvent}
+                                value={address.notes} />
+                        </Form.Label>
+                    </Col>
+                </Row>
+                
+                <Row className="mb-3 pr-0 justify-content-md-center">
+                    <Col xs={12} md={4}>
+                        <Form.Label className="mb-3" as={Col}>
+                            <Form.Group  id="basic-addon1">Bairro</Form.Group >
+                            <Form.Control name="neighborhood" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
+                                value={address.neighborhood} />
+                        </Form.Label>
+                    </Col>
+
+                    <Col xs={12} md={4}>
+                        <Form.Label className="mb-3 pr-0" as={Col}>
+                            <Form.Group  id="basic-addon2">Cidade</Form.Group >
                             <Form.Control type="text" name="city" 
                                 aria-describedby="basic-addon2" onChange={handleChangeEvent}
                                 value={address.city} />
-                        </InputGroup>
+                        </Form.Label>
                     </Col>
                     
-                    <Col xs={4}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Estado</InputGroup.Text>
+                    <Col xs={12} md={4}>
+                        <Form.Label className="mb-3 pr-0" as={Col}>
+                            <Form.Group  id="basic-addon2">Estado</Form.Group >
                             <Form.Select name="state" defaultValue={address.state} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
                                 {states.map((state) => (
                                     <option key={state.acronym} value={state.acronym}>{state.name}</option>
                                 ))}
                             </Form.Select>
-                        </InputGroup>
-                    </Col>
-                </Row>
-                
-                <Row className="mb-3 pr-0 justify-content-md-center">
-                    <Col xs={4}>
-                        <InputGroup className="mb-3" as={Col}>
-                            <InputGroup.Text id="basic-addon1">CEP</InputGroup.Text>
-                            <Form.Control name="postalCode" aria-describedby="basic-addon1" onChange={handleChangeEvent} 
-                                value={address.postalCode} />
-                        </InputGroup>
-                    </Col>
-
-                    <Col xs={8}>
-                        <InputGroup className="mb-3 pr-0" as={Col}>
-                            <InputGroup.Text id="basic-addon2">Complemento</InputGroup.Text>
-                            <Form.Control type="text" name="notes" aria-describedby="basic-addon2" onChange={handleChangeEvent}
-                                value={address.notes} />
-                        </InputGroup>
+                        </Form.Label>
                     </Col>
                 </Row>
             </Container>

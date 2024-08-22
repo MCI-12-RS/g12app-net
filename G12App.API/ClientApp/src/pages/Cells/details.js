@@ -49,6 +49,7 @@ export const CellDetails = () => {
         weekDay: {
             name: ''
         },
+        type: 'Evangelistic',
         place: emptyPlace
     };
 
@@ -132,8 +133,8 @@ export const CellDetails = () => {
                 return (
                     report.weekCellSkipped ?
                         <>
-                            <span><b>Não houve célula.</b></span> 
-                            <br/>
+                            <span><b>Não houve célula.</b></span>
+                            <br />
                             <span><b>Observações:</b> {report.notes}</span>
                         </>
                         :
@@ -158,7 +159,7 @@ export const CellDetails = () => {
         {
             name: '',
             render: (report) => authContext.auth.user.role !== 'AppUser' &&
-                    <FontAwesomeIcon icon={faRemove} className="remove-button" title="Remover relatório" onClick={(e) => DeleteReportPrompt(e, report.id)} />
+                <FontAwesomeIcon icon={faRemove} className="remove-button" title="Remover relatório" onClick={(e) => DeleteReportPrompt(e, report.id)} />
         }
     ];
 
@@ -207,8 +208,47 @@ export const CellDetails = () => {
         setCell({ ...cell, [name]: value });
     };
 
+    const ValidateForm = () => {
+        if ((cell.leadId || 0) == 0) {
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Selecione o líder da célula.'
+            });
+            return false;
+        }
+
+        if ((cell.timothyId || 0) == 0) {
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Selecione o timóteo da célula.'
+            });
+            return false;
+        }
+
+        if ((cell.hostId || 0) == 0) {
+            toastContext.addToast({
+                title: 'Erro', hideDelay: 5000,
+                description: 'Selecione o anfitrião da célula.'
+            });
+            return false;
+        }
+
+        return true;
+    }
+
     const SaveCell = async (e) => {
         e.preventDefault();
+
+        var form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.stopPropagation();
+            return;
+        }
+
+        if (!ValidateForm()) {
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -287,7 +327,7 @@ export const CellDetails = () => {
         if (option?.item?.homeAddress != null) {
             let address = option?.item?.homeAddress;
             if (address != null)
-                setPlace({...address, id: null});
+                setPlace({ ...address, id: null });
         }
     }
 
@@ -301,11 +341,11 @@ export const CellDetails = () => {
                 <>
                     {(params.id ? <h1>Alterar cadastro de célula</h1> : <h1>Cadastrar nova célula</h1>)}
                     <hr />
-                    <Form>
+                    <Form onSubmit={SaveCell}>
                         <Container fluid>
                             <h6>Participantes</h6>
-                            <Row className="mb-3" as={Col}>
-                                <Col>
+                            <Row className="mb-0">
+                                <Col xs={12} md={4}>
                                     <MemberPicker label="Líder"
                                         initialValue="Selecione o líder da célula"
                                         setValue={(value) => handleSelectChangeEvent('leadId', value)}
@@ -313,7 +353,7 @@ export const CellDetails = () => {
                                         selectedValue={cell.lead?.id} />
                                 </Col>
 
-                                <Col>
+                                <Col xs={12} md={4}>
                                     <MemberPicker label="Timóteo"
                                         initialValue="Selecione o timóteo da célula"
                                         setValue={(value) => handleSelectChangeEvent('timothyId', value)}
@@ -321,7 +361,7 @@ export const CellDetails = () => {
                                         selectedValue={cell.timothy?.id} />
                                 </Col>
 
-                                <Col>
+                                <Col xs={12} md={4}>
                                     <MemberPicker label="Anfitrião"
                                         initialValue="Selecione o anfitrião da célula"
                                         setValue={(value) => handleSelectChangeEvent('hostId', value)}
@@ -333,13 +373,28 @@ export const CellDetails = () => {
                         </Container>
 
                         <Container fluid>
-                            <h6>Data/Horário</h6>
-                            <Row className="mb-3 pr-0">
-                                <Col>
-                                    <InputGroup className="mb-3 pr-0" as={Col}>
-                                        <InputGroup.Text id="basic-addon2">Dia da Semana</InputGroup.Text>
-                                        <Form.Select name="weekDay" defaultValue={cell.weekDay} aria-describedby="basic-addon2" onChange={handleChangeEvent}>
-                                            <option value={null}>Selecione o dia</option>
+                            <h6>Definições</h6>
+                            <Row>
+
+                                <Col xs={12} md={4}>
+                                    <Form.Group as={Col} hasValidation className="mb-3 pr-0">
+                                        <Form.Label>Modalidade</Form.Label>
+                                        <Form.Select required name="type" defaultValue={cell.type}>
+                                            <option value="Evangelistic">Evangelística</option>
+                                            <option value="Discipleship">Discipuladora</option>
+                                            <option value="Macrocell">Macrocélula</option>
+                                        </Form.Select>
+                                    </Form.Group>
+                                </Col>
+
+
+                                <Col xs={12} md={4}>
+                                    <Form.Group as={Col} hasValidation className="mb-3 pr-0">
+                                        <Form.Label>Dia da Semana</Form.Label>
+                                        <Form.Select required name="weekDay" defaultValue={cell.weekDay} aria-describedby="basic-addon2"
+                                            onInvalid={e => e.target.setCustomValidity('Selecione o dia da semana')}
+                                            onChange={e => { handleChangeEvent(e); e.target.setCustomValidity('') }}>
+                                            <option value="">Selecione o dia</option>
                                             <option value="Monday">Segunda-feira</option>
                                             <option value="Tuesday">Terça-feira</option>
                                             <option value="Wednesday">Quarta-feira</option>
@@ -348,24 +403,26 @@ export const CellDetails = () => {
                                             <option value="Saturday">Sábado</option>
                                             <option value="Sunday">Domingo</option>
                                         </Form.Select>
-                                    </InputGroup>
+                                    </Form.Group>
                                 </Col>
 
-                                <Col>
-                                    <InputGroup className="mb-3 pr-0" as={Col}>
-                                        <InputGroup.Text id="basic-addon2">Horário</InputGroup.Text>
+                                <Col xs={12} md={4}>
+                                    <Form.Group as={Col} className="mb-3 pr-0">
+                                        <Form.Label>Horário</Form.Label>
                                         <InputMask mask="99:99" value={cell['time']} onChange={handleChangeEvent}>
-                                            <Form.Control name="time" aria-describedby="basic-addon2" />
+                                            <Form.Control required name="time" aria-describedby="basic-addon2"
+                                                onInvalid={e => e.target.setCustomValidity('Defina o horário')} onInput={e => e.target.setCustomValidity('')} />
                                         </InputMask>
-                                    </InputGroup>
+                                    </Form.Group>
                                 </Col>
+
                             </Row>
                         </Container>
 
                         <AddressDetails address={place} setAddress={(address) => setPlace(address)} />
 
                         <Container fluid>
-                            <Row className="mb-3 pr-0 d-flex">
+                            <Row className="mb-0 pr-0 d-flex">
 
                                 <Col xs={12}>
                                     {(params.id && <Button variant="danger" type="button" onClick={DeleteCellPrompt}>Deletar cadastro</Button>)}
@@ -378,7 +435,7 @@ export const CellDetails = () => {
                                             </InputGroup> :
                                             '')}
 
-                                        <Button variant="primary" className="ms-3" type="submit" onClick={SaveCell}>
+                                        <Button variant="primary" className="ms-3" type="submit">
                                             Salvar {(params.id ? "alterações" : "cadastro")}
                                         </Button>
                                     </div>
