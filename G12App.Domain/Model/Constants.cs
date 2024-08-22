@@ -9,6 +9,8 @@
         public const string LeadershipId = nameof(LeadershipId);
 
         public const string G12LeadershipName = nameof(G12LeadershipName);
+
+        public const string SpouseId = nameof(SpouseId);
     }
 
     public static class Roles

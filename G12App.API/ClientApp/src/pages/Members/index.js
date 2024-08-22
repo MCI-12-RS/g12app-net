@@ -8,7 +8,7 @@ import { isMobile } from 'react-device-detect';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { RenderGridAddress, TranslateMinistryLevel } from '../../shared/utils';
+import { FormatFirstLastName, RenderGridAddress, TranslateMinistryLevel } from '../../shared/utils';
 
 export const Members = () => {
 
@@ -25,35 +25,37 @@ export const Members = () => {
   const getLeadership = (member) => {
     switch (member.ministryLevel) {
       case 0: case 1: return '-';
-      case 12: return <><b>{member.computedLeadershipName}</b></>;
-      case 144: return <><b>{member.computedG12Leader}</b></>;
-      default: return <><b>{member.computedG12Leader}</b> / {member.computedLeadershipName}</>;
+      case 12: return <span className="text-nowrap"><b>{FormatFirstLastName(member.computedLeadershipName)}</b></span>;
+      case 144: return <span className="text-nowrap"><b>{FormatFirstLastName(member.computedG12Leader)}</b></span>;
+      default: return <span className="text-nowrap"><b>{FormatFirstLastName(member.computedG12Leader)}</b> / {FormatFirstLastName(member.computedLeadershipName)}</span>;
     }
   }
 
   const columns = [
     {
       name: '#',
-      properties: { md: 1 },
+      properties: { sm: 1 },
       className: 'text-left',
       render: (member) => (member.id.toString() ?? '0').padStart(4, '0')
     },
     {
       name: 'Nome',
-      properties: { sm: 3 },
+      properties: { sm: 2 },
       render: (member) => member.name
     },
     {
       name: 'Nível',
+      properties: { sm: 1 },
       render: (member) => TranslateMinistryLevel(member.ministryLevel)
     },
     {
       name: 'Liderança',
-      properties: { sm: 2 },
+      properties: { sm: 3 },
       render: (member) => getLeadership(member)
     },
     {
       name: 'Ministério',
+      properties: { sm: 1 },
       render: (member) => <span>
         <span className="text-nowrap"><strong>{member.totalDisciples || 0}</strong> Discípulos</span><br />
         <span className="text-nowrap"><strong>{member.totalCells || 0}</strong> Células</span>
@@ -66,6 +68,7 @@ export const Members = () => {
     },
     {
       name: '',
+      properties: { sm: 1 },
       className: 'text-right actions',
       render: (member) => <Link to={"/members/" + member.id}><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
     }

@@ -59,6 +59,8 @@ namespace G12App.Application.Services
             var member = await _memberRepository.Create(memberEntity);
             var resultMemberDto = _mapper.Map<MemberDto>(member);
 
+            await UpdateSpouse(member, null, member.SpouseId);
+
             await _eventDispatcher.DispatchEvent(new MemberCreated(resultMemberDto));
 
             return new ServiceResult<MemberDto>(resultMemberDto);
@@ -67,15 +69,19 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
+            var beforeSpouseId = memberEntity.SpouseId;
             var sourceMemberDto = _mapper.Map<Member, MemberDto>(memberEntity);
 
             memberEntity = _mapper.Map(memberDTO, memberEntity);
+            var afterSpouseId = memberEntity.SpouseId;
 
             _changeTrackingService.SetupLastModifiedData(memberEntity);
             await UpdateComputedValues(memberEntity);
 
             var member = await _memberRepository.Update(memberEntity);
             var resultMemberDto = _mapper.Map<MemberDto>(member);
+
+            await UpdateSpouse(member, beforeSpouseId, afterSpouseId);
 
             await _eventDispatcher.DispatchEvent(new MemberUpdated(sourceMemberDto, resultMemberDto));
 
@@ -114,9 +120,31 @@ namespace G12App.Application.Services
             _changeTrackingService.SetupLastModifiedData(memberEntity);
             await _memberRepository.Remove(memberEntity);
 
+            await UpdateSpouse(memberEntity, memberEntity.SpouseId, null);
+
             await _eventDispatcher.DispatchEvent(new MemberDeleted(sourceMemberDto));
 
             return new ServiceResult();
+        }
+
+        private async Task UpdateSpouse(Member member, int? beforeSpouseId, int? afterSpouseId)
+        {
+            if (beforeSpouseId.GetValueOrDefault() == afterSpouseId.GetValueOrDefault())
+                return;
+
+            if (beforeSpouseId.GetValueOrDefault() != 0)
+            {
+                var beforeSpouse = await _memberRepository.GetMemberByIdAsync(beforeSpouseId);
+                beforeSpouse.SpouseId = null;
+                await _memberRepository.Update(beforeSpouse);
+            }
+
+            if (afterSpouseId.GetValueOrDefault() != 0)
+            {
+                var afterSpouse = await _memberRepository.GetMemberByIdAsync(afterSpouseId);
+                afterSpouse.SpouseId = member.Id;
+                await _memberRepository.Update(afterSpouse);
+            }
         }
 
         private async Task UpdateComputedValues(Member memberEntity)

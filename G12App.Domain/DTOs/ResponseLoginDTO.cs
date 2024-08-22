@@ -8,5 +8,6 @@
         public string Token { get; set; }
         public string Role { get; set; }
         public string G12LeadershipName { get; set; }
+        public int? SpouseId { get; set; }
     }
 }

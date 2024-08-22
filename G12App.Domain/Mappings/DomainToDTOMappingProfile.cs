@@ -12,6 +12,8 @@ namespace G12App.Domain.Mappings
     {
         public DomainToDTOMappingProfile(IHttpContextAccessor httpContextAccessor)
         {
+            CreateMap<Member, MemberDtoSmall>();
+
             CreateMap<Member, MemberDto>()
                 .ForMember(x => x.Password, opt =>
                 {
@@ -24,6 +26,7 @@ namespace G12App.Domain.Mappings
                     });
                     opt.MapFrom(s => s.Password);
                 });
+
             CreateMap<MemberDto, Member>()
                 .ForMember(x => x.Leadership, opt => opt.Ignore())
                 .ForMember(x => x.Password, opt =>

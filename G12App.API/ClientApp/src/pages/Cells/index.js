@@ -34,10 +34,10 @@ export const Cells = () => {
     {
       name: 'Liderança',
       properties: { sm: 3 },
-      render: (cell) => <>
+      render: (cell) => <span>
         <span><b className="d-none d-md-inline">Líder: </b>{cell.lead?.name} <small>({TranslateMinistryLevel(cell.lead?.ministryLevel)})</small></span><br />
         {cell.lead?.computedG12Leader && (<span><b>G12: </b>{cell.lead?.computedG12Leader}</span>)}
-      </>
+      </span>
     },
     {
       name: 'Localização',

@@ -74,6 +74,7 @@ namespace G12App.Application.Services
                 Name = user.Name,
                 Role = user.Role,
                 G12LeadershipName = user.ComputedG12Leader,
+                SpouseId = user.SpouseId,
             };
 
             return new ServiceResult<ResponseLoginDto>(response);
@@ -94,6 +95,7 @@ namespace G12App.Application.Services
                     new(CustomClaims.LeadershipId, member.LeadershipId?.ToString() ?? string.Empty),
                     new(ClaimTypes.Role, string.IsNullOrWhiteSpace(member.Role) ? Roles.AppUser : member.Role),
                     new(CustomClaims.G12LeadershipName, member.ComputedG12Leader ?? string.Empty),
+                    new(CustomClaims.SpouseId, member.SpouseId?.ToString() ?? string.Empty),
                 ]),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -37,6 +37,7 @@ namespace G12App.Infrastructure.Data.Repositories
             return await _context.Members
                     .Include(x => x.Leadership)
                     .Include(x => x.HomeAddress)
+                    .Include(x => x.Spouse)
                     .FirstOrDefaultAsync(x => x.Id == id);
         }
 

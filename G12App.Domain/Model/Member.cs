@@ -19,6 +19,8 @@ namespace G12App.Domain.Model
 
         public string Email { get; set; }
 
+        public string CPF { get; set; }
+
         public Address HomeAddress { get; set; }
 
         public int? HomeAddressId { get; set; }
@@ -32,6 +34,18 @@ namespace G12App.Domain.Model
         public ICollection<Report> Reports { get; set; }
 
         public int? SpouseId { get; set; }
+
+        public Member Spouse { get; set; }
+
+        public string Notes { get; set; }
+
+        public bool Baptized { get; set; }
+
+        public DateTime? BaptismDate { get; set; }
+
+        public bool HasNoLeadership { get; set; }
+
+        public bool Idle { get; set; }
 
         public string ComputedG12Leader { get; set; }
 

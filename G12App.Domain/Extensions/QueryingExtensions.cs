@@ -93,9 +93,13 @@ namespace G12App.Domain.Extensions
             if (!int.TryParse(memberIdClaim, out var memberId))
                 return queryable;
 
+            var spouseIdClaim = user.FindFirstValue(CustomClaims.SpouseId);
+            int.TryParse(spouseIdClaim, out var spouseId);
+
             queryable = queryable.Where(x =>
-                x.LeadershipIdTree.Contains($"|{memberId}|") ||
-                x.Id.Equals(memberId));
+            x.LeadershipIdTree.Contains($"|{memberId}|") ||
+            (spouseId > 0 ? x.LeadershipIdTree.Contains($"|{spouseId}|") : false) ||
+            x.Id.Equals(memberId) || x.Id.Equals(spouseId));
 
             return queryable;
         }
@@ -143,7 +147,7 @@ namespace G12App.Domain.Extensions
                 queryable = queryable.Where(x => x.CellType.Equals(query.Filter.CellType));
 
             if (query.Filter.LeadIdAllLevels.HasValue)
-                queryable = queryable.Where(x => x.Lead.LeadershipIdTree.Contains($"|{query.Filter.LeadIdAllLevels}|") || 
+                queryable = queryable.Where(x => x.Lead.LeadershipIdTree.Contains($"|{query.Filter.LeadIdAllLevels}|") ||
                                 x.LeadId.Equals(query.Filter.LeadIdAllLevels));
 
             return queryable;
@@ -161,13 +165,22 @@ namespace G12App.Domain.Extensions
             if (!int.TryParse(memberIdClaim, out var memberId))
                 return queryable;
 
+            var spouseIdClaim = user.FindFirstValue(CustomClaims.SpouseId);
+            int.TryParse(spouseIdClaim, out var spouseId);
+
             queryable = queryable.Where(x =>
                 x.Lead.LeadershipIdTree.Contains($"|{memberId}|") ||
                 x.LeadId.Equals(memberId) ||
                 x.Host.LeadershipIdTree.Contains($"|{memberId}|") ||
                 x.HostId.Equals(memberId) ||
                 x.Timothy.LeadershipIdTree.Contains($"|{memberId}|") ||
-                x.TimothyId.Equals(memberId));
+                x.TimothyId.Equals(memberId) ||
+                x.Lead.LeadershipIdTree.Contains($"|{spouseId}|") ||
+                x.LeadId.Equals(spouseId) ||
+                x.Host.LeadershipIdTree.Contains($"|{spouseId}|") ||
+                x.HostId.Equals(spouseId) ||
+                x.Timothy.LeadershipIdTree.Contains($"|{spouseId}|") ||
+                x.TimothyId.Equals(spouseId));
 
             return queryable;
         }
@@ -220,13 +233,22 @@ namespace G12App.Domain.Extensions
             if (!int.TryParse(memberIdClaim, out var memberId))
                 return queryable;
 
+            var spouseIdClaim = user.FindFirstValue(CustomClaims.SpouseId);
+            int.TryParse(spouseIdClaim, out var spouseId);
+
             queryable = queryable.Where(x =>
                 x.Lead.LeadershipIdTree.Contains($"|{memberId}|") ||
                 x.LeadershipId.Equals(memberId) ||
                 x.Host.LeadershipIdTree.Contains($"|{memberId}|") ||
                 x.HostId.Equals(memberId) ||
                 x.Timothy.LeadershipIdTree.Contains($"|{memberId}|") ||
-                x.TimothyId.Equals(memberId));
+                x.TimothyId.Equals(memberId) ||
+                x.Lead.LeadershipIdTree.Contains($"|{spouseId}|") ||
+                x.LeadershipId.Equals(spouseId) ||
+                x.Host.LeadershipIdTree.Contains($"|{spouseId}|") ||
+                x.HostId.Equals(spouseId) ||
+                x.Timothy.LeadershipIdTree.Contains($"|{spouseId}|") ||
+                x.TimothyId.Equals(spouseId));
 
             return queryable;
         }

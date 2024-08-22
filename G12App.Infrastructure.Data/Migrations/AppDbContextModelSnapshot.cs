@@ -139,8 +139,17 @@ namespace G12App.Infrastructure.Data.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("BaptismDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("Baptized")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CPF")
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("ChildrenMembersComputed")
                         .HasColumnType("tinyint(1)");
@@ -163,8 +172,14 @@ namespace G12App.Infrastructure.Data.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
+                    b.Property<bool>("HasNoLeadership")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int?>("HomeAddressId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Idle")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -193,6 +208,9 @@ namespace G12App.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Password")
                         .HasColumnType("longtext");
 
@@ -216,6 +234,9 @@ namespace G12App.Infrastructure.Data.Migrations
                     b.HasIndex("HomeAddressId");
 
                     b.HasIndex("LeadershipId");
+
+                    b.HasIndex("SpouseId")
+                        .IsUnique();
 
                     b.ToTable("Members");
                 });
@@ -352,9 +373,15 @@ namespace G12App.Infrastructure.Data.Migrations
                         .WithMany()
                         .HasForeignKey("LeadershipId");
 
+                    b.HasOne("G12App.Domain.Model.Member", "Spouse")
+                        .WithOne()
+                        .HasForeignKey("G12App.Domain.Model.Member", "SpouseId");
+
                     b.Navigation("HomeAddress");
 
                     b.Navigation("Leadership");
+
+                    b.Navigation("Spouse");
                 });
 
             modelBuilder.Entity("G12App.Domain.Model.Report", b =>

@@ -9,77 +9,77 @@ export const BrazilCurrencyFormat = new Intl.NumberFormat('pt-BR', {
 
 export const HandleDateMask = (e) => {
     let input = e.target;
-    
-    if(e.charCode < 47 || e.charCode > 57) {
+
+    if (e.charCode < 47 || e.charCode > 57) {
         e.preventDefault();
         return false;
     }
 
     var len = input.value.length;
 
-    if(len !== 1 || len !== 3) {
-        if(e.charCode === 47) {
+    if (len !== 1 || len !== 3) {
+        if (e.charCode === 47) {
             e.preventDefault();
         }
     }
 
-    if(len === 2) {
+    if (len === 2) {
         input.value += '/';
     }
 
-    if(len === 5) {
+    if (len === 5) {
         input.value += '/';
     }
     return true;
-}; 
+};
 
 export const ToBRDate = (dateString) => {
     var date = moment(dateString);
-    if(date.isValid())
+    if (date.isValid())
         return date.format('DD/MM/YYYY');
     return null;
 }
 
 export const FromBRDate = (dateString) => {
     var date = moment(dateString, 'DD/MM/YYYY');
-    if(date.isValid()) 
+    if (date.isValid())
         return date.format('YYYY-MM-DD');
     return null;
 }
 
-export const StringifyResponseErrors = (errors) => {    
-    if(errors == null)
+export const StringifyResponseErrors = (errors) => {
+    if (errors == null)
         return <>Ocorreu um erro!</>;
 
-    if(Array.isArray(errors)) {
+    if (Array.isArray(errors)) {
         return errors.map(x => <>{x.errorMessage}<br /></>);
     }
-    
-    if(typeof(errors) === typeof({})) {
+
+    if (typeof (errors) === typeof ({})) {
         return Object.keys(errors).map(x => <>{errors[x].errorMessage}<br /></>);
     }
 
-    if(errors == null)
+    if (errors == null)
         return <>Ocorreu um erro!</>;
 };
 
 export const FetchPrivate = async (url, options = {}) => {
     var token = localStorage.getItem('jwtToken');
 
-  if (token) {
-    options.headers = {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-    };
-  }
+    if (token) {
+        options.headers = {
+            ...options.headers,
+            Authorization: `Bearer ${token}`,
+        };
+    }
 
-  var result = await fetch(url, options);
-  if(result.status === 401) {
-    CleanupAuth();
-    window.location.href = '/login';
-  }
+    var result = await fetch(url, options);
+    if (result.status === 401) {
+        CleanupAuth();
+        window.location.href = '/login';
+    }
 
-  return result;
+    return result;
 };
 
 export const SetupAuth = (auth) => {
@@ -95,10 +95,9 @@ export const CleanupAuth = () => {
 }
 
 export const FormatMemberPickerLabel = (member) => {
-    if(member == null) return '';
+    if (member == null) return '';
     var leader = (member.computedG12Leader ?? member.computedLeadershipName);
-    if (leader) leader += ' / ';
-    return (leader ?? '') + member.name;
+    return member.name + (leader ? ' (' + leader + ')' : '');
 };
 
 export const TranslateCellType = (cellType) => {
@@ -161,15 +160,15 @@ export const TranslateMomentWeekDay = (weekDay) => {
 
 export const MoneyToDecimal = (value) => {
     let decimal = value || '';
-    
+
     decimal = decimal.replace('R$', '')
-                     .replace(/\./g, '')
-                     .replace(/,/g, '.');
-                     
+        .replace(/\./g, '')
+        .replace(/,/g, '.');
+
     return parseFloat(decimal);
 }
 
-export const DecimalToMoney = (value) => {  
+export const DecimalToMoney = (value) => {
     return BrazilCurrencyFormat.format(value);
 }
 
@@ -179,13 +178,75 @@ export const RenderGridAddress = (address) => {
         {address?.street && (<><span>{address?.street}{address?.number ? ', ' + address?.number : ''}</span><br /></>)}
         {address?.neighborhood && (<><span><b>Bairro: </b>{address?.neighborhood}</span><br /></>)}
         {address?.city && (<><span><b>Cidade: </b>{address?.city}{address?.state ? ' / ' + address?.state : ''}</span></>)}
-      </span>
+    </span>
 }
 
 export const TranslateMinistryLevel = (ministryLevel) => {
-    switch(ministryLevel){
-      case 1: return 'Pastores';
-      case 12: return 'G12';
-      default: return ministryLevel;
+    switch (ministryLevel) {
+        case 1: return 'Pastores';
+        case 12: return 'G12';
+        default: return ministryLevel;
     }
-  };
+};
+
+export const ValidateCPF = (cpf) => {
+    var Soma = 0
+    var Resto
+
+    var strCPF = String(cpf).replace(/[^\d]/g, '')
+
+    if (strCPF.length !== 11)
+        return false
+
+    if ([
+        '00000000000',
+        '11111111111',
+        '22222222222',
+        '33333333333',
+        '44444444444',
+        '55555555555',
+        '66666666666',
+        '77777777777',
+        '88888888888',
+        '99999999999',
+    ].indexOf(strCPF) !== -1)
+        return false
+
+    for (let i = 1; i <= 9; i++)
+        Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+
+    Resto = (Soma * 10) % 11
+
+    if ((Resto == 10) || (Resto == 11))
+        Resto = 0
+
+    if (Resto != parseInt(strCPF.substring(9, 10)))
+        return false
+
+    Soma = 0
+
+    for (let i = 1; i <= 10; i++)
+        Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i)
+
+    Resto = (Soma * 10) % 11
+
+    if ((Resto == 10) || (Resto == 11))
+        Resto = 0
+
+    if (Resto != parseInt(strCPF.substring(10, 11)))
+        return false
+
+    return true
+};
+
+export const FormatFirstLastName = (fullName) => {
+    if (fullName == null) return '';
+    var names = fullName.split(' ');
+    if (names.length === 1) return names[0];
+    return names[0] + ' ' + names[names.length - 1];
+};
+
+export const FormatFirstName = (fullName) => {
+    if (fullName == null) return '';
+    return fullName.split(' ')[0];
+}

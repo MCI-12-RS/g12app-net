@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Col, Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 import AsyncSelect from 'react-select/async';
 import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
@@ -12,13 +12,14 @@ const MemberPicker = ({
     setValue,
     noOptionsMessage,
     placeholder,
-    initialValue = 'Sem liderança',
+    initialValue = 'Nível base (Pastores)',
     minLength = 2,
     notInIds = [],
     selectedValue = null,
     selectedLabel = null,
     isMulti = false,
     disabled = false,
+    disableDefaultOption = false,
     changeValueEvent = () => { }
 }) => {
 
@@ -78,11 +79,12 @@ const MemberPicker = ({
 
     useEffect(() => {
         if (!isMulti) {
-            setDefaultOption([{ label: initialValue, value: null }]);
+            if (!disableDefaultOption)
+                setDefaultOption([{ label: initialValue, value: null }]);
 
             if (selectedValue != null)
                 setOption({ label: selectedLabel, value: selectedValue });
-            else if (option?.value == null)
+            else if (option?.value == null && !disableDefaultOption)
                 setOption({ label: initialValue, value: null });
         }
     }, []);
