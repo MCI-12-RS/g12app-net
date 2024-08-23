@@ -373,7 +373,7 @@ export const ReportDetails = () => {
                                 </Row>
 
                                 <Row className="pr-0">
-                                    <Col>
+                                    <Col className="mb-3">
                                         <MemberPicker label="Participantes" isMulti={true}
                                             setValue={(value) => handleSelectChangeEvent('members', value)}
                                             value={report.frequenters} disabled={report.weekCellSkipped} />
