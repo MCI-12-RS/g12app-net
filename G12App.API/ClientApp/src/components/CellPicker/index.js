@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { SearchCells } from "../../services/Cell.service";
-import { Col, Form, InputGroup } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import AsyncSelect from "react-select/async";
 import { debounce } from 'lodash';
 import './style.css';

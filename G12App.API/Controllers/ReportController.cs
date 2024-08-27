@@ -20,7 +20,7 @@ namespace G12App.API.Controllers
         public async Task<IActionResult> Get([FromServices] IReportService reportService, [FromBody] Query<ReportFilter> query)
         {
             query = query ?? throw new ArgumentNullException(nameof(query));
-            var result = await reportService.GetAllReports(query);
+            var result = await reportService.GetReportsList(query);
             return result.AsActionResult();
         }
 
@@ -37,7 +37,7 @@ namespace G12App.API.Controllers
             var result = await reportApp.LogReport(reportDTO);
             return result.AsActionResult();
         }
-        
+
         [HttpDelete("{id}")]
         [Authorize(Roles = $"{Roles.AppAdmin},{Roles.AppSuperAdmin}")]
         public async Task<IActionResult> Delete([FromServices] IReportService reportService, int id)

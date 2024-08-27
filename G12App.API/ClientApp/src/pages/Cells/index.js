@@ -8,7 +8,7 @@ import { isMobile } from 'react-device-detect';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay } from '../../shared/utils.js';
+import { FormatFirstLastName, RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay } from '../../shared/utils.js';
 
 export const Cells = () => {
 
@@ -35,8 +35,8 @@ export const Cells = () => {
       name: 'Liderança',
       properties: { sm: 3 },
       render: (cell) => <span>
-        <span><b className="d-none d-md-inline">Líder: </b>{cell.lead?.name} <small>({TranslateMinistryLevel(cell.lead?.ministryLevel)})</small></span><br />
-        {cell.lead?.computedG12Leader && (<span><b>G12: </b>{cell.lead?.computedG12Leader}</span>)}
+        <span><b className="d-none d-md-inline">Líder: </b>{FormatFirstLastName(cell.lead?.name)} <small>({TranslateMinistryLevel(cell.lead?.ministryLevel)})</small></span><br />
+        {cell.lead?.computedG12Leader && (<span><b>G12: </b>{FormatFirstLastName(cell.lead?.computedG12Leader)}</span>)}
       </span>
     },
     {
@@ -84,8 +84,12 @@ export const Cells = () => {
   };
 
   useEffect(() => {
+    setPagination({ ...pagination, page: 1 });
+  }, [searchData]);
+
+  useEffect(() => {
     search();
-  }, [pagination, searchData]);
+  }, [pagination]);
 
   return (
     <>

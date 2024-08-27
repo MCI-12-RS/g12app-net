@@ -25,6 +25,10 @@
     max-width: 380px;
 }
 
+.dashboard .card.clickable {
+    cursor: pointer;
+}
+
 .dashboard .card .card-title {
     font-size: 5rem;
     margin: 0;

@@ -1,5 +1,7 @@
 ﻿using G12App.Domain.Interfaces.Repositories;
+using G12App.Domain.Interfaces.Strategies;
 using G12App.Infrastructure.Data.Repositories;
+using G12App.Infrastructure.Data.Strategies;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace G12App.Infrastructure.Data
@@ -8,11 +10,20 @@ namespace G12App.Infrastructure.Data
     {
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            services.AddTransient<IMemberRepository, MemberRepository>();
-            services.AddTransient<ICellRepository, CellRepository>();
-            services.AddTransient<IReportRepository, ReportRepository>();
+            return services
+                    .AddTransient<IMemberRepository, MemberRepository>()
+                    .AddTransient<ICellRepository, CellRepository>()
+                    .AddTransient<IReportRepository, ReportRepository>()
 
-            return services;
+                    .RegisterStrategies();
+        }
+
+        public static IServiceCollection RegisterStrategies(this IServiceCollection services)
+        {
+            return services
+
+                    .AddSingleton<IReportFetchListStrategy, ReportFetchListStrategy>();
+
         }
     }
 }

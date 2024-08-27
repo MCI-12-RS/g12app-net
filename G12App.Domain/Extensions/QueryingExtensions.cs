@@ -1,4 +1,5 @@
-﻿using G12App.Domain.Model;
+﻿using G12App.Domain.Interfaces.Strategies;
+using G12App.Domain.Model;
 using G12App.Domain.Model.Base;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
@@ -11,6 +12,12 @@ namespace G12App.Domain.Extensions
 {
     public static class QueryingExtensions
     {
+        public static IQueryable<TEntity> ApplyStrategy<TEntity>(this IQueryable<TEntity> queryable, IBaseFetchStrategy<TEntity> strategy)
+            where TEntity : BaseEntity
+        {
+            return strategy.Setup(queryable);
+        }
+
         public static IQueryable<TEntity> ApplyPaging<TEntity>(this IQueryable<TEntity> queryable, Query query)
         {
             return queryable.Skip((query.Pagination.Page - 1) * query.Pagination.Limit).Take(query.Pagination.Limit);
@@ -200,8 +207,11 @@ namespace G12App.Domain.Extensions
             if (query.Filter.Date.HasValue)
                 queryable = queryable.Where(x => x.Date.Equals(query.Filter.Date));
 
-            if (query.Filter.StartDate.HasValue && query.Filter.EndDate.HasValue)
-                queryable = queryable.Where(x => x.Date >= query.Filter.StartDate.Value && x.Date <= query.Filter.EndDate.Value);
+            if (query.Filter.StartDate.HasValue)
+                queryable = queryable.Where(x => x.Date >= query.Filter.StartDate.Value);
+
+            if (query.Filter.EndDate.HasValue)
+                queryable = queryable.Where(x => x.Date <= query.Filter.EndDate.Value);
 
             if (query.Filter.CellType.HasValue)
                 queryable = queryable.Where(x => x.CellType.Equals(query.Filter.CellType));

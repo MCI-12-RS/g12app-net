@@ -14,11 +14,11 @@ const LogReport = async (report) => {
     return obj;
 }
 
-const GetReports = async(search, pagination, sort = {}) => {
+const GetReports = async (search, pagination, sort = {}) => {
     var response = await FetchPrivate('/api/report/search', {
         method: 'POST',
         body: JSON.stringify({
-            "pagination":{
+            "pagination": {
                 "page": pagination.page,
                 "limit": pagination.limit
             },
@@ -27,7 +27,11 @@ const GetReports = async(search, pagination, sort = {}) => {
                 "order": sort.order
             },
             "filter": {
-              "cellId": search.cellId
+                "cellId": search.cellId,
+                "leadership": search.leadership,
+                "g12Leadership": search.g12Leadership,
+                "startDate": search.startDate,
+                "endDate": search.endDate,
             }
         }),
         headers: {
@@ -40,7 +44,7 @@ const GetReports = async(search, pagination, sort = {}) => {
     return obj;
 }
 
-const DeleteReport = async (id) => {      
+const DeleteReport = async (id) => {
     var response = await FetchPrivate('/api/report/' + id, {
         method: 'DELETE',
         headers: {

@@ -1,4 +1,5 @@
-﻿using G12App.Domain.Model;
+﻿using G12App.Domain.Interfaces.Strategies;
+using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace G12App.Domain.Interfaces.Repositories
     public interface IReportRepository
     {
         Task<IEnumerable<Report>> GetReportsAsync(Query<ReportFilter> query);
+        Task<IEnumerable<Report>> GetReportsAsync<TStrategy>(Query<ReportFilter> query) where TStrategy : IBaseFetchStrategy<Report>;
         Task<int> CountReportsAsync(Query<ReportFilter> query);
         Task<Report> GetReportById(int Id);
         Task<Report> Create(Report report);
