@@ -3,10 +3,9 @@ import { Form, Col, Row, Accordion, Container } from 'react-bootstrap';
 import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
-
 import { GetReports } from '../../services/Report.service.js';
 import moment from 'moment';
-import { DecimalToMoney, FromBRDate, ToBRDate } from '../../shared/utils.js';
+import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm } from '../../shared/utils.js';
 import { faHouse, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -128,7 +127,6 @@ export const Reports = () => {
     };
 
     useEffect(() => {
-        console.log(searchData);
         setPagination({ ...pagination, page: 1 });
     }, [searchData]);
 
@@ -151,6 +149,10 @@ export const Reports = () => {
                             </Accordion.Header>
 
                             <Accordion.Body>
+
+                                <Row className="clean-form">
+                                    <Link onClick={() => CleanSearchForm(setSearchData)}>Limpar filtros</Link>
+                                </Row>
 
                                 <Row className="pr-3">
                                     <Form.Group className="mb-3" as={Col}>

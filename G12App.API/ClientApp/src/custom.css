@@ -81,6 +81,8 @@ code {
   box-shadow: none !important;
   background-color: transparent !important;
   margin-bottom: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
 .accordion-header {
@@ -137,4 +139,11 @@ code {
 
 input[type="checkbox"] + label {
   cursor: pointer;
+}
+
+.clean-form{
+  position: absolute;
+  right: 0;
+  top: 20px;
+  font-size: 12px;
 }

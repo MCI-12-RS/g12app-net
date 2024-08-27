@@ -5,10 +5,9 @@ import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { FormatFirstLastName, RenderGridAddress, TranslateMinistryLevel } from '../../shared/utils';
+import { FormatFirstLastName, RenderGridAddress, TranslateMinistryLevel, CleanSearchForm } from '../../shared/utils';
 
 export const Members = () => {
 
@@ -119,6 +118,11 @@ export const Members = () => {
               </Accordion.Header>
 
               <Accordion.Body>
+
+                <Row className="clean-form">
+                <Link onClick={() => CleanSearchForm(setSearchData)}>Limpar filtros</Link>
+                </Row>
+
                 <Row className="pr-3">
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label>Nome</Form.Label>

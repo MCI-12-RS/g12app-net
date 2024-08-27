@@ -5,10 +5,9 @@ import { SearchCells } from '../../services/Cell.service.js';
 import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FormatFirstLastName, RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay } from '../../shared/utils.js';
+import { FormatFirstLastName, RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay, CleanSearchForm } from '../../shared/utils.js';
 
 export const Cells = () => {
 
@@ -106,6 +105,10 @@ export const Cells = () => {
               </Accordion.Header>
 
               <Accordion.Body>
+
+                <Row className="clean-form">
+                <Link onClick={() => CleanSearchForm(setSearchData)}>Limpar filtros</Link>
+                </Row>
 
                 <Row className="pr-3">
                   <Form.Group className="mb-3" as={Col}>

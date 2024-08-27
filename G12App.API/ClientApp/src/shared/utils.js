@@ -1,4 +1,5 @@
 import moment from 'moment';
+import $ from 'jquery';
 
 export const BrazilCurrencyFormat = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -251,4 +252,12 @@ export const FormatFirstLastName = (fullName) => {
 export const FormatFirstName = (fullName) => {
     if (fullName == null) return '';
     return fullName.split(' ')[0];
+}
+
+export const CleanSearchForm = (setSearchData) => {
+    $('input').val('');
+    $('select').each((i, e) => {
+        $(e).val($(e).find('option:first').val());
+    });
+    setSearchData({});
 }
