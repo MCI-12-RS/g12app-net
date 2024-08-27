@@ -305,6 +305,8 @@ namespace G12App.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CellId");
+
                     b.HasIndex("HostId");
 
                     b.HasIndex("LeadershipId");
@@ -386,6 +388,12 @@ namespace G12App.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("G12App.Domain.Model.Report", b =>
                 {
+                    b.HasOne("G12App.Domain.Model.Cell", "Cell")
+                        .WithMany()
+                        .HasForeignKey("CellId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
                     b.HasOne("G12App.Domain.Model.Member", "Host")
                         .WithMany()
                         .HasForeignKey("HostId")
@@ -403,6 +411,8 @@ namespace G12App.Infrastructure.Data.Migrations
                         .HasForeignKey("TimothyId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
+
+                    b.Navigation("Cell");
 
                     b.Navigation("Host");
 
