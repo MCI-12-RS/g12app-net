@@ -5,7 +5,7 @@ import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
 import { GetReports } from '../../services/Report.service.js';
 import moment from 'moment';
-import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm } from '../../shared/utils.js';
+import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm, FormatFirstLastName } from '../../shared/utils.js';
 import { faHouse, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -39,8 +39,8 @@ export const Reports = () => {
         {
             name: 'Dados da célula',
             render: (report) => <span>
-                <span><b>Líder:</b> {report.lead?.name} </span>
-                {report.lead?.computedG12Leader && (<><br /><span><b>G12:</b> {report.lead?.computedG12Leader} </span></>)}
+                <span><b>Líder:</b> {FormatFirstLastName(report.lead?.name)} </span>
+                {report.lead?.computedG12Leader && (<><br /><span><b>G12:</b> {FormatFirstLastName(report.lead?.computedG12Leader)} </span></>)}
                 {report.cell?.place?.street && (<><br /><span><b> Endereço:</b> {report.cell?.place?.street}, {report.cell?.place?.number} {report.cell?.place?.neighborhood && (" - " + report.cell?.place?.neighborhood)}</span></>)}
             </span>
         },
@@ -61,6 +61,7 @@ export const Reports = () => {
                                 :
                                 <>
                                     <span><b>Tema:</b> {report.subject}</span>
+                                    {report.notes && <><br /><span><b>Observações:</b> {report.notes}</span></>}
                                 </>}
                         </span>
                     </span>
