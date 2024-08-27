@@ -105,3 +105,11 @@
         zoom: 1.3;
     }
 }
+
+.actions a {    
+    font-size: 1.3em;
+}
+
+.actions a + a {    
+    margin-left: 15px;
+}

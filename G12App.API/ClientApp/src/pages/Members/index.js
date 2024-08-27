@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { InputGroup, Form, Col, Row, Spinner, Accordion, Container } from 'react-bootstrap';
+import { Form, Col, Row, Accordion, Container } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
@@ -20,7 +20,7 @@ export const Members = () => {
     React.useState({ name: '', leadershipName: '', email: '', neighborhood: '', city: '', state: '' });
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
-  const [sort, setSort] = React.useState({ sortBy: 'ministryLevel', order: false });
+  const [sort] = React.useState({ sortBy: 'ministryLevel', order: false });
 
   const getLeadership = (member) => {
     switch (member.ministryLevel) {
@@ -88,7 +88,7 @@ export const Members = () => {
 
   const debounceEventTrigger = debounce(field => {
     var currentValue = searchData[field.name] || '';
-    if (field.value != currentValue)
+    if (field.value !== currentValue)
       setSearchData({ ...searchData, [field.name]: field.value });
   }, 500);
 
@@ -98,8 +98,12 @@ export const Members = () => {
   };
 
   useEffect(() => {
+    setPagination({ ...pagination, page: 1 });
+  }, [searchData]);
+
+  useEffect(() => {
     search();
-  }, [pagination, searchData, sort]);
+  }, [pagination]);
 
   return (
     <>

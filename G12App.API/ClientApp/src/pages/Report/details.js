@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Button, Col, Form, Spinner, FormCheck, InputGroup } from 'react-bootstrap';
 import { GetCell } from "../../services/Cell.service";
 import MemberPicker from '../../components/MemberPicker';
@@ -20,7 +20,7 @@ export const ReportDetails = () => {
 
     const emptyReport = {
         subject: '',
-        frequenters: [],
+        members: [],
         cellId: null,
         dateOnly: null,
         timeOnly: null,
@@ -141,7 +141,6 @@ export const ReportDetails = () => {
             var result = await LogReport({
                 ...reportToSend,
                 contribution: MoneyToDecimal(report.contribution),
-                visitors: report.visitors,
                 date: report.weekCellSkipped ?
                     FromBRDate(getSuggestedDate(cell)) + "T" + (cell.time || '').substring(0, 5) + ":00" :
                     FromBRDate(report.dateOnly) + "T" + report.timeOnly + ":00"
@@ -181,7 +180,7 @@ export const ReportDetails = () => {
         if (name === 'cellId')
             fetchCell(value);
         if (name === 'members')
-            setReport({ ...report, frequenters: value });
+            setReport({ ...report, members: value });
     };
 
 
@@ -376,7 +375,7 @@ export const ReportDetails = () => {
                                     <Col className="mb-3">
                                         <MemberPicker label="Participantes" isMulti={true}
                                             setValue={(value) => handleSelectChangeEvent('members', value)}
-                                            value={report.frequenters} disabled={report.weekCellSkipped} />
+                                            value={report.members} disabled={report.weekCellSkipped} />
                                     </Col>
                                 </Row>
 

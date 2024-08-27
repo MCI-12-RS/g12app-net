@@ -1,11 +1,14 @@
 ﻿using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
+using G12App.Domain.Interfaces.Strategies;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,13 +19,16 @@ namespace G12App.Infrastructure.Data.Repositories
     {
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IServiceProvider _serviceProvider;
 
         public ReportRepository(
             AppDbContext context,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IServiceProvider serviceProvider)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task<Report> Create(Report report)
@@ -44,18 +50,28 @@ namespace G12App.Infrastructure.Data.Repositories
         private IQueryable<Report> GetReportsQueryableAsync(Query<ReportFilter> query)
         {
             return _context.Reports
-                .IgnoreAutoIncludes()
-                .Where(x => x.IsDeleted == false)
-                .ApplyMinistryFilter(_httpContextAccessor?.HttpContext?.User)
-                .ApplyFilter(query);
+                    .IgnoreAutoIncludes()
+                    .Where(x => x.IsDeleted == false)
+                    .ApplyMinistryFilter(_httpContextAccessor?.HttpContext?.User)
+                    .ApplyFilter(query);
         }
 
         public async Task<IEnumerable<Report>> GetReportsAsync(Query<ReportFilter> query)
         {
             return await GetReportsQueryableAsync(query)
-                .ApplySort(query)
-                .ApplyPaging(query)
-                .ToListAsync();
+                            .ApplySort(query)
+                            .ApplyPaging(query)
+                            .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Report>> GetReportsAsync<TStrategy>(Query<ReportFilter> query)
+            where TStrategy : IBaseFetchStrategy<Report>
+        {
+            return await GetReportsQueryableAsync(query)
+                            .ApplyStrategy(_serviceProvider.GetRequiredService<TStrategy>())
+                            .ApplySort(query)
+                            .ApplyPaging(query)
+                            .ToListAsync();
         }
 
         public async Task<int> CountReportsAsync(Query<ReportFilter> query)

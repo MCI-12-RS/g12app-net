@@ -36,17 +36,17 @@ namespace G12App.Application.Services
 
         public async Task<ServiceResult<ReportDto>> LogReport(ReportDto reportDTO)
         {
-            var weekDates = GetWeekSpan(DateTime.Now);
+            var (firstDay, lastDay) = GetWeekSpan(DateTime.Now);
 
             if (reportDTO.Date > DateTime.Now)
                 return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, "O relatório não pode ser enviado para uma data futura.");
 
             if (GetWeekNum(reportDTO.Date) != GetWeekNum(DateTime.Now))
-                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório precisa ser da semana atual, de {weekDates.Item1.ToString("dd/MM/yyyy")} a {weekDates.Item2.ToString("dd/MM/yyyy")}.");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório precisa ser da semana atual, de {firstDay:dd/MM/yyyy} a {lastDay:dd/MM/yyyy}.");
 
             var existentReport = await _reportService.GetAllReports(new Query<ReportFilter>()
             {
-                Filter = new ReportFilter() { StartDate = weekDates.FirstDay, EndDate = weekDates.LastDay, CellId = reportDTO.CellId },
+                Filter = new ReportFilter() { StartDate = firstDay, EndDate = lastDay, CellId = reportDTO.CellId },
                 Pagination = Pagination.SingleRecord,
             });
 
@@ -61,7 +61,7 @@ namespace G12App.Application.Services
                 return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, "O relatório não pode ser lançado antes da data de cadastro da célula.");
 
             if (cellResult.Data.WeekDay == reportDTO.Date.DayOfWeek && cellResult.Data.Time > TimeOnly.FromDateTime(reportDTO.Date))
-                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório não pode ser lançado antes do horário de cadastro da célula ({cellResult.Data.Time.ToString("HH:mm")}).");
+                return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório não pode ser lançado antes do horário de cadastro da célula ({cellResult.Data.Time:HH:mm}).");
 
             return await _reportService.Add(reportDTO);
         }

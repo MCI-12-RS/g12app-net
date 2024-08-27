@@ -17,6 +17,8 @@ namespace G12App.Domain.Model
 
         public int CellId { get; set; }
 
+        public Cell Cell { get; set; }
+
         public Member Lead { get; set; }
 
         public int LeadershipId { get; set; }

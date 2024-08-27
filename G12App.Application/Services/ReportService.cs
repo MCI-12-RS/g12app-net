@@ -4,6 +4,7 @@ using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Events;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Interfaces.Strategies;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
@@ -38,10 +39,9 @@ namespace G12App.Application.Services
         {
             var reportEntity = _mapper.Map<Report>(reportDTO);
 
-            if (reportDTO?.Frequenters != null && reportDTO.Frequenters.Count != 0)
-                foreach (var memberId in reportDTO.Frequenters)
-                    reportEntity.Members.Add(
-                        await _memberRepository.GetMemberByIdAsync(memberId));
+            if (reportDTO?.Members != null && reportDTO.Members.Count != 0)
+                foreach (var member in reportDTO.Members.Where(x => x.Id > 0))
+                    reportEntity.Members.Add(new Member() { Id = member.Id.GetValueOrDefault() });
 
             if (reportDTO.LeadershipId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.LeadershipId))
                 reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.LeadershipId));
@@ -81,6 +81,14 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<IEnumerable<ReportDto>>> GetAllReports(Query<ReportFilter> query)
         {
             var reportEntity = await _reportRepository.GetReportsAsync(query);
+            var totalMembers = reportEntity.Any() ? await _reportRepository.CountReportsAsync(query) : 0;
+            return new ServiceResult<IEnumerable<ReportDto>>(
+                _mapper.Map<IEnumerable<ReportDto>>(reportEntity), totalMembers);
+        }
+
+        public async Task<ServiceResult<IEnumerable<ReportDto>>> GetReportsList(Query<ReportFilter> query)
+        {
+            var reportEntity = await _reportRepository.GetReportsAsync<IReportFetchListStrategy>(query);
             var totalMembers = reportEntity.Any() ? await _reportRepository.CountReportsAsync(query) : 0;
             return new ServiceResult<IEnumerable<ReportDto>>(
                 _mapper.Map<IEnumerable<ReportDto>>(reportEntity), totalMembers);

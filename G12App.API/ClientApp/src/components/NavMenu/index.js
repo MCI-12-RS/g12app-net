@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navbar, Container, Nav, NavDropdown, Badge } from 'react-bootstrap';
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useToastContext } from '../../contexts/ToastContext';
 import { useAuthenticationContext } from '../../contexts/AuthenticationContext';
@@ -45,6 +45,7 @@ export const NavMenu = () => {
                     <NavDropdown.Item as={Link} to="/cells">Gerenciar células</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/new-cell">Cadastrar célula</NavDropdown.Item>
                     <NavDropdown.Divider />
+                    <NavDropdown.Item as={Link} to="/reports">Visualizar relatórios</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/log-report">Registrar relatório</NavDropdown.Item>
                   </NavDropdown>
                 </>

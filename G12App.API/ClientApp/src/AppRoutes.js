@@ -5,6 +5,7 @@ import { Members } from "./pages/Members";
 import { MemberDetails } from "./pages/Members/details";
 import { LoginPage } from "./pages/Login";
 import { ReportDetails } from "./pages/Report/details";
+import { Reports } from "./pages/Report";
 
 const AppRoutes = [
   {
@@ -42,6 +43,10 @@ const AppRoutes = [
   {
     path: '/log-report',
     element: <ReportDetails key="log-report" />
+  },
+  {
+    path: '/reports',
+    element: <Reports key="reports" />
   },
   {
     path: '/login',

@@ -1,33 +1,202 @@
-import React from "react";
+import React, { useEffect } from 'react';
+import { Form, Col, Row, Accordion, Container } from 'react-bootstrap';
+import { debounce } from 'lodash';
+import Grid from '../../components/Grid';
+import { isMobile } from 'react-device-detect';
+
+import { GetReports } from '../../services/Report.service.js';
+import moment from 'moment';
+import { DecimalToMoney, FromBRDate, ToBRDate } from '../../shared/utils.js';
+import { faHouse, faPerson } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+import ReactInputMask from 'react-input-mask';
 
 export const Reports = () => {
 
+    const firstCurrentWeekDay = ToBRDate(moment().startOf('week'));
+    const endCurrentWeekDay = ToBRDate(moment().endOf('week'));
+
+    const [cells, setCells] =
+        React.useState([]);
+    const [pagination, setPagination] =
+        React.useState({ page: 1, limit: 20 });
+    const [searchData, setSearchData] =
+        React.useState({
+            leadership: null,
+            g12Leadership: null,
+            startDate: firstCurrentWeekDay,
+            endDate: endCurrentWeekDay
+        });
+    const [loading, setLoading] = React.useState(false);
+    const [total, setTotal] = React.useState(0);
+
     const columns = [
         {
-            name: 'Dados da célula',
-            render: (report) => <>
-            <span><b>Líder:</b> {report.lead?.name} </span> <br/>
-            <span><b>Líder G12:</b> {report.lead?.computedG12Leader} </span> <br/>
-            <span> <b> Endereço:</b> Rua {report.place?.street}"," {report.place?.neighborhood}</span>
-            </>
+            name: '#',
+            properties: { md: 1 },
+            render: (member) => (member.id.toString() ?? '0').padStart(5, '0')
         },
         {
-            name: 'Frequentantes',
-            render: (report) => <>
-            
-            </>
+            name: 'Dados da célula',
+            render: (report) => <span>
+                <span><b>Líder:</b> {report.lead?.name} </span>
+                {report.lead?.computedG12Leader && (<><br /><span><b>G12:</b> {report.lead?.computedG12Leader} </span></>)}
+                {report.cell?.place?.street && (<><br /><span><b> Endereço:</b> {report.cell?.place?.street}, {report.cell?.place?.number} {report.cell?.place?.neighborhood && (" - " + report.cell?.place?.neighborhood)}</span></>)}
+            </span>
+        },
+        {
+            name: 'Detalhes',
+            render: (report) => {
+                return (
+                    <span>
+                        <span>{moment(report.date).format('DD/MM/yyyy')} - {moment(report.date).format('HH:mm')}</span>
+                        <br />
+                        <span>
+                            {report.weekCellSkipped ?
+                                <>
+                                    <span><b>Não houve célula.</b></span>
+                                    <br />
+                                    <span><b>Observações:</b> {report.notes}</span>
+                                </>
+                                :
+                                <>
+                                    <span><b>Tema:</b> {report.subject}</span>
+                                </>}
+                        </span>
+                    </span>
+                )
+            }
+        },
+        {
+            name: 'Oferta',
+            properties: { md: 1 },
+            render: (report) => DecimalToMoney(report.contribution)
+        },
+        {
+            name: 'Participantes',
+            className: 'text-center',
+            properties: { md: 1 },
+            render: (report, index) => <>{report.numMembers}</>
         },
         {
             name: 'Visitantes',
-            render: (report) => <>
-            
-            </>
+            className: 'text-center',
+            properties: { md: 1 },
+            render: (report, index) => <>{report.numVisitors}</>
         },
         {
-            name: 'Horário',
+            name: '',
+            className: 'text-right actions',
+            properties: { md: 1 },
             render: (report) => <>
-                <span><b>Célula:</b> {report.dateOnly} + {report.timeOnly} </span> <br/>
+                <Link to={"/members/" + report.leadershipId} title="Ir para membro"><FontAwesomeIcon icon={faPerson} /></Link>
+                <Link to={"/cells/" + report.cellId} title="Ir para célula"><FontAwesomeIcon icon={faHouse} /></Link>
             </>
         }
-    ]
+    ];
+
+    const search = async () => {
+        setLoading(true);
+
+        let payload = {
+            ...searchData,
+            startDate: searchData.startDate ? FromBRDate(searchData.startDate) : null,
+            endDate: searchData.endDate ? FromBRDate(searchData.endDate) : null
+        }
+
+        const result = await GetReports(payload, pagination, {});
+        if (result.isValid) {
+            setCells(result.data);
+            setTotal(result.totalRecords ?? result.data.length);
+        }
+
+        setLoading(false);
+    };
+
+    const debounceEventTrigger = debounce(field => {
+        var currentValue = searchData[field.name];
+        var newValue = field.value;
+        if (newValue === '__/__/____' || !newValue) newValue = null;
+        if (newValue !== currentValue)
+            setSearchData({ ...searchData, [field.name]: newValue });
+    }, 500);
+
+    const handleSearchEvent = (event) => {
+        var field = event.target;
+        debounceEventTrigger(field);
+    };
+
+    useEffect(() => {
+        console.log(searchData);
+        setPagination({ ...pagination, page: 1 });
+    }, [searchData]);
+
+    useEffect(() => {
+        search();
+    }, [pagination]);
+
+    return (
+        <>
+            <div>
+                <h1>Relatórios</h1>
+                <hr />
+
+                <Container fluid className="filter-box">
+
+                    <Accordion className="mb-3" {... !isMobile && ({ defaultActiveKey: ['0'], alwaysOpen: true })}>
+                        <Accordion.Item eventKey="0">
+                            <Accordion.Header>
+                                Filtros
+                            </Accordion.Header>
+
+                            <Accordion.Body>
+
+                                <Row className="pr-3">
+                                    <Form.Group className="mb-3" as={Col}>
+                                        <Form.Label>Líder de Célula</Form.Label>
+                                        <Form.Control id="basic-url" name="leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
+                                    </Form.Group>
+
+                                    <Form.Group className="mb-3 pr-3" as={Col}>
+                                        <Form.Label>G12</Form.Label>
+                                        <Form.Control id="basic-url" name="g12Leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
+                                    </Form.Group>
+                                </Row>
+
+                                <Row className="pr-3">
+                                    <Form.Group className="mb-3" as={Col}>
+                                        <Form.Label>Desde</Form.Label>
+                                        <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={firstCurrentWeekDay}>
+                                            <Form.Control id="basic-url" name="startDate" autoComplete='off' />
+                                        </ReactInputMask>
+                                    </Form.Group>
+
+                                    <Form.Group className="mb-3 pr-3" as={Col}>
+                                        <Form.Label>Até</Form.Label>
+                                        <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={endCurrentWeekDay}>
+                                            <Form.Control id="basic-url" name="endDate" autoComplete='off' />
+                                        </ReactInputMask>
+                                    </Form.Group>
+                                </Row>
+
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+
+                </Container>
+
+                <div className="row">
+                    <Grid
+                        columns={columns}
+                        data={cells}
+                        textTotal='relatórios'
+                        loading={loading}
+                        pagination={pagination}
+                        setPagination={setPagination}
+                        totalRecords={total} />
+                </div>
+            </div>
+        </>
+    )
 }
