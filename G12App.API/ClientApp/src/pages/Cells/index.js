@@ -35,7 +35,7 @@ export const Cells = () => {
       properties: { sm: 3 },
       render: (cell) => <span>
         <span><b className="d-none d-md-inline">Líder: </b>{FormatFirstLastName(cell.lead?.name)} <small>({TranslateMinistryLevel(cell.lead?.ministryLevel)})</small></span><br />
-        {cell.lead?.computedG12Leader && (<span><b>G12: </b>{FormatFirstLastName(cell.lead?.computedG12Leader)}</span>)}
+        {cell.lead?.computedG12Leader && (<span><b className="d-none d-md-inline">G12: </b>{FormatFirstLastName(cell.lead?.computedG12Leader)}</span>)}
       </span>
     },
     {

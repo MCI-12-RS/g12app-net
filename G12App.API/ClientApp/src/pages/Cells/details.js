@@ -120,14 +120,17 @@ export const CellDetails = () => {
     const columns = [
         {
             name: '#',
+            properties: { md: 1 },
             render: (member) => (member.id.toString() ?? '0').padStart(5, '0')
         },
         {
             name: 'Data da Reunião',
-            render: (report) => (<><strong>{moment(report.date).format('DD/MM/yyyy')}</strong><br />{moment(report.date).format('HH:mm')}</>)
+            properties: { md: 2 },
+            render: (report) => (<span><strong>{moment(report.date).format('DD/MM/yyyy')}</strong><br />{moment(report.date).format('HH:mm')}</span>)
         },
         {
             name: 'Detalhes',
+            properties: { md: 4 },
             render: (report) => {
                 return (
                     report.weekCellSkipped ?
@@ -145,18 +148,25 @@ export const CellDetails = () => {
         },
         {
             name: 'Oferta',
+            properties: { md: 2 },
             render: (report) => DecimalToMoney(report.contribution)
         },
         {
             name: 'Participantes',
+            className: 'text-center',
+            properties: { md: 1 },
             render: (report, index) => displayReportNumbers(report, reports, index, 'numMembers')
         },
         {
             name: 'Visitantes',
+            className: 'text-center',
+            properties: { md: 1 },
             render: (report, index) => displayReportNumbers(report, reports, index, 'numVisitors')
         },
         {
             name: '',
+            properties: { md: 1 },
+            className: 'text-right actions',
             render: (report) => authContext.auth.user.role !== 'AppUser' &&
                 <FontAwesomeIcon icon={faRemove} className="remove-button" title="Remover relatório" onClick={(e) => DeleteReportPrompt(e, report.id)} />
         }
@@ -461,7 +471,7 @@ export const CellDetails = () => {
                                 <hr />
                                 <br />
                                 <h5>Últimos Relátorios enviados</h5>
-                                <Container fluid>
+                                <Container fluid className="no-background">
                                     <Row className="mb-3 pr-0 cell-reports-list">
                                         <Grid
                                             columns={columns}

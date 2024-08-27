@@ -121,6 +121,10 @@ code {
   border-radius: 5px;
 }
 
+.container-fluid.no-background {
+  background-color: transparent !important;
+}
+
 .form-check {
   margin-top: 3px;
 }
