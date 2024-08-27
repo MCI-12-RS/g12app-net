@@ -3,6 +3,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Repositories;
+using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -12,6 +13,7 @@ namespace G12App.Infrastructure.Data.Tests
     public class ReportRepositoryTests
     {
         private readonly TestFixture _fixture = new();
+        private readonly IServiceProvider _serviceProvider = Mock.Of<IServiceProvider>();
         private readonly ReportRepository _repository;
         private readonly Report _defaultReport = new()
         {
@@ -28,7 +30,8 @@ namespace G12App.Infrastructure.Data.Tests
 
         public ReportRepositoryTests()
         {
-            _repository = new ReportRepository(_fixture.Context, _fixture.HttpContextAccessor);
+            _repository = new ReportRepository(
+                _fixture.Context, _fixture.HttpContextAccessor, _serviceProvider);
         }
 
         [Fact]
