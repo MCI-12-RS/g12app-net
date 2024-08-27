@@ -144,6 +144,6 @@ input[type="checkbox"] + label {
 .clean-form{
   position: absolute;
   right: 0;
-  top: 20px;
+  top: 24px;
   font-size: 12px;
 }

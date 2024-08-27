@@ -8,7 +8,7 @@ import moment from 'moment';
 import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm, FormatFirstLastName } from '../../shared/utils.js';
 import { faHouse, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ReactInputMask from 'react-input-mask';
 
 export const Reports = () => {
@@ -29,11 +29,18 @@ export const Reports = () => {
         });
     const [loading, setLoading] = React.useState(false);
     const [total, setTotal] = React.useState(0);
+    const [sort] = React.useState({ sortBy: 'date', order: true });
+    const params = useParams();
+
+    const IsCellSpecific = () => {
+        return params.cellId;
+    };
 
     const columns = [
         {
             name: '#',
             properties: { md: 1 },
+            className: "text-left d-none d-md-block",
             render: (member) => (member.id.toString() ?? '0').padStart(5, '0')
         },
         {
@@ -90,8 +97,8 @@ export const Reports = () => {
             className: 'text-right actions',
             properties: { md: 1 },
             render: (report) => <>
-                <Link to={"/members/" + report.leadershipId} title="Ir para membro"><FontAwesomeIcon icon={faPerson} /></Link>
-                <Link to={"/cells/" + report.cellId} title="Ir para célula"><FontAwesomeIcon icon={faHouse} /></Link>
+                <Link to={"/members/" + report.leadershipId} title="Dados do líder"><FontAwesomeIcon icon={faPerson} /></Link>
+                <Link to={"/cells/" + report.cellId} title="Dados da célula"><FontAwesomeIcon icon={faHouse} /></Link>
             </>
         }
     ];
@@ -105,7 +112,7 @@ export const Reports = () => {
             endDate: searchData.endDate ? FromBRDate(searchData.endDate) : null
         }
 
-        const result = await GetReports(payload, pagination, {});
+        const result = await GetReports(payload, pagination, sort);
         if (result.isValid) {
             setCells(result.data);
             setTotal(result.totalRecords ?? result.data.length);
@@ -135,59 +142,67 @@ export const Reports = () => {
         search();
     }, [pagination]);
 
+    useEffect(() => {
+        if (params.cellId) {
+            setSearchData({ ...searchData, cellId: params.cellId, startDate: null, endDate: null });
+        }
+    }, [params.cellId]);
+
     return (
         <>
             <div>
-                <h1>Relatórios</h1>
+                {!IsCellSpecific() ? <h1>Relatórios</h1> : <h1>Relatórios da célula</h1>}
                 <hr />
 
-                <Container fluid className="filter-box">
+                {!IsCellSpecific() && (
+                    <Container fluid className="filter-box">
 
-                    <Accordion className="mb-3" {... !isMobile && ({ defaultActiveKey: ['0'], alwaysOpen: true })}>
-                        <Accordion.Item eventKey="0">
-                            <Accordion.Header>
-                                Filtros
-                            </Accordion.Header>
+                        <Accordion className="mb-3" {... !isMobile && ({ defaultActiveKey: ['0'], alwaysOpen: true })}>
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header>
+                                    Filtros
+                                </Accordion.Header>
 
-                            <Accordion.Body>
+                                <Accordion.Body>
 
-                                <Row className="clean-form">
-                                    <Link onClick={() => CleanSearchForm(setSearchData)}>Limpar filtros</Link>
-                                </Row>
+                                    <Row className="clean-form">
+                                        <Link onClick={() => CleanSearchForm(setSearchData)}>Limpar filtros</Link>
+                                    </Row>
 
-                                <Row className="pr-3">
-                                    <Form.Group className="mb-3" as={Col}>
-                                        <Form.Label>Líder de Célula</Form.Label>
-                                        <Form.Control id="basic-url" name="leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
-                                    </Form.Group>
+                                    <Row className="pr-3">
+                                        <Form.Group className="mb-3" as={Col}>
+                                            <Form.Label>Líder de Célula</Form.Label>
+                                            <Form.Control id="basic-url" name="leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
+                                        </Form.Group>
 
-                                    <Form.Group className="mb-3 pr-3" as={Col}>
-                                        <Form.Label>G12</Form.Label>
-                                        <Form.Control id="basic-url" name="g12Leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
-                                    </Form.Group>
-                                </Row>
+                                        <Form.Group className="mb-3 pr-3" as={Col}>
+                                            <Form.Label>G12</Form.Label>
+                                            <Form.Control id="basic-url" name="g12Leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
+                                        </Form.Group>
+                                    </Row>
 
-                                <Row className="pr-3">
-                                    <Form.Group className="mb-3" as={Col}>
-                                        <Form.Label>Desde</Form.Label>
-                                        <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={firstCurrentWeekDay}>
-                                            <Form.Control id="basic-url" name="startDate" autoComplete='off' />
-                                        </ReactInputMask>
-                                    </Form.Group>
+                                    <Row className="pr-3">
+                                        <Form.Group className="mb-3" as={Col}>
+                                            <Form.Label>Desde</Form.Label>
+                                            <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={firstCurrentWeekDay}>
+                                                <Form.Control id="basic-url" name="startDate" autoComplete='off' />
+                                            </ReactInputMask>
+                                        </Form.Group>
 
-                                    <Form.Group className="mb-3 pr-3" as={Col}>
-                                        <Form.Label>Até</Form.Label>
-                                        <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={endCurrentWeekDay}>
-                                            <Form.Control id="basic-url" name="endDate" autoComplete='off' />
-                                        </ReactInputMask>
-                                    </Form.Group>
-                                </Row>
+                                        <Form.Group className="mb-3 pr-3" as={Col}>
+                                            <Form.Label>Até</Form.Label>
+                                            <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={endCurrentWeekDay}>
+                                                <Form.Control id="basic-url" name="endDate" autoComplete='off' />
+                                            </ReactInputMask>
+                                        </Form.Group>
+                                    </Row>
 
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
 
-                </Container>
+                    </Container>
+                )}
 
                 <div className="row">
                     <Grid

@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faList, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FormatFirstLastName, RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay, CleanSearchForm } from '../../shared/utils.js';
 
 export const Cells = () => {
@@ -27,7 +27,7 @@ export const Cells = () => {
     {
       name: '#',
       properties: { md: 1 },
-      className: 'text-left',
+      className: "text-left d-none d-md-block",
       render: (cell) => (cell.id.toString() ?? '0').padStart(4, '0')
     },
     {
@@ -54,7 +54,11 @@ export const Cells = () => {
     {
       name: '',
       className: 'text-right actions',
-      render: (cell) => <Link to={"/cells/" + cell.id}><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
+      render: (cell) => 
+        <>
+          <Link to={"/cells/" + cell.id} title="Dados da célula"><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
+          <Link to={"/cells/" + cell.id + "/reports"} title="Ver relatórios"><FontAwesomeIcon icon={faList} /></Link>
+        </>
     }
 
   ];

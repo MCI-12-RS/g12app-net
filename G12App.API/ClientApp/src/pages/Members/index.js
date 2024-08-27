@@ -34,7 +34,7 @@ export const Members = () => {
     {
       name: '#',
       properties: { sm: 1 },
-      className: 'text-left',
+      className: "text-left d-none d-md-block",
       render: (member) => (member.id.toString() ?? '0').padStart(4, '0')
     },
     {
@@ -50,6 +50,7 @@ export const Members = () => {
     {
       name: 'Liderança',
       properties: { sm: 3 },
+      classFunction: (member) => member.ministryLevel === 0 || member.ministryLevel === 1 ? 'd-none' : '', 
       render: (member) => getLeadership(member)
     },
     {
@@ -63,6 +64,7 @@ export const Members = () => {
     {
       name: 'Endereço',
       properties: { sm: 2 },
+      className: "d-none d-md-block",
       render: (member) => RenderGridAddress(member.homeAddress)
     },
     {

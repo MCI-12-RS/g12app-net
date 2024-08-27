@@ -41,7 +41,7 @@
     position: relative;
 }
 
-.table.grid .grid-item+.grid-item {
+.table.grid .grid-item + .grid-item {
     border-top: 0;
 }
 
@@ -80,29 +80,33 @@
     display: block;
 }
 
-
 .inside-column-name {
     font-weight: bold;
     margin-right: 3px;
-    min-width: 120px;
-    display: inline-block;
-    width: auto !important;
-    vertical-align: middle;
-    font-size: 1.03em;
+    display: block;
+    width: 100%;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: .9em;
+    text-align: left;
+    text-decoration: underline;
 }
 
 .inside-column-value {
-    display: inline-block;
-    width: auto !important;
-    vertical-align: middle;
+    display: block;
+    width: 100%;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    text-align: left;
 }
 
 @media (max-width: 576px) {
-    .actions {
+    .actions div {
         position: absolute;
         top: 38%;
         right: 0px;
         zoom: 1.3;
+        text-align: right !important;
     }
 }
 

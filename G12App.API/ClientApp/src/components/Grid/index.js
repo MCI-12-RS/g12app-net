@@ -39,13 +39,20 @@ const Grid = ({
                         {data.map((item, index) =>
                         (<Row key={item.id} className={"grid-item d-block d-md-flex " + ((index % 2) === 0 ? 'even' : 'odd')} >
                             {columns.map((column) =>
-                                <Col key={column.name + '-' + item.id} className={"align-middle col " + (column?.className ?? '')} {...column.properties}>
-                                    <span className="mobile-grid-value d-inline-block d-md-none">
-                                        <strong className="inside-column-name">{column.name}</strong>
-                                        <span className="inside-column-value">{column.render(item, index)}</span>
-                                    </span>
-                                    <div className="grid-cell-content d-none d-md-inline-flex">{column.render(item, index)}</div>
-                                </Col>
+                                <>
+                                    <div key={column.name + '-' + item.id} 
+                                        className={"d-block d-md-none " + (column?.className ?? '') + (column.classFunction ? column.classFunction(item) : '')} 
+                                        {...column.properties}>
+                                        <div className="inside-column-name d-md-none">{column.name}</div>
+                                        <div className="inside-column-value d-md-none">{column.render(item, index)}</div>
+                                    </div>
+
+                                    <Col key={column.name + '-' + item.id} 
+                                        className={"align-middle col d-none d-md-block " + (column?.className ?? '') + (column.classFunction ? column.classFunction(item) : '')} 
+                                        {...column.properties}>
+                                        <div className="grid-cell-content d-none d-md-inline-flex">{column.render(item, index)}</div>
+                                    </Col>
+                                </>
                             )}
                         </Row>)
                         )}

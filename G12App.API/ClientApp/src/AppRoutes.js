@@ -37,6 +37,10 @@ const AppRoutes = [
     element: <CellDetails key="new-cell" />
   },
   {
+    path: '/cells/:cellId/reports',
+    element: <Reports key="reports" />
+  },
+  {
     path: '/cells/:id',
     element: <CellDetails key="cell-details" />
   },
