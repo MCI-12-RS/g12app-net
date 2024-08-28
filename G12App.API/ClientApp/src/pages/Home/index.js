@@ -19,19 +19,18 @@ export const Home = () => {
 
     var arrCards = [];
 
-    if (data.totalMembers)
-      arrCards.push({ type: 'info', title: <>Membros</>, value: data.totalMembers, link: '/members/' });
+    arrCards.push({ type: 'info', title: <>Relatórios<br />Enviados</>, value: data.weekReports, link: '/reports/', group: 'weekly' });
 
-    if (data.totalCells) {
-      arrCards.push({ type: 'info', title: <>Celulas<br />Ativas</>, value: data.totalCells, link: '/cells/' });
+    var pendingReportsType = data.cellsPendingReports > 0 ? 'danger' : 'success';
+    arrCards.push({ type: pendingReportsType, title: <>Células com<br /> Relatórios Pendentes</>, value: data.cellsPendingReports, link: '/cells/pending-reports', group: 'weekly' });
+    
+    arrCards.push({ type: 'info', title: <>Visitantes em<br />Células</>, value: data.weekVisitors, link: '/reports/', group: 'weekly' });
 
+    arrCards.push({ type: 'info', title: <>Membros</>, value: data.totalMembers, link: '/members/', group: 'general' });
 
-      var pendingReports = Math.max(0, data.totalCells - data.weekReports);
-      var pendingReportsType = pendingReports > 0 ? 'warning' : 'success';
-      arrCards.push({ type: pendingReportsType, title: <>Relatorios<br />Pendentes</>, value: pendingReports });
-    }
+    arrCards.push({ type: 'info', title: <>Celulas<br />Ativas</>, value: data.totalCells, link: '/cells/', group: 'general' });
 
-    setCards(arrCards);
+    setCards(Object.entries(Object.groupBy(arrCards, ({ group }) => group)));
   }
 
   React.useEffect(() => {
@@ -53,25 +52,27 @@ export const Home = () => {
       <Spinner animation="border" /> :
 
       <>
-        <Container fluid className="dashboard">
-          <h1>Dashboard</h1>
-          <hr />
+        <div className="dashboard">
+          {cards.map((group, index) => (
+            <>
+              <h3>{group[0] == 'weekly' ? 'Semanal' : 'Geral'}</h3>
+              <Container fluid className="dashboard-cards">
+                {group[1].map((card, index) => (
+                  <Card bg={card.type} key={index} text="" className={"mb-2 " + (card.link && ' clickable')} onClick={() => cardClick(card)}>
+                    <Card.Body>
+                      <Card.Title>{card.value}</Card.Title>
+                      <Card.Text>
+                        {card.title}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </Container>
+            </>
+          ))}
 
-          <Container fluid className="dashboard-cards">
-            {cards.map((card, index) => (
-              <Card bg={card.type} key={index} text="" className={"mb-2" + (card.link && ' clickable')} onClick={() => cardClick(card)}>
-                <Card.Body>
-                  <Card.Title>{card.value}</Card.Title>
-                  <Card.Text>
-                    {card.title}
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            ))}
 
-          </Container>
-
-        </Container>
+        </div>
       </>
   );
 };

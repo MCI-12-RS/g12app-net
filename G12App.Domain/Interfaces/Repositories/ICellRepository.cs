@@ -2,6 +2,7 @@
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace G12App.Domain.Interfaces.Repositories
@@ -14,5 +15,6 @@ namespace G12App.Domain.Interfaces.Repositories
         Task<Cell> Create(Cell cell);
         Task<Cell> Update(Cell cell);
         Task<Cell> Remove(Cell cell);
+        IQueryable<Cell> GetCellsPendingReport(Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery);
     }
 }

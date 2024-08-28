@@ -3,6 +3,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace G12App.Domain.Interfaces.Repositories
@@ -16,5 +17,8 @@ namespace G12App.Domain.Interfaces.Repositories
         Task<Report> Create(Report report);
         Task<Report> Update(Report report);
         Task<Report> Remove(Report report);
+
+        IQueryable<Report> GetReportsQueryableAsync(Query<ReportFilter> query);
+        Task<int> GetCellsVisitors(Query<ReportFilter> query);
     }
 }

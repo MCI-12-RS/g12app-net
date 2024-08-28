@@ -1,7 +1,6 @@
 ﻿using G12App.Domain.Model.Base;
 using G12App.Domain.Model.Enum;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace G12App.Domain.Model
 {

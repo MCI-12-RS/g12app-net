@@ -31,24 +31,31 @@ namespace G12App.Application.Services
 
             var endDayWeek = startDayWeek + TimeSpan.FromDays(7) - TimeSpan.FromSeconds(1);
 
-            var totalMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>() { });
-            var totalCells = await _cellRepository.CountCellsAsync(new Query<CellFilter>() { });
-
-            var weekReports = await _reportRepository.CountReportsAsync(
-                new Query<ReportFilter>()
+            var memberFilter = new Query<MemberFilter>() { };
+            var cellFilter = new Query<CellFilter>() { };
+            var reportFilter = new Query<ReportFilter>()
+            {
+                Filter = new ReportFilter()
                 {
-                    Filter = new ReportFilter()
-                    {
-                        StartDate = startDayWeek,
-                        EndDate = endDayWeek,
-                    }
-                });
+                    StartDate = startDayWeek,
+                    EndDate = endDayWeek,
+                }
+            };
+
+            var totalMembers = await _memberRepository.CountMembersAsync(memberFilter);
+            var totalCells = await _cellRepository.CountCellsAsync(cellFilter);
+            var cellsPendingReports = _cellRepository.GetCellsPendingReport(cellFilter, reportFilter).Count();
+            var weekReports = await _reportRepository.CountReportsAsync(reportFilter);
+
+            var weekVisitors = await _reportRepository.GetCellsVisitors(reportFilter);
 
             return new DashboardDto()
             {
                 TotalMembers = totalMembers,
                 TotalCells = totalCells,
-                WeekReports = weekReports
+                CellsPendingReports = cellsPendingReports,
+                WeekReports = weekReports,
+                WeekVisitors = weekVisitors
             };
         }
     }

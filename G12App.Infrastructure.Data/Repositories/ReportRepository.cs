@@ -47,7 +47,7 @@ namespace G12App.Infrastructure.Data.Repositories
             return report;
         }
 
-        private IQueryable<Report> GetReportsQueryableAsync(Query<ReportFilter> query)
+        public IQueryable<Report> GetReportsQueryableAsync(Query<ReportFilter> query)
         {
             return _context.Reports
                     .IgnoreAutoIncludes()
@@ -73,6 +73,14 @@ namespace G12App.Infrastructure.Data.Repositories
                             .ApplyPaging(query)
                             .ToListAsync();
         }
+
+        public async Task<int> GetCellsVisitors(Query<ReportFilter> query)
+        {
+            return await GetReportsQueryableAsync(query)
+                            .ApplySort(query)
+                            .SumAsync(x => x.NumVisitors ?? 0);
+        }
+
 
         public async Task<int> CountReportsAsync(Query<ReportFilter> query)
         {

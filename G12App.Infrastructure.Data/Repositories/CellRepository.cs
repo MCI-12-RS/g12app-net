@@ -6,6 +6,8 @@ using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,13 +17,16 @@ namespace G12App.Infrastructure.Data.Repositories
     public class CellRepository : ICellRepository
     {
         private readonly AppDbContext _context;
+        private readonly IReportRepository _reportRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CellRepository(
             AppDbContext context,
+            IReportRepository reportRepository,
             IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _reportRepository = reportRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -91,6 +96,26 @@ namespace G12App.Infrastructure.Data.Repositories
 
             await _context.SaveChangesAsync();
             return cell;
+        }
+
+        public IQueryable<Cell> GetCellsPendingReport(Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery)
+        {
+            var cells = this.GetCellsQueryableAsync(cellQuery)
+                            .Select(cell => new
+                            {
+                                Cell = cell,
+                                Report = _reportRepository.GetReportsQueryableAsync(reportQuery)
+                                                        .FirstOrDefault(r => r.CellId == cell.Id)
+                            })
+                            .Where(cr => cr.Report == null)
+                            .Select(cr => cr.Cell)
+                            .Where(cell => cell.WeekDay < DateTime.Now.DayOfWeek ||
+                                            (cell.WeekDay == DateTime.Now.DayOfWeek &&
+                                            DateTime.Now.Hour > (Convert.ToInt32(cell.Time.Substring(0, 2)) + 1)
+                                            &&
+                                            DateTime.Now.Minute > Convert.ToInt32(cell.Time.Substring(3, 2))));
+
+            return cells;
         }
     }
 }

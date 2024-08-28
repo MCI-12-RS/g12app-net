@@ -6,6 +6,7 @@ import { MemberDetails } from "./pages/Members/details";
 import { LoginPage } from "./pages/Login";
 import { ReportDetails } from "./pages/Report/details";
 import { Reports } from "./pages/Report";
+import { AppChanges } from "./pages/AppChanges";
 
 const AppRoutes = [
   {
@@ -33,12 +34,16 @@ const AppRoutes = [
     element: <Cells key="cells" />
   },
   {
+    path: '/cells/pending-reports',
+    element: <Cells key="cells-pending-reports" />
+  },
+  {
     path: '/new-cell',
     element: <CellDetails key="new-cell" />
   },
   {
     path: '/cells/:cellId/reports',
-    element: <Reports key="reports" />
+    element: <Reports key="cell-reports" />
   },
   {
     path: '/cells/:id',
@@ -55,6 +60,11 @@ const AppRoutes = [
   {
     path: '/login',
     element: <LoginPage key="login" />,
+    public: true
+  },
+  {
+    path: '/last-changes',
+    element: <AppChanges key="updates" />,
     public: true
   }
 ];

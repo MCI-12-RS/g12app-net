@@ -50,7 +50,7 @@ namespace G12App.Domain.Mappings
                 .ForMember(x => x.Lead, opt => opt.Ignore())
                 .ForMember(x => x.Host, opt => opt.Ignore())
                 .ForMember(x => x.Timothy, opt => opt.Ignore())
-                .ForMember(x => x.Time, opt => opt.MapFrom(x => x.Time.ToString()));
+                .ForMember(x => x.Time, opt => opt.MapFrom(x => x.Time.ToString("HH:mm")));
 
             CreateMap<Address, AddressDto>().ReverseMap();
 

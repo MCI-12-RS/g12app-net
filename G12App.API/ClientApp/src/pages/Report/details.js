@@ -236,7 +236,7 @@ export const ReportDetails = () => {
 
                                 {cell && cell.id && (
                                     <>
-                                        <h6>Dados da Célula selecionada</h6>
+                                        <h6 className="mt-3">Dados da Célula selecionada</h6>
                                         <Row className="mb-3 pr-0">
                                             <Col xs={12} md={4} className="mb-3 pr-0">
                                                 <InputGroup>
