@@ -157,6 +157,12 @@ namespace G12App.Infrastructure.Data.Migrations
                     b.Property<string>("ComputedG12Leader")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ComputedG12LeaderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ComputedG12LeaderSpouseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ComputedLeadershipName")
                         .HasColumnType("longtext");
 

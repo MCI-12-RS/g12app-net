@@ -14,5 +14,16 @@ namespace G12App.Infrastructure.Events
 
         public ValueTask<IEvent> Dequeue(CancellationToken token)
             => Reader.ReadAsync(token);
+
+        public int CountEvent()
+        {
+            return _channel.Reader.Count;
+        }
+
+        public IEvent PeekEvent()
+        {
+            _channel.Reader.TryPeek(out var ev);
+            return ev;
+        }
     }
 }

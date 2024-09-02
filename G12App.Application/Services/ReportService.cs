@@ -44,14 +44,15 @@ namespace G12App.Application.Services
                     reportEntity.Members.Add(new Member() { Id = member.Id.GetValueOrDefault() });
 
             if (reportDTO.LeadershipId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.LeadershipId))
-                reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.LeadershipId));
+                reportEntity.Members.Add(new Member() { Id = reportDTO.LeadershipId });
 
             if (reportDTO.TimothyId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.TimothyId))
-                reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.TimothyId));
+                reportEntity.Members.Add(new Member() { Id = reportDTO.TimothyId });
 
             if (reportDTO.HostId != default && !reportEntity.Members.Any(x => x.Id == reportDTO.HostId))
-                reportEntity.Members.Add(await _memberRepository.GetMemberByIdAsync(reportDTO.HostId));
+                reportEntity.Members.Add(new Member() { Id = reportDTO.HostId });
 
+            reportEntity.Members = reportEntity.Members.GroupBy(x => x.Id).Select(x => x.LastOrDefault()).ToList();
             reportEntity.NumMembers = reportEntity.Members.Count;
             reportEntity.NumVisitors = reportDTO.Visitors.Where(x => !string.IsNullOrWhiteSpace(x)).Count();
 

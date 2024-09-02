@@ -30,7 +30,7 @@ namespace G12App.Infrastructure.Data.Repositories
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private IQueryable<Cell> GetCellsQueryableAsync(Query<CellFilter> query)
+        public IQueryable<Cell> GetCellsQueryableAsync(Query<CellFilter> query)
         {
             return _context.Cells
                 .IgnoreAutoIncludes()

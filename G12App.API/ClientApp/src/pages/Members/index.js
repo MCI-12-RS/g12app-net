@@ -23,7 +23,7 @@ export const Members = () => {
 
   const getLeadership = (member) => {
     switch (member.ministryLevel) {
-      case 0: case 1: return '-';
+      case 0: case 1: case 9999999: return (member.hasNoLeadership ? 'Sem liderança' : '-');
       case 12: return <span className="text-nowrap"><b>{FormatFirstLastName(member.computedLeadershipName)}</b></span>;
       case 144: return <span className="text-nowrap"><b>{FormatFirstLastName(member.computedG12Leader)}</b></span>;
       default: return <span className="text-nowrap"><b>{FormatFirstLastName(member.computedG12Leader)}</b> / {FormatFirstLastName(member.computedLeadershipName)}</span>;
@@ -45,7 +45,7 @@ export const Members = () => {
     {
       name: 'Nível',
       properties: { sm: 1 },
-      render: (member) => TranslateMinistryLevel(member.ministryLevel)
+      render: (member) => member.hasNoLeadership ? '-' : TranslateMinistryLevel(member.ministryLevel)
     },
     {
       name: 'Liderança',

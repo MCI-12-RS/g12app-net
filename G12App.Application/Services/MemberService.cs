@@ -174,8 +174,23 @@ namespace G12App.Application.Services
             leadershipList.Reverse();
             leadershipIdList.Reverse();
 
+            if (memberEntity.HasNoLeadership)
+            {
+                memberEntity.MinistryLevel = 9999999;
+                memberEntity.ComputedLeadershipName = null;
+                memberEntity.ComputedG12Leader = null;
+                memberEntity.ComputedG12LeaderId = null;
+                memberEntity.ComputedG12LeaderSpouseId = null;
+                memberEntity.LeadershipTree = null;
+                memberEntity.LeadershipIdTree = null;
+                memberEntity.ChildrenMembersComputed = true;
+                return;
+            }
+
             memberEntity.ComputedLeadershipName = leadershipList.LastOrDefault()?.Name ?? string.Empty;
             memberEntity.ComputedG12Leader = leadershipList.Skip(1).FirstOrDefault()?.Name;
+            memberEntity.ComputedG12LeaderId = leadershipList.Skip(1).FirstOrDefault()?.Id;
+            memberEntity.ComputedG12LeaderSpouseId = leadershipList.Skip(1).FirstOrDefault()?.SpouseId;
             memberEntity.LeadershipTree = string.Join(" / ", leadershipList.Select(x => x.Name));
             memberEntity.LeadershipIdTree = $"|{string.Join("|", leadershipIdList.Where(x => x.HasValue))}|";
             memberEntity.MinistryLevel = (int)Math.Pow(12, leadershipList.Count);

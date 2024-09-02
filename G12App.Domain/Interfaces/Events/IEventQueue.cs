@@ -8,5 +8,9 @@ namespace G12App.Domain.Interfaces.Events
         ValueTask AddEvent(IEvent ev, CancellationToken token);
 
         ValueTask<IEvent> Dequeue(CancellationToken token);
+
+        IEvent PeekEvent();
+
+        int CountEvent();
     }
 }

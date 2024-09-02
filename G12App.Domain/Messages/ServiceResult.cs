@@ -8,6 +8,8 @@ namespace G12App.Domain.Messages
 {
     public class ServiceResult
     {
+        public readonly static ServiceResult Success = new ServiceResult();
+
         public bool IsValid => !Errors.Any();
 
         public List<Error> Errors { get; set; } = new List<Error>();
@@ -26,6 +28,15 @@ namespace G12App.Domain.Messages
         public ServiceResult(string errorMessage) : this() => (Errors) = (new List<Error>() { new Error(errorMessage) });
 
         public ServiceResult(HttpStatusCode statusCode, string errorMessage) : this() => (StatusCode, Errors) = (statusCode, new List<Error>() { new Error(errorMessage) });
+
+        public override string ToString()
+        {
+            if (this.IsValid)
+                return "Valid result.";
+            else
+                return string.Concat("Error result: ",
+                            Errors?.Aggregate(string.Empty, (agg, err) => $"{err.ErrorMessage}; "));
+        }
     }
 
     public class ServiceResult<TData> : ServiceResult
@@ -38,7 +49,7 @@ namespace G12App.Domain.Messages
 
         public ServiceResult(TData data) => (Data) = (data);
 
-        public ServiceResult(TData data, int totalRecords) :this(data) => (TotalRecords) = (totalRecords);
+        public ServiceResult(TData data, int totalRecords) : this(data) => (TotalRecords) = (totalRecords);
 
         public ServiceResult(TData data, IEnumerable<Error> errors) : this(data) => (Errors) = (errors.ToList());
 

@@ -33,7 +33,13 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Report> Create(Report report)
         {
+            _context.ChangeTracker.Clear();
+            if (report.Members != null && report.Members.Any())
+                foreach (var member in report.Members)
+                    _context.Attach(member);
+
             _context.Add(report);
+
             await _context.SaveChangesAsync();
             return report;
         }

@@ -95,6 +95,8 @@ namespace G12App.Application.Services
                     new(CustomClaims.LeadershipId, member.LeadershipId?.ToString() ?? string.Empty),
                     new(ClaimTypes.Role, string.IsNullOrWhiteSpace(member.Role) ? Roles.AppUser : member.Role),
                     new(CustomClaims.G12LeadershipName, member.ComputedG12Leader ?? string.Empty),
+                    new(CustomClaims.G12LeadershipId, member.ComputedG12LeaderId.ToString() ?? string.Empty),
+                    new(CustomClaims.G12LeadershipSpouseId, member.ComputedG12LeaderSpouseId.ToString() ?? string.Empty),
                     new(CustomClaims.SpouseId, member.SpouseId?.ToString() ?? string.Empty),
                 ]),
                 Expires = DateTime.UtcNow.AddDays(1),

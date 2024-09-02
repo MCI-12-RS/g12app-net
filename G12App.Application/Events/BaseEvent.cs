@@ -20,5 +20,10 @@ namespace G12App.Application.Events
 
         protected virtual Task HandleInternal(IServiceProvider serviceProvider, CancellationToken token)
             => Task.CompletedTask;
+
+        public override string ToString()
+        {
+            return string.Concat(this.GetType().Name, ": ", EntityId);
+        }
     }
 }

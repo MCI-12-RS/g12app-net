@@ -11,6 +11,10 @@
         public const string G12LeadershipName = nameof(G12LeadershipName);
 
         public const string SpouseId = nameof(SpouseId);
+
+        public static string G12LeadershipId = nameof(G12LeadershipId);
+
+        public static string G12LeadershipSpouseId = nameof(G12LeadershipSpouseId);
     }
 
     public static class Roles

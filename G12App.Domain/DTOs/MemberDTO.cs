@@ -35,6 +35,8 @@ namespace G12App.Domain.DTOs
         public bool Idle { get; set; }
         public string ComputedG12Leader { get; set; }
         public string ComputedLeadershipName { get; set; }
+        public int? ComputedG12LeaderId { get; set; }
+        public int? ComputedG12LeaderSpouseId { get; set; }
         public string LeadershipTree { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }

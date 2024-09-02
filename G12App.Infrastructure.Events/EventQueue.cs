@@ -13,11 +13,22 @@ namespace G12App.Infrastructure.Events
             return ValueTask.CompletedTask;
         }
 
+        public int CountEvent()
+        {
+            return _queue.Count;
+        }
+
         public ValueTask<IEvent> Dequeue(CancellationToken token)
         {
             IEvent ev = null;
             _queue.TryDequeue(out ev);
             return ValueTask.FromResult(ev);
+        }
+
+        public IEvent PeekEvent()
+        {
+            _queue.TryPeek(out var ev);
+            return ev;
         }
     }
 }

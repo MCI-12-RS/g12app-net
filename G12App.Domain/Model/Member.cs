@@ -47,9 +47,13 @@ namespace G12App.Domain.Model
 
         public bool Idle { get; set; }
 
+        public int? ComputedG12LeaderId { get; set; }
+
         public string ComputedG12Leader { get; set; }
 
         public string ComputedLeadershipName { get; set; }
+
+        public int? ComputedG12LeaderSpouseId { get; set; }
 
         public string LeadershipTree { get; set; }
 
