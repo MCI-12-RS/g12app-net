@@ -100,6 +100,8 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public IQueryable<Cell> GetCellsPendingReport(Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery)
         {
+            var localNow = DateTimeOffset.Now.ToOffset(TimeSpan.FromHours(-3)).DateTime;
+
             var cells = this.GetCellsQueryableAsync(cellQuery)
                             .Select(cell => new
                             {
@@ -109,11 +111,11 @@ namespace G12App.Infrastructure.Data.Repositories
                             })
                             .Where(cr => cr.Report == null)
                             .Select(cr => cr.Cell)
-                            .Where(cell => cell.WeekDay < DateTime.Now.DayOfWeek ||
-                                            (cell.WeekDay == DateTime.Now.DayOfWeek &&
-                                            DateTime.Now.Hour > (Convert.ToInt32(cell.Time.Substring(0, 2)) + 1)
+                            .Where(cell => cell.WeekDay < localNow.DayOfWeek ||
+                                            (cell.WeekDay == localNow.DayOfWeek &&
+                                            localNow.Hour > (Convert.ToInt32(cell.Time.Substring(0, 2)) + 1)
                                             &&
-                                            DateTime.Now.Minute > Convert.ToInt32(cell.Time.Substring(3, 2))));
+                                            localNow.Minute > Convert.ToInt32(cell.Time.Substring(3, 2))));
 
             return cells;
         }

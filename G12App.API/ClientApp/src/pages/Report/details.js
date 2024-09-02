@@ -180,7 +180,7 @@ export const ReportDetails = () => {
         if (name === 'cellId')
             fetchCell(value);
         if (name === 'members')
-            setReport({ ...report, members: value });
+            setReport({ ...report, members: value.map(x => ({id: x})) });
     };
 
 
