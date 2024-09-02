@@ -16,6 +16,7 @@ namespace G12App.Infrastructure.Data.Tests
     {
         private readonly TestFixture _fixture = new TestFixture();
         private readonly CellRepository _repository;
+        private readonly ReportRepository _reportRepository;
         private readonly Cell _defaultCellToCreate = new Cell()
         {
             LeadId = 1,
@@ -30,7 +31,7 @@ namespace G12App.Infrastructure.Data.Tests
         public CellRepositoryTests()
         {
 
-            _repository = new CellRepository(_fixture.Context, _fixture.HttpContextAccessor);
+            _repository = new CellRepository(_fixture.Context, _reportRepository, _fixture.HttpContextAccessor);
         }
 
         [Fact]
