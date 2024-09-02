@@ -84,7 +84,7 @@
     font-weight: bold;
     margin-right: 3px;
     display: block;
-    width: 100%;
+    width: 90%;
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
     font-size: .9em;
@@ -94,10 +94,25 @@
 
 .inside-column-value {
     display: block;
-    width: 100%;
+    width: 90%;
     margin-top: 0 !important;
     padding-top: 0 !important;
     text-align: left;
+}
+
+.actions .inside-column-name, 
+.actions .inside-column-value {
+    width: 10%;
+    margin-right: 3px;
+    clear: both;
+}
+
+.actions a {    
+    font-size: 1.3em;
+}
+
+.actions a + a {    
+    margin-left: 15px;
 }
 
 @media (max-width: 576px) {
@@ -108,12 +123,8 @@
         zoom: 1.3;
         text-align: right !important;
     }
-}
 
-.actions a {    
-    font-size: 1.3em;
-}
-
-.actions a + a {    
-    margin-left: 15px;
+    .actions a + a {    
+        margin-left: 0;
+    }
 }

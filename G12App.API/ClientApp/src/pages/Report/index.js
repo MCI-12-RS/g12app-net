@@ -96,10 +96,10 @@ export const Reports = () => {
             name: '',
             className: 'text-right actions',
             properties: { md: 1 },
-            render: (report) => <>
+            render: (report) => <span className='text-center'>
                 <Link to={"/members/" + report.leadershipId} title="Dados do líder"><FontAwesomeIcon icon={faPerson} /></Link>
                 <Link to={"/cells/" + report.cellId} title="Dados da célula"><FontAwesomeIcon icon={faHouse} /></Link>
-            </>
+            </span>
         }
     ];
 
