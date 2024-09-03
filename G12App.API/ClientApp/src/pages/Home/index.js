@@ -20,36 +20,37 @@ export const Home = () => {
   const SetGraphsData = (data) => {
     var arrGraphs = [];
 
-    arrGraphs.push({
-      element: <PieChart className='graph-element' style={{ margin: '0 auto' }}
+    if (data.totalCellReportedSkipped || data.totalCellReportedCompleted)
+      arrGraphs.push({
+        element: <PieChart className='graph-element' style={{ margin: '0 auto' }}
 
-        slotProps={{
-          legend: {
-            direction: 'column',
-            position: { vertical: 'bottom', horizontal: 'middle' },
-            padding: 0,
-            labelStyle: {
-              fontSize: 14
+          slotProps={{
+            legend: {
+              direction: 'column',
+              position: { vertical: 'bottom', horizontal: 'middle' },
+              padding: 0,
+              labelStyle: {
+                fontSize: 14
+              },
+              itemMarkWidth: 11,
+              itemMarkHeight: 10,
             },
-            itemMarkWidth: 11,
-            itemMarkHeight: 10,
-          },
-        }}
-        margin={{ top: 0, bottom: 60, left: 0, right: 0 }}
-        width={350}
-        height={270}
-        series={[
-          {
-            data: [
-              { id: 0, value: data.totalCellReportedSkipped, label: 'Células Canceladas', color: 'rgb(220, 53, 69)' },
-              { id: 1, value: data.totalCellReportedCompleted, label: 'Células Cumpridas', color: 'rgba(0, 105, 92, 0.9)' },
-            ]
-          }
-        ]}
-      />,
-      group: 'weekly',
-      title: 'Relatórios Entregues'
-    });
+          }}
+          margin={{ top: 0, bottom: 60, left: 0, right: 0 }}
+          width={350}
+          height={270}
+          series={[
+            {
+              data: [
+                { id: 0, value: data.totalCellReportedSkipped, label: 'Células Canceladas', color: 'rgb(220, 53, 69)' },
+                { id: 1, value: data.totalCellReportedCompleted, label: 'Células Cumpridas', color: 'rgba(0, 105, 92, 0.9)' },
+              ]
+            }
+          ]}
+        />,
+        group: 'weekly',
+        title: 'Relatórios Entregues'
+      });
 
     setGraphs(arrGraphs);
   }
@@ -116,11 +117,13 @@ export const Home = () => {
                   </Card>
                 ))}
               </Container>
-              <div className='graphs'>
-                {graphs
-                  .filter(x => x.group === group[0])
-                  .map((graph, index) => <div className='graph-wrapper'><h5>{graph.title}</h5>{graph.element}</div>)}
-              </div>
+              {graphs && graphs.length > 0 && (
+                <div className='graphs'>
+                  {graphs
+                    .filter(x => x.group === group[0])
+                    .map((graph, index) => <div className='graph-wrapper'><h5>{graph.title}</h5>{graph.element}</div>)}
+                </div>
+              )}
             </>
           ))}
 

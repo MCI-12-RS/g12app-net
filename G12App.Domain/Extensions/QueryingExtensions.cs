@@ -20,7 +20,12 @@ namespace G12App.Domain.Extensions
 
         public static IQueryable<TEntity> ApplyPaging<TEntity>(this IQueryable<TEntity> queryable, Query query)
         {
-            return queryable.Skip((query.Pagination.Page - 1) * query.Pagination.Limit).Take(query.Pagination.Limit);
+            var pagination = query.Pagination;
+
+            if (pagination.Page == 0 && pagination.Limit == 0)
+                pagination = Pagination.SingleRecord;
+
+            return queryable.Skip((pagination.Page - 1) * pagination.Limit).Take(pagination.Limit);
         }
 
         public static IOrderedQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> queryable, Query query)
