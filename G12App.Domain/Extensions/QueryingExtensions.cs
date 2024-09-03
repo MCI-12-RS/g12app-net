@@ -58,7 +58,7 @@ namespace G12App.Domain.Extensions
                 queryable = queryable.Where(x => x.Name.ToLower().Contains(query.Filter.Name.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(query.Filter.UserName))
-                queryable = queryable.Where(x => x.MobileNumber.Equals(query.Filter.UserName) || x.Email.Equals(query.Filter.UserName));
+                queryable = queryable.Where(x => x.MobileNumber.Equals(query.Filter.UserName) || x.Email.ToLower().Equals(query.Filter.UserName.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(query.Filter.LeadershipName))
                 queryable = queryable.Where(x => x.Leadership.Name.ToLower().Contains(query.Filter.LeadershipName.ToLower()));
