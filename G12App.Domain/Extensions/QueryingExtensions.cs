@@ -85,6 +85,18 @@ namespace G12App.Domain.Extensions
             if (query.Filter.LeadershipIdAllLevels.HasValue)
                 queryable = queryable.Where(x => x.LeadershipIdTree.Contains($"|{query.Filter.LeadershipIdAllLevels}|"));
 
+            if (query.Filter.CreatedDateFrom.HasValue)
+                queryable = queryable.Where(x => x.CreationDate >= query.Filter.CreatedDateFrom.Value);
+
+            if (query.Filter.CreatedDateUntil.HasValue)
+                queryable = queryable.Where(x => x.CreationDate <= query.Filter.CreatedDateUntil.Value);
+
+            if (query.Filter.Idle.HasValue)
+                queryable = queryable.Where(x => query.Filter.Idle.Equals(x.Idle));
+
+            if (query.Filter.Baptized.HasValue)
+                queryable = queryable.Where(x => query.Filter.Baptized.Equals(x.Baptized));
+
             return queryable;
         }
 
@@ -257,6 +269,9 @@ namespace G12App.Domain.Extensions
 
             if (query.Filter.CellId > 0)
                 queryable = queryable.Where(x => x.CellId.Equals(query.Filter.CellId));
+
+            if (query.Filter.WeekCellSkipped.HasValue)
+                queryable = queryable.Where(x => x.WeekCellSkipped.Equals(query.Filter.WeekCellSkipped.Value));
 
             return queryable;
         }

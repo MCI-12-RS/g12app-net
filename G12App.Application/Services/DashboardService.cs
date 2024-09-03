@@ -5,6 +5,7 @@ using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System.Globalization;
 
+
 namespace G12App.Application.Services
 {
     public class DashboardService : IDashboardService
@@ -46,8 +47,52 @@ namespace G12App.Application.Services
             var totalCells = await _cellRepository.CountCellsAsync(cellFilter);
             var cellsPendingReports = _cellRepository.GetCellsPendingReport(cellFilter, reportFilter).Count();
             var weekReports = await _reportRepository.CountReportsAsync(reportFilter);
-
             var weekVisitors = await _reportRepository.GetCellsVisitors(reportFilter);
+
+            var weekNewMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+            {
+                Filter = new MemberFilter()
+                {
+                    CreatedDateFrom = startDayWeek,
+                    CreatedDateUntil = endDayWeek,
+                }
+            });
+
+            var totalNonBaptizedMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+            {
+                Filter = new MemberFilter()
+                {
+                    Baptized = false
+                }
+            });
+
+            var totalIdleMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+            {
+                Filter = new MemberFilter()
+                {
+                    Idle = true
+                }
+            });
+
+            var totalCellReportedSkipped = await _reportRepository.CountReportsAsync(new Query<ReportFilter>()
+            {
+                Filter = new ReportFilter()
+                {
+                    WeekCellSkipped = true,
+                    StartDate = startDayWeek,
+                    EndDate = endDayWeek,
+                }
+            });
+
+            var totalCellReportedCompleted = await _reportRepository.CountReportsAsync(new Query<ReportFilter>()
+            {
+                Filter = new ReportFilter()
+                {
+                    WeekCellSkipped = false,
+                    StartDate = startDayWeek,
+                    EndDate = endDayWeek,
+                }
+            });
 
             return new DashboardDto()
             {
@@ -55,7 +100,12 @@ namespace G12App.Application.Services
                 TotalCells = totalCells,
                 CellsPendingReports = cellsPendingReports,
                 WeekReports = weekReports,
-                WeekVisitors = weekVisitors
+                WeekVisitors = weekVisitors,
+                WeekNewMembers = weekNewMembers,
+                TotalNonBaptizedMembers = totalNonBaptizedMembers,
+                TotalIdleMembers = totalIdleMembers,
+                TotalCellReportedSkipped = totalCellReportedSkipped,
+                TotalCellReportedCompleted = totalCellReportedCompleted,
             };
         }
     }

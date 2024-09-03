@@ -41,7 +41,7 @@ namespace G12App.Infrastructure.Data.Repositories
                     .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        private IQueryable<Member> GetMembersQueryableAsync(Query<MemberFilter> query)
+        public IQueryable<Member> GetMembersQueryableAsync(Query<MemberFilter> query)
         {
             return _context.Members
                 .IgnoreAutoIncludes()

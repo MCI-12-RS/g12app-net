@@ -30,7 +30,6 @@ namespace G12App.Infrastructure.Data.Tests
 
         public CellRepositoryTests()
         {
-
             _repository = new CellRepository(_fixture.Context, _reportRepository, _fixture.HttpContextAccessor);
         }
 

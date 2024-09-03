@@ -14,5 +14,7 @@ namespace G12App.Domain.Querying.Filters
         public int HostId { get; set; }
         public int TimothyId { get; set; }
         public int? CellId { get; set; }
+
+        public bool? WeekCellSkipped { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { InputGroup, Form, Col, Row, Button, Container, FormCheck, Spinner } from 'react-bootstrap';
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { CreateCell, DeleteCell, GetCell, UpdateCell } from '../../services/Cell.service';
 import MemberPicker from '../../components/MemberPicker';
 import { useToastContext } from '../../contexts/ToastContext';
@@ -12,7 +12,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { DeleteReport, GetReports } from "../../services/Report.service";
 import moment from "moment";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUp, faArrowDown, faCircle, faMagnifyingGlass, faCross, faRemove, faRemoveFormat } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUp, faArrowDown, faCircle, faRemove } from '@fortawesome/free-solid-svg-icons'
 import { useAuthenticationContext } from "../../contexts/AuthenticationContext";
 
 import './style.css';
