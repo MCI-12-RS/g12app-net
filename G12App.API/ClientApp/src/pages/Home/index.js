@@ -68,15 +68,23 @@ export const Home = () => {
 
     arrCards.push({ type: !data.weekVisitors ? 'warning' : 'info', title: <>Visitantes em<br />Células</>, value: data.weekVisitors, link: '/reports/', group: 'weekly' });
 
-    arrCards.push({ type: 'info', title: <>Novos membros<br />cadastrados</>, value: data.weekNewMembers, link: '/reports/', group: 'weekly' });
+    if (data.weekNewMembers)
+      arrCards.push({ type: 'info', title: <>Novos membros<br />cadastrados</>, value: data.weekNewMembers, link: '/reports/', group: 'weekly' });
 
-    arrCards.push({ type: 'info', title: <>Membros<br />Ativos</>, value: (data.totalMembers - data.totalIdleMembers), link: '/members/', group: 'general' });
+    if (data.weekNewCells)
+      arrCards.push({ type: 'info', title: <>Novas células<br />cadastradss</>, value: data.weekNewCells, link: '/reports/', group: 'weekly' });
 
-    arrCards.push({ type: 'info', title: <>Celulas<br />Ativas</>, value: data.totalCells, link: '/cells/', group: 'general' });
+    let activeMembers = data.totalMembers - data.totalIdleMembers;
+    arrCards.push({ type: 'info', title: <>Membros<br />Ativos</>, value: activeMembers, link: '/members/', group: 'general' });
 
-    arrCards.push({ type: 'info', title: <>Membros<br />Inativos</>, value: data.totalIdleMembers, link: '/members/', group: 'general' });
+    if (data.totalCells)
+      arrCards.push({ type: 'info', title: <>Celulas<br />Ativas</>, value: data.totalCells, link: '/cells/', group: 'general' });
 
-    arrCards.push({ type: 'info', title: <>Membros<br />Não Batizados</>, value: data.totalNonBaptizedMembers, link: '/members/', group: 'general' });
+    if (data.totalIdleMembers)
+      arrCards.push({ type: 'info', title: <>Membros<br />Inativos</>, value: data.totalIdleMembers, link: '/members/', group: 'general' });
+
+    if (data.totalNonBaptizedMembers)
+      arrCards.push({ type: 'info', title: <>Membros<br />Não Batizados</>, value: data.totalNonBaptizedMembers, link: '/members/', group: 'general' });
 
     setCards(Object.entries(Object.groupBy(arrCards, ({ group }) => group)));
   }
@@ -104,7 +112,7 @@ export const Home = () => {
         <div className="dashboard">
           {cards.map((group, index) => (
             <>
-              <h3>{group[0] == 'weekly' ? 'Semanal' : 'Geral'}</h3>
+              <h3>{group[0] == 'weekly' ? 'Esta Semana' : 'Geral'}</h3>
               <Container fluid className="dashboard-cards">
                 {group[1].map((card, index) => (
                   <Card bg={card.type} key={index} text="" className={"mb-2 " + (card.link && ' clickable')} onClick={() => cardClick(card)}>

@@ -16,5 +16,6 @@
         public int TotalNonBaptizedMembers { get; set; }
         public int TotalCellReportedCompleted { get; set; }
         public int TotalCellReportedSkipped { get; set; }
+        public int WeekNewCells { get; set; }
     }
 }

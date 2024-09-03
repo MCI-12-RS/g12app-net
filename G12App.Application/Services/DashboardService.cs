@@ -58,6 +58,15 @@ namespace G12App.Application.Services
                 }
             });
 
+            var weekNewCells = await _cellRepository.CountCellsAsync(new Query<CellFilter>()
+            {
+                Filter = new CellFilter()
+                {
+                    CreatedDateFrom = startDayWeek,
+                    CreatedDateUntil = endDayWeek,
+                }
+            });
+
             var totalNonBaptizedMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
             {
                 Filter = new MemberFilter()
@@ -102,6 +111,7 @@ namespace G12App.Application.Services
                 WeekReports = weekReports,
                 WeekVisitors = weekVisitors,
                 WeekNewMembers = weekNewMembers,
+                WeekNewCells = weekNewCells,
                 TotalNonBaptizedMembers = totalNonBaptizedMembers,
                 TotalIdleMembers = totalIdleMembers,
                 TotalCellReportedSkipped = totalCellReportedSkipped,

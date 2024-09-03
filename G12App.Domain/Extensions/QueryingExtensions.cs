@@ -183,6 +183,12 @@ namespace G12App.Domain.Extensions
                 queryable = queryable.Where(x => x.Lead.LeadershipIdTree.Contains($"|{query.Filter.LeadIdAllLevels}|") ||
                                 x.LeadId.Equals(query.Filter.LeadIdAllLevels));
 
+            if (query.Filter.CreatedDateFrom.HasValue)
+                queryable = queryable.Where(x => x.CreationDate >= query.Filter.CreatedDateFrom.Value);
+
+            if (query.Filter.CreatedDateUntil.HasValue)
+                queryable = queryable.Where(x => x.CreationDate <= query.Filter.CreatedDateUntil.Value);
+
             return queryable;
         }
 
