@@ -36,7 +36,7 @@ export const Home = () => {
                 itemMarkHeight: 10,
               },
             }}
-            margin={{ top: 0, bottom: 60, left: 0, right: 0 }}
+            margin={{ top: 0, bottom: 80, left: 0, right: 0 }}
             width={350}
             height={270}
             series={[
