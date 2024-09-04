@@ -133,16 +133,18 @@ export const CellDetails = () => {
             properties: { md: 4 },
             render: (report) => {
                 return (
-                    report.weekCellSkipped ?
-                        <>
+                    <span>
+                        {report.weekCellSkipped ?
                             <span><b>Não houve célula.</b></span>
-                            <br />
-                            <span><b>Observações:</b> {report.notes}</span>
-                        </>
-                        :
-                        <>
+                            :
                             <span><b>Tema:</b> {report.subject}</span>
-                        </>
+                        }
+                        {report.notes && (
+                            <>
+                                <br />
+                                <span><b>Observações:</b> {report.notes}</span>
+                            </>)}
+                    </span>
                 )
             }
         },

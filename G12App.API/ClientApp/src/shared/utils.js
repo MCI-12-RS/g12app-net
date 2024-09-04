@@ -242,16 +242,20 @@ export const ValidateCPF = (cpf) => {
     return true
 };
 
+export const UnifyBlankSpaces = (value) => {
+    return value.toString().replace(/\s\s+/g, " ");
+}
+
 export const FormatFirstLastName = (fullName) => {
     if (fullName == null) return '';
-    var names = fullName.split(' ');
+    var names = UnifyBlankSpaces(fullName).trim().split(' ');
     if (names.length === 1) return names[0];
     return names[0] + ' ' + names[names.length - 1];
 };
 
 export const FormatFirstName = (fullName) => {
     if (fullName == null) return '';
-    return fullName.split(' ')[0];
+    return UnifyBlankSpaces(fullName).trim().split(' ')[0];
 }
 
 export const CleanSearchForm = (setSearchData) => {
