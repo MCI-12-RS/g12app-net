@@ -20,36 +20,38 @@ export const Home = () => {
   const SetGraphsData = (data) => {
     var arrGraphs = [];
 
-    if (data.totalCellReportedSkipped || data.totalCellReportedCompleted)
+    if (data.totalCellReportedSkipped || data.totalCellReportedCompleted || data.cellsPendingReports)
       arrGraphs.push({
-        element: <PieChart className='graph-element' style={{ margin: '0 auto' }}
-
-          slotProps={{
-            legend: {
-              direction: 'column',
-              position: { vertical: 'bottom', horizontal: 'middle' },
-              padding: 0,
-              labelStyle: {
-                fontSize: 14
+        element: (
+          <PieChart className='graph-element' style={{ margin: '0 auto' }}
+            slotProps={{
+              legend: {
+                direction: 'column',
+                position: { vertical: 'bottom', horizontal: 'middle' },
+                padding: 0,
+                labelStyle: {
+                  fontSize: 14
+                },
+                itemMarkWidth: 11,
+                itemMarkHeight: 10,
               },
-              itemMarkWidth: 11,
-              itemMarkHeight: 10,
-            },
-          }}
-          margin={{ top: 0, bottom: 60, left: 0, right: 0 }}
-          width={350}
-          height={270}
-          series={[
-            {
-              data: [
-                { id: 0, value: data.totalCellReportedSkipped, label: 'Células Canceladas', color: 'rgb(220, 53, 69)' },
-                { id: 1, value: data.totalCellReportedCompleted, label: 'Células Cumpridas', color: 'rgba(0, 105, 92, 0.9)' },
-              ]
-            }
-          ]}
-        />,
+            }}
+            margin={{ top: 0, bottom: 60, left: 0, right: 0 }}
+            width={350}
+            height={270}
+            series={[
+              {
+                data: [
+                  { id: 0, value: data.totalCellReportedSkipped, label: 'Células canceladas', color: 'rgb(220, 53, 69)' },
+                  { id: 1, value: data.totalCellReportedCompleted, label: 'Células realizadas', color: 'rgba(0, 105, 92, 0.9)' },
+                  { id: 2, value: data.cellsPendingReports, label: 'Células sem relatório', color: 'rgba(255, 187, 51, 0.9)' },
+                ]
+              }
+            ]}
+          />
+        ),
         group: 'weekly',
-        title: 'Relatórios Entregues'
+        title: 'Relatórios de Células'
       });
 
     setGraphs(arrGraphs);

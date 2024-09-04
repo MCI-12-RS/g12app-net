@@ -51,22 +51,23 @@
 }
 
 .card.bg-warning {
-    background-color: rgba(255, 187, 51, 0.9) !important;
+    background-color: rgba(255, 136, 0, 0.9) !important;
     color: rgba(0, 0, 0, 1) !important;
 }
 
 .card.bg-success {
-    background-color: rgba(0, 105, 92, 0.9) !important;
+    background-color: rgba(0, 126, 51, 0.9) !important;
     color: rgba(255, 255, 255, 1) !important;
 }
 
 .card.bg-info {
-    background-color: rgba(66, 133, 244, 0.9) !important;
+    background-color: rgba(13, 71, 161, 0.9) !important;
     color: rgba(255, 255, 255, 1) !important;
 }
 
 .card.bg-danger {
     color: rgba(255, 255, 255, 1) !important;
+    background-color: rgba(204, 0, 0, 0.9) !important;
 }
 
 .card.bg-primary {
