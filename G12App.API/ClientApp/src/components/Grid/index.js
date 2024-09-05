@@ -1,6 +1,9 @@
 import React from "react";
 import { Col, Container, Pagination, Row, Spinner } from 'react-bootstrap'
 import "./style.css";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 
 const Grid = ({
     columns = [],
@@ -10,7 +13,8 @@ const Grid = ({
     setPagination = () => { },
     totalRecords = 0,
     textTotal = "registros",
-    displayPagination = true
+    displayPagination = true,
+    downloadMethod = null
 }) => {
 
     const pages = Math.max(Math.ceil(totalRecords / pagination.limit), 1);
@@ -30,6 +34,11 @@ const Grid = ({
                 <p className="no-records"><em>Nenhum registro encontrado.</em></p> :
 
                 <div>
+                    {downloadMethod &&
+                        <div className="download-button">
+                            <Link onClick={() => downloadMethod()}> <FontAwesomeIcon icon={faFileExcel} /> Baixar relatórios</Link>
+                        </div>
+                    }
                     <Container className="table grid">
                         <Row className="grid-header d-none d-md-flex">
                             {columns.map(column =>
@@ -40,14 +49,14 @@ const Grid = ({
                         (<Row key={item.id} className={"grid-item d-block d-md-flex " + ((index % 2) === 0 ? 'even' : 'odd')} >
                             {columns.map((column) =>
                                 <>
-                                    <div key={column.name + '-' + item.id} 
+                                    <div key={column.name + '-' + item.id + '-mobile'} 
                                         className={"d-block d-md-none " + (column?.className ?? '') + (column.classFunction ? column.classFunction(item) : '')} 
                                         {...column.properties}>
                                         <div className="inside-column-name d-md-none">{column.name}</div>
                                         <div className="inside-column-value d-md-none">{column.render(item, index)}</div>
                                     </div>
 
-                                    <Col key={column.name + '-' + item.id} 
+                                    <Col key={column.name + '-' + item.id + '-desktop'} 
                                         className={"align-middle col d-none d-md-block " + (column?.className ?? '') + (column.classFunction ? column.classFunction(item) : '')} 
                                         {...column.properties}>
                                         <div className="grid-cell-content d-none d-md-inline-flex">{column.render(item, index)}</div>

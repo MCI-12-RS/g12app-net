@@ -128,3 +128,11 @@
         margin-left: 0;
     }
 }
+
+.download-button {
+    text-align: right;
+    clear: both;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-decoration: none !important;
+}

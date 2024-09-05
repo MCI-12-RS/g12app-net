@@ -18,7 +18,7 @@ namespace G12App.Infrastructure.Data.EntitiesConfiguration
 
             builder.HasOne(x => x.Timothy).WithMany().HasForeignKey(x => x.TimothyId).OnDelete(DeleteBehavior.ClientNoAction);
 
-            builder.HasOne(x => x.Cell).WithMany().HasForeignKey(x => x.CellId).OnDelete(DeleteBehavior.ClientNoAction);
+            builder.HasOne(x => x.Cell).WithMany(x => x.Reports).HasForeignKey(x => x.CellId).OnDelete(DeleteBehavior.ClientNoAction);
         }
     }
 }

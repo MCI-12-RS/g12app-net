@@ -1,3 +1,4 @@
+import download from 'downloadjs';
 import { FetchPrivate } from '../shared/utils';
 
 const LogReport = async (report) => {
@@ -57,4 +58,37 @@ const DeleteReport = async (id) => {
     return obj;
 }
 
-export { LogReport, GetReports, DeleteReport }
+const DownloadExportReports = async (search, pagination, sort = {}) => {
+    FetchPrivate('/api/export/cell-reports', {
+        method: 'POST',
+        body: JSON.stringify({
+            "pagination": {
+                "page": pagination.page,
+                "limit": pagination.limit
+            },
+            "sort": {
+                "sortBy": sort.sortBy,
+                "order": sort.order
+            },
+            "filter": {
+                "cellId": search.cellId,
+                "leadership": search.leadership,
+                "g12Leadership": search.g12Leadership,
+                "startDate": search.startDate,
+                "endDate": search.endDate,
+            }
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    }).then(function (resp) {
+        console.log(resp);
+        return resp.blob();
+    }).then(function (blob) {
+        return download(blob, "Relatorios.xlsx");
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
+
+export { LogReport, GetReports, DeleteReport, DownloadExportReports }

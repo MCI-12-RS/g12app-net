@@ -6,7 +6,6 @@ using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,26 +97,42 @@ namespace G12App.Infrastructure.Data.Repositories
             return cell;
         }
 
-        public IQueryable<Cell> GetCellsPendingReport(Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery)
+        public IQueryable<CellReports> GetCellsReports(
+            Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery, bool? withReportsSent = null)
         {
             var localNow = DateTimeOffset.Now.ToOffset(TimeSpan.FromHours(-3)).DateTime;
 
-            var cells = this.GetCellsQueryableAsync(cellQuery)
-                            .Select(cell => new
+            var queryable = this.GetCellsQueryableAsync(cellQuery)
+                            .Include(x => x.Lead)
+                            .Include(x => x.Host)
+                            .Include(x => x.Timothy)
+                            .Include(x => x.Place)
+                            .AsNoTracking()
+                            .Select(cell => new CellReports
                             {
                                 Cell = cell,
-                                Report = _reportRepository.GetReportsQueryableAsync(reportQuery)
-                                                        .FirstOrDefault(r => r.CellId == cell.Id)
-                            })
-                            .Where(cr => cr.Report == null)
-                            .Select(cr => cr.Cell)
-                            .Where(cell => cell.WeekDay < localNow.DayOfWeek ||
-                                            (cell.WeekDay == localNow.DayOfWeek &&
-                                            localNow.Hour > (Convert.ToInt32(cell.Time.Substring(0, 2)) + 1)
-                                            &&
-                                            localNow.Minute > Convert.ToInt32(cell.Time.Substring(3, 2))));
+                                Reports = _reportRepository.GetReportsQueryableAsync(reportQuery)
+                                                        .Include(x => x.Members)
+                                                        .Where(r => r.CellId == cell.Id)
+                                                        .ToList()
+                            }
+                            );
 
-            return cells;
+            if (withReportsSent.HasValue)
+                queryable = queryable
+                            .Where(x => x.Cell.WeekDay < localNow.DayOfWeek ||
+                                            (x.Cell.WeekDay == localNow.DayOfWeek &&
+                                            localNow.Hour > (Convert.ToInt32(x.Cell.Time.Substring(0, 2)) + 1)
+                                            &&
+                                            localNow.Minute > Convert.ToInt32(x.Cell.Time.Substring(3, 2))));
+
+            if (withReportsSent == true)
+                queryable = queryable.Where(cr => cr.Reports.Any());
+
+            if (withReportsSent == false)
+                queryable = queryable.Where(cr => !cr.Reports.Any());
+
+            return queryable;
         }
     }
 }

@@ -11,6 +11,7 @@
     "@mui/material": "^5.16.7",
     "@mui/x-charts": "^7.12.1",
     "bootstrap": "^5.2.3",
+    "downloadjs": "^1.4.7",
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.4",
     "loadash": "^1.0.0",

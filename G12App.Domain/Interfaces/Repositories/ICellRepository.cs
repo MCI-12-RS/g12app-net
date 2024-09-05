@@ -15,7 +15,7 @@ namespace G12App.Domain.Interfaces.Repositories
         Task<Cell> Create(Cell cell);
         Task<Cell> Update(Cell cell);
         Task<Cell> Remove(Cell cell);
-        IQueryable<Cell> GetCellsPendingReport(Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery);
+        IQueryable<CellReports> GetCellsReports(Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery, bool? withReportsSent = null);
         IQueryable<Cell> GetCellsQueryableAsync(Query<CellFilter> query);
     }
 }

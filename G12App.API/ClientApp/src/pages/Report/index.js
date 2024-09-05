@@ -3,7 +3,7 @@ import { Form, Col, Row, Accordion, Container } from 'react-bootstrap';
 import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
-import { GetReports } from '../../services/Report.service.js';
+import { DownloadExportReports, GetReports } from '../../services/Report.service.js';
 import moment from 'moment';
 import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm, FormatFirstLastName } from '../../shared/utils.js';
 import { faHouse, faPerson } from '@fortawesome/free-solid-svg-icons';
@@ -106,12 +106,7 @@ export const Reports = () => {
     const search = async () => {
         setLoading(true);
 
-        let payload = {
-            ...searchData,
-            startDate: searchData.startDate ? FromBRDate(searchData.startDate) : null,
-            endDate: searchData.endDate ? FromBRDate(searchData.endDate) : null
-        }
-
+        let payload = GetPayload();
         const result = await GetReports(payload, pagination, sort);
         if (result.isValid) {
             setCells(result.data);
@@ -120,6 +115,14 @@ export const Reports = () => {
 
         setLoading(false);
     };
+
+    const GetPayload = () => {
+        return {
+            ...searchData,
+            startDate: searchData.startDate ? FromBRDate(searchData.startDate) : null,
+            endDate: searchData.endDate ? FromBRDate(searchData.endDate) : null
+        };
+    }
 
     const debounceEventTrigger = debounce(field => {
         var currentValue = searchData[field.name];
@@ -132,6 +135,10 @@ export const Reports = () => {
     const handleSearchEvent = (event) => {
         var field = event.target;
         debounceEventTrigger(field);
+    };
+
+    const DownloadReportsResult = async () => {
+        DownloadExportReports(GetPayload(), { page: 1, limit: 9999 }, {});
     };
 
     useEffect(() => {
@@ -206,6 +213,7 @@ export const Reports = () => {
 
                 <div className="row">
                     <Grid
+                        downloadMethod={DownloadReportsResult}
                         columns={columns}
                         data={cells}
                         textTotal='relatórios'

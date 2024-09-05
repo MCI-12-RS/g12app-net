@@ -15,6 +15,11 @@ namespace G12App.Application
             services.AddTransient<IReportApp, ReportApp>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddScoped<IEntityChangeTrackingService, EntityChangeTrackingService>();
+
+            services.AddTransient<IExcelService, ExcelService>();
+            services.AddTransient<IColumnFormatter, ColumnFormatter>();
+            services.AddTransient<IExportService, ExportService>();
+
             return services;
         }
 

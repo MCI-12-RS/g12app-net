@@ -16,7 +16,7 @@ namespace G12App.Infrastructure.Data.Tests
     {
         private readonly TestFixture _fixture = new TestFixture();
         private readonly CellRepository _repository;
-        private readonly ReportRepository _reportRepository;
+        private readonly ReportRepository _reportRepository = Mock.Of<ReportRepository>();
         private readonly Cell _defaultCellToCreate = new Cell()
         {
             LeadId = 1,

@@ -45,7 +45,7 @@ namespace G12App.Application.Services
 
             var totalMembers = await _memberRepository.CountMembersAsync(memberFilter);
             var totalCells = await _cellRepository.CountCellsAsync(cellFilter);
-            var cellsPendingReports = _cellRepository.GetCellsPendingReport(cellFilter, reportFilter).Count();
+            var cellsPendingReports = _cellRepository.GetCellsReports(cellFilter, reportFilter, false).Count();
             var weekReports = await _reportRepository.CountReportsAsync(reportFilter);
             var weekVisitors = await _reportRepository.GetCellsVisitors(reportFilter);
 
