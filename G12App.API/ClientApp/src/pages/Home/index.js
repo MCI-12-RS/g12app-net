@@ -88,6 +88,9 @@ export const Home = () => {
     if (data.totalNonBaptizedMembers)
       arrCards.push({ type: 'info', title: <>Membros<br />Não Batizados</>, value: data.totalNonBaptizedMembers, link: '/members/', group: 'general' });
 
+    if (data.totalNonBaptizedMembers)
+      arrCards.push({ type: 'warning', title: <>Membros<br />Sem Liderança</>, value: data.totalMembersWithoutLeadership, link: '/members/', group: 'general' });
+
     setCards(Object.entries(Object.groupBy(arrCards, ({ group }) => group)));
   }
 

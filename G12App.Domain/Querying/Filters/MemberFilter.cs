@@ -35,5 +35,7 @@ namespace G12App.Domain.Querying.Filters
         public bool? Baptized { get; set; }
 
         public bool? Idle { get; set; }
+
+        public bool? HasNoLeadership { get; set; }
     }
 }

@@ -83,6 +83,14 @@ namespace G12App.Application.Services
                 }
             });
 
+            var totalMembersWithoutLeadership = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+            {
+                Filter = new MemberFilter()
+                {
+                    HasNoLeadership = true
+                }
+            });
+
             var totalCellReportedSkipped = await _reportRepository.CountReportsAsync(new Query<ReportFilter>()
             {
                 Filter = new ReportFilter()
@@ -116,6 +124,7 @@ namespace G12App.Application.Services
                 TotalIdleMembers = totalIdleMembers,
                 TotalCellReportedSkipped = totalCellReportedSkipped,
                 TotalCellReportedCompleted = totalCellReportedCompleted,
+                TotalMembersWithoutLeadership = totalMembersWithoutLeadership,
             };
         }
     }

@@ -102,6 +102,9 @@ namespace G12App.Domain.Extensions
             if (query.Filter.Baptized.HasValue)
                 queryable = queryable.Where(x => query.Filter.Baptized.Equals(x.Baptized));
 
+            if (query.Filter.HasNoLeadership.HasValue)
+                queryable = queryable.Where(x => query.Filter.HasNoLeadership.Equals(x.HasNoLeadership));
+
             return queryable;
         }
 
