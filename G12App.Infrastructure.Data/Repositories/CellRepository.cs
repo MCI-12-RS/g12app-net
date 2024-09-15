@@ -100,7 +100,7 @@ namespace G12App.Infrastructure.Data.Repositories
         public IQueryable<CellReports> GetCellsReports(
             Query<CellFilter> cellQuery, Query<ReportFilter> reportQuery, bool? withReportsSent = null)
         {
-            var localNow = DateTimeOffset.Now.ToOffset(TimeSpan.FromHours(-3)).DateTime;
+            var localNow = SystemConstants.BrazilTime.DateTime;
 
             var queryable = this.GetCellsQueryableAsync(cellQuery)
                             .Include(x => x.Lead)

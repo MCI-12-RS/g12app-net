@@ -59,7 +59,7 @@ const Grid = ({
                                     <Col key={column.name + '-' + item.id + '-desktop'} 
                                         className={"align-middle col d-none d-md-block " + (column?.className ?? '') + (column.classFunction ? column.classFunction(item) : '')} 
                                         {...column.properties}>
-                                        <div className="grid-cell-content d-none d-md-inline-flex">{column.render(item, index)}</div>
+                                        <div className="grid-cell-content d-none d-md-flex">{column.render(item, index)}</div>
                                     </Col>
                                 </>
                             )}

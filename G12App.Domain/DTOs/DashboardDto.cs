@@ -25,5 +25,6 @@
         public int WeekNewCells { get; set; }
 
         public int TotalMembersWithoutLeadership { get; set; }
+        public int TotalMembersWithNoCellLink { get; set; }
     }
 }

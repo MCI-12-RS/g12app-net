@@ -68,5 +68,9 @@ namespace G12App.Domain.Model
         public int? TotalDisciples { get; set; }
 
         public int? TotalCells { get; set; }
+
+        public ICollection<Cell> CellsLeading { get; set; }
+        public ICollection<Cell> CellsHosting { get; set; }
+        public ICollection<Cell> CellsServing { get; set; }
     }
 }

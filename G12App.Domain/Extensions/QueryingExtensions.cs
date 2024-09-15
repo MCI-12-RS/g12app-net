@@ -1,6 +1,7 @@
 ﻿using G12App.Domain.Interfaces.Strategies;
 using G12App.Domain.Model;
 using G12App.Domain.Model.Base;
+using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System;
@@ -61,7 +62,7 @@ namespace G12App.Domain.Extensions
                 queryable = queryable.Where(x => x.MobileNumber.Equals(query.Filter.UserName) || x.Email.ToLower().Equals(query.Filter.UserName.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(query.Filter.LeadershipName))
-                queryable = queryable.Where(x => x.Leadership.Name.ToLower().Contains(query.Filter.LeadershipName.ToLower()));
+                queryable = queryable.Where(x => x.LeadershipTree.ToLower().Contains(query.Filter.LeadershipName.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(query.Filter.Email))
                 queryable = queryable.Where(x => x.Email.ToLower().Contains(query.Filter.Email.ToLower()));
@@ -77,6 +78,9 @@ namespace G12App.Domain.Extensions
 
             if (query.Filter.MinistryLevel.HasValue && query.Filter.MinistryLevel.Value >= 0)
                 queryable = queryable.Where(x => x.MinistryLevel.Equals(query.Filter.MinistryLevel.Value));
+
+            if ((query.Filter.MinistryLevels?.Any()).GetValueOrDefault())
+                queryable = queryable.Where(x => query.Filter.MinistryLevels.Contains(x.MinistryLevel.Value));
 
             if (query.Filter.NotInId != null && query.Filter.NotInId.Any())
                 queryable = queryable.Where(x => !query.Filter.NotInId.Contains(x.Id));
@@ -104,6 +108,36 @@ namespace G12App.Domain.Extensions
 
             if (query.Filter.HasNoLeadership.HasValue)
                 queryable = queryable.Where(x => query.Filter.HasNoLeadership.Equals(x.HasNoLeadership));
+
+            if (query.Filter.CellLink.HasValue)
+            {
+                var sincePeriod = SystemConstants.BrazilTime
+                                    .Subtract(TimeSpan.FromDays(30))
+                                    .DateTime;
+
+                switch (query.Filter.CellLink.Value)
+                {
+                    case CellLink.None:
+                        queryable = queryable.Where(x => !x.Reports.Any(r => r.Date >= sincePeriod));
+                        break;
+
+                    case CellLink.Attendee:
+                        queryable = queryable.Where(x => x.Reports.Any(r => r.Date >= sincePeriod));
+                        break;
+
+                    case CellLink.Leader:
+                        queryable = queryable.Where(x => x.CellsLeading.Any());
+                        break;
+
+                    case CellLink.Timothy:
+                        queryable = queryable.Where(x => x.CellsServing.Any());
+                        break;
+
+                    case CellLink.Host:
+                        queryable = queryable.Where(x => x.CellsHosting.Any());
+                        break;
+                }
+            }
 
             return queryable;
         }
@@ -191,6 +225,72 @@ namespace G12App.Domain.Extensions
 
             if (query.Filter.CreatedDateUntil.HasValue)
                 queryable = queryable.Where(x => x.CreationDate <= query.Filter.CreatedDateUntil.Value);
+
+            if (query.Filter.ReportStatus.HasValue)
+            {
+                var localNow = SystemConstants.BrazilTime.DateTime;
+
+                var date1week = SystemConstants.BrazilTime.DateTime.GetStartOfWeek().Subtract(TimeSpan.FromDays(7));
+                var date2weeks = SystemConstants.BrazilTime.DateTime.GetStartOfWeek().Subtract(TimeSpan.FromDays(14));
+                var date3weeks = SystemConstants.BrazilTime.DateTime.GetStartOfWeek().Subtract(TimeSpan.FromDays(21));
+                var date4weeks = SystemConstants.BrazilTime.DateTime.GetStartOfWeek().Subtract(TimeSpan.FromDays(28));
+
+                var thisWeekStart = SystemConstants.BrazilTime.Date.GetStartOfWeek();
+
+                Func<Cell, bool> notDoneYetQuery = x => x.WeekDay > localNow.DayOfWeek ||
+                                                            (x.WeekDay == localNow.DayOfWeek &&
+                                                            localNow.Hour < (Convert.ToInt32(x.Time.Substring(0, 2)) + 1)
+                                                            &&
+                                                            localNow.Minute < Convert.ToInt32(x.Time.Substring(3, 2)));
+
+                Func<Cell, bool> doneAlreadyQuery = x => x.WeekDay < localNow.DayOfWeek ||
+                                                            (x.WeekDay == localNow.DayOfWeek &&
+                                                            localNow.Hour > (Convert.ToInt32(x.Time.Substring(0, 2)) + 1)
+                                                            &&
+                                                            localNow.Minute > Convert.ToInt32(x.Time.Substring(3, 2)));
+
+                switch (query.Filter.ReportStatus)
+                {
+                    case CellReportStatus.Current:
+                        queryable = queryable.Where(x => x.Reports.Any(x => x.Date >= thisWeekStart) ||
+                                                        (!x.Reports.Any(x => x.Date >= thisWeekStart) && notDoneYetQuery(x)));
+                        break;
+
+                    case CellReportStatus.NotDoneYet:
+                        queryable = queryable.Where(x => !x.Reports.Any(x => x.Date >= thisWeekStart) && notDoneYetQuery(x));
+                        break;
+
+                    case CellReportStatus.OverDue1Week:
+                        queryable = queryable.Where(x =>
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date2weeks &&
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date1week);
+                        break;
+
+                    case CellReportStatus.OverDue2Week:
+                        queryable = queryable.Where(x =>
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date3weeks &&
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date2weeks);
+                        break;
+
+                    case CellReportStatus.OverDue3Week:
+                        queryable = queryable.Where(x =>
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date4weeks &&
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date3weeks);
+                        break;
+
+                    case CellReportStatus.OverDue4Week:
+                        queryable = queryable.Where(x =>
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date4weeks);
+                        break;
+
+                    case CellReportStatus.Cancelled1Week:
+                        queryable = queryable.Where(x =>
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date2weeks &&
+                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date1week);
+                        break;
+                }
+
+            }
 
             return queryable;
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using G12App.Domain.Model.Enum;
+using System;
 
 namespace G12App.Domain.Querying.Filters
 {
@@ -20,6 +21,8 @@ namespace G12App.Domain.Querying.Filters
 
         public int? MinistryLevel { get; set; }
 
+        public int[] MinistryLevels { get; set; }
+
         public int[] NotInId { get; set; }
 
         public int? LeadershipId { get; set; }
@@ -37,5 +40,7 @@ namespace G12App.Domain.Querying.Filters
         public bool? Idle { get; set; }
 
         public bool? HasNoLeadership { get; set; }
+
+        public CellLink? CellLink { get; set; }
     }
 }

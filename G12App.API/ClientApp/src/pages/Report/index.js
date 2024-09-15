@@ -5,7 +5,7 @@ import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
 import { DownloadExportReports, GetReports } from '../../services/Report.service.js';
 import moment from 'moment';
-import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm, FormatFirstLastName } from '../../shared/utils.js';
+import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm, FormatFirstLastName, TranslateWeekDayShort } from '../../shared/utils.js';
 import { faHouse, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useParams } from 'react-router-dom';
@@ -56,8 +56,9 @@ export const Reports = () => {
             render: (report) => {
                 return (
                     <span>
-                        <span>{moment(report.date).format('DD/MM/yyyy')} - {moment(report.date).format('HH:mm')}</span>
+                        <span>{TranslateWeekDayShort(report.cell.weekDay)} ({moment(report.date).format('DD/MM/yyyy')}) - {moment(report.date).format('HH:mm')}</span>
                         <br />
+                        <hr />
                         <span>
                             {report.weekCellSkipped ?
                                 <>

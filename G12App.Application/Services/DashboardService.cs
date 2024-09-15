@@ -1,9 +1,11 @@
 ﻿using G12App.Domain.DTOs;
+using G12App.Domain.Extensions;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Model;
+using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
-using System.Globalization;
 
 
 namespace G12App.Application.Services
@@ -26,11 +28,8 @@ namespace G12App.Application.Services
 
         public async Task<DashboardDto> GetDashbordData()
         {
-            var startDayWeek = DateTime.Today.AddDays(
-                (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek -
-                (int)DateTime.Today.DayOfWeek);
-
-            var endDayWeek = startDayWeek + TimeSpan.FromDays(7) - TimeSpan.FromSeconds(1);
+            var startDayWeek = SystemConstants.BrazilTime.Date.GetStartOfWeek();
+            var endDayWeek = SystemConstants.BrazilTime.Date.GetEndOfWeek();
 
             var memberFilter = new Query<MemberFilter>() { };
             var cellFilter = new Query<CellFilter>() { };
@@ -111,6 +110,15 @@ namespace G12App.Application.Services
                 }
             });
 
+            var totalMembersWithNoCellLink = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+            {
+                Filter = new MemberFilter()
+                {
+                    CellLink = CellLink.None,
+                    MinistryLevels = Enumerable.Range(2, 4).Select(x => (int)Math.Pow(12, x)).ToArray()
+                }
+            });
+
             return new DashboardDto()
             {
                 TotalMembers = totalMembers,
@@ -125,6 +133,7 @@ namespace G12App.Application.Services
                 TotalCellReportedSkipped = totalCellReportedSkipped,
                 TotalCellReportedCompleted = totalCellReportedCompleted,
                 TotalMembersWithoutLeadership = totalMembersWithoutLeadership,
+                TotalMembersWithNoCellLink = totalMembersWithNoCellLink,
             };
         }
     }

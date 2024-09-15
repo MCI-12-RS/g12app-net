@@ -42,9 +42,9 @@ export const Home = () => {
             series={[
               {
                 data: [
-                  { id: 0, value: data.totalCellReportedSkipped, label: 'Células canceladas', color: 'rgb(220, 53, 69)' },
-                  { id: 1, value: data.totalCellReportedCompleted, label: 'Células realizadas', color: 'rgba(0, 105, 92, 0.9)' },
-                  { id: 2, value: data.cellsPendingReports, label: 'Células sem relatório', color: 'rgba(255, 187, 51, 0.9)' },
+                  { id: 0, value: data.totalCellReportedSkipped, label: data.totalCellReportedSkipped + ' Células canceladas', color: 'rgb(220, 53, 69)' },
+                  { id: 1, value: data.totalCellReportedCompleted, label: data.totalCellReportedCompleted + ' Células realizadas', color: 'rgba(0, 105, 92, 0.9)' },
+                  { id: 2, value: data.cellsPendingReports, label: data.cellsPendingReports + ' Células sem relatório', color: 'rgba(255, 187, 51, 0.9)' },
                 ]
               }
             ]}
@@ -74,7 +74,7 @@ export const Home = () => {
       arrCards.push({ type: 'info', title: <>Novos membros<br />cadastrados</>, value: data.weekNewMembers, link: '/reports/', group: 'weekly' });
 
     if (data.weekNewCells)
-      arrCards.push({ type: 'info', title: <>Novas células<br />cadastradss</>, value: data.weekNewCells, link: '/reports/', group: 'weekly' });
+      arrCards.push({ type: 'info', title: <>Novas células<br />cadastradas</>, value: data.weekNewCells, link: '/reports/', group: 'weekly' });
 
     let activeMembers = data.totalMembers - data.totalIdleMembers;
     arrCards.push({ type: 'info', title: <>Membros<br />Ativos</>, value: activeMembers, link: '/members/', group: 'general' });
@@ -87,9 +87,12 @@ export const Home = () => {
 
     if (data.totalNonBaptizedMembers)
       arrCards.push({ type: 'info', title: <>Membros<br />Não Batizados</>, value: data.totalNonBaptizedMembers, link: '/members/', group: 'general' });
-
-    if (data.totalNonBaptizedMembers)
+ 
+    if (data.totalMembersWithoutLeadership)
       arrCards.push({ type: 'warning', title: <>Membros<br />Sem Liderança</>, value: data.totalMembersWithoutLeadership, link: '/members/', group: 'general' });
+
+    if (data.totalMembersWithNoCellLink)
+      arrCards.push({ type: 'warning', title: <>Membros Sem<br />Vínculo Celular</>, value: data.totalMembersWithNoCellLink, link: '/members/', group: 'general' });
 
     setCards(Object.entries(Object.groupBy(arrCards, ({ group }) => group)));
   }

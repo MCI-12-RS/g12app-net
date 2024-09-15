@@ -14,14 +14,13 @@ namespace G12App.Domain.Querying.Filters
         public string Timothy { get; set; }
         public DayOfWeek? WeekDay { get; set; }
         public string HomeAddress_Neighborhood { get; set; }
-
         public string HomeAddress_City { get; set; }
-
         public string HomeAddress_State { get; set; }
         public string HomeAddress_Street { get; set; }
         public CellType? CellType { get; set; }
         public int? LeadIdAllLevels { get; set; }
         public DateTime? CreatedDateFrom { get; set; }
         public DateTime? CreatedDateUntil { get; set; }
+        public CellReportStatus? ReportStatus { get; set; }
     }
 }

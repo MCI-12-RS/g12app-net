@@ -1,5 +1,17 @@
-﻿namespace G12App.Domain.Model
+﻿using System;
+using System.Globalization;
+
+namespace G12App.Domain.Model
 {
+    public static class SystemConstants
+    {
+        public static DateTimeOffset BrazilTime => DateTimeOffset.Now.ToOffset(BrazilTimeZoneOffset);
+
+        public static readonly CultureInfo BrazilCulture = CultureInfo.GetCultureInfo("pt-BR");
+
+        public static readonly TimeSpan BrazilTimeZoneOffset = TimeSpan.FromHours(-3);
+    }
+
     public static class CustomClaims
     {
         public const string MemberId = nameof(MemberId);
