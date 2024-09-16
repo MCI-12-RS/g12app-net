@@ -1,7 +1,6 @@
-﻿using G12App.Application.Events;
+﻿using G12App.Domain.DomainEvents;
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Events;
-using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
@@ -9,7 +8,6 @@ using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,15 +19,9 @@ namespace G12App.API.Controllers
     [AllowAnonymous]
     public class OperationController : ControllerBase
     {
-        private readonly ILogger<OperationController> _logger;
-
-        public OperationController(ILogger<OperationController> logger)
-            => (_logger) = (logger);
-
         [HttpPost("member-consolidation")]
         public async Task<ServiceResult> ConsolidateAllMembersData(
             [FromServices] IMemberService memberService,
-            [FromServices] IMemberRepository memberRepository,
             [FromServices] IEventDispatcher eventDispatcher)
         {
             var query = new Query<MemberFilter>()

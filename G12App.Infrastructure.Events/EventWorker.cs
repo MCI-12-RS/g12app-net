@@ -8,15 +8,18 @@ namespace G12App.Infrastructure.Events
     public class EventWorker : BackgroundService
     {
         private readonly IEventQueue _eventQueue;
+        private readonly IEventHandlerRegistry _eventHandlerRegistry;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<EventWorker> _logger;
 
         public EventWorker(
             IEventQueue eventQueue,
+            IEventHandlerRegistry eventHandlerRegistry,
             IServiceProvider serviceProvider,
             ILogger<EventWorker> logger)
         {
             _eventQueue = eventQueue;
+            _eventHandlerRegistry = eventHandlerRegistry;
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
@@ -33,8 +36,14 @@ namespace G12App.Infrastructure.Events
                     if (ev == null)
                         continue;
 
+                    if (!_eventHandlerRegistry.Handlers.TryGetValue(ev.GetType(), out var handler))
+                    {
+                        _logger.LogWarning("No handler found for event type {type}.", ev.GetType().Name);
+                        continue;
+                    }
+
                     await using var scope = _serviceProvider.CreateAsyncScope();
-                    await ev.Handle(scope.ServiceProvider, stoppingToken);
+                    await handler(scope.ServiceProvider, ev);
                 }
                 catch (Exception ex)
                 {

@@ -10,7 +10,7 @@ namespace G12App.Domain.Tests
 
         public MemberDtoValidatorTests()
         {
-            _validator = new MemberDtoValidator();
+            _validator = new MemberDtoValidator(null);
         }
 
         [Fact]

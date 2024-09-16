@@ -1,4 +1,6 @@
-﻿using G12App.Application.Services;
+﻿using G12App.Application.Events;
+using G12App.Application.Services;
+using G12App.Domain.Interfaces.EventHandlers;
 using G12App.Domain.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,5 +25,12 @@ namespace G12App.Application
             return services;
         }
 
+        public static IServiceCollection RegisterEventHandlers(this IServiceCollection services)
+        {
+            services.AddTransient<IMemberChangedHandler, MemberChangedHandler>();
+            services.AddTransient<ICellChangedHandler, CellChangedHandler>();
+
+            return services;
+        }
     }
 }

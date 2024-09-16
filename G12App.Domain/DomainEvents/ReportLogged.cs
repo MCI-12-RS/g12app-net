@@ -1,4 +1,5 @@
-﻿using G12App.Domain.DTOs;
+﻿using G12App.Domain.DomainEvents;
+using G12App.Domain.DTOs;
 
 namespace G12App.Application.Events
 {
@@ -7,7 +8,7 @@ namespace G12App.Application.Events
         private readonly ReportDto _before;
         private readonly ReportDto _after;
 
-        protected override object EntityId => _after?.Id ?? _before?.Id;
+        public override object EntityId => _after?.Id ?? _before?.Id;
 
         public ReportLogged(ReportDto before, ReportDto after)
             => (_before, _after) = (before, after);

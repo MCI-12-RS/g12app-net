@@ -6,6 +6,7 @@ using G12App.Domain.Model;
 using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace G12App.Application.Services
@@ -15,15 +16,18 @@ namespace G12App.Application.Services
         private readonly IMemberRepository _memberRepository;
         private readonly ICellRepository _cellRepository;
         private readonly IReportRepository _reportRepository;
+        private readonly IMemoryCache _cache;
 
         public DashboardService(
             IMemberRepository memberRepository,
             ICellRepository cellRepository,
-            IReportRepository reportRepository)
+            IReportRepository reportRepository,
+            IMemoryCache cache)
         {
             _memberRepository = memberRepository;
             _cellRepository = cellRepository;
             _reportRepository = reportRepository;
+            _cache = cache;
         }
 
         public async Task<DashboardDto> GetDashbordData()
@@ -48,14 +52,15 @@ namespace G12App.Application.Services
             var weekReports = await _reportRepository.CountReportsAsync(reportFilter);
             var weekVisitors = await _reportRepository.GetCellsVisitors(reportFilter);
 
-            var weekNewMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
-            {
-                Filter = new MemberFilter()
+            var weekNewMembers = await _cache.GetOrCreateAsync(CacheKeys.Member_CreatedCurrentWeek,
+                (entry) => _memberRepository.CountMembersAsync(new Query<MemberFilter>()
                 {
-                    CreatedDateFrom = startDayWeek,
-                    CreatedDateUntil = endDayWeek,
-                }
-            });
+                    Filter = new MemberFilter()
+                    {
+                        CreatedDateFrom = startDayWeek,
+                        CreatedDateUntil = endDayWeek,
+                    }
+                }));
 
             var weekNewCells = await _cellRepository.CountCellsAsync(new Query<CellFilter>()
             {
