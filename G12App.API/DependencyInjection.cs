@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 
 namespace G12App.API
@@ -99,7 +100,16 @@ namespace G12App.API
         {
             using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-            context.Database.Migrate();
+
+            try
+            {
+                context.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occurred while applying migration. {ex.Message}");
+                throw;
+            }
         }
     }
 }

@@ -167,7 +167,7 @@ export const Cells = () => {
                       <option value="Sunday">Domingo</option>
                     </Form.Select>
                   </Form.Group>
-{/* 
+ 
                   <Form.Group className="mb-3 pr-3" xs={12} md={4} as={Col}>
                     <Form.Label>Situação de Relatório</Form.Label>
                     <Form.Select name="reportStatus" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
@@ -179,12 +179,12 @@ export const Cells = () => {
                       <option value="overDue2Week">Sem relatório a 2 semanas</option>
                       <option value="overDue3Week">Sem relatório a 3 semanas</option>
                       <option value="overDue4Week">Sem relatório a 4 semanas</option>
-                      <option value="cancelled1Week">Cancelada a 1 semana</option>
+                      {/* <option value="cancelled1Week">Cancelada a 1 semana</option>
                       <option value="cancelled2Weeks">Cancelada a 2 semanas</option>
                       <option value="cancelled3Weeks">Cancelada a 3 semanas</option>
-                      <option value="cancelled4Weeks">Cancelada a 4 semanas</option> 
+                      <option value="cancelled4Weeks">Cancelada a 4 semanas</option>  */}
                     </Form.Select>
-                  </Form.Group> */}
+                  </Form.Group> 
                 </Row>
               </Accordion.Body>
             </Accordion.Item>

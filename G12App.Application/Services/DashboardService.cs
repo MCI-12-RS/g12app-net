@@ -115,7 +115,6 @@ namespace G12App.Application.Services
                 Filter = new MemberFilter()
                 {
                     CellLink = CellLink.None,
-                    MinistryLevels = Enumerable.Range(2, 4).Select(x => (int)Math.Pow(12, x)).ToArray()
                 }
             });
 

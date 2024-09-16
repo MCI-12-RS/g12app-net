@@ -1,5 +1,7 @@
 ﻿using G12App.Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Diagnostics;
 
 namespace G12App.Infrastructure.Data.Context
 {
@@ -18,6 +20,12 @@ namespace G12App.Infrastructure.Data.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
+            if (Debugger.IsAttached)
+                optionsBuilder.LogTo((query) =>
+                {
+                    if ((query?.Contains("Executing DbCommand")).GetValueOrDefault())
+                        Console.WriteLine("Query: " + query);
+                });
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

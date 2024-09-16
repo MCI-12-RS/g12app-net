@@ -118,7 +118,11 @@ namespace G12App.Domain.Extensions
                 switch (query.Filter.CellLink.Value)
                 {
                     case CellLink.None:
-                        queryable = queryable.Where(x => !x.Reports.Any(r => r.Date >= sincePeriod));
+                        queryable = queryable.Where(x => !x.Reports.Any(r => r.Date >= sincePeriod) &&
+                                                        !x.CellsLeading.Any() &&
+                                                        !x.CellsServing.Any() &&
+                                                        !x.CellsHosting.Any() &&
+                                                        x.TotalCells == 0);
                         break;
 
                     case CellLink.Attendee:
@@ -230,6 +234,7 @@ namespace G12App.Domain.Extensions
             {
                 var localNow = SystemConstants.BrazilTime.DateTime;
 
+                var weekStart = SystemConstants.BrazilTime.DateTime.GetStartOfWeek();
                 var date1week = SystemConstants.BrazilTime.DateTime.GetStartOfWeek().Subtract(TimeSpan.FromDays(7));
                 var date2weeks = SystemConstants.BrazilTime.DateTime.GetStartOfWeek().Subtract(TimeSpan.FromDays(14));
                 var date3weeks = SystemConstants.BrazilTime.DateTime.GetStartOfWeek().Subtract(TimeSpan.FromDays(21));
@@ -237,56 +242,62 @@ namespace G12App.Domain.Extensions
 
                 var thisWeekStart = SystemConstants.BrazilTime.Date.GetStartOfWeek();
 
-                Func<Cell, bool> notDoneYetQuery = x => x.WeekDay > localNow.DayOfWeek ||
-                                                            (x.WeekDay == localNow.DayOfWeek &&
-                                                            localNow.Hour < (Convert.ToInt32(x.Time.Substring(0, 2)) + 1)
-                                                            &&
-                                                            localNow.Minute < Convert.ToInt32(x.Time.Substring(3, 2)));
-
-                Func<Cell, bool> doneAlreadyQuery = x => x.WeekDay < localNow.DayOfWeek ||
-                                                            (x.WeekDay == localNow.DayOfWeek &&
-                                                            localNow.Hour > (Convert.ToInt32(x.Time.Substring(0, 2)) + 1)
-                                                            &&
-                                                            localNow.Minute > Convert.ToInt32(x.Time.Substring(3, 2)));
-
                 switch (query.Filter.ReportStatus)
                 {
                     case CellReportStatus.Current:
-                        queryable = queryable.Where(x => x.Reports.Any(x => x.Date >= thisWeekStart) ||
-                                                        (!x.Reports.Any(x => x.Date >= thisWeekStart) && notDoneYetQuery(x)));
+                        queryable = queryable.Where(x => x.Reports.Where(x => !x.IsDeleted).Any(x => x.Date >= thisWeekStart) ||
+                                                        (!x.Reports.Where(x => !x.IsDeleted).Any(x => x.Date >= thisWeekStart) &&
+                                                        (
+                                                        x.WeekDay > localNow.DayOfWeek ||
+                                                            (x.WeekDay == localNow.DayOfWeek &&
+                                                            localNow.Hour < (Convert.ToInt32(x.Time.Substring(0, 2)) + 1)
+                                                            &&
+                                                            localNow.Minute < Convert.ToInt32(x.Time.Substring(3, 2))
+                                                        ))));
                         break;
 
                     case CellReportStatus.NotDoneYet:
-                        queryable = queryable.Where(x => !x.Reports.Any(x => x.Date >= thisWeekStart) && notDoneYetQuery(x));
+                        queryable = queryable.Where(x => !x.Reports.Where(x => !x.IsDeleted).Any(x => x.Date >= thisWeekStart) &&
+                                                        (
+                                                        x.WeekDay > localNow.DayOfWeek ||
+                                                            (x.WeekDay == localNow.DayOfWeek &&
+                                                            localNow.Hour < (Convert.ToInt32(x.Time.Substring(0, 2)) + 1)
+                                                            &&
+                                                            localNow.Minute < Convert.ToInt32(x.Time.Substring(3, 2))
+                                                        )));
+                        break;
+
+                    case CellReportStatus.OverDueThisWeek:
+                        queryable = queryable.Where(x => !x.Reports.Where(x => !x.IsDeleted).Any(x => x.Date >= thisWeekStart) &&
+                                                        (
+                                                            x.WeekDay < localNow.DayOfWeek ||
+                                                            (x.WeekDay == localNow.DayOfWeek &&
+                                                            localNow.Hour > (Convert.ToInt32(x.Time.Substring(0, 2)) + 1)
+                                                            &&
+                                                            localNow.Minute > Convert.ToInt32(x.Time.Substring(3, 2)))));
                         break;
 
                     case CellReportStatus.OverDue1Week:
                         queryable = queryable.Where(x =>
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date2weeks &&
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date1week);
+                            x.Reports.Where(x => !x.IsDeleted).OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date2weeks &&
+                            x.Reports.Where(x => !x.IsDeleted).OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date1week);
                         break;
 
                     case CellReportStatus.OverDue2Week:
                         queryable = queryable.Where(x =>
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date3weeks &&
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date2weeks);
+                            x.Reports.Where(x => !x.IsDeleted).OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date3weeks &&
+                            x.Reports.Where(x => !x.IsDeleted).OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date2weeks);
                         break;
 
                     case CellReportStatus.OverDue3Week:
                         queryable = queryable.Where(x =>
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date4weeks &&
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date3weeks);
+                            x.Reports.Where(x => !x.IsDeleted).OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date4weeks &&
+                            x.Reports.Where(x => !x.IsDeleted).OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date3weeks);
                         break;
 
                     case CellReportStatus.OverDue4Week:
                         queryable = queryable.Where(x =>
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date4weeks);
-                        break;
-
-                    case CellReportStatus.Cancelled1Week:
-                        queryable = queryable.Where(x =>
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() > date2weeks &&
-                            x.Reports.OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date1week);
+                            x.Reports.Where(x => !x.IsDeleted).OrderBy(r => r.Date).Select(r => r.Date).LastOrDefault() < date4weeks);
                         break;
                 }
 

@@ -7,7 +7,7 @@ namespace G12App.Domain.Extensions
     {
         public static DateTime GetStartOfWeek(this DateTime date)
         {
-            return date.AddDays(
+            return date.Date.AddDays(
                 (int)SystemConstants.BrazilCulture.DateTimeFormat.FirstDayOfWeek -
                 (int)date.DayOfWeek);
         }
