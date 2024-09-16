@@ -1,4 +1,5 @@
 ﻿using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Model;
 using G12App.Domain.Model.Base;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -21,7 +22,7 @@ namespace G12App.Application.Services
                 .Value;
 
             entity.CreatedBy = userName;
-            entity.CreationDate = DateTime.Now;
+            entity.CreationDate = SystemConstants.BrazilTime.DateTime;
         }
 
         public void SetupLastModifiedData(BaseEntity entity)
@@ -31,7 +32,7 @@ namespace G12App.Application.Services
                 .Value;
 
             entity.LastModifiedBy = userName;
-            entity.LastModifiedDate = DateTime.Now;
+            entity.LastModifiedDate = SystemConstants.BrazilTime.DateTime;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System;
@@ -28,7 +29,7 @@ namespace G12App.Domain.Validators
 
             RuleFor(x => x.BirthDate)
                 .GreaterThan(
-                    DateTime.Now.Subtract(TimeSpan.FromDays(365 * 100)))
+                    SystemConstants.BrazilTime.DateTime.Subtract(TimeSpan.FromDays(365 * 100)))
                 .WithMessage(BirthDate_ErrorMessage);
 
             RuleFor(x => x.Gender)

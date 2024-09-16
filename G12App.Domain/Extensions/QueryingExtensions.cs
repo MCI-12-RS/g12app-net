@@ -42,7 +42,7 @@ namespace G12App.Domain.Extensions
             var parameter = Expression.Parameter(type, "p");
             var propertyAccess = Expression.MakeMemberAccess(parameter, property);
             var orderByExpression = Expression.Lambda(propertyAccess, parameter);
-            var resultExpression = Expression.Call(typeof(Queryable), command, new Type[] { type, property.PropertyType },
+            var resultExpression = Expression.Call(typeof(Queryable), command, [type, property.PropertyType],
                 queryable.Expression, Expression.Quote(orderByExpression));
 
             return queryable.Provider.CreateQuery<TEntity>(resultExpression) as IOrderedQueryable<TEntity>;
@@ -122,7 +122,7 @@ namespace G12App.Domain.Extensions
                                                         !x.CellsLeading.Any() &&
                                                         !x.CellsServing.Any() &&
                                                         !x.CellsHosting.Any() &&
-                                                        x.TotalCells == 0);
+                                                        (x.TotalCells == 0 || !x.TotalCells.HasValue));
                         break;
 
                     case CellLink.Attendee:
@@ -159,13 +159,13 @@ namespace G12App.Domain.Extensions
                 return queryable;
 
             var spouseIdClaim = user.FindFirstValue(CustomClaims.SpouseId);
-            int.TryParse(spouseIdClaim, out var spouseId);
+            _ = int.TryParse(spouseIdClaim, out var spouseId);
 
             var g12IdClaim = user.FindFirstValue(CustomClaims.G12LeadershipId);
-            int.TryParse(g12IdClaim, out var g12Id);
+            _ = int.TryParse(g12IdClaim, out var g12Id);
 
             var g12SpouseIdClaim = user.FindFirstValue(CustomClaims.G12LeadershipSpouseId);
-            int.TryParse(g12SpouseIdClaim, out var g12SpouseId);
+            _ = int.TryParse(g12SpouseIdClaim, out var g12SpouseId);
 
             queryable = queryable.Where(x =>
             x.LeadershipIdTree.Contains($"|{memberId}|") ||
@@ -319,13 +319,13 @@ namespace G12App.Domain.Extensions
                 return queryable;
 
             var spouseIdClaim = user.FindFirstValue(CustomClaims.SpouseId);
-            int.TryParse(spouseIdClaim, out var spouseId);
+            _ = int.TryParse(spouseIdClaim, out var spouseId);
 
             var g12IdClaim = user.FindFirstValue(CustomClaims.G12LeadershipId);
-            int.TryParse(g12IdClaim, out var g12Id);
+            _ = int.TryParse(g12IdClaim, out var g12Id);
 
             var g12SpouseIdClaim = user.FindFirstValue(CustomClaims.G12LeadershipSpouseId);
-            int.TryParse(g12SpouseIdClaim, out var g12SpouseId);
+            _ = int.TryParse(g12SpouseIdClaim, out var g12SpouseId);
 
             queryable = queryable.Where(x =>
                 x.Lead.LeadershipIdTree.Contains($"|{memberId}|") ||
@@ -414,13 +414,13 @@ namespace G12App.Domain.Extensions
                 return queryable;
 
             var spouseIdClaim = user.FindFirstValue(CustomClaims.SpouseId);
-            int.TryParse(spouseIdClaim, out var spouseId);
+            _ = int.TryParse(spouseIdClaim, out var spouseId);
 
             var g12IdClaim = user.FindFirstValue(CustomClaims.G12LeadershipId);
-            int.TryParse(g12IdClaim, out var g12Id);
+            _ = int.TryParse(g12IdClaim, out var g12Id);
 
             var g12SpouseIdClaim = user.FindFirstValue(CustomClaims.G12LeadershipSpouseId);
-            int.TryParse(g12SpouseIdClaim, out var g12SpouseId);
+            _ = int.TryParse(g12SpouseIdClaim, out var g12SpouseId);
 
             queryable = queryable.Where(x =>
                 x.Lead.LeadershipIdTree.Contains($"|{memberId}|") ||
