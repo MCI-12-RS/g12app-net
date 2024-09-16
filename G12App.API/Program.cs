@@ -88,6 +88,7 @@ namespace G12App.API
                 .RegisterInfrastructure()
                 .RegisterRepositories()
                 .RegisterServices()
+                .RegisterCache()
                 .RegisterWorkers()
                 .RegisterJWT(builder.Configuration)
                 .RegisterEvents()

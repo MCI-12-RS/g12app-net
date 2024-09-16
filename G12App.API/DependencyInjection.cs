@@ -86,6 +86,13 @@ namespace G12App.API
             return services;
         }
 
+        public static IServiceCollection RegisterCache(this IServiceCollection services)
+        {
+            services.AddMemoryCache();
+
+            return services;
+        }
+
         public static IServiceCollection RegisterWorkers(this IServiceCollection services)
         {
             // services.AddHostedService<ChildrenMemberConsolidationWorker>();

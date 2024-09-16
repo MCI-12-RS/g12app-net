@@ -178,7 +178,7 @@ export const Cells = () => {
                       <option value="overDue1Week">Sem relatório a 1 semana</option>
                       <option value="overDue2Week">Sem relatório a 2 semanas</option>
                       <option value="overDue3Week">Sem relatório a 3 semanas</option>
-                      <option value="overDue4Week">Sem relatório a 4 semanas</option>
+                      <option value="overDue4Week">Sem relatório a 4 semanas ou mais</option>
                       {/* <option value="cancelled1Week">Cancelada a 1 semana</option>
                       <option value="cancelled2Weeks">Cancelada a 2 semanas</option>
                       <option value="cancelled3Weeks">Cancelada a 3 semanas</option>
