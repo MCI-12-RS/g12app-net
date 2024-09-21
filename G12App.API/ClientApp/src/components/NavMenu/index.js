@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { Navbar, Container, Nav, NavDropdown, Badge } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useToastContext } from '../../contexts/ToastContext';
 import { useAuthenticationContext } from '../../contexts/AuthenticationContext';
 
+
 import './style.css';
 import logo from '../../images/logo.png';
+import { ToBRDate } from '../../shared/utils';
+import moment from 'moment';
 
 export const NavMenu = () => {
 
   const toastContext = useToastContext();
   const authContext = useAuthenticationContext();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
 
   const doLogoff = () => {
@@ -21,6 +25,19 @@ export const NavMenu = () => {
       title: 'Ate a proxima!', hideDelay: 5000,
       description: 'Logout efetuado com sucesso.'
     });
+  }
+
+  const startOfCurrentWeek = ToBRDate(moment().startOf('week'));
+  const startOfPreviosWeek = ToBRDate(moment().subtract(1, 'week').startOf('week'));
+  const startOfWeekBefore = ToBRDate(moment().subtract(2, 'week').startOf('week'));
+
+  const endOfCurrentWeek = ToBRDate(moment().endOf('week'));
+  const endOfPreviosWeek = ToBRDate(moment().subtract(1, 'week').endOf('week'));
+  const endOfWeekBefore = ToBRDate(moment().subtract(2, 'week').endOf('week'));
+
+  const gotoReports = (start, end) => {
+    
+    navigate('/reports', { state: { startDate: start, endDate: end } });
   }
 
   return (
@@ -46,8 +63,11 @@ export const NavMenu = () => {
                     <NavDropdown.Item as={Link} to="/cells" onClick={() => setExpanded(false)}>Gerenciar células</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/new-cell" onClick={() => setExpanded(false)}>Cadastrar célula</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item as={Link} to="/reports" onClick={() => setExpanded(false)}>Visualizar relatórios</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/log-report" onClick={() => setExpanded(false)}>Registrar relatório</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item onClick={() => { setExpanded(false); gotoReports(startOfCurrentWeek, endOfCurrentWeek); }}>Relatórios desta semana</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => { setExpanded(false); gotoReports(startOfPreviosWeek, endOfPreviosWeek); }}>Relatórios de semana passada</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => { setExpanded(false); gotoReports(startOfWeekBefore, endOfWeekBefore); }}>Relatórios de semana retrasada</NavDropdown.Item>
                   </NavDropdown>
                 </>
               )}

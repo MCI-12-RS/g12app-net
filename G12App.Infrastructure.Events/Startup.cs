@@ -9,6 +9,7 @@ namespace G12App.Infrastructure.Events
         {
             servicesCollection.AddSingleton<IEventDispatcher, EventDispatcher>();
             servicesCollection.AddSingleton<IEventQueue, ChannelEventQueue>();
+            servicesCollection.AddSingleton<IEventHandlerService, EventHandlerService>();
 
             servicesCollection.AddHostedService<EventWorker>();
 

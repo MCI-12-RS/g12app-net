@@ -6,6 +6,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
 import { PieChart } from '@mui/x-charts';
+import { ToBRDate } from '../../shared/utils';
+import moment from 'moment';
 
 export const Home = () => {
   const [cards, setCards] = React.useState([]);
@@ -13,8 +15,37 @@ export const Home = () => {
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
+  const clickCellPendingReports = () => {
+    navigate('/cells', { state: { reportStatus: 'overDueThisWeek' } });
+  }
+
+  const clickCellCreatedThisWeek = () => {
+    navigate('/cells', { state: { createdDateFrom: ToBRDate(moment().startOf('week')) } });
+  }
+  
+  const clickActiveMembers = () => {
+    navigate('/members', { state: { idle: false } });
+  }
+
+  const clickIdleMembers = () => {
+    navigate('/members', { state: { idle: true } });
+  }
+
+  const clickNonBaptizedMembers = () => {
+    navigate('/members', { state: { baptized: false } });
+  }
+
+  const clickMembersWithoutLeadership = () => {
+    navigate('/members', { state: { hasNoLeadership: true } });
+  }
+
+  const clickMembersWithoutCellLink = () => {
+    navigate('/members', { state: { cellLink: 'none' } });
+  }
+
   const cardClick = (card) => {
-    if (card.link) navigate(card.link);
+    if (card.link)
+      navigate(card.link);
   }
 
   const SetGraphsData = (data) => {
@@ -65,7 +96,7 @@ export const Home = () => {
     var pendingReportsType = data.cellsPendingReports > 0 ? 'danger' : 'success';
     arrCards.push({
       type: pendingReportsType, title: <>Células com<br /> Relatórios Pendentes</>, value: data.cellsPendingReports,
-      link: '/cells/pending-reports', group: 'weekly'
+      click: clickCellPendingReports, group: 'weekly'
     });
 
     arrCards.push({ type: !data.weekVisitors ? 'warning' : 'info', title: <>Visitantes em<br />Células</>, value: data.weekVisitors, link: '/reports/', group: 'weekly' });
@@ -74,25 +105,25 @@ export const Home = () => {
       arrCards.push({ type: 'info', title: <>Novos membros<br />cadastrados</>, value: data.weekNewMembers, link: '/reports/', group: 'weekly' });
 
     if (data.weekNewCells)
-      arrCards.push({ type: 'info', title: <>Novas células<br />cadastradas</>, value: data.weekNewCells, link: '/reports/', group: 'weekly' });
+      arrCards.push({ type: 'info', title: <>Novas células<br />cadastradas</>, value: data.weekNewCells, click: clickCellCreatedThisWeek, group: 'weekly' });
 
     let activeMembers = data.totalMembers - data.totalIdleMembers;
-    arrCards.push({ type: 'info', title: <>Membros<br />Ativos</>, value: activeMembers, link: '/members/', group: 'general' });
+    arrCards.push({ type: 'info', title: <>Membros<br />Ativos</>, value: activeMembers, click: clickActiveMembers, group: 'general' });
 
     if (data.totalCells)
       arrCards.push({ type: 'info', title: <>Celulas<br />Ativas</>, value: data.totalCells, link: '/cells/', group: 'general' });
 
     if (data.totalIdleMembers)
-      arrCards.push({ type: 'info', title: <>Membros<br />Inativos</>, value: data.totalIdleMembers, link: '/members/', group: 'general' });
+      arrCards.push({ type: 'info', title: <>Membros<br />Inativos</>, value: data.totalIdleMembers, click: clickIdleMembers, group: 'general' });
 
     if (data.totalNonBaptizedMembers)
-      arrCards.push({ type: 'info', title: <>Membros<br />Não Batizados</>, value: data.totalNonBaptizedMembers, link: '/members/', group: 'general' });
- 
+      arrCards.push({ type: 'info', title: <>Membros<br />Não Batizados</>, value: data.totalNonBaptizedMembers, click: clickNonBaptizedMembers, group: 'general' });
+
     if (data.totalMembersWithoutLeadership)
-      arrCards.push({ type: 'warning', title: <>Membros<br />Sem Liderança</>, value: data.totalMembersWithoutLeadership, link: '/members/', group: 'general' });
+      arrCards.push({ type: 'warning', title: <>Membros<br />Sem Liderança</>, value: data.totalMembersWithoutLeadership, click: clickMembersWithoutLeadership, group: 'general' });
 
     if (data.totalMembersWithNoCellLink)
-      arrCards.push({ type: 'warning', title: <>Membros Sem<br />Vínculo Celular</>, value: data.totalMembersWithNoCellLink, link: '/members/', group: 'general' });
+      arrCards.push({ type: 'warning', title: <>Membros Sem<br />Vínculo Celular</>, value: data.totalMembersWithNoCellLink, click: clickMembersWithoutCellLink, group: 'general' });
 
     setCards(Object.entries(Object.groupBy(arrCards, ({ group }) => group)));
   }
@@ -119,11 +150,12 @@ export const Home = () => {
       <>
         <div className="dashboard">
           {cards.map((group, index) => (
-            <>
+            <div key={index}>
               <h3>{group[0] == 'weekly' ? 'Esta Semana' : 'Geral'}</h3>
               <Container fluid className="dashboard-cards">
                 {group[1].map((card, index) => (
-                  <Card bg={card.type} key={index} text="" className={"mb-2 " + (card.link && ' clickable')} onClick={() => cardClick(card)}>
+                  <Card bg={card.type} key={index} text="" className={"mb-2 " + ((card.link || card.click) && ' clickable')}
+                    onClick={() => card.link ? cardClick(card) : card.click ? card.click() : () => { }}>
                     <Card.Body>
                       <Card.Title>{card.value}</Card.Title>
                       <Card.Text>
@@ -137,10 +169,10 @@ export const Home = () => {
                 <div className='graphs'>
                   {graphs
                     .filter(x => x.group === group[0])
-                    .map((graph, index) => <div className='graph-wrapper'><h5>{graph.title}</h5>{graph.element}</div>)}
+                    .map((graph, index) => <div className='graph-wrapper' key={index}><h5>{graph.title}</h5>{graph.element}</div>)}
                 </div>
               )}
-            </>
+            </div>
           ))}
 
 

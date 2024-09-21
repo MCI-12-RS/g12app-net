@@ -8,13 +8,12 @@ import moment from 'moment';
 import { DecimalToMoney, FromBRDate, ToBRDate, CleanSearchForm, FormatFirstLastName, TranslateWeekDayShort } from '../../shared/utils.js';
 import { faHouse, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import ReactInputMask from 'react-input-mask';
 
 export const Reports = () => {
 
-    const firstCurrentWeekDay = ToBRDate(moment().startOf('week'));
-    const endCurrentWeekDay = ToBRDate(moment().endOf('week'));
+    const { state } = useLocation();
 
     const [cells, setCells] =
         React.useState([]);
@@ -24,12 +23,13 @@ export const Reports = () => {
         React.useState({
             leadership: null,
             g12Leadership: null,
-            startDate: firstCurrentWeekDay,
-            endDate: endCurrentWeekDay
+            startDate: state?.startDate,
+            endDate: state?.endDate
         });
     const [loading, setLoading] = React.useState(false);
     const [total, setTotal] = React.useState(0);
     const [sort] = React.useState({ sortBy: 'date', order: true });
+    const [initialSearch, setInitialSearch] = React.useState(true);
     const params = useParams();
 
     const IsCellSpecific = () => {
@@ -114,6 +114,7 @@ export const Reports = () => {
             setTotal(result.totalRecords ?? result.data.length);
         }
 
+        setInitialSearch(false);
         setLoading(false);
     };
 
@@ -125,17 +126,17 @@ export const Reports = () => {
         };
     }
 
-    const debounceEventTrigger = debounce(field => {
-        var currentValue = searchData[field.name];
-        var newValue = field.value;
-        if (newValue === '__/__/____' || !newValue) newValue = null;
-        if (newValue !== currentValue)
-            setSearchData({ ...searchData, [field.name]: newValue });
+    const debounceSearch = debounce(() => {
+        setPagination({ ...pagination, page: 1 });
     }, 500);
 
     const handleSearchEvent = (event) => {
         var field = event.target;
-        debounceEventTrigger(field);
+        var currentValue = searchData[field.name];
+        var newValue = field.value;
+        if (newValue === '__/__/____' || !newValue || (field.name.indexOf('Date') > -1 && newValue.indexOf('_') > -1)) newValue = null;
+        if (newValue !== currentValue)
+            setSearchData({ ...searchData, [field.name]: newValue });
     };
 
     const DownloadReportsResult = async () => {
@@ -143,8 +144,18 @@ export const Reports = () => {
     };
 
     useEffect(() => {
-        setPagination({ ...pagination, page: 1 });
+        if (!initialSearch)
+            debounceSearch();
     }, [searchData]);
+
+    useEffect(() => {
+        setSearchData({
+            leadership: null,
+            g12Leadership: null,
+            startDate: state?.startDate,
+            endDate: state?.endDate
+        });
+    }, [state]);
 
     useEffect(() => {
         search();
@@ -192,14 +203,14 @@ export const Reports = () => {
                                     <Row className="pr-3">
                                         <Form.Group className="mb-3" as={Col}>
                                             <Form.Label>Desde</Form.Label>
-                                            <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={firstCurrentWeekDay}>
+                                            <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} value={searchData.startDate}>
                                                 <Form.Control id="basic-url" name="startDate" autoComplete='off' />
                                             </ReactInputMask>
                                         </Form.Group>
 
                                         <Form.Group className="mb-3 pr-3" as={Col}>
                                             <Form.Label>Até</Form.Label>
-                                            <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={endCurrentWeekDay}>
+                                            <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} value={searchData.endDate}>
                                                 <Form.Control id="basic-url" name="endDate" autoComplete='off' />
                                             </ReactInputMask>
                                         </Form.Group>

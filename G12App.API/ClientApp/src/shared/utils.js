@@ -265,3 +265,11 @@ export const CleanSearchForm = (setSearchData) => {
     });
     setSearchData({});
 }
+
+export const ParseBool = (value) => {
+    if (/true/i.test(value) || value === true)
+        return true;
+    if (/false/i.test(value) || value === false)
+        return false;
+    return null;
+}

@@ -1,6 +1,6 @@
 ﻿using G12App.Domain.DTOs;
 
-namespace G12App.Application.Events
+namespace G12App.Domain.DomainEvents
 {
     public class CellDeleted : CellChanged
     {

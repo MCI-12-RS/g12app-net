@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { Form, Col, Row, Accordion, Container } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SearchCells } from '../../services/Cell.service.js';
 import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FormatFirstLastName, RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay, CleanSearchForm } from '../../shared/utils.js';
+import { FormatFirstLastName, RenderGridAddress, TranslateCellType, TranslateMinistryLevel, TranslateWeekDay, CleanSearchForm, ToBRDate, FromBRDate } from '../../shared/utils.js';
+import ReactInputMask from 'react-input-mask';
 
 export const Cells = () => {
+
+  const { state } = useLocation();
 
   const [cells, setCells] =
     React.useState([]);
@@ -17,11 +20,23 @@ export const Cells = () => {
     React.useState({ page: 1, limit: 20 });
   const [searchData, setSearchData] =
     React.useState({
-      lead: '', leadership: '', host: '', timothy: '',
-      street: '', cellType: null, weekDay: null, neighborhood: '', city: '', state: ''
+      lead: '',
+      leadership: '',
+      host: '',
+      timothy: '',
+      street: '',
+      cellType: null,
+      weekDay: null,
+      neighborhood: '',
+      city: '',
+      state: '',
+      reportStatus: state?.reportStatus || '',
+      createdDateFrom: state?.createdDateFrom || null,
+      createdDateUntil: null
     });
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
+  const [initialSearch, setInitialSearch] = React.useState(true);
 
   const columns = [
     {
@@ -66,28 +81,38 @@ export const Cells = () => {
   const search = async () => {
     setLoading(true);
 
-    const result = await SearchCells(searchData, pagination, {});
+    let payload = {
+      ...searchData,
+      createdDateFrom: searchData.createdDateFrom ? FromBRDate(searchData.createdDateFrom) : null,
+      createdDateUntil: searchData.createdDateUntil ? FromBRDate(searchData.createdDateUntil) : null
+    }
+
+    const result = await SearchCells(payload, pagination, {});
     if (result.isValid) {
       setCells(result.data);
       setTotal(result.totalRecords ?? result.data.length);
     }
 
+    setInitialSearch(false);
     setLoading(false);
   };
 
-  const debounceEventTrigger = debounce(field => {
-    var currentValue = searchData[field.name] || '';
-    if (field.value != currentValue)
-      setSearchData({ ...searchData, [field.name]: field.value });
-  }, 500);
-
   const handleSearchEvent = (event) => {
     var field = event.target;
-    debounceEventTrigger(field);
+    var newValue = field.value;
+    var currentValue = searchData[field.name];
+    if (newValue === '__/__/____' || !newValue || (field.name.indexOf('Date') > -1 && newValue.indexOf('_') > -1)) newValue = null;
+    if (newValue != currentValue)
+      setSearchData({ ...searchData, [field.name]: field.value });
   };
 
-  useEffect(() => {
+  const debounceSearch = debounce(() => {
     setPagination({ ...pagination, page: 1 });
+  }, 500);
+
+  useEffect(() => {
+    if (!initialSearch)
+      debounceSearch();
   }, [searchData]);
 
   useEffect(() => {
@@ -167,10 +192,10 @@ export const Cells = () => {
                       <option value="Sunday">Domingo</option>
                     </Form.Select>
                   </Form.Group>
- 
+
                   <Form.Group className="mb-3 pr-3" xs={12} md={4} as={Col}>
                     <Form.Label>Situação de Relatório</Form.Label>
-                    <Form.Select name="reportStatus" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <Form.Select name="reportStatus" value={searchData.reportStatus} aria-describedby="basic-addon2" onChange={handleSearchEvent}>
                       <option value="">Indiferente</option>
                       <option value="current">Relatório em dia</option>
                       <option value="notDoneYet">Ainda não ocorreu esta semana</option>
@@ -184,7 +209,23 @@ export const Cells = () => {
                       <option value="cancelled3Weeks">Cancelada a 3 semanas</option>
                       <option value="cancelled4Weeks">Cancelada a 4 semanas</option>  */}
                     </Form.Select>
-                  </Form.Group> 
+                  </Form.Group>
+                </Row>
+
+                <Row className="pr-3">
+                  <Form.Group className="mb-3" as={Col}>
+                    <Form.Label>Cadastrada a partir de</Form.Label>
+                    <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={searchData.createdDateFrom}>
+                      <Form.Control id="basic-url" name="createdDateFrom" autoComplete='off' />
+                    </ReactInputMask>
+                  </Form.Group>
+
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label>Cadastrada até</Form.Label>
+                    <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={searchData.createdDateUntil}>
+                      <Form.Control id="basic-url" name="createdDateUntil" autoComplete='off' />
+                    </ReactInputMask>
+                  </Form.Group>
                 </Row>
               </Accordion.Body>
             </Accordion.Item>
@@ -202,7 +243,7 @@ export const Cells = () => {
             setPagination={setPagination}
             totalRecords={total} />
         </div>
-      </div>
+      </div >
     </>
   )
 }

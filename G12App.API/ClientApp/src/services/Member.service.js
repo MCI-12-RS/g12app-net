@@ -1,6 +1,9 @@
-import { FetchPrivate } from '../shared/utils';
+import { FetchPrivate, ParseBool } from '../shared/utils';
 
 const SearchMembers = async (search, pagination, sort = {}) => {
+
+    console.log(search);
+
     var response = await FetchPrivate('/api/member/search', {
         method: 'POST',
         body: JSON.stringify({
@@ -21,9 +24,9 @@ const SearchMembers = async (search, pagination, sort = {}) => {
                 "homeAddress_State": search.state,
                 "ministryLevel": search.ministryLevel ? parseInt(search.ministryLevel) : null,
                 "notInId": search.notInIds,
-                "idle": search.idle ? /true/i.test(search.idle) : null,
-                "hasNoLeadership": search.hasNoLeadership ? /true/i.test(search.hasNoLeadership) : null,
-                "baptized": search.baptized ? /true/i.test(search.baptized) : null,
+                "idle": ParseBool(search.idle),
+                "hasNoLeadership": ParseBool(search.hasNoLeadership),
+                "baptized": ParseBool(search.baptized),
                 "cellLink": search.cellLink ? search.cellLink : null,
             }
         }),

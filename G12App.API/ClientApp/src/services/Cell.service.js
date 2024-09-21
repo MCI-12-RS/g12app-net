@@ -23,7 +23,9 @@ const SearchCells = async (search, pagination, sort) => {
               "homeAddress_State": search.state,
               "homeAddress_Street": search.street,
               "cellType": search.cellType === "" ? null : search.cellType,
-              "reportStatus": search.reportStatus === "" ? null : search.reportStatus
+              "reportStatus": search.reportStatus === "" ? null : search.reportStatus,
+              "createdDateFrom": search.createdDateFrom,
+              "createdDateUntil": search.createdDateUntil,
             }
         }),
         headers: {

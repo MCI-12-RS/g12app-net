@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using G12App.Application.Events;
+using G12App.Domain.DomainEvents;
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Events;
 using G12App.Domain.Interfaces.Repositories;
