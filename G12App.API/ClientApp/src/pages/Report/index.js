@@ -58,7 +58,7 @@ export const Reports = () => {
                     <span>
                         <span>{TranslateWeekDayShort(report.cell.weekDay)} ({moment(report.date).format('DD/MM/yyyy')}) - {moment(report.date).format('HH:mm')}</span>
                         <br />
-                        <hr />
+                        <hr className='d-none d-md-block' />
                         <span>
                             {report.weekCellSkipped ?
                                 <>
@@ -85,19 +85,19 @@ export const Reports = () => {
             name: 'Participantes',
             className: 'text-center',
             properties: { md: 1 },
-            render: (report, index) => <>{report.numMembers}</>
+            render: (report, index) => <span>{report.numMembers}</span>
         },
         {
             name: 'Visitantes',
             className: 'text-center',
             properties: { md: 1 },
-            render: (report, index) => <>{report.numVisitors}</>
+            render: (report, index) => <span>{report.numVisitors}</span>
         },
         {
             name: '',
             className: 'text-right actions',
             properties: { md: 1 },
-            render: (report) => <span className='text-center'>
+            render: (report) => <span>
                 <Link to={"/members/" + report.leadershipId} title="Dados do líder"><FontAwesomeIcon icon={faPerson} /></Link>
                 <Link to={"/cells/" + report.cellId} title="Dados da célula"><FontAwesomeIcon icon={faHouse} /></Link>
             </span>

@@ -19,7 +19,8 @@ namespace G12App.Application.EventHandlers.CacheInvalidation
 
         protected override async Task HandleInternal(CellChanged ev)
         {
-            await _memoryCache.Remove(CacheKeys.Cell_CountTotalCells);
+            await _memoryCache.Remove(CacheKeys.Cell_CountTotalDiscipleshipCells);
+            await _memoryCache.Remove(CacheKeys.Cell_CountTotalEvangelisticCells);
             await _memoryCache.Remove(CacheKeys.Cell_CountPendingReports);
             await _memoryCache.Remove(CacheKeys.Cell_CountWeekVisitors);
             await _memoryCache.Remove(CacheKeys.Cell_CountWeekReports);

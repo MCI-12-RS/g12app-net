@@ -22,7 +22,15 @@ export const Home = () => {
   const clickCellCreatedThisWeek = () => {
     navigate('/cells', { state: { createdDateFrom: ToBRDate(moment().startOf('week')) } });
   }
-  
+
+  const clickMemberCreatedThisWeek = () => {
+    navigate('/members', { state: { createdDateFrom: ToBRDate(moment().startOf('week')) } });
+  }
+
+  const clickReportsLoggedThisWeek = () => {
+    navigate('/reports', { state: { startDate: ToBRDate(moment().startOf('week')), endDate: ToBRDate(moment().endOf('week')) } });
+  }
+
   const clickActiveMembers = () => {
     navigate('/members', { state: { idle: false } });
   }
@@ -43,6 +51,14 @@ export const Home = () => {
     navigate('/members', { state: { cellLink: 'none' } });
   }
 
+  const clickTotalEvangelisticCells = () => {
+    navigate('/cells', { state: { cellType: 'Evangelistic' } });
+  }
+
+  const clickTotalDiscipleshipCells = () => {
+    navigate('/cells', { state: { cellType: 'Discipleship' } });
+  }
+  
   const cardClick = (card) => {
     if (card.link)
       navigate(card.link);
@@ -91,7 +107,7 @@ export const Home = () => {
   const SetCardsData = (data) => {
     var arrCards = [];
 
-    arrCards.push({ type: 'info', title: <>Relatórios<br />Enviados</>, value: data.weekReports, link: '/reports/', group: 'weekly' });
+    arrCards.push({ type: 'info', title: <>Relatórios<br />Enviados</>, value: data.weekReports, click: clickReportsLoggedThisWeek, group: 'weekly' });
 
     var pendingReportsType = data.cellsPendingReports > 0 ? 'danger' : 'success';
     arrCards.push({
@@ -102,7 +118,7 @@ export const Home = () => {
     arrCards.push({ type: !data.weekVisitors ? 'warning' : 'info', title: <>Visitantes em<br />Células</>, value: data.weekVisitors, link: '/reports/', group: 'weekly' });
 
     if (data.weekNewMembers)
-      arrCards.push({ type: 'info', title: <>Novos membros<br />cadastrados</>, value: data.weekNewMembers, link: '/reports/', group: 'weekly' });
+      arrCards.push({ type: 'info', title: <>Novos membros<br />cadastrados</>, value: data.weekNewMembers, click: clickMemberCreatedThisWeek, group: 'weekly' });
 
     if (data.weekNewCells)
       arrCards.push({ type: 'info', title: <>Novas células<br />cadastradas</>, value: data.weekNewCells, click: clickCellCreatedThisWeek, group: 'weekly' });
@@ -110,8 +126,11 @@ export const Home = () => {
     let activeMembers = data.totalMembers - data.totalIdleMembers;
     arrCards.push({ type: 'info', title: <>Membros<br />Ativos</>, value: activeMembers, click: clickActiveMembers, group: 'general' });
 
-    if (data.totalCells)
-      arrCards.push({ type: 'info', title: <>Celulas<br />Ativas</>, value: data.totalCells, link: '/cells/', group: 'general' });
+    if (data.totalEvangelisticCells)
+      arrCards.push({ type: 'info', title: <>Celulas<br />Evangelísticas</>, value: data.totalEvangelisticCells, click: clickTotalEvangelisticCells, group: 'general' });
+
+    if (data.totalDiscipleshipCells)
+      arrCards.push({ type: 'info', title: <>Celulas<br />Discipuladoras</>, value: data.totalDiscipleshipCells, click: clickTotalDiscipleshipCells, group: 'general' });
 
     if (data.totalIdleMembers)
       arrCards.push({ type: 'info', title: <>Membros<br />Inativos</>, value: data.totalIdleMembers, click: clickIdleMembers, group: 'general' });

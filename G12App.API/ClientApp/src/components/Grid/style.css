@@ -108,6 +108,10 @@
     text-align: left;
 }
 
+.actions div{    
+    text-align: right !important;
+}
+
 .actions .inside-column-name, 
 .actions .inside-column-value {
     width: 10%;

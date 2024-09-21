@@ -25,13 +25,13 @@ export const Cells = () => {
       host: '',
       timothy: '',
       street: '',
-      cellType: null,
+      cellType: state?.cellType,
       weekDay: null,
       neighborhood: '',
       city: '',
       state: '',
       reportStatus: state?.reportStatus || '',
-      createdDateFrom: state?.createdDateFrom || null,
+      createdDateFrom: state?.createdDateFrom,
       createdDateUntil: null
     });
   const [loading, setLoading] = React.useState(false);
@@ -70,10 +70,10 @@ export const Cells = () => {
       name: '',
       className: 'text-right actions',
       render: (cell) =>
-        <>
+        <span>
           <Link to={"/cells/" + cell.id} title="Dados da célula"><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
           <Link to={"/cells/" + cell.id + "/reports"} title="Ver relatórios"><FontAwesomeIcon icon={faList} /></Link>
-        </>
+        </span>
     }
 
   ];
@@ -171,7 +171,7 @@ export const Cells = () => {
                 <Row className="pr-3">
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label>Modalidade</Form.Label>
-                    <Form.Select name="cellType" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <Form.Select name="cellType" value={searchData.cellType} aria-describedby="basic-addon2" onChange={handleSearchEvent}>
                       <option value="">Todas</option>
                       <option value="Evangelistic">Evangelística</option>
                       <option value="Discipleship">Discipuladora</option>

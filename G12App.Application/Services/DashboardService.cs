@@ -56,9 +56,25 @@ namespace G12App.Application.Services
                             }
                         })),
 
-                TotalCells =
-                    await _cache.GetOrFetch(CacheKeys.Cell_CountTotalCells,
-                        () => _cellRepository.CountCellsAsync(new Query<CellFilter>())),
+                TotalDiscipleshipCells =
+                    await _cache.GetOrFetch(CacheKeys.Cell_CountTotalDiscipleshipCells,
+                        () => _cellRepository.CountCellsAsync(new Query<CellFilter>()
+                        {
+                            Filter = new CellFilter
+                            {
+                                CellType = CellType.Discipleship
+                            }
+                        })),
+
+                TotalEvangelisticCells =
+                    await _cache.GetOrFetch(CacheKeys.Cell_CountTotalEvangelisticCells,
+                        () => _cellRepository.CountCellsAsync(new Query<CellFilter>()
+                        {
+                            Filter = new CellFilter
+                            {
+                                CellType = CellType.Evangelistic
+                            }
+                        })),
 
                 CellsPendingReports =
                     await _cache.GetOrFetch(CacheKeys.Cell_CountPendingReports,

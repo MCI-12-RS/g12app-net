@@ -2,8 +2,6 @@ import { FetchPrivate, ParseBool } from '../shared/utils';
 
 const SearchMembers = async (search, pagination, sort = {}) => {
 
-    console.log(search);
-
     var response = await FetchPrivate('/api/member/search', {
         method: 'POST',
         body: JSON.stringify({
@@ -28,6 +26,8 @@ const SearchMembers = async (search, pagination, sort = {}) => {
                 "hasNoLeadership": ParseBool(search.hasNoLeadership),
                 "baptized": ParseBool(search.baptized),
                 "cellLink": search.cellLink ? search.cellLink : null,
+                "createdDateFrom": search.createdDateFrom,
+                "createdDateUntil": search.createdDateUntil,
             }
         }),
         headers: {

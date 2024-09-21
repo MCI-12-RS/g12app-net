@@ -1,5 +1,6 @@
 ﻿using G12App.Domain.Interfaces.EventHandlers;
 using G12App.Domain.Interfaces.Events;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -8,18 +9,15 @@ namespace G12App.Infrastructure.Events
     public class EventWorker : BackgroundService
     {
         private readonly IEventQueue _eventQueue;
-        private readonly IEventHandlerService _eventHandlerRegistry;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<EventWorker> _logger;
 
         public EventWorker(
             IEventQueue eventQueue,
-            IEventHandlerService eventHandlerRegistry,
             IServiceProvider serviceProvider,
             ILogger<EventWorker> logger)
         {
             _eventQueue = eventQueue;
-            _eventHandlerRegistry = eventHandlerRegistry;
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
@@ -36,14 +34,17 @@ namespace G12App.Infrastructure.Events
                     if (ev == null)
                         continue;
 
-                    List<IEventHandler> handlers = await _eventHandlerRegistry.GetHandlers(ev.GetType());
-                    if (handlers == null || handlers.Count == 0)
+                    var handlerType = typeof(IEventHandler<>).MakeGenericType(ev.GetType());
+                    await using var scope = _serviceProvider.CreateAsyncScope();
+                    var services = scope.ServiceProvider.GetServices(handlerType).Cast<IEventHandler>();
+
+                    if (services == null || services.Count() == 0)
                     {
                         _logger.LogWarning("No handler found for event type {type}.", ev.GetType().Name);
                         continue;
                     }
 
-                    foreach (var handler in handlers)
+                    foreach (var handler in services)
                     {
                         try
                         {

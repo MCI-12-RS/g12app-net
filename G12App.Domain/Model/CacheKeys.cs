@@ -14,7 +14,8 @@ namespace G12App.Domain.Model
         public static readonly CacheSettings Member_CountCreatedCurrentWeek = new CacheSettings(nameof(Member_CountCreatedCurrentWeek));
 
         // Cell Count
-        public static readonly CacheSettings Cell_CountTotalCells = new CacheSettings(nameof(Cell_CountTotalCells));
+        public static readonly CacheSettings Cell_CountTotalDiscipleshipCells = new CacheSettings(nameof(Cell_CountTotalDiscipleshipCells));
+        public static readonly CacheSettings Cell_CountTotalEvangelisticCells = new CacheSettings(nameof(Cell_CountTotalEvangelisticCells));
         public static readonly CacheSettings Cell_CountPendingReports = new CacheSettings(nameof(Cell_CountPendingReports));
         public static readonly CacheSettings Cell_CountWeekVisitors = new CacheSettings(nameof(Cell_CountWeekVisitors));
         public static readonly CacheSettings Cell_CountWeekReports = new CacheSettings(nameof(Cell_CountWeekReports));

@@ -7,7 +7,8 @@ import Grid from '../../components/Grid';
 import { isMobile } from 'react-device-detect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { FormatFirstLastName, RenderGridAddress, TranslateMinistryLevel, CleanSearchForm } from '../../shared/utils';
+import { FormatFirstLastName, RenderGridAddress, TranslateMinistryLevel, CleanSearchForm, FromBRDate } from '../../shared/utils';
+import ReactInputMask from 'react-input-mask';
 
 export const Members = () => {
 
@@ -29,7 +30,9 @@ export const Members = () => {
       hasNoLeadership: state?.hasNoLeadership,
       baptized: state?.baptized,
       ministryLevel: '',
-      cellLink: state?.cellLink
+      cellLink: state?.cellLink,
+      createdDateFrom: state?.createdDateFrom || null,
+      createdDateUntil: null
     });
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
@@ -85,16 +88,22 @@ export const Members = () => {
       name: '',
       properties: { sm: 1 },
       className: 'text-right actions',
-      render: (member) => <Link to={"/members/" + member.id}><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
+      render: (member) => <span>
+        <Link to={"/members/" + member.id}><FontAwesomeIcon icon={faMagnifyingGlass} /></Link>
+      </span>
     }
   ];
 
   const search = async () => {
     setLoading(true);
 
-    console.log(`searchData`, searchData);
+    let payload = {
+      ...searchData,
+      createdDateFrom: searchData.createdDateFrom ? FromBRDate(searchData.createdDateFrom) : null,
+      createdDateUntil: searchData.createdDateUntil ? FromBRDate(searchData.createdDateUntil) : null
+    }
 
-    const result = await SearchMembers(searchData, pagination, sort);
+    const result = await SearchMembers(payload, pagination, sort);
     if (result.isValid) {
       setMembers(result.data);
       setTotal(result.totalRecords ?? result.data.length);
@@ -217,6 +226,22 @@ export const Members = () => {
                       <option value="attendee">Participante</option>
                       <option value="none">Sem vínculo</option>
                     </Form.Select>
+                  </Form.Group>
+                </Row>
+
+                <Row className="pr-3">
+                  <Form.Group className="mb-3" as={Col}>
+                    <Form.Label>Cadastrado a partir de</Form.Label>
+                    <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={searchData.createdDateFrom}>
+                      <Form.Control id="basic-url" name="createdDateFrom" autoComplete='off' />
+                    </ReactInputMask>
+                  </Form.Group>
+
+                  <Form.Group className="mb-3 pr-3" as={Col}>
+                    <Form.Label>Cadastrado até</Form.Label>
+                    <ReactInputMask mask="99/99/9999" onChange={handleSearchEvent} defaultValue={searchData.createdDateUntil}>
+                      <Form.Control id="basic-url" name="createdDateUntil" autoComplete='off' />
+                    </ReactInputMask>
                   </Form.Group>
                 </Row>
 
