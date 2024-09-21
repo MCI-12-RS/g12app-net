@@ -1,13 +1,14 @@
-﻿using System;
+﻿using G12App.Domain.Caching;
+using System;
 using System.Threading.Tasks;
 
 namespace G12App.Domain.Interfaces.Caching
 {
     public interface ICacheService
     {
-        public Task<T> Get<T>(string key);
-        Task<T> Set<T>(string key, T value);
-        Task<T> GetOrFetch<T>(string key, Func<Task<T>> fetchFunction);
-        Task Remove(string key);
+        public Task<T> Get<T>(CacheSettings settings);
+        Task<T> Set<T>(CacheSettings settings, T value);
+        Task<T> GetOrFetch<T>(CacheSettings settings, Func<Task<T>> fetchFunction);
+        Task Remove(CacheSettings settings);
     }
 }

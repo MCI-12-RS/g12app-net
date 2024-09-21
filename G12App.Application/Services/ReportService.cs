@@ -62,7 +62,7 @@ namespace G12App.Application.Services
             var report = await _reportRepository.Create(reportEntity);
             var resultReportDto = _mapper.Map<ReportDto>(report);
 
-            await _eventDispatcher.DispatchEvent(new ReportLogged(null, resultReportDto));
+            await _eventDispatcher.DispatchEvent(new ReportLogged(resultReportDto));
 
             return new ServiceResult<ReportDto>(resultReportDto);
         }

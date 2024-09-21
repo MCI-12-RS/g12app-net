@@ -1,6 +1,7 @@
 ﻿using G12App.Application.Caching;
 using G12App.Application.EventHandlers.CacheInvalidation;
 using G12App.Application.EventHandlers.DomainEvents;
+using G12App.Application.Events;
 using G12App.Application.Services;
 using G12App.Domain.DomainEvents;
 using G12App.Domain.Interfaces.Caching;
@@ -54,6 +55,8 @@ namespace G12App.Application
             services.AddTransient<IEventHandler<CellCreated>, CellCacheInvalidationHandler>();
             services.AddTransient<IEventHandler<CellUpdated>, CellCacheInvalidationHandler>();
             services.AddTransient<IEventHandler<CellDeleted>, CellCacheInvalidationHandler>();
+
+            services.AddTransient<IEventHandler<ReportLogged>, ReportCacheInvalidationHandler>();
 
             return services;
         }
