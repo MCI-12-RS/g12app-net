@@ -35,8 +35,6 @@ namespace G12App.Application.Services
             var startDayWeek = SystemConstants.BrazilTime.Date.GetStartOfWeek();
             var endDayWeek = SystemConstants.BrazilTime.Date.GetEndOfWeek();
 
-            var memberFilter = new Query<MemberFilter>() { };
-            var cellFilter = new Query<CellFilter>() { };
             var reportFilter = new Query<ReportFilter>()
             {
                 Filter = new ReportFilter()
@@ -46,98 +44,107 @@ namespace G12App.Application.Services
                 }
             };
 
-            var totalMembers = await _memberRepository.CountMembersAsync(memberFilter);
-            var totalCells = await _cellRepository.CountCellsAsync(cellFilter);
-            var cellsPendingReports = _cellRepository.GetCellsReports(cellFilter, reportFilter, false).Count();
-            var weekReports = await _reportRepository.CountReportsAsync(reportFilter);
-            var weekVisitors = await _reportRepository.GetCellsVisitors(reportFilter);
-
-            var weekNewMembers = await _cache.GetOrCreateAsync(CacheKeys.Member_CreatedCurrentWeek,
-                (entry) => _memberRepository.CountMembersAsync(new Query<MemberFilter>()
-                {
-                    Filter = new MemberFilter()
-                    {
-                        CreatedDateFrom = startDayWeek,
-                        CreatedDateUntil = endDayWeek,
-                    }
-                }));
-
-            var weekNewCells = await _cellRepository.CountCellsAsync(new Query<CellFilter>()
-            {
-                Filter = new CellFilter()
-                {
-                    CreatedDateFrom = startDayWeek,
-                    CreatedDateUntil = endDayWeek,
-                }
-            });
-
-            var totalNonBaptizedMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
-            {
-                Filter = new MemberFilter()
-                {
-                    Baptized = false
-                }
-            });
-
-            var totalIdleMembers = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
-            {
-                Filter = new MemberFilter()
-                {
-                    Idle = true
-                }
-            });
-
-            var totalMembersWithoutLeadership = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
-            {
-                Filter = new MemberFilter()
-                {
-                    HasNoLeadership = true
-                }
-            });
-
-            var totalCellReportedSkipped = await _reportRepository.CountReportsAsync(new Query<ReportFilter>()
-            {
-                Filter = new ReportFilter()
-                {
-                    WeekCellSkipped = true,
-                    StartDate = startDayWeek,
-                    EndDate = endDayWeek,
-                }
-            });
-
-            var totalCellReportedCompleted = await _reportRepository.CountReportsAsync(new Query<ReportFilter>()
-            {
-                Filter = new ReportFilter()
-                {
-                    WeekCellSkipped = false,
-                    StartDate = startDayWeek,
-                    EndDate = endDayWeek,
-                }
-            });
-
-            var totalMembersWithNoCellLink = await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
-            {
-                Filter = new MemberFilter()
-                {
-                    CellLink = CellLink.None,
-                }
-            });
-
             return new DashboardDto()
             {
-                TotalMembers = totalMembers,
-                TotalCells = totalCells,
-                CellsPendingReports = cellsPendingReports,
-                WeekReports = weekReports,
-                WeekVisitors = weekVisitors,
-                WeekNewMembers = weekNewMembers,
-                WeekNewCells = weekNewCells,
-                TotalNonBaptizedMembers = totalNonBaptizedMembers,
-                TotalIdleMembers = totalIdleMembers,
-                TotalCellReportedSkipped = totalCellReportedSkipped,
-                TotalCellReportedCompleted = totalCellReportedCompleted,
-                TotalMembersWithoutLeadership = totalMembersWithoutLeadership,
-                TotalMembersWithNoCellLink = totalMembersWithNoCellLink,
+                TotalMembers =
+                    await _memberRepository.CountMembersAsync(new Query<MemberFilter>()),
+
+                TotalCells =
+                     await _cellRepository.CountCellsAsync(new Query<CellFilter>()),
+
+                CellsPendingReports =
+                    await _cellRepository.CountCellsAsync(new Query<CellFilter>()
+                    {
+                        Filter = new CellFilter()
+                        {
+                            ReportStatus = CellReportStatus.OverDueThisWeek
+                        }
+                    }),
+
+                WeekReports =
+                    await _reportRepository.CountReportsAsync(reportFilter),
+
+                WeekVisitors =
+                    await _reportRepository.GetCellsVisitors(reportFilter),
+
+                WeekNewMembers =
+                    await _cache.GetOrCreateAsync(CacheKeys.Member_CreatedCurrentWeek,
+                        (entry) => _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+                        {
+                            Filter = new MemberFilter()
+                            {
+                                CreatedDateFrom = startDayWeek,
+                                CreatedDateUntil = endDayWeek,
+                            }
+                        })),
+
+                WeekNewCells =
+                    await _cellRepository.CountCellsAsync(new Query<CellFilter>()
+                    {
+                        Filter = new CellFilter()
+                        {
+                            CreatedDateFrom = startDayWeek,
+                            CreatedDateUntil = endDayWeek,
+                        }
+                    }),
+
+                TotalNonBaptizedMembers =
+                    await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+                    {
+                        Filter = new MemberFilter()
+                        {
+                            Baptized = false
+                        }
+                    }),
+
+                TotalIdleMembers =
+                    await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+                    {
+                        Filter = new MemberFilter()
+                        {
+                            Idle = true
+                        }
+                    }),
+
+                TotalCellReportedSkipped =
+                    await _reportRepository.CountReportsAsync(new Query<ReportFilter>()
+                    {
+                        Filter = new ReportFilter()
+                        {
+                            WeekCellSkipped = true,
+                            StartDate = startDayWeek,
+                            EndDate = endDayWeek,
+                        }
+                    }),
+
+                TotalCellReportedCompleted =
+                    await _reportRepository.CountReportsAsync(new Query<ReportFilter>()
+                    {
+                        Filter = new ReportFilter()
+                        {
+                            WeekCellSkipped = false,
+                            StartDate = startDayWeek,
+                            EndDate = endDayWeek,
+                        }
+                    }),
+
+                TotalMembersWithoutLeadership =
+                    await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+                    {
+                        Filter = new MemberFilter()
+                        {
+                            HasNoLeadership = true
+                        }
+                    }),
+
+                TotalMembersWithNoCellLink =
+                     await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
+                     {
+                         Filter = new MemberFilter()
+                         {
+                             CellLink = CellLink.None,
+                         }
+                     }),
             };
         }
     }

@@ -1,17 +1,15 @@
-﻿using G12App.Application.EventHandlers;
-using G12App.Domain.DomainEvents;
+﻿using G12App.Domain.DomainEvents;
 using G12App.Domain.DTOs;
 using G12App.Domain.Helpers;
-using G12App.Domain.Interfaces.EventHandlers;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace G12App.Application.Events
+namespace G12App.Application.EventHandlers.DomainEvents
 {
-    public class MemberChangedHandler : BaseEventHandler<MemberChanged>, IMemberChangedHandler
+    public class MemberChangedHandler : BaseEventHandler<MemberChanged>
     {
         private readonly IMemberService _memberService;
         private readonly IMemberRepository _memberRepository;

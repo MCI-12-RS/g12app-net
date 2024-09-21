@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Col, Row, Accordion, Container } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SearchMembers } from '../../services/Member.service';
 import { debounce } from 'lodash';
 import Grid from '../../components/Grid';
@@ -11,12 +11,26 @@ import { FormatFirstLastName, RenderGridAddress, TranslateMinistryLevel, CleanSe
 
 export const Members = () => {
 
+  const { state } = useLocation();
+
+  const [initialSearch, setInitialSearch] = React.useState(true);
+
   const [members, setMembers] =
     React.useState([]);
   const [pagination, setPagination] =
     React.useState({ page: 1, limit: 10 });
   const [searchData, setSearchData] =
-    React.useState({ name: '', leadershipName: '', email: '', neighborhood: '', city: '', state: '' });
+    React.useState({
+      name: '',
+      leadershipName: '',
+      neighborhood: '',
+      city: '',
+      idle: state?.idle,
+      hasNoLeadership: state?.hasNoLeadership,
+      baptized: state?.baptized,
+      ministryLevel: '',
+      cellLink: state?.cellLink
+    });
   const [loading, setLoading] = React.useState(false);
   const [total, setTotal] = React.useState(0);
   const [sort] = React.useState({ sortBy: 'ministryLevel', order: false });
@@ -78,28 +92,32 @@ export const Members = () => {
   const search = async () => {
     setLoading(true);
 
+    console.log(`searchData`, searchData);
+
     const result = await SearchMembers(searchData, pagination, sort);
     if (result.isValid) {
       setMembers(result.data);
       setTotal(result.totalRecords ?? result.data.length);
     }
 
+    setInitialSearch(false);
     setLoading(false);
   };
 
-  const debounceEventTrigger = debounce(field => {
-    var currentValue = searchData[field.name] || '';
-    if (field.value !== currentValue)
-      setSearchData({ ...searchData, [field.name]: field.value });
+  const debounceSearch = debounce(() => {
+    setPagination({ ...pagination, page: 1 });
   }, 500);
 
   const handleSearchEvent = (event) => {
     var field = event.target;
-    debounceEventTrigger(field);
+    var currentValue = searchData[field.name] || '';
+    if (field.value !== currentValue)
+      setSearchData({ ...searchData, [field.name]: field.value });
   };
 
   useEffect(() => {
-    setPagination({ ...pagination, page: 1 });
+    if (!initialSearch)
+      debounceSearch();
   }, [searchData]);
 
   useEffect(() => {
@@ -128,31 +146,31 @@ export const Members = () => {
                 <Row className="pr-3">
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label>Nome</Form.Label>
-                    <Form.Control id="basic-url" name="name" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="name" value={searchData.name} autoComplete='off' onKeyUp={handleSearchEvent} />
                   </Form.Group>
 
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label id="basic-addon3">Liderança</Form.Label>
-                    <Form.Control id="basic-url" name="leadershipName" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="leadershipName" value={searchData.leadershipName} aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
                   </Form.Group>
                 </Row>
 
                 <Row className="pr-3">
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label id="basic-addon3">Bairro</Form.Label>
-                    <Form.Control id="basic-url" name="neighborhood" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="neighborhood" value={searchData.neighborhood} aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
                   </Form.Group>
 
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label id="basic-addon3">Cidade</Form.Label>
-                    <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="city" value={searchData.city} aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
                   </Form.Group>
                 </Row>
 
                 <Row className="pr-3">
                   <Form.Group className="mb-3 pr-3" xs={12} md={2} as={Col}>
                     <Form.Label>Situação</Form.Label>
-                    <Form.Select name="idle" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <Form.Select name="idle" aria-describedby="basic-addon2" value={searchData.idle} onChange={handleSearchEvent}>
                       <option value="">Indiferente</option>
                       <option value="false">Ativo</option>
                       <option value="true">Inativo</option>
@@ -161,7 +179,7 @@ export const Members = () => {
 
                   <Form.Group className="mb-3 pr-3" xs={12} md={2} as={Col}>
                     <Form.Label>Possui Liderança</Form.Label>
-                    <Form.Select name="hasNoLeadership" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <Form.Select name="hasNoLeadership" aria-describedby="basic-addon2" value={searchData.hasNoLeadership} onChange={handleSearchEvent}>
                       <option value="">Indiferente</option>
                       <option value="false">Sim</option>
                       <option value="true">Não</option>
@@ -170,7 +188,7 @@ export const Members = () => {
 
                   <Form.Group className="mb-3 pr-3" xs={12} md={2} as={Col}>
                     <Form.Label>Batizado</Form.Label>
-                    <Form.Select name="baptized" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <Form.Select name="baptized" aria-describedby="basic-addon2" value={searchData.baptized} onChange={handleSearchEvent}>
                       <option value="">Indiferente</option>
                       <option value="true">Sim</option>
                       <option value="false">Não</option>
@@ -179,7 +197,7 @@ export const Members = () => {
 
                   <Form.Group className="mb-3 pr-3" xs={12} md={3} as={Col}>
                     <Form.Label>Nível Ministerial</Form.Label>
-                    <Form.Select name="ministryLevel" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <Form.Select name="ministryLevel" aria-describedby="basic-addon2" value={searchData.ministryLevel} onChange={handleSearchEvent}>
                       <option value="">Indiferente</option>
                       <option value="1">Pastores</option>
                       <option value="12">G12</option>
@@ -191,7 +209,7 @@ export const Members = () => {
 
                   <Form.Group className="mb-3 pr-3" xs={12} md={3} as={Col}>
                     <Form.Label>Vínculo Celular</Form.Label>
-                    <Form.Select name="cellLink" aria-describedby="basic-addon2" onChange={handleSearchEvent}>
+                    <Form.Select name="cellLink" aria-describedby="basic-addon2" value={searchData.cellLink} onChange={handleSearchEvent}>
                       <option value="">Indiferente</option>
                       <option value="leader">Líder</option>
                       <option value="timothy">Timóteo</option>

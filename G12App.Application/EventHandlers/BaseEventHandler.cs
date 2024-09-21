@@ -23,5 +23,8 @@ namespace G12App.Application.EventHandlers
 
         protected virtual Task HandleInternal(TEvent ev)
             => Task.CompletedTask;
+
+        public Task Handle(IEvent ev)
+            => Handle((TEvent)ev);
     }
 }

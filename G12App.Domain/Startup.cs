@@ -11,8 +11,6 @@ namespace G12App.Domain
         {
             servicesCollection.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
-            servicesCollection.AddSingleton<IEventHandlerRegistry, EventHandlerRegistry>();
-
             return servicesCollection;
         }
     }

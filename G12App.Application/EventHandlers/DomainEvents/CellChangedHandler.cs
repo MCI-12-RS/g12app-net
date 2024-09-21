@@ -1,16 +1,14 @@
-﻿using G12App.Application.EventHandlers;
-using G12App.Domain.DomainEvents;
+﻿using G12App.Domain.DomainEvents;
 using G12App.Domain.DTOs;
 using G12App.Domain.Helpers;
-using G12App.Domain.Interfaces.EventHandlers;
 using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace G12App.Application.Events
+namespace G12App.Application.EventHandlers.DomainEvents
 {
-    public class CellChangedHandler : BaseEventHandler<CellChanged>, ICellChangedHandler
+    public class CellChangedHandler : BaseEventHandler<CellChanged>
     {
         private readonly IMemberRepository _memberRepository;
         private readonly ICellRepository _cellRepository;

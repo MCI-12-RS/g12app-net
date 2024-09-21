@@ -1,5 +1,5 @@
-﻿using G12App.Domain.Interfaces.Events;
-using Microsoft.Extensions.DependencyInjection;
+﻿using G12App.Domain.Interfaces.EventHandlers;
+using G12App.Domain.Interfaces.Events;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -8,13 +8,13 @@ namespace G12App.Infrastructure.Events
     public class EventWorker : BackgroundService
     {
         private readonly IEventQueue _eventQueue;
-        private readonly IEventHandlerRegistry _eventHandlerRegistry;
+        private readonly IEventHandlerService _eventHandlerRegistry;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<EventWorker> _logger;
 
         public EventWorker(
             IEventQueue eventQueue,
-            IEventHandlerRegistry eventHandlerRegistry,
+            IEventHandlerService eventHandlerRegistry,
             IServiceProvider serviceProvider,
             ILogger<EventWorker> logger)
         {
@@ -36,14 +36,24 @@ namespace G12App.Infrastructure.Events
                     if (ev == null)
                         continue;
 
-                    if (!_eventHandlerRegistry.Handlers.TryGetValue(ev.GetType(), out var handler))
+                    List<IEventHandler> handlers = await _eventHandlerRegistry.GetHandlers(ev.GetType());
+                    if (handlers == null || handlers.Count == 0)
                     {
                         _logger.LogWarning("No handler found for event type {type}.", ev.GetType().Name);
                         continue;
                     }
 
-                    await using var scope = _serviceProvider.CreateAsyncScope();
-                    await handler(scope.ServiceProvider, ev);
+                    foreach (var handler in handlers)
+                    {
+                        try
+                        {
+                            await handler.Handle(ev);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogCritical(ex, "Exception occurred while calling handler for event {type}.", ev?.GetType());
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

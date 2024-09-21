@@ -3,7 +3,7 @@ using G12App.Domain.Interfaces.Events;
 
 namespace G12App.Domain.DomainEvents
 {
-    public class MemberChanged : BaseEvent, IEvent
+    public abstract class MemberChanged : BaseEvent, IEvent
     {
         public MemberDto Before { get; }
         public MemberDto After { get; }

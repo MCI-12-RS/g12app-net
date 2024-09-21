@@ -34,10 +34,6 @@ const AppRoutes = [
     element: <Cells key="cells" />
   },
   {
-    path: '/cells/pending-reports',
-    element: <Cells key="cells-pending-reports" />
-  },
-  {
     path: '/new-cell',
     element: <CellDetails key="new-cell" />
   },
