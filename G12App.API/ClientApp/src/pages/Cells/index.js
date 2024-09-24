@@ -142,29 +142,29 @@ export const Cells = () => {
                 <Row className="pr-3">
                   <Form.Group className="mb-3" as={Col}>
                     <Form.Label>Líder</Form.Label>
-                    <Form.Control id="basic-url" name="lead" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="lead" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
 
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label>G12</Form.Label>
-                    <Form.Control id="basic-url" name="leadership" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="leadership" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
                 </Row>
 
                 <Row className="pr-3">
                   <Form.Group className="mb-3" as={Col} xs={6} md={4}>
                     <Form.Label>Logradouro</Form.Label>
-                    <Form.Control id="basic-url" name="street" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="street" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
 
                   <Form.Group className="mb-3 pr-3" as={Col} xs={6} md={4}>
                     <Form.Label>Bairro</Form.Label>
-                    <Form.Control id="basic-url" name="neighborhood" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="neighborhood" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
 
                   <Form.Group className="mb-3" as={Col} xs={12} md={4}>
                     <Form.Label>Cidade</Form.Label>
-                    <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="city" aria-describedby="basic-addon3" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
                 </Row>
 

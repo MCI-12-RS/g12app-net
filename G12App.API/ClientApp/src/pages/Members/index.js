@@ -155,24 +155,24 @@ export const Members = () => {
                 <Row className="pr-3">
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label>Nome</Form.Label>
-                    <Form.Control id="basic-url" name="name" value={searchData.name} autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="name" value={searchData.name} autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
 
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label id="basic-addon3">Liderança</Form.Label>
-                    <Form.Control id="basic-url" name="leadershipName" value={searchData.leadershipName} aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="leadershipName" value={searchData.leadershipName} aria-describedby="basic-addon3" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
                 </Row>
 
                 <Row className="pr-3">
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label id="basic-addon3">Bairro</Form.Label>
-                    <Form.Control id="basic-url" name="neighborhood" value={searchData.neighborhood} aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="neighborhood" value={searchData.neighborhood} aria-describedby="basic-addon3" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
 
                   <Form.Group className="mb-3 pr-3" as={Col}>
                     <Form.Label id="basic-addon3">Cidade</Form.Label>
-                    <Form.Control id="basic-url" name="city" value={searchData.city} aria-describedby="basic-addon3" autoComplete='off' onKeyUp={handleSearchEvent} />
+                    <Form.Control id="basic-url" name="city" value={searchData.city} aria-describedby="basic-addon3" autoComplete='off' onChange={handleSearchEvent} />
                   </Form.Group>
                 </Row>
 
