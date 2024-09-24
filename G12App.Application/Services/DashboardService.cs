@@ -87,10 +87,10 @@ namespace G12App.Application.Services
                     }),
 
                 WeekReports =
-                    await _reportRepository.CountReportsAsync(reportFilter)),
+                    await _reportRepository.CountReportsAsync(reportFilter),
 
                 WeekVisitors =
-                    await _reportRepository.GetCellsVisitors(reportFilter)),
+                    await _reportRepository.GetCellsVisitors(reportFilter),
 
                 WeekNewMembers =
                     await _memberRepository.CountMembersAsync(new Query<MemberFilter>()
