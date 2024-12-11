@@ -339,7 +339,7 @@ export const CellDetails = () => {
         if (option?.item?.homeAddress != null) {
             let address = option?.item?.homeAddress;
             if (address != null)
-                setPlace({ ...address, id: null });
+                setPlace({ ...address, id: place.id });
         }
     }
 
