@@ -1,6 +1,7 @@
 version: '3.3'
 services:
   db:
+    profiles: ["mssql"]
     image: mcr.microsoft.com/mssql/server:2017-latest
     environment:
       - SA_PASSWORD=Pass@word
@@ -8,12 +9,14 @@ services:
     ports:
       - "1433:1433"
   postgres:
+    profiles: ["postgres"]
     image: postgres
     environment:
       POSTGRES_PASSWORD: "Pass@word"
     ports:
       - "5432:5432"
   mysql:
+    platform: linux/x86_64
     image: mysql:5.7
     restart: always
     environment:

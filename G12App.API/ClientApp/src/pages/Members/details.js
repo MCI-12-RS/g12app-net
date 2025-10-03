@@ -238,7 +238,7 @@ export const MemberDetails = () => {
                 });
 
                 if (registerMore)
-                    navigate('/new-member', { state: { registerMore: true } });
+                    navigate('/new-member', { state: { registerMore: true }, replace: false });
                 else
                     navigate('/members/' + result.data.id);
             } else {

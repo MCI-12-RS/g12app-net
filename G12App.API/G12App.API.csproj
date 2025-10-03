@@ -9,7 +9,7 @@
 		<SpaRoot>ClientApp\</SpaRoot>
 		<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
 		<SpaProxyServerUrl>https://localhost:44436</SpaProxyServerUrl>
-		<SpaProxyLaunchCommand>cmd.exe /c npm start</SpaProxyLaunchCommand>
+		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
 		<ImplicitUsings>disable</ImplicitUsings>
 	</PropertyGroup>
 
