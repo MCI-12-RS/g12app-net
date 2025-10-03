@@ -10,6 +10,8 @@ using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
+using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace G12App.Application.Services
@@ -46,6 +48,32 @@ namespace G12App.Application.Services
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
             return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(memberEntity, opt => opt.Items[MappingConstants.PreservePassword] = preservePassword));
+        }
+
+        public async Task<ServiceResult<IEnumerable<MemberDtoSmall>>> GetMembersByParentId(int parentId, int page, int limit)
+        {
+            if (parentId <= 0)
+            {
+                return new ServiceResult<IEnumerable<MemberDtoSmall>>(Array.Empty<MemberDtoSmall>(), HttpStatusCode.BadRequest, "Identificador de liderança inválido.");
+            }
+
+            var currentPage = Math.Max(page, 1);
+            var pageSize = limit <= 0 ? 12 : Math.Min(limit, 120);
+
+            var query = new Query<MemberFilter>
+            {
+                Pagination = new Pagination(currentPage, pageSize),
+                Sort = new Sort(nameof(Member.Name), order: false)
+            };
+
+            query.Filter.LeadershipId = parentId;
+
+            var members = await _memberRepository.GetMembersAsync(query);
+            var totalMembers = await _memberRepository.CountMembersAsync(query);
+
+            var mappedMembers = _mapper.Map<IEnumerable<MemberDtoSmall>>(members);
+
+            return new ServiceResult<IEnumerable<MemberDtoSmall>>(mappedMembers, totalMembers);
         }
 
         public async Task<ServiceResult<MemberDto>> Add(MemberDto memberDTO)
