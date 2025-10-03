@@ -7,9 +7,11 @@ import { LoginPage } from "./pages/Login";
 import { ReportDetails } from "./pages/Report/details";
 import { Reports } from "./pages/Report";
 import { AppChanges } from "./pages/AppChanges";
+import { Ministries } from "./pages/Ministries";
 
 const AppRoutes = [
   {
+    path: '/',
     index: true,
     element: <Home key="home" />
   },
@@ -27,7 +29,7 @@ const AppRoutes = [
   },
   {
     path: '/ministries',
-    element: <Home key="home" />
+    element: <Ministries key="ministries" />
   },
   {
     path: '/cells',

@@ -10,7 +10,9 @@ namespace G12App.Domain.DTOs
         public string ComputedG12Leader { get; set; }
         public string ComputedLeadershipName { get; set; }
         public int? SpouseId { get; set; }
-        public MemberDtoSmall Spouse { get; set; }
+        public string SpouseName { get; set; }
+        public string SpouseComputedG12Leader { get; set; }
+        public string SpouseComputedLeadershipName { get; set; }
     }
 
     public class MemberDto

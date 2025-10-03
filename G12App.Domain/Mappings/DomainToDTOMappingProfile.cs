@@ -12,7 +12,10 @@ namespace G12App.Domain.Mappings
     {
         public DomainToDTOMappingProfile(IHttpContextAccessor httpContextAccessor)
         {
-            CreateMap<Member, MemberDtoSmall>();
+            CreateMap<Member, MemberDtoSmall>()
+                .ForMember(x => x.SpouseName, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.Name : null))
+                .ForMember(x => x.SpouseComputedG12Leader, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.ComputedG12Leader : null))
+                .ForMember(x => x.SpouseComputedLeadershipName, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.ComputedLeadershipName : null));
 
             CreateMap<Member, MemberDto>()
                 .ForMember(x => x.Password, opt =>
