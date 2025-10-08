@@ -95,4 +95,17 @@ const DeleteMember = async (id) => {
     return obj;
 }
 
+const GetChildren = async (id) => {
+    var response = await FetchPrivate('/api/member/' + id + '/children', {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+
+    var obj = await response.json();
+
+    return obj;
+}
+
 export { SearchMembers, GetMember, CreateMember, UpdateMember, DeleteMember };

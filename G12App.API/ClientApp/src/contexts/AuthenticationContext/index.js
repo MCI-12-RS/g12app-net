@@ -34,14 +34,12 @@ const AuthenticationContextProvider = ({ children }) => {
                 token: user.token,
                 role: user.role,
                 g12LeadershipName: user.g12LeadershipName,
+                g12LeadershipId: user.g12LeadershipId,
+                leadershipId: user.leadershipId,
+                leader211shipName: user.leadershipName,
+                spouseId: user.spouseId
             }
         });
-    };
-
-    const getHeaders = () => {
-        return {
-            'Authorization': 'Bearer ' + auth.user.token
-        };
     };
 
     const refreshAuthState = () => {        
@@ -60,7 +58,7 @@ const AuthenticationContextProvider = ({ children }) => {
     }, [auth]);
 
     return (
-        <Provider value={{ auth, logOff, logIn, getHeaders, refreshAuthState }}>
+        <Provider value={{ auth, logOff, logIn, refreshAuthState }}>
             {children}
         </Provider>
     );

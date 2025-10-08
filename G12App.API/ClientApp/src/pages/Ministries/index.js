@@ -2,14 +2,20 @@ import React from 'react';
 
 export const Ministries = () => {
 
-  return (
-    <>
-      <div>
-        <h1>Minstérios</h1>
-        <hr />
+    const [ministries, setMinistries] = React.useState([]);
 
-      </div>
-    </>
-  );
+    React.useEffect(() => {
+        
+    }, []);
+
+    return (
+        <>
+            <div>
+                <h1>Ministérios</h1>
+                <hr />
+
+            </div>
+        </>
+    );
 
 };

@@ -32,9 +32,9 @@ namespace G12App.API.Controllers
         }
 
         [HttpGet("{id}/children")]
-        public async Task<IActionResult> GetByParentIdAsync([FromServices] IMemberService memberService, int parentId, [FromQuery] int page, [FromQuery] int limit)
+        public async Task<IActionResult> GetByParentIdAsync([FromServices] IMemberService memberService, int id, [FromQuery] int page, [FromQuery] int limit)
         {
-            var result = await memberService.GetMembersByParentId(parentId, page, limit);
+            var result = await memberService.GetMembersByParentId(id, page, limit);
             return result.AsActionResult();
         }
 

@@ -74,6 +74,9 @@ namespace G12App.Application.Services
                 Name = user.Name,
                 Role = user.Role,
                 G12LeadershipName = user.ComputedG12Leader,
+                G12LeadershipId = user.ComputedG12LeaderId,
+                LeadershipId = user.LeadershipId,
+                LeadershipName = user.ComputedLeadershipName,
                 SpouseId = user.SpouseId,
             };
 

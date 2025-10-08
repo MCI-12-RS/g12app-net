@@ -9,5 +9,8 @@
         public string Role { get; set; }
         public string G12LeadershipName { get; set; }
         public int? SpouseId { get; set; }
+        public int? G12LeadershipId { get; set; }
+        public int? LeadershipId { get; set; }
+        public string LeadershipName { get; set; }
     }
 }
