@@ -24,7 +24,8 @@ namespace G12App.Application.Tests
                 Visitors = "a",
                 CellId = 1,
                 LeadershipId = 1,
-                HostId = 1
+                HostId = 1,
+                Members = new List<Member>() { },
             };
 
             var reportDto = new ReportDto()

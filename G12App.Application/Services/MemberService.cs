@@ -47,7 +47,8 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<MemberDto>> GetMemberById(int? id, bool preservePassword = false)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
-            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(memberEntity, opt => opt.Items[MappingConstants.PreservePassword] = preservePassword));
+            var memberDto = _mapper.Map<MemberDto>(memberEntity, opt => opt.Items[MappingConstants.PreservePassword] = preservePassword);
+            return new ServiceResult<MemberDto>(memberDto);
         }
 
         public async Task<ServiceResult<IEnumerable<MemberDtoSmall>>> GetMembersByParentId(int parentId, int page, int limit)
@@ -101,7 +102,7 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
-            var beforeSpouseId = memberEntity.SpouseId;
+            var beforeSpouseId = memberEntity?.SpouseId;
             var sourceMemberDto = _mapper.Map<Member, MemberDto>(memberEntity);
 
             memberEntity = _mapper.Map(memberDTO, memberEntity);

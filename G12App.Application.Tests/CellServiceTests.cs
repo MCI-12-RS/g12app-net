@@ -176,6 +176,7 @@ namespace G12App.Application.Tests
             var mapperMock = new Mock<IMapper>();
 
             mapperMock.Setup(x => x.Map<Cell>(cellDto)).Returns(cell);
+            mapperMock.Setup(x => x.Map(cellDto, cell)).Returns(cell);
             mock.Setup(x => x.Update(It.IsAny<Cell>())).ReturnsAsync(cell);
             mapperMock.Setup(x => x.Map<CellDto>(cell)).Returns(cellDto);
 
@@ -185,8 +186,8 @@ namespace G12App.Application.Tests
             var result = await service.Update(cellDto, cell.Id);
 
             //Assert
-            mapperMock.Verify(x => x.Map<Cell>(cellDto));
-            mock.Verify(x => x.Update(cell));
+            mapperMock.Verify(x => x.Map(cellDto, It.IsAny<Cell>()));
+            mock.Verify(x => x.Update(It.IsAny<Cell>()));
             result.Data.Should().Be(cellDto);
         }
     }

@@ -81,10 +81,38 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Member> Update(Member member)
         {
-            _context.Attach(member);
-            _context.Entry(member).State = EntityState.Modified;
+            var trackedMember = _context.Members.Local.FirstOrDefault(x => x.Id == member.Id);
+            if (trackedMember != null && !ReferenceEquals(trackedMember, member))
+            {
+                _context.Entry(trackedMember).State = EntityState.Detached;
+            }
+
+            var memberEntry = _context.Entry(member);
+            if (memberEntry.State == EntityState.Detached)
+            {
+                _context.Attach(member);
+                memberEntry = _context.Entry(member);
+            }
+
+            memberEntry.State = EntityState.Modified;
+
             if (member.HomeAddress != null && member.HomeAddress.Id > 0)
-                _context.Entry(member.HomeAddress).State = EntityState.Modified;
+            {
+                var trackedAddress = _context.Addresses.Local.FirstOrDefault(x => x.Id == member.HomeAddress.Id);
+                if (trackedAddress != null && !ReferenceEquals(trackedAddress, member.HomeAddress))
+                {
+                    _context.Entry(trackedAddress).State = EntityState.Detached;
+                }
+
+                var addressEntry = _context.Entry(member.HomeAddress);
+                if (addressEntry.State == EntityState.Detached)
+                {
+                    _context.Attach(member.HomeAddress);
+                    addressEntry = _context.Entry(member.HomeAddress);
+                }
+
+                addressEntry.State = EntityState.Modified;
+            }
 
             await _context.SaveChangesAsync();
             return member;

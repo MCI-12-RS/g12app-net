@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentAssertions;
+using G12App.Domain.Interfaces.Repositories;
 using G12App.Domain.Mappings;
 using G12App.Domain.Model;
 using G12App.Domain.Model.Enum;
@@ -16,7 +17,11 @@ namespace G12App.Infrastructure.Data.Tests
     {
         private readonly TestFixture _fixture = new TestFixture();
         private readonly CellRepository _repository;
-        private readonly ReportRepository _reportRepository = Mock.Of<ReportRepository>();
+        private readonly Mock<IReportRepository> _mockReportRepository = new Mock<IReportRepository>();
+        private IReportRepository _reportRepository => _mockReportRepository.Object;
+
+        private IMemberRepository _memberRepository;
+
         private readonly Cell _defaultCellToCreate = new Cell()
         {
             LeadId = 1,
@@ -37,8 +42,6 @@ namespace G12App.Infrastructure.Data.Tests
         public async Task TestUpdate()
         {
             // Arrange
-
-
             var cellToUpdate = new Cell()
             {
                 LeadId = 1,

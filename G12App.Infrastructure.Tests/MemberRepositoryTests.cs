@@ -28,6 +28,32 @@ namespace G12App.Infrastructure.Data.Tests
         }
 
         [Fact]
+        public async Task UpdateTest()
+        {
+            // Arrange
+            var memberToUpdate = new Member()
+            {
+                Name = "Updated Member",
+                BirthDate = new System.DateTime(1994, 01, 01),
+                Email = "updated.member@example.com",
+                Gender = Domain.Model.Enum.Gender.Female,
+                HomeAddressId = 1,
+            };
+
+            var createdMember = await _repository.Create(_defaultMember);
+
+            // Act
+            memberToUpdate.Id = createdMember.Id;
+            await _repository.Update(memberToUpdate);
+
+            // Assert
+            var getMember = await _repository.GetMemberByIdAsync(createdMember.Id);
+            getMember.Should().NotBeNull();
+            getMember.Name.Should().Be(memberToUpdate.Name);
+            getMember.Email.Should().Be(memberToUpdate.Email);
+        }
+
+        [Fact]
         public async Task CreateTest()
         {
             //Arrange

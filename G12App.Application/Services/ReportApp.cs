@@ -37,7 +37,7 @@ namespace G12App.Application.Services
                 Pagination = Pagination.SingleRecord,
             });
 
-            if ((existentReport.Data?.Any()).GetValueOrDefault())
+            if ((existentReport?.Data?.Any()).GetValueOrDefault())
                 return new ServiceResult<ReportDto>(null, HttpStatusCode.BadRequest, $"O relatório para esta semana já foi enviado (#{existentReport.Data.FirstOrDefault().Id}).");
 
             var cellResult = await _cellService.GetCellById(reportDTO.CellId);
