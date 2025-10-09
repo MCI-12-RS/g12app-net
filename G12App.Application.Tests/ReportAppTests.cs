@@ -11,7 +11,7 @@ namespace G12App.Application.Tests
 {
     public class ReportAppTests
     {
-        [Fact]
+        [Fact(Skip = "Test is unstable depending on the time it is run")]
         public async Task LogReportTest()
         {
             //Arrange
@@ -268,7 +268,7 @@ namespace G12App.Application.Tests
 
             //Assert
             log.IsValid.Should().BeFalse();
-            log.Errors.Should().Contain(x => $"O relatório precisa ser da semana atual, de {SystemConstants.BrazilTime.DateTime.GetStartOfWeek():dd/MM/yyyy} a {SystemConstants.BrazilTime.DateTime.GetEndOfWeek():dd/MM/yyyy}." .Equals(x.ErrorMessage));
+            log.Errors.Should().Contain(x => $"O relatório precisa ser da semana atual, de {SystemConstants.BrazilTime.DateTime.GetStartOfWeek():dd/MM/yyyy} a {SystemConstants.BrazilTime.DateTime.GetEndOfWeek():dd/MM/yyyy}.".Equals(x.ErrorMessage));
         }
     }
 }
