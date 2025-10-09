@@ -16,6 +16,7 @@ namespace G12App.Application
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<IMemberService, MemberService>();
+            services.AddTransient<IMinistryService, MinistryService>();
             services.AddTransient<ICellService, CellService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IDashboardService, DashboardService>();

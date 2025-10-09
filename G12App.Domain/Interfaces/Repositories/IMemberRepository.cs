@@ -16,5 +16,6 @@ namespace G12App.Domain.Interfaces.Repositories
         Task<Member> Update(Member member);
         Task<Member> Remove(Member member);
         IQueryable<Member> GetMembersQueryableAsync(Query<MemberFilter> query);
+        Task<List<Member>> GetChildrenWithSpouseAsync(int parentId);
     }
 }

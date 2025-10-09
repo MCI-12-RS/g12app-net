@@ -117,5 +117,21 @@ namespace G12App.Infrastructure.Data.Repositories
             await _context.SaveChangesAsync();
             return member;
         }
+
+        public Task<List<Member>> GetChildrenWithSpouseAsync(int parentId)
+        {
+            IQueryable<Member> query = _context.Members
+                .Include(x => x.Spouse)
+                .Where(x => x.IsDeleted == false);
+
+            if (parentId == 0)
+                query = query.Where(x => x.MinistryLevel == 1);
+            else
+                query = query.Where(x => x.LeadershipId == parentId);
+
+            return query
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+        }
     }
 }
