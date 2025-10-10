@@ -42,7 +42,7 @@ export const Ministries = () => {
 
     let renderTree = (item) => (
         <Tree
-            key={item.husband.id}
+            key={item.husband?.id || item.wife?.id}
             label={getTreeNodeBody(item)}
             {...TreeStyle}>
             {renderTreeChildren(item)}
@@ -58,7 +58,7 @@ export const Ministries = () => {
             return null;
 
         return parent.children.map((item) => (
-            <TreeNode key={item.husband.id} label={getTreeNodeBody(item)}>
+            <TreeNode key={item.husband?.id || item.wife?.id} label={getTreeNodeBody(item)}>
                 {(item.children && item.children.length > 0) && renderTreeChildren(item.children)}
             </TreeNode>
         ));
@@ -93,7 +93,7 @@ export const Ministries = () => {
             let data = response.data;
 
             Promise.all(data.map(item => {
-                return GetMinistryChildren(item.husband.id).then(childrenResponse => {
+                return GetMinistryChildren(item.husband?.id || item.wife?.id).then(childrenResponse => {
                     if (childrenResponse.data)
                         item.children = childrenResponse.data;
                 });
@@ -107,6 +107,7 @@ export const Ministries = () => {
 
     let getTreeNodeBody = (item) => {
         let totalDisciples = (item.husband?.totalDisciples || 0) + (item.wife?.totalDisciples || 0);
+        let totalCells = (item.husband?.totalCells || 0) + (item.wife?.totalCells || 0);
         return (
             <StyledNode className="tree-node" onClick={() => toggleChildren(item)} {...{ style: { cursor: (totalDisciples ? 'pointer' : 'default') } }}>
                 <NameNode>
@@ -132,7 +133,8 @@ export const Ministries = () => {
                 </InfoNode>
                 <InfoNode>
                     <strong>Células:</strong>&nbsp;
-                    {(item.husband && item.husband.totalCells || 0) + (item.wife && item.wife.totalCells || 0)} células
+                    {(totalCells)} {totalCells == 1 ? "célula" : "células"}
+
                 </InfoNode>
                 <Badges>
                     {((item.husband && item.husband.baptized) || (item.wife && item.wife.baptized)) && <Baptized />}

@@ -41,6 +41,7 @@ namespace G12App.Domain.Mappings
 
             CreateMap<MemberDto, Member>()
                 .ForMember(x => x.Leadership, opt => opt.Ignore())
+                .ForMember(x => x.Spouse, opt => opt.Ignore())
                 .ForMember(x => x.Password, opt =>
                 {
                     opt.PreCondition(x => !string.IsNullOrWhiteSpace(x.Password) &&

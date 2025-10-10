@@ -38,6 +38,11 @@ export const MemberDetails = () => {
             id: null,
             name: ''
         },
+        spouseId: null,
+        spouse: {
+            id: null,
+            name: ''
+        },
         password: '',
         confirmPassword: '',
         role: 'AppUser',
