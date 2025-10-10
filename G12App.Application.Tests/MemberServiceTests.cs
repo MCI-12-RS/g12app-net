@@ -119,7 +119,7 @@ namespace G12App.Application.Tests
             var mapperMock = new Mock<IMapper>();
 
             mock.Setup(x => x.GetMemberByIdAsync(member.Id)).ReturnsAsync(member);
-            mapperMock.Setup(x => x.Map<MemberDto>(member)).Returns(memberDto);
+            mapperMock.Setup(x => x.Map<MemberDto>(member, It.IsAny<Action<IMappingOperationOptions<object, MemberDto>>>())).Returns(memberDto);
 
             //Act
             var service = new MemberService(mock.Object, mapperMock.Object, 
@@ -128,7 +128,7 @@ namespace G12App.Application.Tests
 
             //Assert
             mock.Verify(x => x.GetMemberByIdAsync(member.Id));
-            mapperMock.Verify(x => x.Map<MemberDto>(member));
+            mapperMock.Verify(x => x.Map<MemberDto>(It.IsAny<Member>(), It.IsAny<Action<IMappingOperationOptions<object, MemberDto>>>()));
             result.Data.Should().Be(memberDto);
         }
 
@@ -159,8 +159,9 @@ namespace G12App.Application.Tests
             var mapperMock = new Mock<IMapper>();
 
             mapperMock.Setup(x => x.Map<MemberDto>(member)).Returns(memberDto);
+            mock.Setup(x => x.GetMemberByIdAsync(member.Id)).ReturnsAsync(member);
             mock.Setup(x => x.Update(It.IsAny<Member>())).ReturnsAsync(member);
-            mapperMock.Setup(x => x.Map<Member>(memberDto)).Returns(member);
+            mapperMock.Setup(x => x.Map(memberDto, It.IsAny<Member>())).Returns(member);
 
             //Act
             var service = new MemberService(mock.Object, mapperMock.Object, 

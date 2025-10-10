@@ -110,7 +110,11 @@ namespace G12App.API
 
             try
             {
-                context.Database.Migrate();
+                var providerName = context.Database.ProviderName;
+                if (!string.IsNullOrWhiteSpace(providerName) && !providerName.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.Database.Migrate();
+                }
             }
             catch (Exception ex)
             {

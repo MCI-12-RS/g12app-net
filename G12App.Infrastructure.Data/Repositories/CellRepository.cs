@@ -88,10 +88,38 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Cell> Update(Cell cell)
         {
-            _context.Attach(cell);
-            _context.Entry(cell).State = EntityState.Modified;
+            var trackedCell = _context.Cells.Local.FirstOrDefault(x => x.Id == cell.Id);
+            if (trackedCell != null && !ReferenceEquals(trackedCell, cell))
+            {
+                _context.Entry(trackedCell).State = EntityState.Detached;
+            }
+
+            var cellEntry = _context.Entry(cell);
+            if (cellEntry.State == EntityState.Detached)
+            {
+                _context.Attach(cell);
+                cellEntry = _context.Entry(cell);
+            }
+
+            cellEntry.State = EntityState.Modified;
+
             if (cell.Place != null && cell.Place.Id > 0)
-                _context.Entry(cell.Place).State = EntityState.Modified;
+            {
+                var trackedPlace = _context.Addresses.Local.FirstOrDefault(x => x.Id == cell.Place.Id);
+                if (trackedPlace != null && !ReferenceEquals(trackedPlace, cell.Place))
+                {
+                    _context.Entry(trackedPlace).State = EntityState.Detached;
+                }
+
+                var placeEntry = _context.Entry(cell.Place);
+                if (placeEntry.State == EntityState.Detached)
+                {
+                    _context.Attach(cell.Place);
+                    placeEntry = _context.Entry(cell.Place);
+                }
+
+                placeEntry.State = EntityState.Modified;
+            }
 
             await _context.SaveChangesAsync();
             return cell;

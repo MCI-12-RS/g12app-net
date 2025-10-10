@@ -5,7 +5,7 @@ name: .NET
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "feature/**" ]
   pull_request:
     branches: [ "master" ]
 
@@ -24,5 +24,25 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Test with coverage
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults
+    - name: Install reportgenerator
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+    - name: Generate coverage report
+      env:
+        REPORT_DIR: coveragereport
+      run: |
+        export PATH="$PATH:$HOME/.dotnet/tools"
+        mkdir -p "$REPORT_DIR"
+        reportgenerator \
+          -reports:"TestResults/**/coverage.cobertura.xml" \
+          -targetdir:"$REPORT_DIR" \
+          -reporttypes:"Html;TextSummary"
+        cat "$REPORT_DIR/Summary.txt" >> "$GITHUB_STEP_SUMMARY"
+    - name: Upload coverage artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: |
+          TestResults
+          coveragereport

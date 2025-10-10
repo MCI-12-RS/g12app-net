@@ -47,8 +47,20 @@ namespace G12App.Infrastructure.Data.Repositories
 
         public async Task<Report> Update(Report report)
         {
-            _context.Attach(report);
-            _context.Entry(report).State = EntityState.Modified;
+            var trackedReport = _context.Reports.Local.FirstOrDefault(x => x.Id == report.Id);
+            if (trackedReport != null && !ReferenceEquals(trackedReport, report))
+            {
+                _context.Entry(trackedReport).State = EntityState.Detached;
+            }
+
+            var reportEntry = _context.Entry(report);
+            if (reportEntry.State == EntityState.Detached)
+            {
+                _context.Attach(report);
+                reportEntry = _context.Entry(report);
+            }
+
+            reportEntry.State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return report;
         }

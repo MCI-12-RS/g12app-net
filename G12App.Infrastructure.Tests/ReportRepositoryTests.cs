@@ -41,11 +41,12 @@ namespace G12App.Infrastructure.Data.Tests
             var createdReport = new Report()
             {
                 Subject = "Valid subject",
-                Date = new DateTime(2023, 9, 28),
+                Date = SystemConstants.BrazilTime.DateTime.AddDays(3),
                 Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
-                HostId = 1
+                HostId = 1,
+                TimothyId = 1,
             };
 
             //Act
@@ -80,7 +81,8 @@ namespace G12App.Infrastructure.Data.Tests
                 Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
-                HostId = 1
+                HostId = 1,
+                TimothyId = 1,
             };
             var createdReport = await _repository.Create(toCreateReport);
 
@@ -102,7 +104,8 @@ namespace G12App.Infrastructure.Data.Tests
                 Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
-                HostId = 1
+                HostId = 1,
+                TimothyId = 1,
             };
             var createdReport = await _repository.Create(toCreateReport);
 
@@ -124,23 +127,27 @@ namespace G12App.Infrastructure.Data.Tests
                 Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
-                HostId = 1
+                HostId = 1,
+                TimothyId = 1,
             };
 
+            var createdReport = await _repository.Create(toCreateReport);
+            
             var toUpdateReport = new Report()
             {
+                Id = createdReport.Id, // Set the Id to the existing entity's Id
                 Subject = "Valid subject",
                 Date = new DateTime(2023, 9, 28),
                 Visitors = "string",
                 CellId = 1,
                 LeadershipId = 1,
-                HostId = 2
+                HostId = 2,
+                TimothyId = 1,
             };
-            var createdReport = await _repository.Create(toCreateReport);
-
+            
             //Act
             var result = await _repository.Update(toUpdateReport);
-
+            
             //Assert
             result.Should().Be(toUpdateReport);
 

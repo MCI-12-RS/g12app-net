@@ -15,7 +15,16 @@ namespace G12App.Domain.Mappings
             CreateMap<Member, MemberDtoSmall>()
                 .ForMember(x => x.SpouseName, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.Name : null))
                 .ForMember(x => x.SpouseComputedG12Leader, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.ComputedG12Leader : null))
-                .ForMember(x => x.SpouseComputedLeadershipName, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.ComputedLeadershipName : null));
+                .ForMember(x => x.SpouseComputedLeadershipName, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.ComputedLeadershipName : null))
+                .ForMember(x => x.TotalDisciples, opt => opt.MapFrom(s => s.TotalDisciples))
+                .ForMember(x => x.TotalCells, opt => opt.MapFrom(s => s.TotalCells));
+
+            CreateMap<MemberSmall, MemberDtoSmall>()
+                .ForMember(x => x.SpouseName, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.Name : null))
+                .ForMember(x => x.SpouseComputedG12Leader, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.ComputedG12Leader : null))
+                .ForMember(x => x.SpouseComputedLeadershipName, opt => opt.MapFrom(s => s.Spouse != null ? s.Spouse.ComputedLeadershipName : null))
+                .ForMember(x => x.TotalDisciples, opt => opt.MapFrom(s => s.TotalDisciples))
+                .ForMember(x => x.TotalCells, opt => opt.MapFrom(s => s.TotalCells ?? s.CellsLeadingCount));
 
             CreateMap<Member, MemberDto>()
                 .ForMember(x => x.Password, opt =>
@@ -32,6 +41,7 @@ namespace G12App.Domain.Mappings
 
             CreateMap<MemberDto, Member>()
                 .ForMember(x => x.Leadership, opt => opt.Ignore())
+                .ForMember(x => x.Spouse, opt => opt.Ignore())
                 .ForMember(x => x.Password, opt =>
                 {
                     opt.PreCondition(x => !string.IsNullOrWhiteSpace(x.Password) &&

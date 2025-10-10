@@ -47,12 +47,13 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<MemberDto>> GetMemberById(int? id, bool preservePassword = false)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
-            return new ServiceResult<MemberDto>(_mapper.Map<MemberDto>(memberEntity, opt => opt.Items[MappingConstants.PreservePassword] = preservePassword));
+            var memberDto = _mapper.Map<MemberDto>(memberEntity, opt => opt.Items[MappingConstants.PreservePassword] = preservePassword);
+            return new ServiceResult<MemberDto>(memberDto);
         }
 
         public async Task<ServiceResult<IEnumerable<MemberDtoSmall>>> GetMembersByParentId(int parentId, int page, int limit)
         {
-            if (parentId <= 0)
+            if (parentId < 0)
             {
                 return new ServiceResult<IEnumerable<MemberDtoSmall>>(Array.Empty<MemberDtoSmall>(), HttpStatusCode.BadRequest, "Identificador de liderança inválido.");
             }
@@ -66,7 +67,10 @@ namespace G12App.Application.Services
                 Sort = new Sort(nameof(Member.Name), order: false)
             };
 
-            query.Filter.LeadershipId = parentId;
+            if (parentId == 0)
+                query.Filter.MinistryLevel = 1;
+            else
+                query.Filter.LeadershipId = parentId;
 
             var members = await _memberRepository.GetMembersAsync(query);
             var totalMembers = await _memberRepository.CountMembersAsync(query);
@@ -98,7 +102,7 @@ namespace G12App.Application.Services
         public async Task<ServiceResult<MemberDto>> Update(MemberDto memberDTO, int id)
         {
             var memberEntity = await _memberRepository.GetMemberByIdAsync(id);
-            var beforeSpouseId = memberEntity.SpouseId;
+            var beforeSpouseId = memberEntity?.SpouseId;
             var sourceMemberDto = _mapper.Map<Member, MemberDto>(memberEntity);
 
             memberEntity = _mapper.Map(memberDTO, memberEntity);

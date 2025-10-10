@@ -54,6 +54,17 @@ export const NavMenu = () => {
 
               {authContext.auth.user.role !== 'AppUser' && (
                 <>
+
+                  {authContext.auth.user.role === 'AppAdmin' && (
+                  // <Nav.Link as={Link} to="/ministries" onClick={() => setExpanded(false)}>Meu Ministério</Nav.Link>
+                  <></>
+                  )}
+
+                  {authContext.auth.user.role === 'AppSuperAdmin' && (
+                  // <Nav.Link as={Link} to="/ministries" onClick={() => setExpanded(false)}>Ministérios</Nav.Link>
+                  <></>
+                  )}
+
                   <NavDropdown title="Pessoas" id="basic-nav-dropdown" renderMenuOnMount={true}>
                     <NavDropdown.Item as={Link} to="/members" onClick={() => setExpanded(false)}>Gerenciar pessoas</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/new-member" onClick={() => setExpanded(false)}>Cadastrar pessoa</NavDropdown.Item>
@@ -74,7 +85,7 @@ export const NavMenu = () => {
 
               {authContext.auth.user.role === 'AppUser' && (
                 <>
-
+                  {/* <Nav.Link as={Link} to="/ministries" onClick={() => setExpanded(false)}>Meu Ministério</Nav.Link> */}
                   <Nav.Link as={Link} to="/members" onClick={() => setExpanded(false)}>Pessoas</Nav.Link>
                   <Nav.Link as={Link} to="/cells" onClick={() => setExpanded(false)}>Células</Nav.Link>
                   <Nav.Link as={Link} to="/log-report" onClick={() => setExpanded(false)}>Registrar Relatório</Nav.Link>

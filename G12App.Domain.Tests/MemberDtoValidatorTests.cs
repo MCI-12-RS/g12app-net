@@ -1,16 +1,26 @@
 using FluentAssertions;
 using G12App.Domain.DTOs;
+using G12App.Domain.Interfaces.Services;
+using G12App.Domain.Messages;
+using G12App.Domain.Querying;
+using G12App.Domain.Querying.Filters;
 using G12App.Domain.Validators;
+using Moq;
 
 namespace G12App.Domain.Tests
 {
     public class MemberDtoValidatorTests
     {
         private readonly MemberDtoValidator _validator;
+        private readonly Mock<IMemberService> _memberServiceMock = new();
 
         public MemberDtoValidatorTests()
         {
-            _validator = new MemberDtoValidator(null);
+            _memberServiceMock
+                .Setup(x => x.GetMembers(It.IsAny<Query<MemberFilter>>(), It.IsAny<bool>()))
+                .ReturnsAsync(new ServiceResult<IEnumerable<MemberDto>>(new List<MemberDto>()));
+
+            _validator = new MemberDtoValidator(_memberServiceMock.Object);
         }
 
         [Fact]

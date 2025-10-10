@@ -41,7 +41,7 @@ namespace G12App.Tests
 
             //Act
             var response = await _testsFixture.HttpClient.PostAsync("/api/cell/search", queryJson);
-            
+
             //Assert
             var result = await response.Content.ReadAsStringAsync();
             result.Should().NotBeNullOrEmpty();
@@ -55,7 +55,7 @@ namespace G12App.Tests
             var cell = dfcell;
 
             //Act
-            var response = await _testsFixture.HttpClient.GetAsync("api/cell/"+cell.Id);
+            var response = await _testsFixture.HttpClient.GetAsync("api/cell/" + cell.Id);
             var result = await response.Content.ReadAsStringAsync();
 
             //Assert
@@ -96,7 +96,7 @@ namespace G12App.Tests
         public async Task RemoveTest()
         {
             //Arrange
-            var cell = new Cell()
+            var cell = new CellDto()
             {
                 LeadId = 1,
                 HostId = 1,
@@ -105,6 +105,8 @@ namespace G12App.Tests
                 PlaceId = 1,
                 CellType = Domain.Model.Enum.CellType.Evangelistic,
                 ReportMandatory = true,
+                Time = TimeOnly.Parse("19:30"),
+
             };
 
             var cellJson = new StringContent(
@@ -125,7 +127,7 @@ namespace G12App.Tests
         public async Task UpdateTest()
         {
             //Arrange
-            var cell = new Cell()
+            var cell = new CellDto()
             {
                 LeadId = 1,
                 HostId = 1,
@@ -134,15 +136,18 @@ namespace G12App.Tests
                 PlaceId = 1,
                 CellType = CellType.Evangelistic,
                 ReportMandatory = true,
+                Time = TimeOnly.Parse("19:30"),
             };
+
             var cellJson = new StringContent(
                 JsonSerializer.Serialize(cell, _testsFixture.JsonSerializerOptions),
                 Encoding.UTF8,
                 "application/json");
+
             var postResponse = await _testsFixture.HttpClient.PostAsync("api/cell/", cellJson);
             var jsonCell = await postResponse.Content.ReadFromJsonAsync<ServiceResult<CellDto>>(_testsFixture.JsonSerializerOptions);
 
-            var toUpCell = new Cell()
+            var toUpCell = new CellDto()
             {
                 LeadId = 1,
                 HostId = 1,
@@ -151,6 +156,7 @@ namespace G12App.Tests
                 PlaceId = 1,
                 CellType = CellType.Discipleship,
                 ReportMandatory = true,
+                Time = TimeOnly.Parse("20:30"),
             };
             var toUpCellJson = new StringContent(
                JsonSerializer.Serialize(toUpCell, _testsFixture.JsonSerializerOptions),

@@ -13,6 +13,12 @@ namespace G12App.Domain.DTOs
         public string SpouseName { get; set; }
         public string SpouseComputedG12Leader { get; set; }
         public string SpouseComputedLeadershipName { get; set; }
+        public int? TotalDisciples { get; set; }
+        public int? TotalCells { get; set; }
+        public int? CellsLeadingCount { get; set; }
+        public int? CellsHostingCount { get; set; }
+        public int? CellsServingCount { get; set; }
+        public bool Baptized { get; set; }
     }
 
     public class MemberDto
