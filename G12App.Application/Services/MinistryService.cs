@@ -49,13 +49,7 @@ namespace G12App.Application.Services
                 .OrderBy(c => c.Husband?.Name ?? c.Wife?.Name ?? string.Empty)
                 .ToList();
 
-            var currentPage = Math.Max(page, 1);
-            var pageSize = limit <= 0 ? 12 : Math.Min(limit, 120);
-            var skip = (currentPage - 1) * pageSize;
-
-            var paginatedCouples = couples.Skip(skip).Take(pageSize).ToList();
-
-            return new ServiceResult<IEnumerable<CoupleDto>>(paginatedCouples, couples.Count);
+            return new ServiceResult<IEnumerable<CoupleDto>>(couples, couples.Count);
         }
 
         private IReadOnlyCollection<CoupleDto> BuildCouples(IEnumerable<MemberSmall> members)

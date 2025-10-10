@@ -123,7 +123,7 @@ namespace G12App.Infrastructure.Data.Repositories
             var filters = parentIds?.Where(id => id > 0).Distinct().ToList() ?? new List<int>();
 
             IQueryable<Member> query = _context.Members
-                .Where(x => x.IsDeleted == false)
+                .Where(x => x.IsDeleted == false && x.Idle == false)
                 .ApplyMinistryFilter(_httpContextAccessor?.HttpContext?.User);
 
             if (filters.Count == 0)

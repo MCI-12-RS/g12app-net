@@ -15,12 +15,17 @@ const StyledNode = styled.div`
     display: inline-block;
     text-align: left;
     border: 1px solid #000;
+    min-width: 210px;
+    height: 140px;
 `;
 
 const NameNode = styled.div`
     font-size: 1.1em;
     margin-bottom: 8px;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const InfoNode = styled.div`
