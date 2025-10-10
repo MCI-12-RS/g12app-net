@@ -118,20 +118,71 @@ namespace G12App.Infrastructure.Data.Repositories
             return member;
         }
 
-        public Task<List<Member>> GetChildrenWithSpouseAsync(int parentId)
+        public async Task<List<MemberSmall>> GetChildrenWithSpouseAsync(IEnumerable<int> parentIds)
         {
+            var filters = parentIds?.Where(id => id > 0).Distinct().ToList() ?? new List<int>();
+
             IQueryable<Member> query = _context.Members
-                .Include(x => x.Spouse)
-                .Where(x => x.IsDeleted == false);
+                .Where(x => x.IsDeleted == false)
+                .ApplyMinistryFilter(_httpContextAccessor?.HttpContext?.User);
 
-            if (parentId == 0)
-                query = query.Where(x => x.MinistryLevel == 1);
+            if (filters.Count == 0)
+            {
+                var lowestMinistryLevel = query
+                    .OrderBy(x => x.MinistryLevel)
+                    .Select(x => x.MinistryLevel)
+                    .FirstOrDefault();
+
+                if (lowestMinistryLevel == 0)
+                {
+                    query = query.Where(x => x.MinistryLevel == 0);
+                }
+                else if (lowestMinistryLevel.HasValue)
+                {
+                    query = query.Where(x => x.MinistryLevel == lowestMinistryLevel.Value);
+                }
+            }
             else
-                query = query.Where(x => x.LeadershipId == parentId);
+                query = query.Where(x => x.LeadershipId.HasValue && filters.Contains(x.LeadershipId.Value));
 
-            return query
+            var members = await query
                 .OrderBy(x => x.Name)
+                .Select(x => new MemberSmall
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Gender = x.Gender,
+                    LeadershipId = x.LeadershipId,
+                    MinistryLevel = x.MinistryLevel,
+                    SpouseId = x.SpouseId,
+                    ComputedG12Leader = x.ComputedG12Leader,
+                    ComputedLeadershipName = x.ComputedLeadershipName,
+                    TotalDisciples = x.TotalDisciples,
+                    CellsLeadingCount = x.CellsLeading.Count(),
+                    CellsHostingCount = x.CellsHosting.Count(),
+                    CellsServingCount = x.CellsServing.Count(),
+                    TotalCells = x.TotalCells,
+                    Baptized = x.Baptized,
+                    Spouse = x.Spouse == null ? null : new MemberSmall
+                    {
+                        Id = x.Spouse.Id,
+                        Name = x.Spouse.Name,
+                        Gender = x.Spouse.Gender,
+                        LeadershipId = x.Spouse.LeadershipId,
+                        MinistryLevel = x.Spouse.MinistryLevel,
+                        SpouseId = x.Spouse.SpouseId,
+                        ComputedG12Leader = x.Spouse.ComputedG12Leader,
+                        ComputedLeadershipName = x.Spouse.ComputedLeadershipName,
+                        TotalDisciples = x.Spouse.TotalDisciples,
+                        CellsLeadingCount = x.Spouse.CellsLeading.Count(),
+                        CellsHostingCount = x.Spouse.CellsHosting.Count(),
+                        CellsServingCount = x.Spouse.CellsServing.Count(),
+                        TotalCells = x.Spouse.TotalCells,
+                        Baptized = x.Baptized,
+                    }
+                })
                 .ToListAsync();
+            return members;
         }
     }
 }

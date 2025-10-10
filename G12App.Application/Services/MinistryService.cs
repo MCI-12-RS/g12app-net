@@ -31,7 +31,19 @@ namespace G12App.Application.Services
                 return new ServiceResult<IEnumerable<CoupleDto>>(Array.Empty<CoupleDto>(), HttpStatusCode.BadRequest, "Identificador de liderança inválido.");
             }
 
-            var members = await _memberRepository.GetChildrenWithSpouseAsync(parentId);
+            var parentIds = new List<int>();
+            if (parentId > 0)
+            {
+                var parent = await _memberRepository.GetMemberByIdAsync(parentId);
+                if (parent == null)
+                    return new ServiceResult<IEnumerable<CoupleDto>>(Array.Empty<CoupleDto>(), HttpStatusCode.NotFound, "Liderança não encontrada.");
+
+                parentIds.Add(parentId);
+                if (parent.SpouseId.HasValue && parent.SpouseId.Value > 0)
+                    parentIds.Add(parent.SpouseId.Value);
+            }
+
+            var members = await _memberRepository.GetChildrenWithSpouseAsync(parentIds);
 
             var couples = BuildCouples(members)
                 .OrderBy(c => c.Husband?.Name ?? c.Wife?.Name ?? string.Empty)
@@ -46,7 +58,7 @@ namespace G12App.Application.Services
             return new ServiceResult<IEnumerable<CoupleDto>>(paginatedCouples, couples.Count);
         }
 
-        private IReadOnlyCollection<CoupleDto> BuildCouples(IEnumerable<Member> members)
+        private IReadOnlyCollection<CoupleDto> BuildCouples(IEnumerable<MemberSmall> members)
         {
             var couples = new List<CoupleDto>();
             var processedIds = new HashSet<int>();
@@ -58,8 +70,8 @@ namespace G12App.Application.Services
 
                 var spouse = member.Spouse;
 
-                Member husband = null;
-                Member wife = null;
+                MemberSmall husband = null;
+                MemberSmall wife = null;
 
                 if (spouse != null)
                 {
@@ -88,10 +100,10 @@ namespace G12App.Application.Services
             return couples;
         }
 
-        private static (Member husband, Member wife) SortByGender(Member first, Member second)
+        private static (MemberSmall husband, MemberSmall wife) SortByGender(MemberSmall first, MemberSmall second)
         {
-            Member husband = null;
-            Member wife = null;
+            MemberSmall husband = null;
+            MemberSmall wife = null;
 
             if (first.Gender == Gender.Male)
                 husband = first;
