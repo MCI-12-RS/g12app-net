@@ -1,13 +1,10 @@
 ﻿using FluentAssertions;
 using G12App.Domain.DTOs;
 using G12App.Domain.Messages;
-using G12App.Domain.Model;
 using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;

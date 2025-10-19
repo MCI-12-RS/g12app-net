@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using FluentAssertions;
 using G12App.Application.Services;

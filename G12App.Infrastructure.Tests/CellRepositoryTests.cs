@@ -1,9 +1,6 @@
-using AutoMapper;
 using FluentAssertions;
 using G12App.Domain.Interfaces.Repositories;
-using G12App.Domain.Mappings;
 using G12App.Domain.Model;
-using G12App.Domain.Model.Enum;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
 using G12App.Infrastructure.Data.Repositories;

@@ -1,5 +1,4 @@
-﻿using G12App.Domain.DomainEvents;
-using G12App.Domain.DTOs;
+﻿using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Events;
 
 namespace G12App.Domain.DomainEvents

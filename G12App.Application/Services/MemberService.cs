@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using G12App.Application.Events;
 using G12App.Domain.DomainEvents;
 using G12App.Domain.DTOs;
 using G12App.Domain.Interfaces.Events;
@@ -10,8 +9,6 @@ using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Querying;
 using G12App.Domain.Querying.Filters;
-using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace G12App.Application.Services

@@ -5,11 +5,7 @@ using G12App.Domain.Interfaces.Services;
 using G12App.Domain.Messages;
 using G12App.Domain.Model;
 using G12App.Domain.Model.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace G12App.Application.Services
 {

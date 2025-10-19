@@ -1,6 +1,4 @@
-﻿using G12App.Domain.Events;
-using G12App.Domain.Interfaces.Events;
-using G12App.Domain.Mappings;
+﻿using G12App.Domain.Mappings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace G12App.Domain
